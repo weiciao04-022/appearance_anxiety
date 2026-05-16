@@ -208,6 +208,12 @@ body {
 }
 
 @media (max-width: 900px) {
+  .text-column {
+    width: 88vw;
+    min-width: 0;
+    font-size: 17px;
+  }
+
   .frame-3-layout { grid-template-columns: 1fr; }
   .choice-row { width: 100%; overflow-x: auto; padding-bottom: 8px; }
   .case-row { flex-direction: column; }
@@ -215,4 +221,30 @@ body {
   .modal { width: 88vw; }
   .inline-row, .action-row { flex-wrap: wrap; justify-content: center; gap: 16px; }
   .floating-card { position: static; transform: none !important; margin-top: 12px; }
+}
+
+
+.text-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 96px 6vw;
+  box-sizing: border-box;
+}
+
+.text-column {
+  width: min(34vw, 640px);
+  min-width: 420px;
+  line-height: 1.85;
+  font-size: 20px;
+  letter-spacing: 0.02em;
+}
+
+.text-column p {
+  margin: 0 0 1.2em;
+}
+
+.text-column .button {
+  margin-top: 32px;
 }

@@ -19,7 +19,7 @@ if (phoneFeed && bmiModal) {
     if (maxScrollable <= 0) return;
 
     const ratio = phoneFeed.scrollTop / maxScrollable;
-    if (ratio >= 0.45) {
+    if (ratio >= 0.88) {
       bmiModal.classList.add('show');
       bmiModal.setAttribute('aria-hidden', 'false');
       hasShownBmiModal = true;
