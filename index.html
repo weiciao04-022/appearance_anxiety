@@ -1,1 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>體態、BMI、社群與健康焦慮互動原型</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section id="phone-feed-section" class="section reveal">
+    <div class="phone-feed-wrapper">
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="phone-screen">
+          <div id="phoneFeed" class="phone-feed" aria-label="instagram feed">
+            <article class="ig-post">instagram<br />post 1</article>
+            <article class="ig-post">instagram<br />post 2</article>
+            <article class="ig-post">instagram<br />post 3</article>
+            <article class="ig-post">instagram<br />post 4</article>
+            <article class="ig-post">instagram<br />post 5</article>
+            <article class="ig-post">instagram<br />post 6</article>
+            <article class="ig-post">instagram<br />post 7</article>
+            <article class="ig-post">instagram<br />post 8</article>
+          </div>
+        </div>
+      </div>
 
+      <div id="bmiModal" class="modal" aria-hidden="true">
+        <p class="modal-title">你的體態夠健康嗎？</p>
+        <p>點擊下方按鈕計算</p>
+        <hr />
+        <button id="btnBmi" class="button" type="button">計算我的BMI</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="frame-3" class="section reveal">
+    <div class="frame-wrap frame-3-layout">
+      <div class="left-col">
+        <div class="wire-card rounded-box intro-box">BMI是什麼</div>
+        <div class="wire-card rounded-box bmi-form-box">
+          <p>你是否成年</p>
+          <label for="heightInput">身高 (cm)</label>
+          <input id="heightInput" type="number" min="0" placeholder="例如 170" />
+          <label for="weightInput">體重 (kg)</label>
+          <input id="weightInput" type="number" min="0" placeholder="例如 60" />
+          <button id="submitBmi" class="button" type="button">送出</button>
+        </div>
+      </div>
+
+      <div class="wire-card bmi-result-box">
+        <p>你的BMI：</p>
+        <p id="bmiValue" class="bmi-value">22</p>
+        <p id="bmiStatus">屬於正常，恭喜！要繼續保持！</p>
+        <div class="wire-card chart-box">圖表分佈圖</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="frame-4" class="section reveal">
+    <div class="frame-wrap center-col">
+      <p class="title">圖表分佈圖</p>
+      <p class="subtitle">你的理想身材是哪個？</p>
+      <div class="choice-row" id="choiceRow">
+        <button class="choice-card" data-choice="A" type="button">A</button>
+        <button class="choice-card" data-choice="B" type="button">B</button>
+        <button class="choice-card" data-choice="C" type="button">C</button>
+        <button class="choice-card" data-choice="D" type="button">D</button>
+        <button class="choice-card" data-choice="E" type="button">E</button>
+      </div>
+      <p id="choiceResult">你和曾點選過的人中，有 XX% 選擇一樣的答案</p>
+    </div>
+  </section>
+
+  <section id="story-1-page" class="section reveal">
+    <div class="frame-wrap center-col">
+      <p class="title">看看大家的故事</p>
+      <div class="case-row">
+        <a class="case-card" href="pages/case1.html">案例一</a>
+        <a class="case-card" href="pages/case2.html">案例二</a>
+        <a class="case-card" href="pages/case3.html">案例三</a>
+      </div>
+      <p>點選，或是繼續下滑</p>
+    </div>
+  </section>
+
+  <section id="frame-9" class="section reveal">
+    <div class="frame-wrap center-col">
+      <div class="wire-card large-placeholder">圖片 placeholder</div>
+      <div class="inline-row">
+        <span>繼續下滑</span>
+        <span>或是</span>
+        <a id="goGym" class="button" href="pages/gym.html">進入健身房</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="frame-11" class="section reveal">
+    <div class="frame-wrap overlay-wrap">
+      <div class="wire-card article-main">體態產品頁</div>
+      <div class="wire-card floating-card from-right reveal">
+        <p>（視差滾動）</p>
+        <p>不只健身房，體態管理</p>
+        <p>和健康餐盒等關注體態</p>
+        <p>的也越來越多</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="frame-12" class="section reveal">
+    <div class="frame-wrap overlay-wrap">
+      <div class="wire-card article-main">
+        夾健康餐遊戲<br />
+        試算熱量等於一些<br />
+        食物，像是珍珠奶茶、<br />
+        一個便當比對
+      </div>
+      <div class="wire-card floating-card from-left reveal">
+        <p>（視差滾動）</p>
+        <p>營養師話帶</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="frame-13" class="section reveal">
+    <div class="frame-wrap center-col">
+      <div class="iphone">
+        <div class="dynamic-island"></div>
+        <div class="phone-screen">
+          <div class="ig-post story">instagram<br />story</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section id="frame-14" class="section text-page reveal">
+    <div class="text-column">
+        <p>在美國部署尚未轉向印太地區之前，其戰略核心仍是聚焦中東，更要避免激怒崛起中的中國，也因此長期留下對台軍售「賣舊、賣貴」的印象。</p>
+        <p>不過自2017年批准兩款射程可破百公里的空對空、空對海飛彈開始，美方釋出台灣可提升武力的訊號，再到2019年放行F-16V戰機、M1A2T戰車。台灣於2020年購買的11套海馬士多管火箭系統（HIMARS）甚至提早交貨，都可見國軍現代化需求和美方的戰略轉向逐漸靠攏。</p>
+        <p>「川普政府在歐洲、中東地區都有一定程度的戰略退卻，唯有印度洋─太平洋司令部仍維持既有編制，」陳世民強調，美國2025年〈國家安全戰略報告〉和今年1月剛出爐的〈國防戰略報告〉都將印太安全視為重中之重，近年允許台灣購買的軍備也是實證。</p>
+        <p>目前《國防特別預算條例》草案可總結為三重點：加強台灣「不對稱戰力」、構築「台灣之盾」防空系統、打造「非紅供應鏈」。陳世民表示，目標是增加解放軍侵台的代價，達成備戰止戰的嚇阻效果。</p>
+        <p>在行政院希望通過的1.25兆經費中，已有5項共計3,800億的軍售案獲得三黨一致支持，分別是82套新購海馬士、60輛M109A7自走砲、1,545枚拖2B飛彈、1,050枚標槍飛彈，以及共計2,032架的ALTIUS-600和700型自殺型無人機等。</p>
+        <p>陳國銘表示，美方預計和82套海馬士包裹售出的陸軍戰術飛彈（ATACMS）射程達300公里，能瞄準中國沿岸，在解放軍集結時進行攻擊。他解釋，本款飛彈和海馬士系統在俄烏戰場已立下奇功，摧毀俄國內陸的多座機場、軍營、彈藥庫、橋梁，經常迫使俄軍向後撤退，為前線烏軍創造喘息機會。</p>
+        <p>「假設我們有更多海馬士，解放軍當然也會害怕，」陳國銘說，部署攻擊性武器，用「以攻代守」創造可供我方防守的「縱深地帶」，是台灣在地窄人稠條件下，不得不發展的戰術。</p>
+
+      <a class="button" href="pages/case1.html">帶入個案</a>
+    </div>
+  </section>
+
+    <section id="frame-15" class="section text-page reveal">
+    <div class="text-column">
+        <p>在美國部署尚未轉向印太地區之前，其戰略核心仍是聚焦中東，更要避免激怒崛起中的中國，也因此長期留下對台軍售「賣舊、賣貴」的印象。</p>
+        <p>不過自2017年批准兩款射程可破百公里的空對空、空對海飛彈開始，美方釋出台灣可提升武力的訊號，再到2019年放行F-16V戰機、M1A2T戰車。台灣於2020年購買的11套海馬士多管火箭系統（HIMARS）甚至提早交貨，都可見國軍現代化需求和美方的戰略轉向逐漸靠攏。</p>
+        <p>「川普政府在歐洲、中東地區都有一定程度的戰略退卻，唯有印度洋─太平洋司令部仍維持既有編制，」陳世民強調，美國2025年〈國家安全戰略報告〉和今年1月剛出爐的〈國防戰略報告〉都將印太安全視為重中之重，近年允許台灣購買的軍備也是實證。</p>
+        <p>目前《國防特別預算條例》草案可總結為三重點：加強台灣「不對稱戰力」、構築「台灣之盾」防空系統、打造「非紅供應鏈」。陳世民表示，目標是增加解放軍侵台的代價，達成備戰止戰的嚇阻效果。</p>
+        <p>在行政院希望通過的1.25兆經費中，已有5項共計3,800億的軍售案獲得三黨一致支持，分別是82套新購海馬士、60輛M109A7自走砲、1,545枚拖2B飛彈、1,050枚標槍飛彈，以及共計2,032架的ALTIUS-600和700型自殺型無人機等。</p>
+        <p>陳國銘表示，美方預計和82套海馬士包裹售出的陸軍戰術飛彈（ATACMS）射程達300公里，能瞄準中國沿岸，在解放軍集結時進行攻擊。他解釋，本款飛彈和海馬士系統在俄烏戰場已立下奇功，摧毀俄國內陸的多座機場、軍營、彈藥庫、橋梁，經常迫使俄軍向後撤退，為前線烏軍創造喘息機會。</p>
+        <p>「假設我們有更多海馬士，解放軍當然也會害怕，」陳國銘說，部署攻擊性武器，用「以攻代守」創造可供我方防守的「縱深地帶」，是台灣在地窄人稠條件下，不得不發展的戰術。</p>
+
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
