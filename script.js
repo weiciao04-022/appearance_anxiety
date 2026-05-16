@@ -16,41 +16,25 @@ function initBmiModalTrigger() {
 
   let modalShown = false;
 
-  function showModal() {
+  function showBmiModal() {
     if (modalShown) return;
     modalShown = true;
     bmiModal.classList.add('visible', 'show');
     bmiModal.setAttribute('aria-hidden', 'false');
   }
 
-  if (window.matchMedia('(max-width: 900px)').matches) {
-    const posts = phoneFeed.querySelectorAll('.ig-post');
-    const lastPost = posts[posts.length - 1];
-    if (!lastPost) return;
+  phoneFeed.addEventListener('scroll', () => {
+    const maxScroll = phoneFeed.scrollHeight - phoneFeed.clientHeight;
+    if (maxScroll <= 0) return;
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          showModal();
-          observer.disconnect();
-        }
-      });
-    }, {
-      threshold: 0.35
-    });
+    const scrollRatio =
+      phoneFeed.scrollTop /
+      (phoneFeed.scrollHeight - phoneFeed.clientHeight);
 
-    observer.observe(lastPost);
-  } else {
-    phoneFeed.addEventListener('scroll', () => {
-      const maxScroll = phoneFeed.scrollHeight - phoneFeed.clientHeight;
-      if (maxScroll <= 0) return;
-
-      const scrollRatio = phoneFeed.scrollTop / maxScroll;
-      if (scrollRatio >= 0.88) {
-        showModal();
-      }
-    });
-  }
+    if (scrollRatio >= 0.88 && !modalShown) {
+      showBmiModal();
+    }
+  });
 }
 
 initBmiModalTrigger();

@@ -263,61 +263,38 @@ body {
 
   #phone-feed-section {
     min-height: auto;
-    padding: 24px 20px 80px;
-    align-items: stretch;
-  }
-
-  #phone-feed-section .phone-feed-wrapper {
-    width: 100%;
+    padding: 40px 0 80px;
+    align-items: center;
   }
 
   #phone-feed-section .iphone {
-    width: 100%;
-    height: auto;
-    border: none;
-    border-radius: 0;
-    padding: 0;
-    box-shadow: none;
-    background: transparent;
-    transform: none;
-  }
-
-  #phone-feed-section .dynamic-island {
-    display: none;
+    width: 92vw;
+    max-width: 430px;
+    height: 88vh;
+    max-height: 860px;
   }
 
   #phone-feed-section .phone-screen {
-    position: static;
-    height: auto;
-    overflow: visible;
-    border-radius: 0;
+    height: 100%;
   }
 
   #phoneFeed {
-    height: auto;
-    overflow: visible;
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    padding-right: 0;
-    width: min(92vw, 100%);
-    margin: 0 auto;
+    height: 100%;
+    overflow-y: auto;
   }
 
   #phoneFeed .ig-post {
     width: 100%;
-    min-height: 60vh;
+    min-height: 68vh;
   }
 
   #bmiModal {
     position: fixed;
     width: calc(100vw - 40px);
-    max-width: 420px;
-    min-height: 220px;
+    max-width: 400px;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1000;
   }
 
   #frame-3 .frame-3-layout {
