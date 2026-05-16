@@ -7,25 +7,53 @@ function scrollToSection(id) {
   target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-const phoneFeed = document.getElementById('phoneFeed');
-const bmiModal = document.getElementById('bmiModal');
 const btnBmi = document.getElementById('btnBmi');
-let hasShownBmiModal = false;
 
-if (phoneFeed && bmiModal) {
-  phoneFeed.addEventListener('scroll', () => {
-    if (hasShownBmiModal) return;
-    const maxScrollable = phoneFeed.scrollHeight - phoneFeed.clientHeight;
-    if (maxScrollable <= 0) return;
+function initBmiModalTrigger() {
+  const phoneFeed = document.getElementById('phoneFeed');
+  const bmiModal = document.getElementById('bmiModal');
+  if (!phoneFeed || !bmiModal) return;
 
-    const ratio = phoneFeed.scrollTop / maxScrollable;
-    if (ratio >= 0.88) {
-      bmiModal.classList.add('show');
-      bmiModal.setAttribute('aria-hidden', 'false');
-      hasShownBmiModal = true;
-    }
-  });
+  let modalShown = false;
+
+  function showModal() {
+    if (modalShown) return;
+    modalShown = true;
+    bmiModal.classList.add('visible', 'show');
+    bmiModal.setAttribute('aria-hidden', 'false');
+  }
+
+  if (window.matchMedia('(max-width: 900px)').matches) {
+    const posts = phoneFeed.querySelectorAll('.ig-post');
+    const lastPost = posts[posts.length - 1];
+    if (!lastPost) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          showModal();
+          observer.disconnect();
+        }
+      });
+    }, {
+      threshold: 0.35
+    });
+
+    observer.observe(lastPost);
+  } else {
+    phoneFeed.addEventListener('scroll', () => {
+      const maxScroll = phoneFeed.scrollHeight - phoneFeed.clientHeight;
+      if (maxScroll <= 0) return;
+
+      const scrollRatio = phoneFeed.scrollTop / maxScroll;
+      if (scrollRatio >= 0.88) {
+        showModal();
+      }
+    });
+  }
 }
+
+initBmiModalTrigger();
 
 if (btnBmi) {
   btnBmi.addEventListener('click', () => {
