@@ -1,36 +1,10 @@
+const CHOICE_STORAGE_KEY = 'bodyIdealChoices';
+const mockData = [];
+
 function scrollToSection(id) {
   const target = document.getElementById(id);
   if (!target) return;
   target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-function showPage(pageId) {
-  document.querySelectorAll('.page').forEach((page) => {
-    page.classList.remove('active');
-  });
-
-  const target = document.getElementById(pageId);
-  if (!target) return;
-
-  target.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'instant' });
-}
-
-function showMainAndScrollTo(sectionId) {
-  document.querySelectorAll('.page').forEach((page) => {
-    page.classList.remove('active');
-  });
-
-  const mainPage = document.getElementById('main-page');
-  if (!mainPage) return;
-  mainPage.classList.add('active');
-
-  requestAnimationFrame(() => {
-    const target = document.getElementById(sectionId);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  });
 }
 
 const phoneFeed = document.getElementById('phoneFeed');
@@ -55,7 +29,7 @@ if (phoneFeed && bmiModal) {
 
 if (btnBmi) {
   btnBmi.addEventListener('click', () => {
-    showMainAndScrollTo('frame-3');
+    document.getElementById('frame-3')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 }
 
@@ -65,7 +39,7 @@ const submitBmi = document.getElementById('submitBmi');
 const bmiValue = document.getElementById('bmiValue');
 const bmiStatus = document.getElementById('bmiStatus');
 
-if (submitBmi) {
+if (submitBmi && heightInput && weightInput && bmiValue && bmiStatus) {
   submitBmi.addEventListener('click', () => {
     const heightCm = Number(heightInput.value);
     const weightKg = Number(weightInput.value);
@@ -90,9 +64,6 @@ if (submitBmi) {
     }
   });
 }
-
-const CHOICE_STORAGE_KEY = 'bodyIdealChoices';
-const mockData = [];
 
 function getChoices() {
   try {
@@ -121,6 +92,7 @@ function calculateChoicePercentage(choice) {
 
 function renderChoiceResult(choice) {
   const choiceResult = document.getElementById('choiceResult');
+  if (!choiceResult) return;
   const percentage = calculateChoicePercentage(choice);
   choiceResult.textContent = `你和曾點選過的人中，有 ${percentage}% 選擇一樣的答案`;
 }
@@ -132,55 +104,28 @@ function submitChoiceToGitHub(choice) {
 }
 
 const choiceCards = document.querySelectorAll('.choice-card');
-choiceCards.forEach((card) => {
-  card.addEventListener('click', async () => {
-    const choice = card.dataset.choice;
-    choiceCards.forEach((item) => item.classList.remove('active'));
-    card.classList.add('active');
+if (choiceCards.length > 0) {
+  choiceCards.forEach((card) => {
+    card.addEventListener('click', async () => {
+      const choice = card.dataset.choice;
+      if (!choice) return;
 
-    saveChoice(choice);
-    await submitChoiceToGitHub(choice);
-    renderChoiceResult(choice);
+      choiceCards.forEach((item) => item.classList.remove('active'));
+      card.classList.add('active');
+
+      saveChoice(choice);
+      await submitChoiceToGitHub(choice);
+      renderChoiceResult(choice);
+    });
   });
-});
+}
 
-const caseCard1 = document.getElementById('caseCard1');
-const caseCard2 = document.getElementById('caseCard2');
-const caseCard3 = document.getElementById('caseCard3');
-const backToStories1 = document.getElementById('backToStories1');
-const backToStories2 = document.getElementById('backToStories2');
-const backToStories3 = document.getElementById('backToStories3');
-const goGym = document.getElementById('goGym');
 const restartGym = document.getElementById('restartGym');
-const backArticle = document.getElementById('backArticle');
-
-if (caseCard1) caseCard1.addEventListener('click', () => showPage('story-case-1-page'));
-if (caseCard2) caseCard2.addEventListener('click', () => showPage('story-case-2-page'));
-if (caseCard3) caseCard3.addEventListener('click', () => showPage('story-case-3-page'));
-
-if (backToStories1) backToStories1.addEventListener('click', () => showMainAndScrollTo('story-1-page'));
-if (backToStories2) backToStories2.addEventListener('click', () => showMainAndScrollTo('story-1-page'));
-if (backToStories3) backToStories3.addEventListener('click', () => showMainAndScrollTo('story-1-page'));
-
-if (goGym) goGym.addEventListener('click', () => showPage('gym-page'));
-
-const gymStatus = document.getElementById('gymStatus');
-const gymPlaceholder = document.getElementById('gymPlaceholder');
-
-function resetGymPage() {
-  if (gymPlaceholder) gymPlaceholder.textContent = '圖片 placeholder（初始狀態）';
-  if (gymStatus) gymStatus.textContent = '已重新開始';
-}
-
 if (restartGym) {
-  restartGym.addEventListener('click', () => {
-    resetGymPage();
-  });
-}
-
-if (backArticle) {
-  backArticle.addEventListener('click', () => {
-    showMainAndScrollTo('frame-11');
+  restartGym.addEventListener('click', (event) => {
+    event.preventDefault();
+    const status = document.getElementById('gymStatus');
+    if (status) status.textContent = '已重新開始';
   });
 }
 
