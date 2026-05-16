@@ -5,7 +5,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", sans-serif;
 }
 
-section {
+.section {
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -14,21 +14,21 @@ section {
   box-sizing: border-box;
 }
 
-.frame-content {
+.frame-wrap {
   width: min(1200px, 100%);
 }
 
-.centered-column {
+.center-col {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 20px;
 }
 
 .reveal {
   opacity: 0;
-  transform: translateY(22px);
+  transform: translateY(24px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
@@ -42,9 +42,8 @@ section {
   height: 760px;
   border: 8px solid #000;
   border-radius: 58px;
-  background: #fff;
   position: relative;
-  box-sizing: border-box;
+  background: #fff;
   overflow: hidden;
 }
 
@@ -57,27 +56,31 @@ section {
   top: 14px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 2;
+  z-index: 3;
 }
 
-.iphone-screen {
+.phone-screen {
   position: absolute;
-  inset: 62px 20px 20px;
+  inset: 62px 18px 18px;
+  overflow: hidden;
+}
+
+.phone-feed {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 14px;
+  padding-right: 4px;
+  box-sizing: border-box;
 }
 
-.post-placeholder,
-.story-placeholder,
-.wire-box,
-.chart-placeholder,
-.story-card,
-.wide-placeholder,
-.big-panel,
-.floating-card,
+.ig-post,
+.wire-card,
+.choice-card,
 .case-card,
-.ideal-card {
+.large-placeholder {
   border: 1px solid #000;
   background: #fff;
   display: flex;
@@ -87,105 +90,185 @@ section {
   box-sizing: border-box;
 }
 
-.post-placeholder {
-  flex: 1;
-}
-.story-placeholder {
-  height: 100%;
+.ig-post {
+  min-height: 230px;
 }
 
-.phone-modal-wrap {
+.ig-post.story {
+  min-height: 100%;
+}
+
+.phone-feed-wrapper {
   position: relative;
+  display: flex;
+  justify-content: center;
 }
 
-.modal-box {
+.modal {
   width: 620px;
-  height: 300px;
-  background: #fff;
+  min-height: 280px;
   border: 1px solid #000;
   border-radius: 40px;
+  background: #fff;
   position: absolute;
-  z-index: 5;
-  left: 50%;
+  z-index: 10;
   top: 50%;
-  transform: translate(-50%, -25%);
-  display: flex;
+  left: 50%;
+  transform: translate(-50%, -40%);
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
+  padding: 24px;
+  box-sizing: border-box;
 }
 
-.modal-title { font-size: 1.5rem; margin: 0; }
-.modal-subtitle { margin: 0; }
-.modal-box hr { width: 70%; border: none; border-top: 1px solid #000; }
+.modal.show {
+  display: flex;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.modal hr {
+  width: 72%;
+  border: none;
+  border-top: 1px solid #000;
+}
 
 .btn {
   border: 1px solid #000;
   background: #fff;
   border-radius: 999px;
-  padding: 10px 24px;
+  padding: 10px 22px;
   cursor: pointer;
 }
 
-.btn-bmi { background: #eef6ff; color: #3a74c9; }
-
-.two-col-layout {
+.frame-3-layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 28px;
 }
 
 .left-col,
-.form-box {
+.bmi-form-box {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
-.large-radius { border-radius: 30px; min-height: 180px; padding: 24px; }
-.right-col { padding: 24px; min-height: 520px; align-items: flex-start; justify-content: flex-start; }
-.bmi-value { font-size: 84px; margin: 0; }
-.chart-placeholder { width: 100%; min-height: 220px; margin-top: auto; }
+.rounded-box {
+  border-radius: 30px;
+  padding: 24px;
+}
 
-input {
+.intro-box {
+  min-height: 180px;
+}
+
+.bmi-form-box input {
   border: 1px solid #000;
   padding: 10px;
   font: inherit;
 }
 
-.section-title, .section-subtitle { margin: 0; }
-.ideal-cards {
+.bmi-result-box {
+  min-height: 520px;
+  padding: 24px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+.bmi-value {
+  font-size: 84px;
+  margin: 0;
+}
+
+.chart-box {
+  margin-top: auto;
+  width: 100%;
+  min-height: 220px;
+}
+
+.title,
+.subtitle {
+  margin: 0;
+}
+
+.choice-row {
   display: flex;
   gap: 14px;
 }
-.ideal-card {
+
+.choice-card {
   width: 120px;
   height: 280px;
   cursor: pointer;
 }
-.ideal-card.active {
+
+.choice-card.active {
   border-width: 3px;
-  background: #f2f2f2;
+  background: #f3f3f3;
 }
 
-.case-cards {
+.case-row {
   display: flex;
   gap: 20px;
 }
+
 .case-card {
   width: 220px;
   height: 360px;
   cursor: pointer;
 }
-.story-card { width: 320px; height: 500px; }
 
-.wide-placeholder { width: min(900px, 90vw); height: 360px; }
-.inline-row, .button-row { display: flex; align-items: center; gap: 18px; }
+.case-page {
+  background: #fcfcfc;
+}
 
-.overlay-wrap { position: relative; display: flex; justify-content: center; align-items: center; }
-.big-panel { width: min(900px, 92vw); height: 520px; padding: 20px; font-size: 1.4rem; line-height: 1.6; }
-.text-panel { height: 360px; }
+.story-card {
+  width: 320px;
+  height: 520px;
+}
+
+.large-placeholder {
+  width: min(920px, 92vw);
+  height: 360px;
+}
+
+.inline-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.small-status {
+  min-height: 24px;
+  margin: 0;
+}
+
+.overlay-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.article-main {
+  width: min(900px, 92vw);
+  height: 520px;
+  padding: 20px;
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+.article-main.short {
+  height: 360px;
+}
 
 .floating-card {
   width: 280px;
@@ -193,19 +276,56 @@ input {
   padding: 16px;
   position: absolute;
   top: 50%;
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-#frame-11 .floating-card { right: 8%; transform: translate(50px, -50%); }
-#frame-12 .floating-card { left: 8%; transform: translate(-50px, -50%); }
+#frame-11 .floating-card {
+  right: 8%;
+  transform: translate(50px, -50%);
+}
 
-.floating-card.visible { transform: translate(0, -50%); }
+#frame-12 .floating-card {
+  left: 8%;
+  transform: translate(-50px, -50%);
+}
+
+#frame-11 .floating-card.visible,
+#frame-12 .floating-card.visible {
+  transform: translate(0, -50%);
+}
 
 @media (max-width: 900px) {
-  .two-col-layout { grid-template-columns: 1fr; }
-  .case-cards { flex-direction: column; }
-  .ideal-cards { overflow-x: auto; width: 100%; padding-bottom: 8px; }
-  .iphone { transform: scale(0.85); transform-origin: center; }
-  .modal-box { width: 88vw; }
-  .inline-row, .button-row { flex-wrap: wrap; justify-content: center; }
-  .floating-card { position: static; transform: none !important; margin-top: 16px; }
+  .frame-3-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .choice-row {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .case-row {
+    flex-direction: column;
+  }
+
+  .iphone {
+    transform: scale(0.85);
+    transform-origin: center;
+  }
+
+  .modal {
+    width: 88vw;
+  }
+
+  .inline-row {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .floating-card {
+    position: static;
+    transform: none !important;
+    margin-top: 12px;
+  }
 }

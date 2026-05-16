@@ -3,45 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>體態與健康焦慮互動敘事</title>
+  <title>體態、BMI、社群與健康焦慮互動原型</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <section id="frame-1" class="reveal">
-    <div class="frame-content centered-column">
+  <section id="phone-feed-section" class="section reveal">
+    <div class="phone-feed-wrapper">
       <div class="iphone">
         <div class="dynamic-island"></div>
-        <div class="iphone-screen">
-          <div class="post-placeholder">instagram<br />post</div>
-          <div class="post-placeholder">instagram<br />post</div>
+        <div class="phone-screen">
+          <div id="phoneFeed" class="phone-feed" aria-label="instagram feed">
+            <article class="ig-post">instagram<br />post</article>
+            <article class="ig-post">instagram<br />post</article>
+            <article class="ig-post">instagram<br />post</article>
+            <article class="ig-post">instagram<br />post</article>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section id="frame-2" class="reveal">
-    <div class="frame-content centered-column phone-modal-wrap">
-      <div class="iphone">
-        <div class="dynamic-island"></div>
-        <div class="iphone-screen">
-          <div class="post-placeholder">instagram<br />post</div>
-          <div class="post-placeholder">instagram<br />post</div>
-        </div>
-      </div>
-      <div class="modal-box">
+      <div id="bmiModal" class="modal" aria-hidden="true">
         <p class="modal-title">你的體態夠健康嗎？</p>
-        <p class="modal-subtitle">點擊下方按鈕計算</p>
+        <p>點擊下方按鈕計算</p>
         <hr />
-        <button id="btn-bmi" class="btn btn-bmi">計算我的BMI</button>
+        <button id="btnBmi" class="btn">計算我的BMI</button>
       </div>
     </div>
   </section>
 
-  <section id="frame-3" class="reveal">
-    <div class="frame-content two-col-layout">
-      <div class="col left-col">
-        <div class="wire-box large-radius intro-box">BMI是什麼</div>
-        <div class="wire-box large-radius form-box">
+  <section id="frame-3" class="section reveal">
+    <div class="frame-wrap frame-3-layout">
+      <div class="left-col">
+        <div class="wire-card rounded-box intro-box">BMI是什麼</div>
+        <div class="wire-card rounded-box bmi-form-box">
           <p>你是否成年</p>
           <label for="heightInput">身高 (cm)</label>
           <input id="heightInput" type="number" min="0" placeholder="例如 170" />
@@ -50,34 +43,35 @@
           <button id="submitBmi" class="btn">送出</button>
         </div>
       </div>
-      <div class="col right-col wire-box">
+
+      <div class="wire-card bmi-result-box">
         <p>你的BMI：</p>
         <p id="bmiValue" class="bmi-value">22</p>
         <p id="bmiStatus">屬於正常，恭喜！要繼續保持！</p>
-        <div class="chart-placeholder">圖表分佈圖</div>
+        <div class="wire-card chart-box">圖表分佈圖</div>
       </div>
     </div>
   </section>
 
-  <section id="frame-4" class="reveal">
-    <div class="frame-content centered-column">
-      <p class="section-title">圖表分佈圖</p>
-      <p class="section-subtitle">你的理想身材是哪個？</p>
-      <div class="ideal-cards" id="idealCards">
-        <button class="ideal-card" data-card="card1">1</button>
-        <button class="ideal-card" data-card="card2">2</button>
-        <button class="ideal-card" data-card="card3">3</button>
-        <button class="ideal-card" data-card="card4">4</button>
-        <button class="ideal-card" data-card="card5">5</button>
+  <section id="frame-4" class="section reveal">
+    <div class="frame-wrap center-col">
+      <p class="title">圖表分佈圖</p>
+      <p class="subtitle">你的理想身材是哪個？</p>
+      <div class="choice-row" id="choiceRow">
+        <button class="choice-card" data-choice="A">A</button>
+        <button class="choice-card" data-choice="B">B</button>
+        <button class="choice-card" data-choice="C">C</button>
+        <button class="choice-card" data-choice="D">D</button>
+        <button class="choice-card" data-choice="E">E</button>
       </div>
-      <p id="choiceResult">你和XX%人的選擇一樣</p>
+      <p id="choiceResult">你和曾點選過的人中，有 XX% 選擇一樣的答案</p>
     </div>
   </section>
 
-  <section id="frame-5" class="reveal">
-    <div class="frame-content centered-column">
-      <p class="section-title">看看大家的故事</p>
-      <div class="case-cards">
+  <section id="frame-5" class="section reveal">
+    <div class="frame-wrap center-col">
+      <p class="title">看看大家的故事</p>
+      <div class="case-row">
         <button id="caseCard1" class="case-card">案例一</button>
         <button id="caseCard2" class="case-card">案例二</button>
         <button id="caseCard3" class="case-card">案例三</button>
@@ -86,30 +80,30 @@
     </div>
   </section>
 
-  <section id="frame-6" class="reveal">
-    <div class="frame-content centered-column">
-      <div class="story-card">案例一</div>
+  <section id="frame-6" class="section reveal case-page">
+    <div class="frame-wrap center-col">
+      <div class="wire-card story-card">案例一</div>
       <button id="backToStories1" class="btn">看看更多故事</button>
     </div>
   </section>
 
-  <section id="frame-7" class="reveal">
-    <div class="frame-content centered-column">
-      <div class="story-card">案例二</div>
+  <section id="frame-7" class="section reveal case-page">
+    <div class="frame-wrap center-col">
+      <div class="wire-card story-card">案例二</div>
       <button id="backToStories2" class="btn">看看更多故事</button>
     </div>
   </section>
 
-  <section id="frame-8" class="reveal">
-    <div class="frame-content centered-column">
-      <div class="story-card">案例三</div>
+  <section id="frame-8" class="section reveal case-page">
+    <div class="frame-wrap center-col">
+      <div class="wire-card story-card">案例三</div>
       <button id="backToStories3" class="btn">看看更多故事</button>
     </div>
   </section>
 
-  <section id="frame-9" class="reveal">
-    <div class="frame-content centered-column">
-      <div class="wide-placeholder">圖片 placeholder</div>
+  <section id="frame-9" class="section reveal">
+    <div class="frame-wrap center-col">
+      <div class="wire-card large-placeholder">圖片 placeholder</div>
       <div class="inline-row">
         <span>繼續下滑</span>
         <span>或是</span>
@@ -118,20 +112,21 @@
     </div>
   </section>
 
-  <section id="frame-10" class="reveal">
-    <div class="frame-content centered-column">
-      <div class="wide-placeholder">圖片 placeholder</div>
-      <div class="button-row">
+  <section id="frame-10" class="section reveal">
+    <div class="frame-wrap center-col">
+      <div id="frame10Placeholder" class="wire-card large-placeholder">圖片 placeholder（初始狀態）</div>
+      <div class="inline-row">
         <button id="restart" class="btn">再來一次</button>
         <button id="backArticle" class="btn">回到文章</button>
       </div>
+      <p id="frame10Status" class="small-status"></p>
     </div>
   </section>
 
-  <section id="frame-11" class="reveal">
-    <div class="frame-content overlay-wrap">
-      <div class="big-panel">體態產品頁</div>
-      <div class="floating-card from-right reveal">
+  <section id="frame-11" class="section reveal">
+    <div class="frame-wrap overlay-wrap">
+      <div class="wire-card article-main">體態產品頁</div>
+      <div class="wire-card floating-card from-right reveal">
         <p>（視差滾動）</p>
         <p>不只健身房，體態管理</p>
         <p>和健康餐盒等關注體態</p>
@@ -140,47 +135,45 @@
     </div>
   </section>
 
-  <section id="frame-12" class="reveal">
-    <div class="frame-content overlay-wrap">
-      <div class="big-panel">
+  <section id="frame-12" class="section reveal">
+    <div class="frame-wrap overlay-wrap">
+      <div class="wire-card article-main">
         夾健康餐遊戲<br />
         試算熱量等於一些<br />
         食物，像是珍珠奶茶、<br />
         一個便當比對
       </div>
-      <div class="floating-card from-left reveal">
+      <div class="wire-card floating-card from-left reveal">
         <p>（視差滾動）</p>
         <p>營養師話帶</p>
       </div>
     </div>
   </section>
 
-  <section id="frame-13" class="reveal">
-    <div class="frame-content centered-column">
+  <section id="frame-13" class="section reveal">
+    <div class="frame-wrap center-col">
       <div class="iphone">
         <div class="dynamic-island"></div>
-        <div class="iphone-screen">
-          <div class="story-placeholder">instagram<br />story</div>
+        <div class="phone-screen">
+          <div class="ig-post story">instagram<br />story</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="frame-14" class="reveal">
-    <div class="frame-content centered-column">
-      <div class="big-panel text-panel">
+  <section id="frame-14" class="section reveal">
+    <div class="frame-wrap center-col">
+      <div class="wire-card article-main short">
         跑步到底是為了健康？還是社群表象的自律？<br />
         體態是否成為審視是否自律的標準
       </div>
-      <button class="btn">帶入個案</button>
+      <p>帶入個案</p>
     </div>
   </section>
 
-  <section id="frame-15" class="reveal">
-    <div class="frame-content centered-column">
-      <div class="big-panel text-panel">
-        收尾：社群媒體重新定義我們對於體態的想法
-      </div>
+  <section id="frame-15" class="section reveal">
+    <div class="frame-wrap center-col">
+      <div class="wire-card article-main short">收尾：社群媒體重新定義我們對於體態的想法</div>
     </div>
   </section>
 
