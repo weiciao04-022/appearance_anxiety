@@ -4,6 +4,35 @@ function scrollToSection(id) {
   target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach((page) => {
+    page.classList.remove('active');
+  });
+
+  const target = document.getElementById(pageId);
+  if (!target) return;
+
+  target.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function showMainAndScrollTo(sectionId) {
+  document.querySelectorAll('.page').forEach((page) => {
+    page.classList.remove('active');
+  });
+
+  const mainPage = document.getElementById('main-page');
+  if (!mainPage) return;
+  mainPage.classList.add('active');
+
+  requestAnimationFrame(() => {
+    const target = document.getElementById(sectionId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+}
+
 const phoneFeed = document.getElementById('phoneFeed');
 const bmiModal = document.getElementById('bmiModal');
 const btnBmi = document.getElementById('btnBmi');
@@ -26,7 +55,7 @@ if (phoneFeed && bmiModal) {
 
 if (btnBmi) {
   btnBmi.addEventListener('click', () => {
-    scrollToSection('frame-3');
+    showMainAndScrollTo('frame-3');
   });
 }
 
@@ -72,7 +101,7 @@ function getChoices() {
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [...mockData];
     return parsed;
-  } catch (error) {
+  } catch {
     return [...mockData];
   }
 }
@@ -115,36 +144,44 @@ choiceCards.forEach((card) => {
   });
 });
 
-function bindJump(triggerId, targetId) {
-  const trigger = document.getElementById(triggerId);
-  if (!trigger) return;
-  trigger.addEventListener('click', () => scrollToSection(targetId));
+const caseCard1 = document.getElementById('caseCard1');
+const caseCard2 = document.getElementById('caseCard2');
+const caseCard3 = document.getElementById('caseCard3');
+const backToStories1 = document.getElementById('backToStories1');
+const backToStories2 = document.getElementById('backToStories2');
+const backToStories3 = document.getElementById('backToStories3');
+const goGym = document.getElementById('goGym');
+const restartGym = document.getElementById('restartGym');
+const backArticle = document.getElementById('backArticle');
+
+if (caseCard1) caseCard1.addEventListener('click', () => showPage('story-case-1-page'));
+if (caseCard2) caseCard2.addEventListener('click', () => showPage('story-case-2-page'));
+if (caseCard3) caseCard3.addEventListener('click', () => showPage('story-case-3-page'));
+
+if (backToStories1) backToStories1.addEventListener('click', () => showMainAndScrollTo('story-1-page'));
+if (backToStories2) backToStories2.addEventListener('click', () => showMainAndScrollTo('story-1-page'));
+if (backToStories3) backToStories3.addEventListener('click', () => showMainAndScrollTo('story-1-page'));
+
+if (goGym) goGym.addEventListener('click', () => showPage('gym-page'));
+
+const gymStatus = document.getElementById('gymStatus');
+const gymPlaceholder = document.getElementById('gymPlaceholder');
+
+function resetGymPage() {
+  if (gymPlaceholder) gymPlaceholder.textContent = '圖片 placeholder（初始狀態）';
+  if (gymStatus) gymStatus.textContent = '已重新開始';
 }
 
-bindJump('caseCard1', 'frame-6');
-bindJump('caseCard2', 'frame-7');
-bindJump('caseCard3', 'frame-8');
-bindJump('backToStories1', 'frame-5');
-bindJump('backToStories2', 'frame-5');
-bindJump('backToStories3', 'frame-5');
-bindJump('goGym', 'frame-10');
-bindJump('backArticle', 'frame-11');
-
-const frame10Status = document.getElementById('frame10Status');
-const frame10Placeholder = document.getElementById('frame10Placeholder');
-
-function restartFrame10() {
-  if (frame10Placeholder) {
-    frame10Placeholder.textContent = '圖片 placeholder（初始狀態）';
-  }
-  if (frame10Status) {
-    frame10Status.textContent = '已重新開始';
-  }
+if (restartGym) {
+  restartGym.addEventListener('click', () => {
+    resetGymPage();
+  });
 }
 
-const restartBtn = document.getElementById('restart');
-if (restartBtn) {
-  restartBtn.addEventListener('click', restartFrame10);
+if (backArticle) {
+  backArticle.addEventListener('click', () => {
+    showMainAndScrollTo('frame-11');
+  });
 }
 
 const revealObserver = new IntersectionObserver(

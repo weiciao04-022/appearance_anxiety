@@ -226,10 +226,6 @@ body {
   cursor: pointer;
 }
 
-.case-page {
-  background: #fcfcfc;
-}
-
 .story-card {
   width: 320px;
   height: 520px;
@@ -328,4 +324,22 @@ body {
     transform: none !important;
     margin-top: 12px;
   }
+}
+
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+}
+
+.standalone-page.active {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 6vw;
+  box-sizing: border-box;
 }
