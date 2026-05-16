@@ -1,0 +1,211 @@
+body {
+  margin: 0;
+  background: #fff;
+  color: #000;
+  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", sans-serif;
+}
+
+section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 6vw;
+  box-sizing: border-box;
+}
+
+.frame-content {
+  width: min(1200px, 100%);
+}
+
+.centered-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.iphone {
+  width: 390px;
+  height: 760px;
+  border: 8px solid #000;
+  border-radius: 58px;
+  background: #fff;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.dynamic-island {
+  width: 132px;
+  height: 34px;
+  border-radius: 999px;
+  background: #000;
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.iphone-screen {
+  position: absolute;
+  inset: 62px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.post-placeholder,
+.story-placeholder,
+.wire-box,
+.chart-placeholder,
+.story-card,
+.wide-placeholder,
+.big-panel,
+.floating-card,
+.case-card,
+.ideal-card {
+  border: 1px solid #000;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.post-placeholder {
+  flex: 1;
+}
+.story-placeholder {
+  height: 100%;
+}
+
+.phone-modal-wrap {
+  position: relative;
+}
+
+.modal-box {
+  width: 620px;
+  height: 300px;
+  background: #fff;
+  border: 1px solid #000;
+  border-radius: 40px;
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -25%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.modal-title { font-size: 1.5rem; margin: 0; }
+.modal-subtitle { margin: 0; }
+.modal-box hr { width: 70%; border: none; border-top: 1px solid #000; }
+
+.btn {
+  border: 1px solid #000;
+  background: #fff;
+  border-radius: 999px;
+  padding: 10px 24px;
+  cursor: pointer;
+}
+
+.btn-bmi { background: #eef6ff; color: #3a74c9; }
+
+.two-col-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.left-col,
+.form-box {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.large-radius { border-radius: 30px; min-height: 180px; padding: 24px; }
+.right-col { padding: 24px; min-height: 520px; align-items: flex-start; justify-content: flex-start; }
+.bmi-value { font-size: 84px; margin: 0; }
+.chart-placeholder { width: 100%; min-height: 220px; margin-top: auto; }
+
+input {
+  border: 1px solid #000;
+  padding: 10px;
+  font: inherit;
+}
+
+.section-title, .section-subtitle { margin: 0; }
+.ideal-cards {
+  display: flex;
+  gap: 14px;
+}
+.ideal-card {
+  width: 120px;
+  height: 280px;
+  cursor: pointer;
+}
+.ideal-card.active {
+  border-width: 3px;
+  background: #f2f2f2;
+}
+
+.case-cards {
+  display: flex;
+  gap: 20px;
+}
+.case-card {
+  width: 220px;
+  height: 360px;
+  cursor: pointer;
+}
+.story-card { width: 320px; height: 500px; }
+
+.wide-placeholder { width: min(900px, 90vw); height: 360px; }
+.inline-row, .button-row { display: flex; align-items: center; gap: 18px; }
+
+.overlay-wrap { position: relative; display: flex; justify-content: center; align-items: center; }
+.big-panel { width: min(900px, 92vw); height: 520px; padding: 20px; font-size: 1.4rem; line-height: 1.6; }
+.text-panel { height: 360px; }
+
+.floating-card {
+  width: 280px;
+  min-height: 220px;
+  padding: 16px;
+  position: absolute;
+  top: 50%;
+}
+
+#frame-11 .floating-card { right: 8%; transform: translate(50px, -50%); }
+#frame-12 .floating-card { left: 8%; transform: translate(-50px, -50%); }
+
+.floating-card.visible { transform: translate(0, -50%); }
+
+@media (max-width: 900px) {
+  .two-col-layout { grid-template-columns: 1fr; }
+  .case-cards { flex-direction: column; }
+  .ideal-cards { overflow-x: auto; width: 100%; padding-bottom: 8px; }
+  .iphone { transform: scale(0.85); transform-origin: center; }
+  .modal-box { width: 88vw; }
+  .inline-row, .button-row { flex-wrap: wrap; justify-content: center; }
+  .floating-card { position: static; transform: none !important; margin-top: 16px; }
+}
