@@ -7,25 +7,37 @@ function scrollToSection(id) {
   target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-const phoneFeed = document.getElementById('phoneFeed');
-const bmiModal = document.getElementById('bmiModal');
 const btnBmi = document.getElementById('btnBmi');
-let hasShownBmiModal = false;
 
-if (phoneFeed && bmiModal) {
+function initBmiModalTrigger() {
+  const phoneFeed = document.getElementById('phoneFeed');
+  const bmiModal = document.getElementById('bmiModal');
+  if (!phoneFeed || !bmiModal) return;
+
+  let modalShown = false;
+
+  function showBmiModal() {
+    if (modalShown) return;
+    modalShown = true;
+    bmiModal.classList.add('visible', 'show');
+    bmiModal.setAttribute('aria-hidden', 'false');
+  }
+
   phoneFeed.addEventListener('scroll', () => {
-    if (hasShownBmiModal) return;
-    const maxScrollable = phoneFeed.scrollHeight - phoneFeed.clientHeight;
-    if (maxScrollable <= 0) return;
+    const maxScroll = phoneFeed.scrollHeight - phoneFeed.clientHeight;
+    if (maxScroll <= 0) return;
 
-    const ratio = phoneFeed.scrollTop / maxScrollable;
-    if (ratio >= 0.88) {
-      bmiModal.classList.add('show');
-      bmiModal.setAttribute('aria-hidden', 'false');
-      hasShownBmiModal = true;
+    const scrollRatio =
+      phoneFeed.scrollTop /
+      (phoneFeed.scrollHeight - phoneFeed.clientHeight);
+
+    if (scrollRatio >= 0.88 && !modalShown) {
+      showBmiModal();
     }
   });
 }
+
+initBmiModalTrigger();
 
 if (btnBmi) {
   btnBmi.addEventListener('click', () => {
