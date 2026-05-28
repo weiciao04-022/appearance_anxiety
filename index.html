@@ -108,16 +108,95 @@
   </section>
 
   <section id="frame-12" class="section reveal">
-    <div class="frame-wrap overlay-wrap">
-      <div class="wire-card article-main">
-        夾健康餐遊戲<br />
-        試算熱量等於一些<br />
-        食物，像是珍珠奶茶、<br />
-        一個便當比對
-      </div>
-      <div class="wire-card floating-card from-left reveal">
-        <p>（視差滾動）</p>
-        <p>營養師話帶</p>
+    <div class="frame-wrap meal-section" data-meal-section>
+      <aside class="meal-story-panel" aria-live="polite">
+        <div class="meal-role-placeholder" data-asset-path="assets/ui/nutritionist-placeholder.png">
+          營養師角色 placeholder
+        </div>
+        <p class="meal-kicker">變棒棒健康餐</p>
+        <h2 id="mealDialogueTitle">歡迎光臨變棒棒健康餐！</h2>
+        <p id="mealDialogueText">你知道自己每天吃進多少熱量嗎？先點選食材，做一份你的健康餐盒。</p>
+        <div class="meal-tip-box">
+          <span>熱量小知識</span>
+          <p id="mealTipText">醬料、主食和點綴都會影響一餐的總熱量。</p>
+        </div>
+      </aside>
+
+      <div class="meal-game-panel">
+        <div class="meal-game-head">
+          <p class="meal-kicker">自助夾菜區</p>
+          <h3 id="mealStageTitle">自己夾一份健康餐</h3>
+          <p id="mealStageHint">點擊食材，夾子會把它放進餐盒。先選 5 樣青菜。</p>
+        </div>
+
+        <div class="meal-play-area">
+          <div class="meal-counter-scene" data-meal-scene="build">
+            <div class="meal-box-zone">
+              <div id="embeddedMealBox" class="meal-lunchbox" aria-label="空餐盒">
+                <span class="meal-box-label">餐盒 placeholder</span>
+              </div>
+              <button id="mealCheckoutButton" class="button meal-inline-button" type="button" disabled>前往結帳</button>
+            </div>
+
+            <div class="meal-ingredient-zone">
+              <div class="meal-category-row">
+                <h4>青菜</h4>
+                <span id="embeddedVeggieCount">0 / 5</span>
+              </div>
+              <div class="meal-option-grid" data-meal-category="veggies"></div>
+
+              <div class="meal-category-row">
+                <h4>主食</h4>
+                <span>選 1 樣</span>
+              </div>
+              <div class="meal-option-grid" data-meal-category="protein"></div>
+
+              <div class="meal-category-row">
+                <h4>醬料</h4>
+                <span>選 1 種</span>
+              </div>
+              <div class="meal-option-grid" data-meal-category="sauce"></div>
+            </div>
+          </div>
+
+          <div class="meal-counter-scene is-hidden" data-meal-scene="checkout">
+            <div class="meal-checkout-counter">
+              <div class="meal-counter-box">櫃台 placeholder</div>
+              <div id="checkoutMealBox" class="meal-lunchbox meal-lunchbox-small"></div>
+              <button id="mealPayButton" class="button meal-inline-button" type="button">確認付款</button>
+            </div>
+          </div>
+
+          <div class="meal-counter-scene is-hidden" data-meal-scene="waiting">
+            <div class="meal-waiting-box">
+              <p>製作中</p>
+              <div id="waitingMealBox" class="meal-lunchbox meal-lunchbox-small"></div>
+              <div class="meal-progress-track"><span id="mealProgressBar"></span></div>
+            </div>
+          </div>
+
+          <div class="meal-counter-scene is-hidden" data-meal-scene="result">
+            <div class="meal-result-layout">
+              <div>
+                <div id="resultEmbeddedMealBox" class="meal-lunchbox meal-lunchbox-small"></div>
+                <p class="meal-total"><span id="embeddedMealCalories">0</span> kcal</p>
+              </div>
+              <div class="meal-result-copy">
+                <div class="meal-macro-row">
+                  <span>蛋白質 <b id="embeddedMealProtein">0g</b></span>
+                  <span>脂肪 <b id="embeddedMealFat">0g</b></span>
+                  <span>碳水 <b id="embeddedMealCarbs">0g</b></span>
+                </div>
+                <div id="mealComparisons" class="meal-comparisons"></div>
+                <p id="embeddedMealComment" class="meal-comment"></p>
+                <button id="embeddedMealRestart" class="button meal-inline-button" type="button">再夾一次</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="mealTongs" class="meal-tongs" aria-hidden="true"></div>
+          <div id="mealFlyLayer" class="meal-fly-layer" aria-hidden="true"></div>
+        </div>
       </div>
     </div>
   </section>
