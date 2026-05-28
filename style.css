@@ -208,6 +208,500 @@ body {
   box-sizing: border-box;
 }
 
+#frame-12 {
+  background: #fff8ea;
+  color: #3d2d1d;
+}
+
+#frame-12 .meal-section {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.88fr) minmax(0, 1.6fr);
+  gap: 34px;
+  align-items: stretch;
+}
+
+#frame-12 .meal-story-panel {
+  position: sticky;
+  top: 48px;
+  align-self: start;
+  min-height: 520px;
+  padding: 28px;
+  border: 1px solid rgba(90, 62, 36, 0.18);
+  border-radius: 28px;
+  background: rgba(255, 252, 244, 0.92);
+  box-shadow: 0 18px 44px rgba(91, 65, 36, 0.12);
+  box-sizing: border-box;
+}
+
+#frame-12 .meal-role-placeholder,
+#frame-12 .meal-counter-box,
+#frame-12 .meal-food-art,
+#frame-12 .meal-lunchbox {
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(96, 69, 43, 0.34);
+  background:
+    linear-gradient(135deg, rgba(249, 231, 190, 0.58), rgba(231, 244, 210, 0.62));
+  color: #7a674b;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#frame-12 .meal-role-placeholder {
+  width: 100%;
+  aspect-ratio: 1.08;
+  margin-bottom: 24px;
+  border-radius: 24px;
+  font-weight: 700;
+}
+
+#frame-12 .meal-kicker {
+  display: inline-flex;
+  width: fit-content;
+  margin: 0 0 12px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: #eef6df;
+  color: #6d8b43;
+  font-weight: 800;
+  font-size: 0.92rem;
+}
+
+#frame-12 .meal-story-panel h2,
+#frame-12 .meal-game-head h3 {
+  margin: 0;
+  letter-spacing: 0;
+  line-height: 1.24;
+}
+
+#frame-12 .meal-story-panel h2 {
+  font-size: clamp(1.75rem, 3.2vw, 2.7rem);
+}
+
+#frame-12 .meal-story-panel p,
+#frame-12 .meal-game-head p,
+#frame-12 .meal-tip-box p {
+  line-height: 1.75;
+}
+
+#frame-12 .meal-tip-box {
+  margin-top: 24px;
+  padding: 18px;
+  border-radius: 18px;
+  background: #f6ead2;
+}
+
+#frame-12 .meal-tip-box span {
+  color: #a36b25;
+  font-weight: 800;
+}
+
+#frame-12 .meal-game-panel {
+  position: relative;
+  min-height: 640px;
+  padding: 28px;
+  border: 1px solid rgba(90, 62, 36, 0.18);
+  border-radius: 32px;
+  background:
+    linear-gradient(90deg, rgba(162, 111, 57, 0.08) 1px, transparent 1px) 0 0 / 38px 100%,
+    linear-gradient(145deg, #fffdf7 0%, #f2f8e9 52%, #f4d8aa 100%);
+  box-shadow: inset 0 -18px 36px rgba(130, 86, 40, 0.09), 0 24px 60px rgba(91, 65, 36, 0.14);
+  box-sizing: border-box;
+  cursor: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 5l10 10M14 5l-8 8M18 15l8 8M16 17l8 8' stroke='%235b3b1f' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M20 19l5-5M23 22l5-5' stroke='%2384a75b' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 6 6, pointer;
+}
+
+#frame-12 .meal-game-head {
+  max-width: 620px;
+  margin-bottom: 20px;
+}
+
+#frame-12 .meal-play-area {
+  position: relative;
+  min-height: 500px;
+}
+
+#frame-12 .meal-counter-scene {
+  animation: mealSceneIn 0.32s ease both;
+}
+
+#frame-12 .meal-counter-scene.is-hidden {
+  display: none !important;
+}
+
+#frame-12 .meal-counter-scene[data-meal-scene="build"] {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.82fr) minmax(0, 1.18fr);
+  gap: 22px;
+}
+
+#frame-12 .meal-box-zone,
+#frame-12 .meal-ingredient-zone,
+#frame-12 .meal-checkout-counter,
+#frame-12 .meal-waiting-box,
+#frame-12 .meal-result-layout {
+  border-radius: 24px;
+  background: rgba(255, 252, 244, 0.84);
+  box-shadow: 0 14px 34px rgba(91, 65, 36, 0.1);
+}
+
+#frame-12 .meal-box-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+}
+
+#frame-12 .meal-lunchbox {
+  position: relative;
+  width: min(310px, 100%);
+  aspect-ratio: 1.32;
+  border: 10px solid #f7efe0;
+  border-radius: 28px;
+  background: #fffaf0;
+  overflow: hidden;
+}
+
+#frame-12 .meal-lunchbox::before,
+#frame-12 .meal-lunchbox::after {
+  content: "";
+  position: absolute;
+  background: rgba(122, 92, 56, 0.12);
+}
+
+#frame-12 .meal-lunchbox::before {
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+}
+
+#frame-12 .meal-lunchbox::after {
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+}
+
+#frame-12 .meal-lunchbox-small {
+  width: min(250px, 100%);
+}
+
+#frame-12 .meal-box-label {
+  position: relative;
+  z-index: 1;
+  max-width: 12em;
+  color: #b19b7b;
+  font-weight: 700;
+}
+
+#frame-12 .meal-ingredient-zone {
+  padding: 20px;
+}
+
+#frame-12 .meal-category-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 18px 0 10px;
+}
+
+#frame-12 .meal-category-row:first-child {
+  margin-top: 0;
+}
+
+#frame-12 .meal-category-row h4 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+#frame-12 .meal-category-row span {
+  color: #6d8b43;
+  font-weight: 800;
+}
+
+#frame-12 .meal-option-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(118px, 1fr));
+  gap: 10px;
+}
+
+#frame-12 .meal-option {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  min-height: 64px;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 18px;
+  background: #fffdf7;
+  color: #44321f;
+  box-shadow: 0 8px 18px rgba(91, 65, 36, 0.08);
+  font: inherit;
+  text-align: left;
+  cursor: inherit;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+#frame-12 .meal-option:hover {
+  transform: translateY(-4px) rotate(-1deg);
+}
+
+#frame-12 .meal-option:active,
+#frame-12 .meal-option.is-pinching {
+  transform: translateY(1px) scale(0.97);
+}
+
+#frame-12 .meal-option.is-selected {
+  border-color: #7fa15a;
+  box-shadow: 0 8px 0 rgba(127, 161, 90, 0.16), 0 14px 22px rgba(91, 65, 36, 0.08);
+}
+
+#frame-12 .meal-option:disabled {
+  opacity: 0.42;
+  transform: none;
+  cursor: not-allowed;
+}
+
+#frame-12 .meal-food-art {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  font-size: 0.64rem;
+  line-height: 1.2;
+}
+
+#frame-12 .meal-inline-button {
+  border: 0;
+  background: #eda33a;
+  color: #3d2d1d;
+  box-shadow: 0 7px 0 rgba(135, 90, 43, 0.18), 0 14px 24px rgba(91, 65, 36, 0.12);
+  font-weight: 800;
+}
+
+#frame-12 .meal-inline-button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+#frame-12 .meal-piece {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 19%;
+  height: 24%;
+  border: 1px dashed rgba(74, 55, 34, 0.3);
+  border-radius: 14px;
+  background: var(--piece-color, #e9ddb9);
+  color: rgba(67, 48, 30, 0.78);
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-align: center;
+  animation: mealDrop 0.28s cubic-bezier(.2, .9, .2, 1.2) both;
+  z-index: 2;
+}
+
+#frame-12 .meal-tongs {
+  position: absolute;
+  left: var(--tong-x, 50%);
+  top: var(--tong-y, 50%);
+  width: 42px;
+  height: 42px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  z-index: 10;
+}
+
+#frame-12 .meal-tongs::before,
+#frame-12 .meal-tongs::after {
+  content: "";
+  position: absolute;
+  left: 19px;
+  top: 4px;
+  width: 4px;
+  height: 34px;
+  border-radius: 999px;
+  background: #664323;
+  transform-origin: top center;
+}
+
+#frame-12 .meal-tongs::before { transform: rotate(-20deg); }
+#frame-12 .meal-tongs::after { transform: rotate(20deg); }
+#frame-12 .meal-tongs.is-active {
+  opacity: 1;
+  animation: mealPinch 0.34s ease both;
+}
+
+#frame-12 .meal-fly-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9;
+}
+
+#frame-12 .meal-fly-item {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  border: 1px dashed rgba(74, 55, 34, 0.35);
+  border-radius: 14px;
+  background: var(--piece-color, #ead9ad);
+  color: #5d472f;
+  display: grid;
+  place-items: center;
+  font-size: 0.62rem;
+  font-weight: 800;
+  animation: mealFly 0.48s ease-in-out forwards;
+}
+
+#frame-12 .meal-checkout-counter,
+#frame-12 .meal-waiting-box {
+  display: grid;
+  place-items: center;
+  min-height: 430px;
+  gap: 18px;
+  padding: 28px;
+}
+
+#frame-12 .meal-counter-box {
+  width: min(520px, 100%);
+  height: 120px;
+  border-radius: 18px;
+  background-color: #e0b477;
+}
+
+#frame-12 .meal-progress-track {
+  width: min(420px, 90%);
+  height: 14px;
+  border-radius: 999px;
+  background: #eadcc6;
+  overflow: hidden;
+}
+
+#frame-12 .meal-progress-track span {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: #83a65e;
+}
+
+#frame-12 .meal-progress-track.is-running span {
+  animation: mealProgress 1.25s ease forwards;
+}
+
+#frame-12 .meal-result-layout {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+  min-height: 430px;
+  padding: 24px;
+}
+
+#frame-12 .meal-total {
+  margin: 16px 0 0;
+  color: #a36b25;
+  font-size: 1.6rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+#frame-12 .meal-macro-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+#frame-12 .meal-macro-row span,
+#frame-12 .meal-comparison-card {
+  padding: 12px;
+  border-radius: 16px;
+  background: #fffaf0;
+  box-shadow: inset 0 -4px 0 rgba(237, 163, 58, 0.13);
+}
+
+#frame-12 .meal-comparisons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 16px 0;
+}
+
+#frame-12 .meal-comparison-card {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+}
+
+#frame-12 .meal-comparison-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px dashed rgba(96, 69, 43, 0.32);
+  border-radius: 14px;
+  background: #eef6df;
+  color: #7a674b;
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+#frame-12 .meal-comparison-card p,
+#frame-12 .meal-comment {
+  margin: 0;
+  line-height: 1.55;
+}
+
+#frame-12 .meal-comment {
+  margin-bottom: 18px;
+  color: #6d8b43;
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+@keyframes mealSceneIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes mealDrop {
+  from { opacity: 0; transform: scale(0.72) translateY(-10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes mealPinch {
+  0% { transform: translate(-50%, -50%) rotate(-18deg) scale(0.9); }
+  45% { transform: translate(-50%, -50%) rotate(-18deg) scale(1.08); }
+  100% { transform: translate(-50%, -50%) rotate(-18deg) scale(1); }
+}
+
+@keyframes mealFly {
+  from {
+    left: var(--from-x);
+    top: var(--from-y);
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    left: var(--to-x);
+    top: var(--to-y);
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.66) rotate(8deg);
+  }
+}
+
+@keyframes mealProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
 @media (max-width: 900px) {
   .text-column {
     width: 88vw;
@@ -385,5 +879,45 @@ body {
   .button {
     width: 100%;
     min-height: 48px;
+  }
+
+  #frame-12 .meal-section,
+  #frame-12 .meal-counter-scene[data-meal-scene="build"],
+  #frame-12 .meal-result-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #frame-12 .meal-story-panel {
+    position: static;
+    min-height: auto;
+  }
+
+  #frame-12 .meal-game-panel {
+    min-height: auto;
+    padding: 20px;
+  }
+
+  #frame-12 .meal-option-grid,
+  #frame-12 .meal-comparisons {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  #frame-12 .meal-option {
+    grid-template-columns: 36px minmax(0, 1fr);
+    min-height: 58px;
+    font-size: 0.94rem;
+  }
+
+  #frame-12 .meal-food-art {
+    width: 36px;
+    height: 36px;
+  }
+
+  #frame-12 .meal-macro-row {
+    grid-template-columns: 1fr;
+  }
+
+  #frame-12 .meal-inline-button {
+    width: 100%;
   }
 }
