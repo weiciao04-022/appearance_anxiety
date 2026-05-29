@@ -3,56 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>體態、BMI、社群與健康焦慮互動原型</title>
+  <title>體態、社群與健康焦慮互動專題</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <section id="phone-feed-section" class="section reveal">
-    <div class="phone-feed-wrapper">
-      <div class="iphone">
-        <div class="dynamic-island"></div>
-        <div class="phone-screen">
-          <div id="phoneFeed" class="phone-feed" aria-label="instagram feed">
-            <article class="ig-post">instagram<br />post 1</article>
-            <article class="ig-post">instagram<br />post 2</article>
-            <article class="ig-post">instagram<br />post 3</article>
-            <article class="ig-post">instagram<br />post 4</article>
-            <article class="ig-post">instagram<br />post 5</article>
-            <article class="ig-post">instagram<br />post 6</article>
-            <article class="ig-post">instagram<br />post 7</article>
-            <article class="ig-post">instagram<br />post 8</article>
+  <section id="opening-video-section" class="section reveal scroll-video-intro" data-video-intro>
+    <div class="frame-wrap video-intro-wrap">
+      <div class="video-intro-sticky">
+        <div class="video-copy-block">
+          <p class="section-kicker">互動新聞專題</p>
+          <h1>滑動觀看體態焦慮如何被日常內容推進</h1>
+          <p>這裡預留滾動式影片敘事素材位置。使用者往下滑時，placeholder 畫面會依序推進，後續可替換成正式影片或連續影格。</p>
+        </div>
+
+        <div class="video-placeholder-block" aria-label="滾動式影片 placeholder">
+          <div class="video-frame-placeholder" data-video-frame>
+            <span>scroll video placeholder</span>
+            <strong id="videoFrameLabel">frame 01</strong>
+          </div>
+          <div class="video-progress-track" aria-hidden="true">
+            <span data-video-progress></span>
           </div>
         </div>
-      </div>
 
-      <div id="bmiModal" class="modal" aria-hidden="true">
-        <p class="modal-title">你的體態夠健康嗎？</p>
-        <p>點擊下方按鈕計算</p>
-        <hr />
-        <button id="btnBmi" class="button" type="button">計算我的BMI</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="frame-3" class="section reveal">
-    <div class="frame-wrap frame-3-layout">
-      <div class="left-col">
-        <div class="wire-card rounded-box intro-box">BMI是什麼</div>
-        <div class="wire-card rounded-box bmi-form-box">
-          <p>你是否成年</p>
-          <label for="heightInput">身高 (cm)</label>
-          <input id="heightInput" type="number" min="0" placeholder="例如 170" />
-          <label for="weightInput">體重 (kg)</label>
-          <input id="weightInput" type="number" min="0" placeholder="例如 60" />
-          <button id="submitBmi" class="button" type="button">送出</button>
-        </div>
-      </div>
-
-      <div class="wire-card bmi-result-box">
-        <p>你的BMI：</p>
-        <p id="bmiValue" class="bmi-value">22</p>
-        <p id="bmiStatus">屬於正常，恭喜！要繼續保持！</p>
-        <div class="wire-card chart-box">圖表分佈圖</div>
+        <ol class="video-cue-list" aria-label="影片敘事段落">
+          <li class="is-active" data-video-cue>看見社群中的體態訊息</li>
+          <li data-video-cue>注意開始被外貌標準牽動</li>
+          <li data-video-cue>進入後續互動內容</li>
+        </ol>
       </div>
     </div>
   </section>
@@ -115,7 +93,7 @@
         </div>
         <p class="meal-kicker">變棒棒健康餐</p>
         <h2 id="mealDialogueTitle">歡迎光臨變棒棒健康餐！</h2>
-        <p id="mealDialogueText">你知道自己每天吃進多少熱量嗎？先點選食材，做一份你的健康餐盒。</p>
+        <p id="mealDialogueText">你知道自己每天吃進多少熱量嗎？先輸入基本資料，再做一份你的健康餐盒。</p>
         <div class="meal-tip-box">
           <span>熱量小知識</span>
           <p id="mealTipText">醬料、主食和點綴都會影響一餐的總熱量。</p>
@@ -125,15 +103,50 @@
       <div class="meal-game-panel">
         <div class="meal-game-head">
           <p class="meal-kicker">自助夾菜區</p>
-          <h3 id="mealStageTitle">自己夾一份健康餐</h3>
-          <p id="mealStageHint">點擊食材，夾子會把它放進餐盒。先選 5 樣青菜。</p>
+          <h3 id="mealStageTitle">先建立一餐建議量</h3>
+          <p id="mealStageHint">填寫身高、體重、性別、年齡與活動量，估算你這一餐的建議攝取範圍。</p>
         </div>
 
         <div class="meal-play-area">
-          <div class="meal-counter-scene" data-meal-scene="build">
+          <div class="meal-counter-scene" data-meal-scene="profile">
+            <form id="mealProfileForm" class="meal-profile-form">
+              <label>
+                <span>身高 cm</span>
+                <input id="mealHeightInput" type="number" min="80" max="250" step="1" inputmode="decimal" required />
+              </label>
+              <label>
+                <span>體重 kg</span>
+                <input id="mealWeightInput" type="number" min="20" max="250" step="0.1" inputmode="decimal" required />
+              </label>
+              <label>
+                <span>性別</span>
+                <select id="mealSexInput" required>
+                  <option value="male">男性</option>
+                  <option value="female">女性</option>
+                </select>
+              </label>
+              <label>
+                <span>年齡</span>
+                <input id="mealAgeInput" type="number" min="6" max="120" step="1" inputmode="numeric" required />
+              </label>
+              <label class="meal-profile-wide">
+                <span>活動量</span>
+                <select id="mealActivityInput" required>
+                  <option value="1.2">久坐</option>
+                  <option value="1.375">輕度活動</option>
+                  <option value="1.55">中度活動</option>
+                  <option value="1.725">高度活動</option>
+                </select>
+              </label>
+              <p id="mealProfileError" class="meal-profile-error" aria-live="polite"></p>
+              <button id="mealStartButton" class="button meal-inline-button meal-profile-wide" type="button">開始夾菜</button>
+            </form>
+          </div>
+
+          <div class="meal-counter-scene is-hidden" data-meal-scene="build">
             <div class="meal-box-zone">
               <div id="embeddedMealBox" class="meal-lunchbox" aria-label="空餐盒">
-                <span class="meal-box-label">餐盒 placeholder</span>
+                <span class="meal-box-label">圓形碗 placeholder</span>
               </div>
               <button id="mealCheckoutButton" class="button meal-inline-button" type="button" disabled>前往結帳</button>
             </div>
@@ -146,7 +159,7 @@
               <div class="meal-option-grid" data-meal-category="veggies"></div>
 
               <div class="meal-category-row">
-                <h4>主食</h4>
+                <h4>主菜</h4>
                 <span>選 1 樣</span>
               </div>
               <div class="meal-option-grid" data-meal-category="protein"></div>
@@ -156,6 +169,12 @@
                 <span>選 1 種</span>
               </div>
               <div class="meal-option-grid" data-meal-category="sauce"></div>
+
+              <div class="meal-category-row">
+                <h4>點綴</h4>
+                <span>選 1 種</span>
+              </div>
+              <div class="meal-option-grid" data-meal-category="topping"></div>
             </div>
           </div>
 
@@ -179,14 +198,12 @@
             <div class="meal-result-layout">
               <div>
                 <div id="resultEmbeddedMealBox" class="meal-lunchbox meal-lunchbox-small"></div>
-                <p class="meal-total"><span id="embeddedMealCalories">0</span> kcal</p>
+                <p class="meal-total">玩家餐盒總熱量：<span id="embeddedMealCalories">0</span> kcal</p>
               </div>
               <div class="meal-result-copy">
-                <div class="meal-macro-row">
-                  <span>蛋白質 <b id="embeddedMealProtein">0g</b></span>
-                  <span>脂肪 <b id="embeddedMealFat">0g</b></span>
-                  <span>碳水 <b id="embeddedMealCarbs">0g</b></span>
-                </div>
+                <h4>你的餐盒 vs 你這一餐建議攝取量</h4>
+                <div id="mealMacroResults" class="meal-macro-results"></div>
+                <h4>常見食物熱量比較</h4>
                 <div id="mealComparisons" class="meal-comparisons"></div>
                 <p id="embeddedMealComment" class="meal-comment"></p>
                 <button id="embeddedMealRestart" class="button meal-inline-button" type="button">再夾一次</button>
@@ -200,7 +217,6 @@
       </div>
     </div>
   </section>
-
   <section id="frame-13" class="section reveal">
     <div class="frame-wrap center-col">
       <div class="iphone">
