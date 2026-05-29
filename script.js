@@ -191,6 +191,7 @@ function initHealthyMealSection() {
   const stageHint = document.getElementById('mealStageHint');
   const profileForm = document.getElementById('mealProfileForm');
   const profileError = document.getElementById('mealProfileError');
+  const startButton = document.getElementById('mealStartButton');
   const veggieCount = document.getElementById('embeddedVeggieCount');
   const checkoutButton = document.getElementById('mealCheckoutButton');
   const payButton = document.getElementById('mealPayButton');
@@ -317,6 +318,14 @@ function initHealthyMealSection() {
       scene.classList.toggle('is-hidden', scene.dataset.mealScene !== name);
     });
     updateDialogue(name);
+  }
+
+  function keepMealSectionPosition(callback) {
+    const frame = section.closest('#frame-12') || section;
+    const topBefore = frame.getBoundingClientRect().top;
+    callback();
+    const topAfter = frame.getBoundingClientRect().top;
+    window.scrollBy({ top: topAfter - topBefore, left: 0, behavior: 'auto' });
   }
 
   function makeSlot(className, label, item) {
@@ -557,19 +566,27 @@ function initHealthyMealSection() {
   syncBuild();
   showScene('profile');
 
-  profileForm?.addEventListener('submit', (event) => {
-    event.preventDefault();
+  function startBuildFlow(event) {
+    event?.preventDefault();
+    if (profileForm?.reportValidity && !profileForm.reportValidity()) return;
+
     const profile = readProfile();
     if (!profile) {
       if (profileError) profileError.textContent = '請輸入有效的基本資料。';
       return;
     }
     if (profileError) profileError.textContent = '';
+    startButton?.blur();
     state.targets = calculateTargets(profile);
     playClickSound();
-    showScene('build');
-    syncBuild();
-  });
+    keepMealSectionPosition(() => {
+      showScene('build');
+      syncBuild();
+    });
+  }
+
+  profileForm?.addEventListener('submit', startBuildFlow);
+  startButton?.addEventListener('click', startBuildFlow);
 
   checkoutButton?.addEventListener('click', () => {
     if (!isComplete()) return;
