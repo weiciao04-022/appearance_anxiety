@@ -3,56 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>體態、BMI、社群與健康焦慮互動原型</title>
+  <title>體態、社群與健康焦慮互動專題</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <section id="phone-feed-section" class="section reveal">
-    <div class="phone-feed-wrapper">
-      <div class="iphone">
-        <div class="dynamic-island"></div>
-        <div class="phone-screen">
-          <div id="phoneFeed" class="phone-feed" aria-label="instagram feed">
-            <article class="ig-post">instagram<br />post 1</article>
-            <article class="ig-post">instagram<br />post 2</article>
-            <article class="ig-post">instagram<br />post 3</article>
-            <article class="ig-post">instagram<br />post 4</article>
-            <article class="ig-post">instagram<br />post 5</article>
-            <article class="ig-post">instagram<br />post 6</article>
-            <article class="ig-post">instagram<br />post 7</article>
-            <article class="ig-post">instagram<br />post 8</article>
+  <section id="opening-video-section" class="section reveal scroll-video-intro" data-video-intro>
+    <div class="frame-wrap video-intro-wrap">
+      <div class="video-intro-sticky">
+        <div class="video-copy-block">
+          <p class="section-kicker">互動新聞專題</p>
+          <h1>滑動觀看體態焦慮如何被日常內容推進</h1>
+          <p>這裡預留滾動式影片敘事素材位置。使用者往下滑時，placeholder 畫面會依序推進，後續可替換成正式影片或連續影格。</p>
+        </div>
+
+        <div class="video-placeholder-block" aria-label="滾動式影片 placeholder">
+          <div class="video-frame-placeholder" data-video-frame>
+            <span>scroll video placeholder</span>
+            <strong id="videoFrameLabel">frame 01</strong>
+          </div>
+          <div class="video-progress-track" aria-hidden="true">
+            <span data-video-progress></span>
           </div>
         </div>
-      </div>
 
-      <div id="bmiModal" class="modal" aria-hidden="true">
-        <p class="modal-title">你的體態夠健康嗎？</p>
-        <p>點擊下方按鈕計算</p>
-        <hr />
-        <button id="btnBmi" class="button" type="button">計算我的BMI</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="frame-3" class="section reveal">
-    <div class="frame-wrap frame-3-layout">
-      <div class="left-col">
-        <div class="wire-card rounded-box intro-box">BMI是什麼</div>
-        <div class="wire-card rounded-box bmi-form-box">
-          <p>你是否成年</p>
-          <label for="heightInput">身高 (cm)</label>
-          <input id="heightInput" type="number" min="0" placeholder="例如 170" />
-          <label for="weightInput">體重 (kg)</label>
-          <input id="weightInput" type="number" min="0" placeholder="例如 60" />
-          <button id="submitBmi" class="button" type="button">送出</button>
-        </div>
-      </div>
-
-      <div class="wire-card bmi-result-box">
-        <p>你的BMI：</p>
-        <p id="bmiValue" class="bmi-value">22</p>
-        <p id="bmiStatus">屬於正常，恭喜！要繼續保持！</p>
-        <div class="wire-card chart-box">圖表分佈圖</div>
+        <ol class="video-cue-list" aria-label="影片敘事段落">
+          <li class="is-active" data-video-cue>看見社群中的體態訊息</li>
+          <li data-video-cue>注意開始被外貌標準牽動</li>
+          <li data-video-cue>進入後續互動內容</li>
+        </ol>
       </div>
     </div>
   </section>

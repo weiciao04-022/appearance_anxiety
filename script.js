@@ -7,75 +7,34 @@ function scrollToSection(id) {
   target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-const btnBmi = document.getElementById('btnBmi');
+function initScrollVideoIntro() {
+  const intro = document.querySelector('[data-video-intro]');
+  if (!intro) return;
 
-function initBmiModalTrigger() {
-  const phoneFeed = document.getElementById('phoneFeed');
-  const bmiModal = document.getElementById('bmiModal');
-  if (!phoneFeed || !bmiModal) return;
+  const progressBar = intro.querySelector('[data-video-progress]');
+  const frameLabel = document.getElementById('videoFrameLabel');
+  const cues = [...intro.querySelectorAll('[data-video-cue]')];
 
-  let modalShown = false;
+  function updateIntroProgress() {
+    const rect = intro.getBoundingClientRect();
+    const scrollable = Math.max(1, intro.offsetHeight - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+    const percent = Math.round(progress * 100);
+    const frameNumber = String(Math.min(3, Math.floor(progress * 3) + 1)).padStart(2, '0');
+    const activeIndex = Math.min(cues.length - 1, Math.floor(progress * cues.length));
 
-  function showBmiModal() {
-    if (modalShown) return;
-    modalShown = true;
-    bmiModal.classList.add('visible', 'show');
-    bmiModal.setAttribute('aria-hidden', 'false');
+    intro.style.setProperty('--intro-progress', `${percent}%`);
+    if (progressBar) progressBar.style.width = `${percent}%`;
+    if (frameLabel) frameLabel.textContent = `frame ${frameNumber}`;
+    cues.forEach((cue, index) => cue.classList.toggle('is-active', index === activeIndex));
   }
 
-  phoneFeed.addEventListener('scroll', () => {
-    const maxScroll = phoneFeed.scrollHeight - phoneFeed.clientHeight;
-    if (maxScroll <= 0) return;
-
-    const scrollRatio =
-      phoneFeed.scrollTop /
-      (phoneFeed.scrollHeight - phoneFeed.clientHeight);
-
-    if (scrollRatio >= 0.88 && !modalShown) {
-      showBmiModal();
-    }
-  });
+  updateIntroProgress();
+  window.addEventListener('scroll', updateIntroProgress, { passive: true });
+  window.addEventListener('resize', updateIntroProgress);
 }
 
-initBmiModalTrigger();
-
-if (btnBmi) {
-  btnBmi.addEventListener('click', () => {
-    document.getElementById('frame-3')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-}
-
-const heightInput = document.getElementById('heightInput');
-const weightInput = document.getElementById('weightInput');
-const submitBmi = document.getElementById('submitBmi');
-const bmiValue = document.getElementById('bmiValue');
-const bmiStatus = document.getElementById('bmiStatus');
-
-if (submitBmi && heightInput && weightInput && bmiValue && bmiStatus) {
-  submitBmi.addEventListener('click', () => {
-    const heightCm = Number(heightInput.value);
-    const weightKg = Number(weightInput.value);
-
-    if (!heightCm || !weightKg || heightCm <= 0 || weightKg <= 0) {
-      bmiStatus.textContent = '請輸入有效的身高與體重';
-      return;
-    }
-
-    const heightM = heightCm / 100;
-    const bmi = weightKg / (heightM * heightM);
-    bmiValue.textContent = bmi.toFixed(1);
-
-    if (bmi < 18.5) {
-      bmiStatus.textContent = '偏低';
-    } else if (bmi < 24) {
-      bmiStatus.textContent = '正常';
-    } else if (bmi < 27) {
-      bmiStatus.textContent = '過重';
-    } else {
-      bmiStatus.textContent = '肥胖';
-    }
-  });
-}
+initScrollVideoIntro();
 
 function getChoices() {
   try {
