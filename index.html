@@ -115,7 +115,7 @@
         </div>
         <p class="meal-kicker">變棒棒健康餐</p>
         <h2 id="mealDialogueTitle">歡迎光臨變棒棒健康餐！</h2>
-        <p id="mealDialogueText">你知道自己每天吃進多少熱量嗎？先點選食材，做一份你的健康餐盒。</p>
+        <p id="mealDialogueText">你知道自己每天吃進多少熱量嗎？先輸入基本資料，再做一份你的健康餐盒。</p>
         <div class="meal-tip-box">
           <span>熱量小知識</span>
           <p id="mealTipText">醬料、主食和點綴都會影響一餐的總熱量。</p>
@@ -125,15 +125,50 @@
       <div class="meal-game-panel">
         <div class="meal-game-head">
           <p class="meal-kicker">自助夾菜區</p>
-          <h3 id="mealStageTitle">自己夾一份健康餐</h3>
-          <p id="mealStageHint">點擊食材，夾子會把它放進餐盒。先選 5 樣青菜。</p>
+          <h3 id="mealStageTitle">先建立一餐建議量</h3>
+          <p id="mealStageHint">填寫身高、體重、性別、年齡與活動量，估算你這一餐的建議攝取範圍。</p>
         </div>
 
         <div class="meal-play-area">
-          <div class="meal-counter-scene" data-meal-scene="build">
+          <div class="meal-counter-scene" data-meal-scene="profile">
+            <form id="mealProfileForm" class="meal-profile-form">
+              <label>
+                <span>身高 cm</span>
+                <input id="mealHeightInput" type="number" min="80" max="250" step="1" inputmode="decimal" required />
+              </label>
+              <label>
+                <span>體重 kg</span>
+                <input id="mealWeightInput" type="number" min="20" max="250" step="0.1" inputmode="decimal" required />
+              </label>
+              <label>
+                <span>性別</span>
+                <select id="mealSexInput" required>
+                  <option value="male">男性</option>
+                  <option value="female">女性</option>
+                </select>
+              </label>
+              <label>
+                <span>年齡</span>
+                <input id="mealAgeInput" type="number" min="6" max="120" step="1" inputmode="numeric" required />
+              </label>
+              <label class="meal-profile-wide">
+                <span>活動量</span>
+                <select id="mealActivityInput" required>
+                  <option value="1.2">久坐</option>
+                  <option value="1.375">輕度活動</option>
+                  <option value="1.55">中度活動</option>
+                  <option value="1.725">高度活動</option>
+                </select>
+              </label>
+              <p id="mealProfileError" class="meal-profile-error" aria-live="polite"></p>
+              <button id="mealStartButton" class="button meal-inline-button meal-profile-wide" type="button">開始夾菜</button>
+            </form>
+          </div>
+
+          <div class="meal-counter-scene is-hidden" data-meal-scene="build">
             <div class="meal-box-zone">
               <div id="embeddedMealBox" class="meal-lunchbox" aria-label="空餐盒">
-                <span class="meal-box-label">餐盒 placeholder</span>
+                <span class="meal-box-label">圓形碗 placeholder</span>
               </div>
               <button id="mealCheckoutButton" class="button meal-inline-button" type="button" disabled>前往結帳</button>
             </div>
@@ -146,7 +181,7 @@
               <div class="meal-option-grid" data-meal-category="veggies"></div>
 
               <div class="meal-category-row">
-                <h4>主食</h4>
+                <h4>主菜</h4>
                 <span>選 1 樣</span>
               </div>
               <div class="meal-option-grid" data-meal-category="protein"></div>
@@ -156,6 +191,12 @@
                 <span>選 1 種</span>
               </div>
               <div class="meal-option-grid" data-meal-category="sauce"></div>
+
+              <div class="meal-category-row">
+                <h4>點綴</h4>
+                <span>選 1 種</span>
+              </div>
+              <div class="meal-option-grid" data-meal-category="topping"></div>
             </div>
           </div>
 
@@ -179,14 +220,12 @@
             <div class="meal-result-layout">
               <div>
                 <div id="resultEmbeddedMealBox" class="meal-lunchbox meal-lunchbox-small"></div>
-                <p class="meal-total"><span id="embeddedMealCalories">0</span> kcal</p>
+                <p class="meal-total">玩家餐盒總熱量：<span id="embeddedMealCalories">0</span> kcal</p>
               </div>
               <div class="meal-result-copy">
-                <div class="meal-macro-row">
-                  <span>蛋白質 <b id="embeddedMealProtein">0g</b></span>
-                  <span>脂肪 <b id="embeddedMealFat">0g</b></span>
-                  <span>碳水 <b id="embeddedMealCarbs">0g</b></span>
-                </div>
+                <h4>你的餐盒 vs 你這一餐建議攝取量</h4>
+                <div id="mealMacroResults" class="meal-macro-results"></div>
+                <h4>常見食物熱量比較</h4>
                 <div id="mealComparisons" class="meal-comparisons"></div>
                 <p id="embeddedMealComment" class="meal-comment"></p>
                 <button id="embeddedMealRestart" class="button meal-inline-button" type="button">再夾一次</button>
@@ -200,7 +239,6 @@
       </div>
     </div>
   </section>
-
   <section id="frame-13" class="section reveal">
     <div class="frame-wrap center-col">
       <div class="iphone">
