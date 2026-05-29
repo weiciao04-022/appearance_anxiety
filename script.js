@@ -136,41 +136,52 @@ function initHealthyMealSection() {
   const section = document.querySelector('[data-meal-section]');
   if (!section) return;
 
-  const items = {
+  // Nutrition references for this section:
+  // - Mifflin-St Jeor equation estimates BMR from sex, age, height, and weight.
+  // - AMDR: carbohydrate 45–65%, fat 20–35%, protein 10–35%.
+  // - USDA FoodData Central can be used as a reference source for food nutrition data.
+  const ingredientData = {
     veggies: [
-      { name: '花椰菜', asset: 'assets/foods/broccoli.png', color: '#8fbf67', calories: 35, protein: 3, fat: 0, carbs: 7 },
-      { name: '玉米筍', asset: 'assets/foods/baby-corn.png', color: '#f0c860', calories: 28, protein: 1, fat: 0, carbs: 6 },
-      { name: '高麗菜', asset: 'assets/foods/cabbage.png', color: '#b8d985', calories: 30, protein: 2, fat: 0, carbs: 6 },
-      { name: '菠菜', asset: 'assets/foods/spinach.png', color: '#75aa61', calories: 25, protein: 3, fat: 0, carbs: 4 },
-      { name: '杏鮑菇', asset: 'assets/foods/mushroom.png', color: '#d7c4a1', calories: 36, protein: 2, fat: 0, carbs: 7 },
-      { name: '南瓜', asset: 'assets/foods/pumpkin.png', color: '#eba24c', calories: 55, protein: 1, fat: 0, carbs: 13 },
-      { name: '小黃瓜', asset: 'assets/foods/cucumber.png', color: '#94cb7b', calories: 18, protein: 1, fat: 0, carbs: 4 },
-      { name: '胡蘿蔔', asset: 'assets/foods/carrot.png', color: '#ee8d43', calories: 32, protein: 1, fat: 0, carbs: 8 },
-      { name: '紫高麗菜', asset: 'assets/foods/purple-cabbage.png', color: '#b895c8', calories: 30, protein: 1, fat: 0, carbs: 7 },
-      { name: '毛豆', asset: 'assets/foods/edamame.png', color: '#8fbd65', calories: 80, protein: 8, fat: 3, carbs: 7 }
+      { name: '花椰菜', type: 'vegetable', calories: 35, protein: 3, carbs: 7, fat: 0, image: 'assets/foods/broccoli-placeholder.png', color: '#8fbf67' },
+      { name: '玉米筍', type: 'vegetable', calories: 28, protein: 1, carbs: 6, fat: 0, image: 'assets/foods/baby-corn-placeholder.png', color: '#f0c860' },
+      { name: '高麗菜', type: 'vegetable', calories: 30, protein: 2, carbs: 6, fat: 0, image: 'assets/foods/cabbage-placeholder.png', color: '#b8d985' },
+      { name: '菠菜', type: 'vegetable', calories: 25, protein: 3, carbs: 4, fat: 0, image: 'assets/foods/spinach-placeholder.png', color: '#75aa61' },
+      { name: '杏鮑菇', type: 'vegetable', calories: 36, protein: 2, carbs: 7, fat: 0, image: 'assets/foods/mushroom-placeholder.png', color: '#d7c4a1' },
+      { name: '南瓜', type: 'vegetable', calories: 55, protein: 1, carbs: 13, fat: 0, image: 'assets/foods/pumpkin-placeholder.png', color: '#eba24c' },
+      { name: '小黃瓜', type: 'vegetable', calories: 18, protein: 1, carbs: 4, fat: 0, image: 'assets/foods/cucumber-placeholder.png', color: '#94cb7b' },
+      { name: '胡蘿蔔', type: 'vegetable', calories: 32, protein: 1, carbs: 8, fat: 0, image: 'assets/foods/carrot-placeholder.png', color: '#ee8d43' },
+      { name: '紫高麗菜', type: 'vegetable', calories: 30, protein: 1, carbs: 7, fat: 0, image: 'assets/foods/purple-cabbage-placeholder.png', color: '#b895c8' },
+      { name: '毛豆', type: 'vegetable', calories: 80, protein: 8, carbs: 7, fat: 3, image: 'assets/foods/edamame-placeholder.png', color: '#8fbd65' }
     ],
     protein: [
-      { name: '舒肥雞胸', asset: 'assets/foods/chicken.png', color: '#dfbf91', calories: 165, protein: 31, fat: 4, carbs: 0 },
-      { name: '鮭魚', asset: 'assets/foods/salmon.png', color: '#ef9d7a', calories: 210, protein: 22, fat: 13, carbs: 0 },
-      { name: '牛肉', asset: 'assets/foods/beef.png', color: '#c17a5a', calories: 230, protein: 25, fat: 14, carbs: 0 },
-      { name: '豆腐', asset: 'assets/foods/tofu.png', color: '#f2e8d6', calories: 120, protein: 12, fat: 7, carbs: 4 },
-      { name: '水煮蛋', asset: 'assets/foods/egg.png', color: '#f1cf72', calories: 78, protein: 6, fat: 5, carbs: 1 }
+      { name: '舒肥雞胸', type: 'protein', calories: 165, protein: 31, carbs: 0, fat: 4, image: 'assets/foods/chicken-placeholder.png', color: '#dfbf91' },
+      { name: '鮭魚', type: 'protein', calories: 210, protein: 22, carbs: 0, fat: 13, image: 'assets/foods/salmon-placeholder.png', color: '#ef9d7a' },
+      { name: '牛肉', type: 'protein', calories: 230, protein: 25, carbs: 0, fat: 14, image: 'assets/foods/beef-placeholder.png', color: '#c17a5a' },
+      { name: '豆腐', type: 'protein', calories: 120, protein: 12, carbs: 4, fat: 7, image: 'assets/foods/tofu-placeholder.png', color: '#f2e8d6' },
+      { name: '水煮蛋', type: 'protein', calories: 78, protein: 6, carbs: 1, fat: 5, image: 'assets/foods/egg-placeholder.png', color: '#f1cf72' }
     ],
     sauce: [
-      { name: '胡麻醬', asset: 'assets/foods/sesame-sauce.png', color: '#d2a75c', calories: 95, protein: 2, fat: 8, carbs: 4 },
-      { name: '和風醬', asset: 'assets/foods/wafu-sauce.png', color: '#cbb176', calories: 45, protein: 1, fat: 2, carbs: 6 },
-      { name: '凱薩醬', asset: 'assets/foods/caesar-sauce.png', color: '#eeddb5', calories: 110, protein: 2, fat: 10, carbs: 3 },
-      { name: '辣味優格醬', asset: 'assets/foods/spicy-yogurt.png', color: '#f09a63', calories: 70, protein: 4, fat: 3, carbs: 6 }
+      { name: '胡麻醬', type: 'sauce', calories: 95, protein: 2, carbs: 4, fat: 8, image: 'assets/foods/sesame-sauce-placeholder.png', color: '#d2a75c' },
+      { name: '和風醬', type: 'sauce', calories: 45, protein: 1, carbs: 6, fat: 2, image: 'assets/foods/wafu-sauce-placeholder.png', color: '#cbb176' },
+      { name: '凱薩醬', type: 'sauce', calories: 110, protein: 2, carbs: 3, fat: 10, image: 'assets/foods/caesar-sauce-placeholder.png', color: '#eeddb5' },
+      { name: '辣味優格醬', type: 'sauce', calories: 70, protein: 4, carbs: 6, fat: 3, image: 'assets/foods/spicy-yogurt-placeholder.png', color: '#f09a63' }
+    ],
+    topping: [
+      { name: '白芝麻', type: 'topping', calories: 25, protein: 1, carbs: 1, fat: 2, image: 'assets/foods/sesame-placeholder.png', color: '#efe0bd' },
+      { name: '海苔絲', type: 'topping', calories: 8, protein: 1, carbs: 1, fat: 0, image: 'assets/foods/nori-placeholder.png', color: '#56694e' },
+      { name: '堅果碎', type: 'topping', calories: 65, protein: 2, carbs: 2, fat: 6, image: 'assets/foods/nuts-placeholder.png', color: '#b9854f' },
+      { name: '蔥花', type: 'topping', calories: 5, protein: 0, carbs: 1, fat: 0, image: 'assets/foods/scallion-placeholder.png', color: '#76a85c' }
     ]
   };
 
   const comparisonFoods = {
-    珍珠奶茶: { calories: 650, asset: 'assets/foods/bubble-tea.png' },
-    炸雞排: { calories: 700, asset: 'assets/foods/fried-chicken.png' },
-    麥當勞套餐: { calories: 1050, asset: 'assets/foods/fast-food-set.png' },
-    泡麵: { calories: 520, asset: 'assets/foods/instant-noodles.png' },
-    手搖飲: { calories: 420, asset: 'assets/foods/tea-drink.png' },
-    超商便當: { calories: 850, asset: 'assets/foods/convenience-bento.png' }
+    珍珠奶茶: { calories: 650, unit: '杯', image: 'assets/foods/bubble-tea-placeholder.png' },
+    炸雞排: { calories: 700, unit: '份', image: 'assets/foods/fried-chicken-placeholder.png' },
+    麥當勞套餐: { calories: 900, unit: '份', image: 'assets/foods/fast-food-set-placeholder.png' },
+    泡麵: { calories: 450, unit: '碗', image: 'assets/foods/instant-noodles-placeholder.png' },
+    超商便當: { calories: 850, unit: '份', image: 'assets/foods/convenience-bento-placeholder.png' },
+    甜甜圈: { calories: 300, unit: '個', image: 'assets/foods/donut-placeholder.png' },
+    拿鐵: { calories: 180, unit: '杯', image: 'assets/foods/latte-placeholder.png' }
   };
 
   const dialogueTitle = document.getElementById('mealDialogueTitle');
@@ -178,6 +189,8 @@ function initHealthyMealSection() {
   const tipText = document.getElementById('mealTipText');
   const stageTitle = document.getElementById('mealStageTitle');
   const stageHint = document.getElementById('mealStageHint');
+  const profileForm = document.getElementById('mealProfileForm');
+  const profileError = document.getElementById('mealProfileError');
   const veggieCount = document.getElementById('embeddedVeggieCount');
   const checkoutButton = document.getElementById('mealCheckoutButton');
   const payButton = document.getElementById('mealPayButton');
@@ -195,7 +208,9 @@ function initHealthyMealSection() {
   const state = {
     veggies: [],
     protein: null,
-    sauce: null
+    sauce: null,
+    topping: null,
+    targets: null
   };
 
   function playClickSound() {
@@ -215,7 +230,7 @@ function initHealthyMealSection() {
   }
 
   function selectedItems() {
-    return [...state.veggies, state.protein, state.sauce].filter(Boolean);
+    return [...state.veggies, state.protein, state.sauce, state.topping].filter(Boolean);
   }
 
   function totals() {
@@ -223,27 +238,61 @@ function initHealthyMealSection() {
       (sum, item) => ({
         calories: sum.calories + item.calories,
         protein: sum.protein + item.protein,
-        fat: sum.fat + item.fat,
-        carbs: sum.carbs + item.carbs
+        carbs: sum.carbs + item.carbs,
+        fat: sum.fat + item.fat
       }),
-      { calories: 0, protein: 0, fat: 0, carbs: 0 }
+      { calories: 0, protein: 0, carbs: 0, fat: 0 }
     );
   }
 
   function isComplete() {
-    return state.veggies.length === 5 && state.protein && state.sauce;
+    return state.veggies.length === 5 && state.protein && state.sauce && state.topping;
+  }
+
+  function calculateTargets(profile) {
+    const bmr = profile.sex === 'male'
+      ? 10 * profile.weight + 6.25 * profile.height - 5 * profile.age + 5
+      : 10 * profile.weight + 6.25 * profile.height - 5 * profile.age - 161;
+    const mealCalories = (bmr * profile.activity) / 3;
+    return {
+      calories: { min: Math.round(mealCalories * 0.9), max: Math.round(mealCalories * 1.1), center: Math.round(mealCalories) },
+      protein: { min: Math.round((mealCalories * 0.10) / 4), max: Math.round((mealCalories * 0.35) / 4) },
+      carbs: { min: Math.round((mealCalories * 0.45) / 4), max: Math.round((mealCalories * 0.65) / 4) },
+      fat: { min: Math.round((mealCalories * 0.20) / 9), max: Math.round((mealCalories * 0.35) / 9) }
+    };
+  }
+
+  function readProfile() {
+    const height = Number(document.getElementById('mealHeightInput')?.value);
+    const weight = Number(document.getElementById('mealWeightInput')?.value);
+    const sex = document.getElementById('mealSexInput')?.value;
+    const age = Number(document.getElementById('mealAgeInput')?.value);
+    const activity = Number(document.getElementById('mealActivityInput')?.value);
+    if (!height || !weight || !sex || !age || !activity || height <= 0 || weight <= 0 || age <= 0) return null;
+    return { height, weight, sex, age, activity };
+  }
+
+  function getStatus(value, range) {
+    if (value < range.min) return '偏低';
+    if (value > range.max) return '偏高';
+    return '足夠';
   }
 
   function updateDialogue(step) {
     const copy = {
+      profile: [
+        '歡迎光臨變棒棒健康餐！',
+        '你知道自己每天吃進多少熱量嗎？先輸入基本資料，再做一份你的健康餐盒。',
+        '一餐建議量會依照身高、體重、性別、年齡與活動量估算。'
+      ],
       build: [
         '歡迎光臨變棒棒健康餐！',
-        '你知道自己每天吃進多少熱量嗎？先點選食材，做一份你的健康餐盒。',
-        '青菜熱量通常不高，但份量和醬料會讓整體差很多。'
+        '點擊食材，夾子會把它放進圓形碗。請依序選青菜、主菜、醬料與點綴。',
+        '青菜熱量通常不高，但份量、主菜和醬料會讓整體差很多。'
       ],
       checkout: [
         '餐盒完成，準備結帳！',
-        '結帳前可以觀察一下，主食和醬料通常是熱量變化最大的地方。',
+        '結帳前可以觀察一下，主菜和醬料通常是熱量變化最大的地方。',
         '有些健康餐看起來清爽，醬料熱量其實也很有存在感。'
       ],
       waiting: [
@@ -257,6 +306,7 @@ function initHealthyMealSection() {
         '偶爾吃喜歡的食物也沒關係，重點是看見選擇。'
       ]
     }[step];
+    if (!copy) return;
     dialogueTitle.textContent = copy[0];
     dialogueText.textContent = copy[1];
     tipText.textContent = copy[2];
@@ -269,21 +319,26 @@ function initHealthyMealSection() {
     updateDialogue(name);
   }
 
+  function makeSlot(className, label, item) {
+    const slot = document.createElement('span');
+    slot.className = `meal-piece ${className}${item ? ' is-filled' : ''}`;
+    slot.textContent = item ? item.name : label;
+    if (item) {
+      slot.style.setProperty('--piece-color', item.color);
+      slot.dataset.assetPath = item.image;
+    }
+    return slot;
+  }
+
   function renderMealBox(target) {
     if (!target) return;
-    target.innerHTML = '<span class="meal-box-label">餐盒 placeholder</span>';
-    selectedItems().forEach((item, index) => {
-      const piece = document.createElement('span');
-      const row = Math.floor(index / 4);
-      const col = index % 4;
-      piece.className = 'meal-piece';
-      piece.textContent = item.name;
-      piece.style.setProperty('--piece-color', item.color);
-      piece.style.left = `${7 + col * 23 + (row % 2) * 3}%`;
-      piece.style.top = `${9 + row * 27}%`;
-      piece.style.animationDelay = `${index * 0.025}s`;
-      target.appendChild(piece);
-    });
+    target.innerHTML = '<span class="meal-box-label">圓形碗 placeholder</span>';
+    for (let index = 0; index < 5; index += 1) {
+      target.appendChild(makeSlot(`vegetable-slot-${index + 1}`, `vegetable-slot-${index + 1}`, state.veggies[index]));
+    }
+    target.appendChild(makeSlot('protein-center-slot', 'protein-center-slot', state.protein));
+    target.appendChild(makeSlot('sauce-overlay', 'sauce-overlay', state.sauce));
+    target.appendChild(makeSlot('topping-overlay', 'topping-overlay', state.topping));
   }
 
   function renderAllBoxes() {
@@ -298,14 +353,17 @@ function initHealthyMealSection() {
       stageTitle.textContent = '自己夾一份健康餐';
       stageHint.textContent = `先選 5 樣青菜，還差 ${5 - state.veggies.length} 樣。`;
     } else if (!state.protein) {
-      stageTitle.textContent = '選一份主食';
-      stageHint.textContent = '青菜夾好了，接著選一份主食。';
+      stageTitle.textContent = '選一份主菜';
+      stageHint.textContent = '青菜夾好了，接著選一份主菜。';
     } else if (!state.sauce) {
-      stageTitle.textContent = '最後選醬料';
+      stageTitle.textContent = '選一種醬料';
       stageHint.textContent = '醬料也會增加熱量，選一種你今天想吃的。';
+    } else if (!state.topping) {
+      stageTitle.textContent = '最後選點綴';
+      stageHint.textContent = '撒上一種點綴，就可以前往結帳。';
     } else {
       stageTitle.textContent = '餐盒完成';
-      stageHint.textContent = '可以前往結帳，看看這份餐盒和常見食物差多少。';
+      stageHint.textContent = '可以前往結帳，看看這份餐盒和你的一餐建議量差多少。';
     }
   }
 
@@ -318,7 +376,8 @@ function initHealthyMealSection() {
         : state[category]?.name === name;
       const locked =
         (category === 'protein' && state.veggies.length < 5) ||
-        (category === 'sauce' && !state.protein);
+        (category === 'sauce' && !state.protein) ||
+        (category === 'topping' && !state.sauce);
       button.classList.toggle('is-selected', selected);
       button.setAttribute('aria-pressed', selected ? 'true' : 'false');
       button.disabled = category === 'veggies'
@@ -333,6 +392,17 @@ function initHealthyMealSection() {
     updateOptionStates();
   }
 
+  function targetSelectorFor(category, item) {
+    if (category === 'veggies') {
+      const selectedIndex = state.veggies.findIndex((selected) => selected.name === item.name);
+      const nextIndex = selectedIndex >= 0 ? selectedIndex : state.veggies.length;
+      return `.vegetable-slot-${Math.min(nextIndex + 1, 5)}`;
+    }
+    if (category === 'protein') return '.protein-center-slot';
+    if (category === 'sauce') return '.sauce-overlay';
+    return '.topping-overlay';
+  }
+
   function runTongsAnimation(sourceButton) {
     if (!tongs) return;
     const areaRect = section.querySelector('.meal-play-area').getBoundingClientRect();
@@ -344,11 +414,12 @@ function initHealthyMealSection() {
     tongs.classList.add('is-active');
   }
 
-  function runFlyAnimation(sourceButton, item) {
+  function runFlyAnimation(sourceButton, item, category) {
     if (!flyLayer || !boxes[0]) return;
     const areaRect = section.querySelector('.meal-play-area').getBoundingClientRect();
     const sourceRect = sourceButton.getBoundingClientRect();
-    const targetRect = boxes[0].getBoundingClientRect();
+    const targetSlot = boxes[0].querySelector(targetSelectorFor(category, item)) || boxes[0];
+    const targetRect = targetSlot.getBoundingClientRect();
     const flyItem = document.createElement('span');
     flyItem.className = 'meal-fly-item';
     flyItem.textContent = item.name;
@@ -362,11 +433,12 @@ function initHealthyMealSection() {
   }
 
   function chooseItem(category, item, button) {
+    if (button.disabled) return;
     playClickSound();
     button.classList.add('is-pinching');
     window.setTimeout(() => button.classList.remove('is-pinching'), 180);
     runTongsAnimation(button);
-    runFlyAnimation(button, item);
+    runFlyAnimation(button, item, category);
 
     if (category === 'veggies') {
       const existingIndex = state.veggies.findIndex((selected) => selected.name === item.name);
@@ -382,7 +454,7 @@ function initHealthyMealSection() {
   }
 
   function renderOptions() {
-    Object.entries(items).forEach(([category, options]) => {
+    Object.entries(ingredientData).forEach(([category, options]) => {
       const container = section.querySelector(`[data-meal-category="${category}"]`);
       if (!container) return;
       container.innerHTML = '';
@@ -392,12 +464,35 @@ function initHealthyMealSection() {
         button.type = 'button';
         button.dataset.category = category;
         button.dataset.name = item.name;
-        button.dataset.assetPath = item.asset;
+        button.dataset.assetPath = item.image;
         button.setAttribute('aria-pressed', 'false');
         button.innerHTML = `<span class="meal-food-art">素材<br />placeholder</span><span>${item.name}</span>`;
         button.addEventListener('click', () => chooseItem(category, item, button));
         container.appendChild(button);
       });
+    });
+  }
+
+  function renderMacroResults(total) {
+    const target = document.getElementById('mealMacroResults');
+    if (!target || !state.targets) return;
+    const rows = [
+      { key: 'protein', label: '蛋白質', unit: 'g', value: total.protein, range: state.targets.protein },
+      { key: 'carbs', label: '碳水', unit: 'g', value: total.carbs, range: state.targets.carbs },
+      { key: 'fat', label: '脂肪', unit: 'g', value: total.fat, range: state.targets.fat },
+      { key: 'calories', label: '總熱量', unit: 'kcal', value: total.calories, range: state.targets.calories }
+    ];
+    target.innerHTML = '';
+    rows.forEach((row) => {
+      const status = getStatus(row.value, row.range);
+      const card = document.createElement('div');
+      card.className = `meal-macro-card is-${status === '足夠' ? 'enough' : status === '偏低' ? 'low' : 'high'}`;
+      card.innerHTML = `
+        <span>${row.label}</span>
+        <b>${row.value}${row.unit} / 建議 ${row.range.min}–${row.range.max}${row.unit}</b>
+        <em>${status}</em>
+      `;
+      target.appendChild(card);
     });
   }
 
@@ -410,28 +505,36 @@ function initHealthyMealSection() {
       const card = document.createElement('div');
       card.className = 'meal-comparison-card';
       card.innerHTML = `
-        <span class="meal-comparison-icon" data-asset-path="${food.asset}">icon<br />placeholder</span>
-        <p>約為 <b>${name}</b> 的 ${ratio.toFixed(1)} 倍</p>
+        <div class="comparison-icon-placeholder" data-asset-path="${food.image}"></div>
+        <p>約等於 ${ratio.toFixed(1)} ${food.unit}${name}</p>
       `;
       comparisonTarget.appendChild(card);
     });
   }
 
+  function buildNutritionComment(total) {
+    if (!state.targets) return '';
+    if (getStatus(total.protein, state.targets.protein) === '偏低') {
+      return '這餐蛋白質偏少，可以考慮增加雞胸、豆腐或蛋。';
+    }
+    if (getStatus(total.carbs, state.targets.carbs) === '偏低') {
+      return '這餐碳水偏少，可能比較不耐餓，可以補一點地瓜或糙米。';
+    }
+    if (getStatus(total.fat, state.targets.fat) === '偏高') {
+      return '脂肪偏高，可能是醬料或主菜選擇造成的。';
+    }
+    if (getStatus(total.calories, state.targets.calories) === '足夠') {
+      return '這份餐盒和你的一餐建議量相當接近，是相對均衡的一餐。';
+    }
+    return '這份餐盒已完成，可以依照上方標籤調整下一餐的份量。';
+  }
+
   function showResult() {
     const total = totals();
-    const sauceCalories = state.sauce?.calories || 0;
-    const comment = sauceCalories >= 90
-      ? '醬料熱量其實比你想像高喔。'
-      : total.calories < comparisonFoods.珍珠奶茶.calories
-        ? '其實你今天這份，比一杯全糖珍奶還低熱量很多！'
-        : '這份餐盒很有飽足感，下一餐可以搭配清爽一點。';
-
     document.getElementById('embeddedMealCalories').textContent = total.calories;
-    document.getElementById('embeddedMealProtein').textContent = `${total.protein}g`;
-    document.getElementById('embeddedMealFat').textContent = `${total.fat}g`;
-    document.getElementById('embeddedMealCarbs').textContent = `${total.carbs}g`;
-    document.getElementById('embeddedMealComment').textContent = comment;
+    renderMacroResults(total);
     renderComparisons(total.calories);
+    document.getElementById('embeddedMealComment').textContent = buildNutritionComment(total);
     renderAllBoxes();
     showScene('result');
   }
@@ -440,13 +543,33 @@ function initHealthyMealSection() {
     state.veggies = [];
     state.protein = null;
     state.sauce = null;
+    state.topping = null;
+    state.targets = null;
+    if (profileError) profileError.textContent = '';
     progressTrack?.classList.remove('is-running');
-    showScene('build');
+    showScene('profile');
     syncBuild();
+    stageTitle.textContent = '先建立一餐建議量';
+    stageHint.textContent = '填寫身高、體重、性別、年齡與活動量，估算你這一餐的建議攝取範圍。';
   }
 
   renderOptions();
   syncBuild();
+  showScene('profile');
+
+  profileForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const profile = readProfile();
+    if (!profile) {
+      if (profileError) profileError.textContent = '請輸入有效的基本資料。';
+      return;
+    }
+    if (profileError) profileError.textContent = '';
+    state.targets = calculateTargets(profile);
+    playClickSound();
+    showScene('build');
+    syncBuild();
+  });
 
   checkoutButton?.addEventListener('click', () => {
     if (!isComplete()) return;
