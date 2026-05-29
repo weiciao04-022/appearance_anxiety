@@ -1130,3 +1130,318 @@ body {
     width: 100%;
   }
 }
+
+/* Compact healthy meal game layout revisions. Scoped to the existing frame-12 section only. */
+#frame-12 {
+  padding-block: 56px;
+}
+
+#frame-12 .meal-section {
+  width: min(980px, 100%);
+  margin-inline: auto;
+  grid-template-columns: 210px minmax(0, 740px);
+  gap: 18px;
+  align-items: start;
+}
+
+#frame-12 .meal-story-panel {
+  position: sticky;
+  top: 72px;
+  min-height: auto;
+  padding: 16px;
+  border-radius: 20px;
+  background: rgba(255, 252, 244, 0.96);
+  box-shadow: 0 12px 28px rgba(91, 65, 36, 0.1);
+}
+
+#frame-12 .meal-role-placeholder {
+  display: none;
+}
+
+#frame-12 .meal-story-panel h2 {
+  font-size: 1.15rem;
+}
+
+#frame-12 .meal-story-panel p,
+#frame-12 .meal-tip-box p {
+  margin-block: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+#frame-12 .meal-tip-box {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 16px;
+}
+
+#frame-12 .meal-game-panel {
+  min-height: auto;
+  padding: 20px;
+  border-radius: 28px;
+}
+
+#frame-12 .meal-game-head {
+  max-width: 560px;
+  margin-bottom: 14px;
+}
+
+#frame-12 .meal-game-head h3 {
+  font-size: 1.35rem;
+}
+
+#frame-12 .meal-game-head p:not(.meal-kicker) {
+  margin: 8px 0 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+#frame-12 .meal-profile-form {
+  width: min(560px, 100%);
+  min-height: auto;
+  margin-inline: auto;
+  padding: 22px;
+  gap: 12px;
+}
+
+#frame-12 .meal-counter-scene[data-meal-scene="build"] {
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+#frame-12 .meal-box-zone,
+#frame-12 .meal-ingredient-zone,
+#frame-12 .meal-checkout-counter,
+#frame-12 .meal-waiting-box,
+#frame-12 .meal-result-layout {
+  border-radius: 20px;
+}
+
+#frame-12 .meal-box-zone {
+  min-height: 0;
+  padding: 16px;
+  justify-content: start;
+}
+
+#frame-12 .meal-lunchbox {
+  width: min(280px, 100%);
+  border-width: 10px;
+}
+
+#frame-12 .meal-lunchbox-small {
+  width: min(300px, 100%);
+}
+
+#frame-12 .meal-ingredient-zone {
+  padding: 14px;
+}
+
+#frame-12 .meal-category-row {
+  margin: 9px 0 6px;
+}
+
+#frame-12 .meal-category-row h4 {
+  font-size: 0.95rem;
+}
+
+#frame-12 .meal-category-row span {
+  font-size: 0.82rem;
+}
+
+#frame-12 .meal-option-grid {
+  grid-template-columns: repeat(auto-fit, minmax(68px, 1fr));
+  gap: 7px;
+}
+
+#frame-12 .meal-option {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  gap: 5px;
+  min-height: 74px;
+  padding: 7px 5px;
+  border-radius: 14px;
+  text-align: center;
+  font-size: 0.78rem;
+  line-height: 1.18;
+}
+
+#frame-12 .meal-option small {
+  display: block;
+  margin-top: 2px;
+  color: #a36b25;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+#frame-12 .meal-food-art {
+  width: 34px;
+  height: 30px;
+  border-radius: 10px;
+  font-size: 0.5rem;
+}
+
+#frame-12 .meal-piece {
+  font-size: 0.52rem;
+}
+
+#frame-12 .base-center-slot {
+  left: 24%;
+  top: 34%;
+  width: 52%;
+  min-height: 31%;
+  z-index: 1;
+}
+
+#frame-12 .protein-center-slot {
+  left: 32%;
+  top: 39%;
+  width: 36%;
+  min-height: 22%;
+  z-index: 3;
+}
+
+#frame-12 .meal-checkout-counter {
+  grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
+  min-height: 0;
+  padding: 22px;
+  gap: 22px;
+  align-items: center;
+  justify-items: center;
+}
+
+#frame-12 .meal-checkout-summary {
+  width: 100%;
+}
+
+#frame-12 .meal-checkout-summary h4,
+#frame-12 .meal-result-copy h4 {
+  margin: 0 0 8px;
+  color: #44321f;
+}
+
+#frame-12 .meal-selected-list {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+#frame-12 .meal-selected-list p {
+  display: grid;
+  grid-template-columns: 4em minmax(0, 1fr);
+  gap: 8px;
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #fffaf0;
+  line-height: 1.45;
+}
+
+#frame-12 .meal-selected-list span {
+  color: #6d8b43;
+  font-weight: 900;
+}
+
+#frame-12 .meal-selected-list b {
+  font-weight: 700;
+}
+
+#frame-12 .meal-result-layout {
+  grid-template-columns: minmax(250px, 320px) minmax(0, 1fr);
+  min-height: 0;
+  padding: 18px;
+  gap: 18px;
+}
+
+#frame-12 .meal-result-plate {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+}
+
+#frame-12 .meal-total,
+#frame-12 .meal-price-total {
+  margin: 10px 0 0;
+  color: #a36b25;
+  font-size: 1.1rem;
+  font-weight: 900;
+  text-align: center;
+}
+
+#frame-12 .meal-price-total {
+  color: #6d8b43;
+}
+
+#frame-12 .meal-macro-results {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+#frame-12 .meal-macro-card {
+  grid-template-columns: 1fr;
+  gap: 4px;
+  padding: 9px;
+  font-size: 0.84rem;
+}
+
+#frame-12 .meal-macro-card b {
+  font-size: 0.82rem;
+}
+
+#frame-12 .meal-macro-card em {
+  justify-self: start;
+  font-size: 0.76rem;
+}
+
+#frame-12 .meal-comparisons {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 10px 0;
+}
+
+#frame-12 .meal-comparison-card {
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 8px;
+  padding: 8px;
+  font-size: 0.8rem;
+}
+
+#frame-12 .comparison-icon-placeholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+}
+
+#frame-12 .meal-comment {
+  margin-bottom: 12px;
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  #frame-12 .meal-section,
+  #frame-12 .meal-counter-scene[data-meal-scene="build"],
+  #frame-12 .meal-checkout-counter,
+  #frame-12 .meal-result-layout {
+    grid-template-columns: 1fr;
+  }
+
+  #frame-12 .meal-story-panel {
+    position: static;
+  }
+
+  #frame-12 .meal-profile-form,
+  #frame-12 .meal-macro-results,
+  #frame-12 .meal-comparisons {
+    grid-template-columns: 1fr;
+  }
+
+  #frame-12 .meal-option-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  #frame-12 .meal-inline-button {
+    width: 100%;
+  }
+}
