@@ -62,15 +62,262 @@
     </div>
   </section>
 
-  <section id="frame-9" class="section reveal">
-    <div class="frame-wrap center-col">
-      <div class="wire-card large-placeholder">圖片 placeholder</div>
-      <div class="inline-row">
-        <span>繼續下滑</span>
-        <span>或是</span>
-        <a id="goGym" class="button" href="pages/gym.html">進入健身房</a>
-      </div>
+  <section id="frame-9" class="section reveal body-method-section">
+    <style>
+      #frame-11,
+      #frame-12 {
+        display: none;
+      }
+
+      #frame-9.body-method-section {
+        background: #fff8ea;
+        color: #3d2d1d;
+      }
+
+      #frame-9 .BodyMethodExplorer {
+        width: min(1080px, 100%);
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(320px, 0.82fr);
+        gap: 24px;
+        align-items: stretch;
+      }
+
+      #frame-9 .body-method-heading {
+        grid-column: 1 / -1;
+        margin: 0;
+        color: #6d8b43;
+        font-size: 0.95rem;
+        font-weight: 800;
+      }
+
+      #frame-9 .body-method-card-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      #frame-9 .body-method-card,
+      #frame-9 .body-method-detail {
+        border: 1px solid rgba(90, 62, 36, 0.16);
+        border-radius: 28px;
+        background: #fffdf7;
+        box-shadow: 0 18px 42px rgba(91, 65, 36, 0.12);
+        box-sizing: border-box;
+      }
+
+      #frame-9 .body-method-card {
+        min-height: 260px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        color: inherit;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+      }
+
+      #frame-9 .body-method-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 22px 48px rgba(91, 65, 36, 0.16);
+      }
+
+      #frame-9 .body-method-card.is-active {
+        border-color: rgba(109, 139, 67, 0.8);
+        background: #f2f8e9;
+        box-shadow: 0 24px 54px rgba(91, 65, 36, 0.18);
+      }
+
+      #frame-9 .body-method-card h3,
+      #frame-9 .body-method-detail h3 {
+        margin: 0;
+        color: #44321f;
+        font-size: 1.45rem;
+        line-height: 1.25;
+      }
+
+      #frame-9 .body-method-card p,
+      #frame-9 .body-method-detail p {
+        margin: 0;
+        line-height: 1.65;
+      }
+
+      #frame-9 .body-method-image-placeholder {
+        min-height: 118px;
+        display: grid;
+        place-items: center;
+        border: 1px dashed rgba(96, 69, 43, 0.32);
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(249, 231, 190, 0.58), rgba(231, 244, 210, 0.62));
+        color: #7a674b;
+        font-weight: 800;
+      }
+
+      #frame-9 .body-method-card-cta {
+        margin-top: auto;
+        color: #a36b25;
+        font-weight: 900;
+      }
+
+      #frame-9 .body-method-detail {
+        min-height: 100%;
+        padding: 26px;
+        display: grid;
+        gap: 16px;
+        align-content: start;
+        background: linear-gradient(145deg, #fffdf7 0%, #f2f8e9 58%, #f6ead2 100%);
+      }
+
+      #frame-9 .body-method-detail[hidden] {
+        display: none;
+      }
+
+      #frame-9 .body-method-detail .body-method-image-placeholder {
+        min-height: 220px;
+      }
+
+      #frame-9 .body-method-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      #frame-9 .body-method-actions .button {
+        border: 0;
+        background: #eda33a;
+        color: #3d2d1d;
+        box-shadow: 0 7px 0 rgba(135, 90, 43, 0.16), 0 14px 24px rgba(91, 65, 36, 0.12);
+        font-weight: 800;
+      }
+
+      #frame-9 .body-method-actions .button:first-child {
+        background: #eef6df;
+        color: #6d8b43;
+      }
+
+      @media (max-width: 900px) {
+        #frame-9 .BodyMethodExplorer {
+          grid-template-columns: 1fr;
+        }
+
+        #frame-9 .body-method-card-grid {
+          grid-template-columns: 1fr;
+        }
+
+        #frame-9 .body-method-card {
+          min-height: 220px;
+        }
+
+        #frame-9 .body-method-actions .button {
+          width: 100%;
+        }
+      }
+    </style>
+
+    <div class="frame-wrap BodyMethodExplorer" data-body-method-explorer>
+      <p class="body-method-heading">體態管理方式入口</p>
+      <div class="body-method-card-grid" data-method-card-grid></div>
+      <article class="body-method-detail" data-method-detail hidden aria-live="polite">
+        <h3 data-method-title></h3>
+        <p data-method-subtitle>內容待補</p>
+        <div class="body-method-image-placeholder" data-method-image>image placeholder</div>
+        <p>這裡之後會放入此方法的介紹、花費、心理壓力與身體感受。</p>
+        <div class="body-method-actions">
+          <button class="button" type="button" data-method-collapse>收合</button>
+          <button class="button" type="button" data-method-next>下一項</button>
+        </div>
+      </article>
     </div>
+
+    <script>
+      (() => {
+        const explorer = document.querySelector('[data-body-method-explorer]');
+        if (!explorer) return;
+
+        const methods = [
+          {
+            id: 'meal',
+            title: '健康餐',
+            description: '內容待補',
+            imageLabel: 'image placeholder'
+          },
+          {
+            id: 'gym',
+            title: '健身房',
+            description: '內容待補',
+            imageLabel: 'image placeholder'
+          },
+          {
+            id: 'injection',
+            title: '瘦瘦針',
+            description: '內容待補',
+            imageLabel: 'image placeholder'
+          },
+          {
+            id: 'fasting',
+            title: '斷食',
+            description: '內容待補',
+            imageLabel: 'image placeholder'
+          }
+        ];
+
+        let selectedMethod = null;
+        const cardGrid = explorer.querySelector('[data-method-card-grid]');
+        const detail = explorer.querySelector('[data-method-detail]');
+        const detailTitle = explorer.querySelector('[data-method-title]');
+        const detailSubtitle = explorer.querySelector('[data-method-subtitle]');
+        const detailImage = explorer.querySelector('[data-method-image]');
+        const collapseButton = explorer.querySelector('[data-method-collapse]');
+        const nextButton = explorer.querySelector('[data-method-next]');
+
+        function renderCards() {
+          cardGrid.innerHTML = methods.map((method) => `
+            <button class="body-method-card" type="button" data-method-id="${method.id}" aria-pressed="false">
+              <h3>${method.title}</h3>
+              <p>${method.description}</p>
+              <div class="body-method-image-placeholder">${method.imageLabel}</div>
+              <span class="body-method-card-cta">點擊查看 →</span>
+            </button>
+          `).join('');
+        }
+
+        function selectMethod(methodId) {
+          selectedMethod = methods.find((method) => method.id === methodId) || null;
+          explorer.querySelectorAll('[data-method-id]').forEach((card) => {
+            const isActive = card.dataset.methodId === selectedMethod?.id;
+            card.classList.toggle('is-active', isActive);
+            card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+          });
+
+          if (!selectedMethod) {
+            detail.hidden = true;
+            return;
+          }
+
+          detailTitle.textContent = selectedMethod.title;
+          detailSubtitle.textContent = selectedMethod.description;
+          detailImage.textContent = selectedMethod.imageLabel;
+          detail.hidden = false;
+        }
+
+        renderCards();
+
+        cardGrid.addEventListener('click', (event) => {
+          const card = event.target.closest('[data-method-id]');
+          if (!card) return;
+          selectMethod(card.dataset.methodId);
+        });
+
+        collapseButton.addEventListener('click', () => selectMethod(null));
+
+        nextButton.addEventListener('click', () => {
+          const currentIndex = methods.findIndex((method) => method.id === selectedMethod?.id);
+          const nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % methods.length;
+          selectMethod(methods[nextIndex].id);
+        });
+      })();
+    </script>
   </section>
 
   <section id="frame-11" class="section reveal">
