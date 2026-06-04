@@ -64,14 +64,9 @@
 
   <section id="frame-9" class="section reveal body-method-section">
     <style>
-      #frame-11,
-      #frame-12 {
-        display: none;
-      }
-
       #frame-9.body-method-section {
-        background: #fff8ea;
-        color: #3d2d1d;
+        background: #fff;
+        color: #000;
       }
 
       #frame-9 .BodyMethodExplorer {
@@ -85,88 +80,88 @@
       #frame-9 .body-method-heading {
         grid-column: 1 / -1;
         margin: 0;
-        color: #6d8b43;
-        font-size: 0.95rem;
-        font-weight: 800;
+        color: #000;
+        font-size: 1rem;
+        font-weight: 400;
       }
 
       #frame-9 .body-method-card-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 18px;
+        gap: 16px;
       }
 
       #frame-9 .body-method-card,
       #frame-9 .body-method-detail {
-        border: 1px solid rgba(90, 62, 36, 0.16);
-        border-radius: 28px;
-        background: #fffdf7;
-        box-shadow: 0 18px 42px rgba(91, 65, 36, 0.12);
+        border: 1px solid #000;
+        border-radius: 8px;
+        background: #fff;
+        box-shadow: none;
         box-sizing: border-box;
       }
 
       #frame-9 .body-method-card {
-        min-height: 260px;
-        padding: 20px;
+        min-height: 240px;
+        padding: 18px;
         display: flex;
         flex-direction: column;
         gap: 14px;
-        color: inherit;
+        color: #000;
         font: inherit;
         text-align: left;
         cursor: pointer;
-        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+        transition: transform 0.16s ease, border-width 0.16s ease;
       }
 
       #frame-9 .body-method-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 22px 48px rgba(91, 65, 36, 0.16);
+        transform: translateY(-2px);
       }
 
       #frame-9 .body-method-card.is-active {
-        border-color: rgba(109, 139, 67, 0.8);
-        background: #f2f8e9;
-        box-shadow: 0 24px 54px rgba(91, 65, 36, 0.18);
+        border-width: 2px;
+        background: #000;
+        color: #fff;
       }
 
       #frame-9 .body-method-card h3,
       #frame-9 .body-method-detail h3 {
         margin: 0;
-        color: #44321f;
-        font-size: 1.45rem;
-        line-height: 1.25;
+        color: inherit;
+        font-size: 1.35rem;
+        line-height: 1.3;
       }
 
       #frame-9 .body-method-card p,
       #frame-9 .body-method-detail p {
         margin: 0;
-        line-height: 1.65;
+        line-height: 1.6;
       }
 
       #frame-9 .body-method-image-placeholder {
         min-height: 118px;
         display: grid;
         place-items: center;
-        border: 1px dashed rgba(96, 69, 43, 0.32);
-        border-radius: 20px;
-        background: linear-gradient(135deg, rgba(249, 231, 190, 0.58), rgba(231, 244, 210, 0.62));
-        color: #7a674b;
-        font-weight: 800;
+        border: 1px solid currentColor;
+        border-radius: 6px;
+        background: #fff;
+        color: inherit;
+      }
+
+      #frame-9 .body-method-card.is-active .body-method-image-placeholder {
+        background: #000;
       }
 
       #frame-9 .body-method-card-cta {
         margin-top: auto;
-        color: #a36b25;
-        font-weight: 900;
+        color: inherit;
       }
 
       #frame-9 .body-method-detail {
         min-height: 100%;
-        padding: 26px;
+        padding: 24px;
         display: grid;
         gap: 16px;
         align-content: start;
-        background: linear-gradient(145deg, #fffdf7 0%, #f2f8e9 58%, #f6ead2 100%);
       }
 
       #frame-9 .body-method-detail[hidden] {
@@ -184,16 +179,16 @@
       }
 
       #frame-9 .body-method-actions .button {
-        border: 0;
-        background: #eda33a;
-        color: #3d2d1d;
-        box-shadow: 0 7px 0 rgba(135, 90, 43, 0.16), 0 14px 24px rgba(91, 65, 36, 0.12);
-        font-weight: 800;
+        border: 1px solid #000;
+        border-radius: 8px;
+        background: #fff;
+        color: #000;
+        box-shadow: none;
+        font-weight: 400;
       }
 
-      #frame-9 .body-method-actions .button:first-child {
-        background: #eef6df;
-        color: #6d8b43;
+      #frame-9 .body-method-actions .button:hover {
+        transform: translateY(-1px);
       }
 
       @media (max-width: 900px) {
@@ -277,7 +272,7 @@
               <h3>${method.title}</h3>
               <p>${method.description}</p>
               <div class="body-method-image-placeholder">${method.imageLabel}</div>
-              <span class="body-method-card-cta">點擊查看 →</span>
+              <span class="body-method-card-cta">點擊查看</span>
             </button>
           `).join('');
         }
@@ -318,196 +313,6 @@
         });
       })();
     </script>
-  </section>
-
-  <section id="frame-11" class="section reveal">
-    <div class="frame-wrap overlay-wrap">
-      <div class="wire-card article-main">體態產品頁</div>
-      <div class="wire-card floating-card from-right reveal">
-        <p>（視差滾動）</p>
-        <p>不只健身房，體態管理</p>
-        <p>和健康餐盒等關注體態</p>
-        <p>的也越來越多</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="frame-12" class="section reveal">
-    <div class="frame-wrap meal-section" data-meal-section>
-      <aside class="meal-story-panel" aria-live="polite">
-        <p class="meal-kicker" id="mealDialogueTitle">營養師提示</p>
-        <p id="mealDialogueText">先填入基本資料，我們會估算你這一餐大約需要多少熱量與營養素。</p>
-        <div class="meal-tip-box">
-          <span>攝取量提醒</span>
-          <p id="mealTipText">系統會依照 Mifflin-St Jeor 公式估算每日熱量需求，再換算成一餐建議量。營養素比例參考 AMDR：碳水 45–65%、脂肪 20–35%、蛋白質 10–35%。</p>
-        </div>
-      </aside>
-
-      <div class="meal-game-panel">
-        <div class="meal-game-head">
-          <p class="meal-kicker">自助夾菜區</p>
-          <h3 id="mealStageTitle">先建立一餐建議量</h3>
-          <p id="mealStageHint">填寫身高、體重、性別、年齡與活動量，估算你這一餐的建議攝取範圍。</p>
-        </div>
-
-        <div class="meal-play-area">
-          <div class="meal-counter-scene" data-meal-scene="profile">
-            <form id="mealProfileForm" class="meal-profile-form">
-              <label>
-                <span>身高 cm</span>
-                <input id="mealHeightInput" type="number" min="80" max="250" step="1" inputmode="decimal" required />
-              </label>
-              <label>
-                <span>體重 kg</span>
-                <input id="mealWeightInput" type="number" min="20" max="250" step="0.1" inputmode="decimal" required />
-              </label>
-              <label>
-                <span>性別</span>
-                <select id="mealSexInput" required>
-                  <option value="male">男性</option>
-                  <option value="female">女性</option>
-                </select>
-              </label>
-              <label>
-                <span>年齡</span>
-                <input id="mealAgeInput" type="number" min="6" max="120" step="1" inputmode="numeric" required />
-              </label>
-              <label class="meal-profile-wide">
-                <span>活動量</span>
-                <select id="mealActivityInput" required>
-                  <option value="1.2">久坐</option>
-                  <option value="1.375">輕度活動</option>
-                  <option value="1.55">中度活動</option>
-                  <option value="1.725">高度活動</option>
-                </select>
-              </label>
-              <p id="mealProfileError" class="meal-profile-error" aria-live="polite"></p>
-              <button id="mealStartButton" class="button meal-inline-button meal-profile-wide" type="button">開始夾菜</button>
-            </form>
-          </div>
-
-          <div class="meal-counter-scene is-hidden" data-meal-scene="build">
-            <div class="meal-box-zone">
-              <div id="embeddedMealBox" class="meal-lunchbox" aria-label="空餐盒">
-                <span class="meal-box-label">圓形碗 placeholder</span>
-              </div>
-              <button id="mealCheckoutButton" class="button meal-inline-button" type="button" disabled>前往結帳</button>
-            </div>
-
-            <div class="meal-ingredient-zone">
-              <div class="meal-category-row">
-                <h4>基底／主食</h4>
-                <span>選 1 種</span>
-              </div>
-              <div class="meal-option-grid" data-meal-category="base"></div>
-
-              <div class="meal-category-row">
-                <h4>青菜</h4>
-                <span id="embeddedVeggieCount">0 / 5</span>
-              </div>
-              <div class="meal-option-grid" data-meal-category="veggies"></div>
-
-              <div class="meal-category-row">
-                <h4>主菜</h4>
-                <span>選 1 樣</span>
-              </div>
-              <div class="meal-option-grid" data-meal-category="protein"></div>
-
-              <div class="meal-category-row">
-                <h4>醬料</h4>
-                <span>選 1 種</span>
-              </div>
-              <div class="meal-option-grid" data-meal-category="sauce"></div>
-
-              <div class="meal-category-row">
-                <h4>點綴</h4>
-                <span>選 1 種</span>
-              </div>
-              <div class="meal-option-grid" data-meal-category="topping"></div>
-            </div>
-          </div>
-
-          <div class="meal-counter-scene is-hidden" data-meal-scene="checkout">
-            <div class="meal-checkout-counter">
-              <div id="checkoutMealBox" class="meal-lunchbox meal-lunchbox-small"></div>
-              <div class="meal-checkout-summary">
-                <h4>餐盒完成／付款前確認</h4>
-                <div id="mealCheckoutItems" class="meal-selected-list"></div>
-                <p>暫估熱量：<span id="mealCheckoutCalories">0</span> kcal</p>
-                <p>暫估價格：$<span id="mealCheckoutPrice">0</span></p>
-                <button id="mealPayButton" class="button meal-inline-button" type="button">確認付款</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="meal-counter-scene is-hidden" data-meal-scene="waiting">
-            <div class="meal-waiting-box">
-              <p>製作中</p>
-              <div id="waitingMealBox" class="meal-lunchbox meal-lunchbox-small"></div>
-              <div class="meal-progress-track"><span id="mealProgressBar"></span></div>
-            </div>
-          </div>
-
-          <div class="meal-counter-scene is-hidden" data-meal-scene="result">
-            <div class="meal-result-layout">
-              <div class="meal-result-plate">
-                <div id="resultEmbeddedMealBox" class="meal-lunchbox meal-lunchbox-small"></div>
-                <p class="meal-total">玩家餐盒總熱量：<span id="embeddedMealCalories">0</span> kcal</p>
-                <p class="meal-price-total">玩家餐盒總價格：$<span id="embeddedMealPrice">0</span></p>
-              </div>
-              <div class="meal-result-copy">
-                <h4>你的餐盒 vs 你這一餐建議攝取量</h4>
-                <div id="mealMacroResults" class="meal-macro-results"></div>
-                <h4>常見食物熱量比較</h4>
-                <div id="mealComparisons" class="meal-comparisons"></div>
-                <p id="embeddedMealComment" class="meal-comment"></p>
-                <button id="embeddedMealRestart" class="button meal-inline-button" type="button">再夾一次</button>
-              </div>
-            </div>
-          </div>
-
-          <div id="mealTongs" class="meal-tongs" aria-hidden="true"></div>
-          <div id="mealFlyLayer" class="meal-fly-layer" aria-hidden="true"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <section id="frame-13" class="section reveal">
-    <div class="frame-wrap center-col">
-      <div class="iphone">
-        <div class="dynamic-island"></div>
-        <div class="phone-screen">
-          <div class="ig-post story">instagram<br />story</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-    <section id="frame-14" class="section text-page reveal">
-    <div class="text-column">
-        <p>在美國部署尚未轉向印太地區之前，其戰略核心仍是聚焦中東，更要避免激怒崛起中的中國，也因此長期留下對台軍售「賣舊、賣貴」的印象。</p>
-        <p>不過自2017年批准兩款射程可破百公里的空對空、空對海飛彈開始，美方釋出台灣可提升武力的訊號，再到2019年放行F-16V戰機、M1A2T戰車。台灣於2020年購買的11套海馬士多管火箭系統（HIMARS）甚至提早交貨，都可見國軍現代化需求和美方的戰略轉向逐漸靠攏。</p>
-        <p>「川普政府在歐洲、中東地區都有一定程度的戰略退卻，唯有印度洋─太平洋司令部仍維持既有編制，」陳世民強調，美國2025年〈國家安全戰略報告〉和今年1月剛出爐的〈國防戰略報告〉都將印太安全視為重中之重，近年允許台灣購買的軍備也是實證。</p>
-        <p>目前《國防特別預算條例》草案可總結為三重點：加強台灣「不對稱戰力」、構築「台灣之盾」防空系統、打造「非紅供應鏈」。陳世民表示，目標是增加解放軍侵台的代價，達成備戰止戰的嚇阻效果。</p>
-        <p>在行政院希望通過的1.25兆經費中，已有5項共計3,800億的軍售案獲得三黨一致支持，分別是82套新購海馬士、60輛M109A7自走砲、1,545枚拖2B飛彈、1,050枚標槍飛彈，以及共計2,032架的ALTIUS-600和700型自殺型無人機等。</p>
-        <p>陳國銘表示，美方預計和82套海馬士包裹售出的陸軍戰術飛彈（ATACMS）射程達300公里，能瞄準中國沿岸，在解放軍集結時進行攻擊。他解釋，本款飛彈和海馬士系統在俄烏戰場已立下奇功，摧毀俄國內陸的多座機場、軍營、彈藥庫、橋梁，經常迫使俄軍向後撤退，為前線烏軍創造喘息機會。</p>
-        <p>「假設我們有更多海馬士，解放軍當然也會害怕，」陳國銘說，部署攻擊性武器，用「以攻代守」創造可供我方防守的「縱深地帶」，是台灣在地窄人稠條件下，不得不發展的戰術。</p>
-
-      
-    </div>
-  </section>
-
-    <section id="frame-15" class="section text-page reveal">
-    <div class="text-column">
-        <p>在美國部署尚未轉向印太地區之前，其戰略核心仍是聚焦中東，更要避免激怒崛起中的中國，也因此長期留下對台軍售「賣舊、賣貴」的印象。</p>
-        <p>不過自2017年批准兩款射程可破百公里的空對空、空對海飛彈開始，美方釋出台灣可提升武力的訊號，再到2019年放行F-16V戰機、M1A2T戰車。台灣於2020年購買的11套海馬士多管火箭系統（HIMARS）甚至提早交貨，都可見國軍現代化需求和美方的戰略轉向逐漸靠攏。</p>
-        <p>「川普政府在歐洲、中東地區都有一定程度的戰略退卻，唯有印度洋─太平洋司令部仍維持既有編制，」陳世民強調，美國2025年〈國家安全戰略報告〉和今年1月剛出爐的〈國防戰略報告〉都將印太安全視為重中之重，近年允許台灣購買的軍備也是實證。</p>
-        <p>目前《國防特別預算條例》草案可總結為三重點：加強台灣「不對稱戰力」、構築「台灣之盾」防空系統、打造「非紅供應鏈」。陳世民表示，目標是增加解放軍侵台的代價，達成備戰止戰的嚇阻效果。</p>
-        <p>在行政院希望通過的1.25兆經費中，已有5項共計3,800億的軍售案獲得三黨一致支持，分別是82套新購海馬士、60輛M109A7自走砲、1,545枚拖2B飛彈、1,050枚標槍飛彈，以及共計2,032架的ALTIUS-600和700型自殺型無人機等。</p>
-        <p>陳國銘表示，美方預計和82套海馬士包裹售出的陸軍戰術飛彈（ATACMS）射程達300公里，能瞄準中國沿岸，在解放軍集結時進行攻擊。他解釋，本款飛彈和海馬士系統在俄烏戰場已立下奇功，摧毀俄國內陸的多座機場、軍營、彈藥庫、橋梁，經常迫使俄軍向後撤退，為前線烏軍創造喘息機會。</p>
-        <p>「假設我們有更多海馬士，解放軍當然也會害怕，」陳國銘說，部署攻擊性武器，用「以攻代守」創造可供我方防守的「縱深地帶」，是台灣在地窄人稠條件下，不得不發展的戰術。</p>
-
-    </div>
   </section>
 
   <script src="script.js"></script>
