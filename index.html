@@ -89,6 +89,10 @@
         gap: 16px;
       }
 
+      #frame-9 .body-method-card-grid[hidden] {
+        display: none;
+      }
+
       #frame-9 .body-method-card,
       #frame-9 .body-method-detail {
         border: 1px solid #000;
@@ -115,10 +119,15 @@
         transform: translateY(-2px);
       }
 
+      #frame-9 .body-method-card.is-muted {
+        opacity: 0.35;
+      }
+
       #frame-9 .body-method-card.is-active {
         border-width: 2px;
         background: #000;
         color: #fff;
+        opacity: 1;
       }
 
       #frame-9 .body-method-card h3,
@@ -189,9 +198,63 @@
         transform: translateY(-1px);
       }
 
+      #frame-9 .body-profile-panel {
+        grid-column: 1 / -1;
+        width: min(720px, 100%);
+        margin: 0 auto;
+        padding: 24px;
+        border: 1px solid #000;
+        border-radius: 8px;
+        background: #fff;
+        box-sizing: border-box;
+      }
+
+      #frame-9 .body-profile-panel[hidden] {
+        display: none;
+      }
+
+      #frame-9 .body-profile-panel h3,
+      #frame-9 .body-profile-panel p {
+        margin: 0;
+      }
+
+      #frame-9 .body-profile-panel p {
+        margin-top: 8px;
+        line-height: 1.6;
+      }
+
+      #frame-9 .body-profile-form {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      #frame-9 .body-profile-form label {
+        display: grid;
+        gap: 6px;
+      }
+
+      #frame-9 .body-profile-form input,
+      #frame-9 .body-profile-form select {
+        width: 100%;
+        min-height: 42px;
+        border: 1px solid #000;
+        border-radius: 8px;
+        background: #fff;
+        color: #000;
+        padding: 8px 10px;
+        font: inherit;
+        box-sizing: border-box;
+      }
+
+      #frame-9 .body-profile-actions {
+        grid-column: 1 / -1;
+      }
+
       #frame-9 .meal-box-game {
         display: grid;
-        gap: 18px;
+        gap: 12px;
       }
 
       #frame-9 .meal-game-intro {
@@ -205,12 +268,13 @@
       }
 
       #frame-9 .meal-game-intro p {
-        line-height: 1.65;
+        line-height: 1.55;
       }
 
       #frame-9 .meal-option-groups {
         display: grid;
-        gap: 16px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
       }
 
       #frame-9 .meal-option-group {
@@ -220,7 +284,7 @@
 
       #frame-9 .meal-option-group h4 {
         margin: 0;
-        font-size: 1rem;
+        font-size: 0.95rem;
       }
 
       #frame-9 .meal-option-buttons {
@@ -234,9 +298,10 @@
         border-radius: 999px;
         background: #fff;
         color: #000;
-        padding: 8px 12px;
+        padding: 6px 9px;
         cursor: pointer;
         font: inherit;
+        font-size: 0.86rem;
         transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
       }
 
@@ -251,14 +316,14 @@
 
       #frame-9 .meal-summary-grid {
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 8px;
       }
 
       #frame-9 .meal-summary-item {
         border: 1px solid #000;
         border-radius: 8px;
-        padding: 10px;
+        padding: 8px;
         text-align: center;
       }
 
@@ -273,15 +338,15 @@
 
       #frame-9 .meal-summary-item b {
         margin-top: 4px;
-        font-size: 1rem;
+        font-size: 0.95rem;
       }
 
       #frame-9 .meal-feedback {
         margin: 0;
         border: 1px solid #000;
         border-radius: 8px;
-        padding: 12px;
-        line-height: 1.6;
+        padding: 10px;
+        line-height: 1.55;
       }
 
       @media (max-width: 900px) {
@@ -290,6 +355,11 @@
         }
 
         #frame-9 .body-method-card-grid {
+          grid-template-columns: 1fr;
+        }
+
+        #frame-9 .body-profile-form,
+        #frame-9 .meal-option-groups {
           grid-template-columns: 1fr;
         }
 
@@ -315,7 +385,44 @@
 
     <div class="frame-wrap BodyMethodExplorer" data-body-method-explorer>
       <p class="body-method-heading">體態管理方式入口</p>
-      <div class="body-method-card-grid" data-method-card-grid></div>
+      <section class="body-profile-panel" data-profile-panel>
+        <h3>先建立你的身體資料</h3>
+        <p>系統會用簡化公式估算一餐建議範圍，讓後續體驗更貼近你的狀態。</p>
+        <form class="body-profile-form" data-profile-form>
+          <label>
+            身高 cm
+            <input name="height" type="number" min="1" required />
+          </label>
+          <label>
+            體重 kg
+            <input name="weight" type="number" min="1" required />
+          </label>
+          <label>
+            年齡
+            <input name="age" type="number" min="1" required />
+          </label>
+          <label>
+            性別
+            <select name="gender" required>
+              <option value="female">女</option>
+              <option value="male">男</option>
+              <option value="private">不透露</option>
+            </select>
+          </label>
+          <label>
+            活動量
+            <select name="activityLevel" required>
+              <option value="low">低</option>
+              <option value="medium">中</option>
+              <option value="high">高</option>
+            </select>
+          </label>
+          <div class="body-profile-actions">
+            <button class="button" type="submit">開始體驗</button>
+          </div>
+        </form>
+      </section>
+      <div class="body-method-card-grid" data-method-card-grid hidden></div>
       <article class="body-method-detail" data-method-detail hidden aria-live="polite">
         <h3 data-method-title></h3>
         <p data-method-subtitle>內容待補</p>
@@ -362,6 +469,9 @@
         ];
 
         let selectedMethod = null;
+        let bodyProfile = null;
+        const profilePanel = explorer.querySelector('[data-profile-panel]');
+        const profileForm = explorer.querySelector('[data-profile-form]');
         const cardGrid = explorer.querySelector('[data-method-card-grid]');
         const detail = explorer.querySelector('[data-method-detail]');
         const detailTitle = explorer.querySelector('[data-method-title]');
@@ -371,52 +481,77 @@
         const mealGame = explorer.querySelector('[data-meal-game]');
         const collapseButton = explorer.querySelector('[data-method-collapse]');
         const nextButton = explorer.querySelector('[data-method-next]');
+        const baseOptions = [
+          { name: '白飯', price: 20, kcal: 180, protein: 3, carb: 40, fat: 0 },
+          { name: '紫米飯', price: 25, kcal: 170, protein: 4, carb: 35, fat: 1 },
+          { name: '地瓜', price: 25, kcal: 140, protein: 2, carb: 32, fat: 0 },
+          { name: '生菜', price: 20, kcal: 25, protein: 2, carb: 5, fat: 0 },
+          { name: '生菜加白飯', price: 30, kcal: 130, protein: 3, carb: 28, fat: 0 },
+          { name: '生菜加紫米飯', price: 35, kcal: 125, protein: 4, carb: 25, fat: 1 }
+        ];
+        const proteinOptions = [
+          { name: '雞胸肉', price: 60, kcal: 160, protein: 30, carb: 0, fat: 3 },
+          { name: '鮭魚', price: 90, kcal: 220, protein: 25, carb: 0, fat: 14 },
+          { name: '豆腐', price: 45, kcal: 120, protein: 12, carb: 5, fat: 6 },
+          { name: '牛肉', price: 75, kcal: 230, protein: 24, carb: 0, fat: 15 },
+          { name: '水煮蛋', price: 25, kcal: 75, protein: 6, carb: 1, fat: 5 }
+        ];
+        const veggieOptions = [
+          { name: '花椰菜', price: 10, kcal: 30, protein: 2, carb: 5, fat: 0 },
+          { name: '高麗菜', price: 10, kcal: 25, protein: 1, carb: 5, fat: 0 },
+          { name: '玉米筍', price: 10, kcal: 35, protein: 1, carb: 7, fat: 0 },
+          { name: '菇類', price: 10, kcal: 30, protein: 2, carb: 4, fat: 0 },
+          { name: '小黃瓜', price: 10, kcal: 15, protein: 1, carb: 3, fat: 0 },
+          { name: '毛豆', price: 15, kcal: 80, protein: 8, carb: 7, fat: 3 },
+          { name: '海帶芽', price: 10, kcal: 20, protein: 1, carb: 3, fat: 0 },
+          { name: '番茄', price: 10, kcal: 20, protein: 1, carb: 4, fat: 0 },
+          { name: '玉米粒', price: 15, kcal: 85, protein: 3, carb: 19, fat: 1 },
+          { name: '酪梨', price: 30, kcal: 120, protein: 1, carb: 6, fat: 11 }
+        ];
+        const sauceOptions = [
+          { name: '和風醬', price: 10, kcal: 45, protein: 0, carb: 5, fat: 2 },
+          { name: '胡麻醬', price: 15, kcal: 120, protein: 2, carb: 6, fat: 10 },
+          { name: '優格醬', price: 15, kcal: 70, protein: 3, carb: 5, fat: 4 },
+          { name: '不加醬', price: 0, kcal: 0, protein: 0, carb: 0, fat: 0 }
+        ];
+        const drinkOptions = [
+          { name: '無糖茶', price: 0, kcal: 0, protein: 0, carb: 0, fat: 0 },
+          { name: '黑咖啡', price: 0, kcal: 5, protein: 0, carb: 1, fat: 0 },
+          { name: '豆漿', price: 25, kcal: 130, protein: 9, carb: 12, fat: 5 },
+          { name: '珍珠奶茶', price: 65, kcal: 450, protein: 6, carb: 70, fat: 12 }
+        ];
         const mealOptions = {
-          staple: {
+          base: {
             label: '主食',
-            items: [
-              { name: '白飯', price: 20, calories: 180, protein: 3, carbs: 40, fat: 0 },
-              { name: '紫米飯', price: 25, calories: 170, protein: 4, carbs: 36, fat: 1 },
-              { name: '地瓜', price: 30, calories: 150, protein: 2, carbs: 34, fat: 0 },
-              { name: '生菜', price: 25, calories: 40, protein: 2, carbs: 8, fat: 0 },
-              { name: '生菜加白飯', price: 35, calories: 210, protein: 5, carbs: 45, fat: 1 },
-              { name: '生菜加紫米飯', price: 40, calories: 200, protein: 6, carbs: 41, fat: 2 }
-            ]
+            items: baseOptions,
+            type: 'single'
           },
           protein: {
             label: '蛋白質',
-            items: [
-              { name: '雞胸肉', price: 60, calories: 160, protein: 30, carbs: 0, fat: 4 },
-              { name: '鮭魚', price: 90, calories: 220, protein: 25, carbs: 0, fat: 14 },
-              { name: '豆腐', price: 45, calories: 120, protein: 12, carbs: 4, fat: 7 },
-              { name: '牛肉', price: 80, calories: 230, protein: 24, carbs: 0, fat: 15 },
-              { name: '水煮蛋', price: 25, calories: 80, protein: 7, carbs: 1, fat: 5 }
-            ]
+            items: proteinOptions,
+            type: 'single'
           },
-          side: {
-            label: '配菜',
-            items: [
-              { name: '花椰菜', price: 25, calories: 35, protein: 3, carbs: 7, fat: 0 },
-              { name: '高麗菜', price: 20, calories: 30, protein: 2, carbs: 6, fat: 0 },
-              { name: '玉米筍', price: 25, calories: 28, protein: 1, carbs: 6, fat: 0 },
-              { name: '菇類', price: 30, calories: 40, protein: 3, carbs: 7, fat: 0 },
-              { name: '綜合蔬菜', price: 35, calories: 70, protein: 4, carbs: 13, fat: 1 }
-            ]
+          veggies: {
+            label: '配菜（最多 5 個）',
+            items: veggieOptions,
+            type: 'multi'
+          },
+          sauce: {
+            label: '醬料',
+            items: sauceOptions,
+            type: 'single'
           },
           drink: {
             label: '飲料',
-            items: [
-              { name: '無糖茶', price: 20, calories: 0, protein: 0, carbs: 0, fat: 0 },
-              { name: '黑咖啡', price: 35, calories: 5, protein: 0, carbs: 1, fat: 0 },
-              { name: '豆漿', price: 35, calories: 130, protein: 9, carbs: 12, fat: 5 },
-              { name: '珍珠奶茶', price: 65, calories: 450, protein: 6, carbs: 70, fat: 12 }
-            ]
+            items: drinkOptions,
+            type: 'single'
           }
         };
         const mealState = {
-          staple: null,
+          base: null,
           protein: null,
-          side: null,
+          veggies: [],
+          sauce: null,
           drink: null
         };
 
@@ -432,34 +567,102 @@
         }
 
         function selectedMealItems() {
-          return Object.values(mealState).filter(Boolean);
+          return [
+            mealState.base,
+            mealState.protein,
+            ...mealState.veggies,
+            mealState.sauce,
+            mealState.drink
+          ].filter(Boolean);
         }
 
         function mealTotals() {
           return selectedMealItems().reduce(
             (total, item) => ({
               price: total.price + item.price,
-              calories: total.calories + item.calories,
+              kcal: total.kcal + item.kcal,
               protein: total.protein + item.protein,
-              carbs: total.carbs + item.carbs,
+              carb: total.carb + item.carb,
               fat: total.fat + item.fat
             }),
-            { price: 0, calories: 0, protein: 0, carbs: 0, fat: 0 }
+            { price: 0, kcal: 0, protein: 0, carb: 0, fat: 0 }
           );
         }
 
-        function mealFeedback(calories) {
-          if (calories < 400) return '這份餐點偏輕，可能不適合作為正餐。';
-          if (calories <= 700) return '這份餐點較接近一般健康餐盒。';
-          return '這份餐點熱量較高，可能來自飲料或高脂蛋白質。';
+        function mealTargets() {
+          if (!bodyProfile) {
+            return { mealCalories: 0, proteinTarget: 0, carbTarget: 0, veggieTarget: 3 };
+          }
+
+          const genderOffset = bodyProfile.gender === 'male'
+            ? 5
+            : bodyProfile.gender === 'female'
+              ? -161
+              : -80;
+          const activityMultiplier = {
+            low: 1.2,
+            medium: 1.375,
+            high: 1.55
+          }[bodyProfile.activityLevel] || 1.2;
+          const bmr = 10 * bodyProfile.weight + 6.25 * bodyProfile.height - 5 * bodyProfile.age + genderOffset;
+          const tdee = bmr * activityMultiplier;
+
+          return {
+            mealCalories: Math.max(0, Math.round(tdee / 3)),
+            proteinTarget: Math.max(0, Math.round((bodyProfile.weight * 1.2) / 3)),
+            carbTarget: Math.max(0, Math.round((bodyProfile.weight * 3) / 3)),
+            veggieTarget: 3
+          };
+        }
+
+        function mealJudgement(totals) {
+          const targets = mealTargets();
+          const calorieStatus = totals.kcal < targets.mealCalories * 0.8
+            ? '偏低'
+            : totals.kcal > targets.mealCalories * 1.2
+              ? '偏高'
+              : '接近';
+          const proteinStatus = totals.protein < targets.proteinTarget * 0.8 ? '不足' : '接近';
+          const carbStatus = totals.carb < targets.carbTarget * 0.7
+            ? '不足'
+            : totals.carb > targets.carbTarget * 1.3
+              ? '偏高'
+              : '接近';
+          const veggieStatus = mealState.veggies.length >= targets.veggieTarget ? '足夠' : '不足';
+          const caloriePhrase = calorieStatus === '接近'
+            ? '較接近'
+            : calorieStatus === '偏低'
+              ? '低於'
+              : '高於';
+          const mainDifference = calorieStatus === '偏高' && mealState.drink?.name === '珍珠奶茶'
+            ? '飲料'
+            : calorieStatus === '偏高' && mealState.protein?.fat >= 14
+              ? '高脂蛋白質'
+              : proteinStatus === '不足'
+                ? '蛋白質'
+                : carbStatus !== '接近'
+                  ? '碳水'
+                  : veggieStatus === '不足'
+                    ? '蔬菜份量'
+                    : '整體搭配';
+
+          return {
+            targets,
+            calorieStatus,
+            proteinStatus,
+            carbStatus,
+            veggieStatus,
+            summary: `這份餐點目前${caloriePhrase}你的一餐需求，差異主要來自${mainDifference}。`
+          };
         }
 
         function renderMealGame() {
           const totals = mealTotals();
+          const judgement = mealJudgement(totals);
           mealGame.innerHTML = `
             <div class="meal-game-intro">
-              <h3>今天你會怎麼配一盒健康餐？</h3>
-              <p>選擇主食、蛋白質、蔬菜與飲料，系統會即時計算價格與營養組成。</p>
+              <h3>今天你會怎麼配一碗夏威夷碗／健康餐盒？</h3>
+              <p>選擇主食、蛋白質、配菜、醬料與飲料，系統會用你的身體資料粗估一餐建議範圍。</p>
             </div>
             <div class="meal-option-groups">
               ${Object.entries(mealOptions).map(([category, group]) => `
@@ -468,7 +671,9 @@
                   <div class="meal-option-buttons">
                     ${group.items.map((item) => `
                       <button
-                        class="meal-option-button${mealState[category]?.name === item.name ? ' is-selected' : ''}"
+                        class="meal-option-button${group.type === 'multi'
+                          ? mealState[category].some((selected) => selected.name === item.name) ? ' is-selected' : ''
+                          : mealState[category]?.name === item.name ? ' is-selected' : ''}"
                         type="button"
                         data-meal-category="${category}"
                         data-meal-option="${item.name}"
@@ -480,12 +685,16 @@
             </div>
             <div class="meal-summary-grid" aria-live="polite">
               <div class="meal-summary-item"><span>總價格</span><b>${totals.price} 元</b></div>
-              <div class="meal-summary-item"><span>熱量</span><b>${totals.calories} kcal</b></div>
+              <div class="meal-summary-item"><span>熱量</span><b>${totals.kcal} kcal</b></div>
               <div class="meal-summary-item"><span>蛋白質</span><b>${totals.protein} g</b></div>
-              <div class="meal-summary-item"><span>碳水</span><b>${totals.carbs} g</b></div>
+              <div class="meal-summary-item"><span>碳水</span><b>${totals.carb} g</b></div>
               <div class="meal-summary-item"><span>脂肪</span><b>${totals.fat} g</b></div>
+              <div class="meal-summary-item"><span>熱量比較</span><b>${judgement.calorieStatus}</b></div>
+              <div class="meal-summary-item"><span>蛋白質</span><b>${judgement.proteinStatus}</b></div>
+              <div class="meal-summary-item"><span>碳水</span><b>${judgement.carbStatus}</b></div>
+              <div class="meal-summary-item"><span>蔬菜</span><b>${judgement.veggieStatus}</b></div>
             </div>
-            <p class="meal-feedback">${mealFeedback(totals.calories)}</p>
+            <p class="meal-feedback">${judgement.summary}<br />一餐粗估：${judgement.targets.mealCalories} kcal、蛋白質 ${judgement.targets.proteinTarget}g、碳水 ${judgement.targets.carbTarget}g。</p>
           `;
         }
 
@@ -494,11 +703,17 @@
           explorer.querySelectorAll('[data-method-id]').forEach((card) => {
             const isActive = card.dataset.methodId === selectedMethod?.id;
             card.classList.toggle('is-active', isActive);
+            card.classList.toggle('is-muted', selectedMethod?.id === 'meal' && !isActive);
             card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
           });
 
           if (!selectedMethod) {
             detail.hidden = true;
+            detailTitle.hidden = false;
+            detailSubtitle.hidden = false;
+            detailImage.hidden = false;
+            detailCopy.hidden = false;
+            mealGame.hidden = true;
             return;
           }
 
@@ -524,6 +739,25 @@
 
         renderCards();
 
+        profileForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          const data = new FormData(profileForm);
+          const height = Number(data.get('height'));
+          const weight = Number(data.get('weight'));
+          const age = Number(data.get('age'));
+          if (!height || !weight || !age) return;
+
+          bodyProfile = {
+            height,
+            weight,
+            age,
+            gender: data.get('gender'),
+            activityLevel: data.get('activityLevel')
+          };
+          profilePanel.hidden = true;
+          cardGrid.hidden = false;
+        });
+
         cardGrid.addEventListener('click', (event) => {
           const card = event.target.closest('[data-method-id]');
           if (!card) return;
@@ -539,7 +773,16 @@
           const optionName = optionButton.dataset.mealOption;
           const option = mealOptions[category]?.items.find((item) => item.name === optionName);
           if (!option) return;
-          mealState[category] = option;
+          if (mealOptions[category].type === 'multi') {
+            const existingIndex = mealState[category].findIndex((item) => item.name === option.name);
+            if (existingIndex >= 0) {
+              mealState[category].splice(existingIndex, 1);
+            } else if (mealState[category].length < 5) {
+              mealState[category].push(option);
+            }
+          } else {
+            mealState[category] = option;
+          }
           renderMealGame();
         });
 
