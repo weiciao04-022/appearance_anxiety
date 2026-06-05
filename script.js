@@ -1,6 +1,3 @@
-const CHOICE_STORAGE_KEY = 'bodyIdealChoices';
-const mockData = [];
-
 function scrollToSection(id) {
   const target = document.getElementById(id);
   if (!target) return;
@@ -36,60 +33,151 @@ function initScrollVideoIntro() {
 
 initScrollVideoIntro();
 
-function getChoices() {
-  try {
-    const raw = localStorage.getItem(CHOICE_STORAGE_KEY);
-    if (!raw) return [...mockData];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [...mockData];
-    return parsed;
-  } catch {
-    return [...mockData];
-  }
+// GitHub Pages 目前直接服務 repository root，所以 public 需保留在路徑中。
+// 若之後改成會把 public 當網站根目錄的 build 流程，可改為 '/pic/B/'。
+const bodyImageBasePath = 'public/pic/B/';
+
+function createBodyImagePath(fileName) {
+  return encodeURI(`${bodyImageBasePath}${fileName}`);
 }
 
-function saveChoice(choice) {
-  const current = getChoices();
-  current.push({ choice, createdAt: new Date().toISOString() });
-  localStorage.setItem(CHOICE_STORAGE_KEY, JSON.stringify(current));
+const bodyOptions = {
+  female: [
+    { id: 'female-under-8', label: '女生身材 1', image: createBodyImagePath('B_female<8%.png') },
+    { id: 'female-10-14', label: '女生身材 2', image: createBodyImagePath('B_female10-14%.png') },
+    { id: 'female-15-18', label: '女生身材 3', image: createBodyImagePath('B_female15-18%.png') },
+    { id: 'female-22-25', label: '女生身材 4', image: createBodyImagePath('B_female22-25%.png') },
+    { id: 'female-over-30', label: '女生身材 5', image: createBodyImagePath('B_female>30%.png') }
+  ],
+  male: [
+    { id: 'male-under-8', label: '男生身材 1', image: createBodyImagePath('B_male<8%.png') },
+    { id: 'male-10-14', label: '男生身材 2', image: createBodyImagePath('B_male10-14%.png') },
+    { id: 'male-15-18', label: '男生身材 3', image: createBodyImagePath('B_male15-18%.png') },
+    { id: 'male-20-25', label: '男生身材 4', image: createBodyImagePath('B_male20-25%.png') },
+    { id: 'male-over-30', label: '男生身材 5', image: createBodyImagePath('B_male>30%.png') }
+  ]
+};
+
+const IdealBodySelector = {
+  selectedGender: 'female',
+  selectedOptionId: null,
+  percentage: null,
+  voteCounts: []
+};
+
+function calculateBodyChoicePercentage(votes, gender, optionId) {
+  const genderVotes = votes.filter((vote) => vote.gender === gender);
+  if (genderVotes.length === 0) return 100;
+  const sameVotes = genderVotes.filter((vote) => vote.optionId === optionId);
+  return Math.round((sameVotes.length / genderVotes.length) * 100);
 }
 
-function calculateChoicePercentage(choice) {
-  const choices = getChoices();
-  if (choices.length === 0) return 0;
-  const sameCount = choices.filter((item) => item.choice === choice).length;
-  return Math.round((sameCount / choices.length) * 100);
-}
-
-function renderChoiceResult(choice) {
+function updateBodyChoiceResult() {
   const choiceResult = document.getElementById('choiceResult');
   if (!choiceResult) return;
-  const percentage = calculateChoicePercentage(choice);
-  choiceResult.textContent = `你和曾點選過的人中，有 ${percentage}% 選擇一樣的答案`;
+
+  if (!IdealBodySelector.selectedOptionId) {
+    choiceResult.textContent = '請先選擇一張圖片';
+    return;
+  }
+
+  IdealBodySelector.percentage = calculateBodyChoicePercentage(
+    IdealBodySelector.voteCounts,
+    IdealBodySelector.selectedGender,
+    IdealBodySelector.selectedOptionId
+  );
+  choiceResult.textContent = `有 ${IdealBodySelector.percentage}% 的人和你選擇一樣`;
 }
 
-function submitChoiceToGitHub(choice) {
-  // 正式部署時，應改成呼叫後端 API / GitHub Action / serverless function，不要把 GitHub Token 放在前端。
-  // 建議做法：前端送 choice 給你的後端，後端再用安全憑證寫入 GitHub Issues 或 Gist。
-  return Promise.resolve({ ok: true, choice });
-}
+function renderBodyOptions() {
+  const optionGrid = document.getElementById('bodyOptionGrid');
+  if (!optionGrid) return;
 
-const choiceCards = document.querySelectorAll('.choice-card');
-if (choiceCards.length > 0) {
-  choiceCards.forEach((card) => {
-    card.addEventListener('click', async () => {
-      const choice = card.dataset.choice;
-      if (!choice) return;
-
-      choiceCards.forEach((item) => item.classList.remove('active'));
-      card.classList.add('active');
-
-      saveChoice(choice);
-      await submitChoiceToGitHub(choice);
-      renderChoiceResult(choice);
-    });
+  optionGrid.innerHTML = '';
+  bodyOptions[IdealBodySelector.selectedGender].forEach((option) => {
+    const button = document.createElement('button');
+    button.className = 'body-option-card';
+    button.type = 'button';
+    button.dataset.optionId = option.id;
+    button.classList.toggle('active', option.id === IdealBodySelector.selectedOptionId);
+    button.innerHTML = `
+      <span class="body-option-image">
+        <img src="${option.image}" alt="${option.label}" loading="lazy" />
+      </span>
+      <span class="body-option-label">${option.label}</span>
+    `;
+    optionGrid.appendChild(button);
   });
 }
+
+async function initIdealBodySelector() {
+  const optionGrid = document.getElementById('bodyOptionGrid');
+  if (!optionGrid) return;
+
+  let firebase;
+  try {
+    firebase = await import('./src/firebase.js');
+  } catch {
+    renderBodyOptions();
+    const choiceResult = document.getElementById('choiceResult');
+    if (choiceResult) choiceResult.textContent = 'Firebase 載入失敗，請確認網路與 config。';
+    return;
+  }
+
+  const genderButtons = document.querySelectorAll('.body-gender-button');
+
+  function setGender(gender) {
+    IdealBodySelector.selectedGender = gender;
+    IdealBodySelector.selectedOptionId = null;
+    genderButtons.forEach((button) => {
+      button.classList.toggle('active', button.dataset.gender === gender);
+    });
+    renderBodyOptions();
+    updateBodyChoiceResult();
+  }
+
+  genderButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const gender = button.dataset.gender;
+      if (!gender || gender === IdealBodySelector.selectedGender) return;
+      setGender(gender);
+    });
+  });
+
+  optionGrid.addEventListener('click', async (event) => {
+    const card = event.target.closest('.body-option-card');
+    if (!card) return;
+
+    IdealBodySelector.selectedOptionId = card.dataset.optionId;
+    renderBodyOptions();
+    updateBodyChoiceResult();
+
+    try {
+      await firebase.addBodyShapeVote({
+        gender: IdealBodySelector.selectedGender,
+        optionId: IdealBodySelector.selectedOptionId
+      });
+    } catch {
+      const choiceResult = document.getElementById('choiceResult');
+      if (choiceResult) choiceResult.textContent = 'Firebase 尚未設定完成，請先填入 config。';
+    }
+  });
+
+  firebase.listenBodyShapeVotes(
+    (votes) => {
+      IdealBodySelector.voteCounts = votes;
+      updateBodyChoiceResult();
+    },
+    () => {
+      const choiceResult = document.getElementById('choiceResult');
+      if (choiceResult) choiceResult.textContent = 'Firebase 讀取失敗，請確認 config 與 Firestore rules。';
+    }
+  );
+
+  renderBodyOptions();
+}
+
+initIdealBodySelector();
 
 function initHealthyMealSection() {
   const section = document.querySelector('[data-meal-section]');

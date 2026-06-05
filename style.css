@@ -67,7 +67,6 @@ body {
 
 .ig-post,
 .wire-card,
-.choice-card,
 .case-card,
 .large-placeholder,
 .standalone-card,
@@ -224,9 +223,81 @@ body {
 }
 
 .title, .subtitle { margin: 0; }
-.choice-row { display: flex; gap: 14px; }
-.choice-card { width: 120px; height: 280px; cursor: pointer; }
-.choice-card.active { border-width: 3px; background: #f3f3f3; }
+
+.body-gender-toggle {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.body-gender-button {
+  min-width: 120px;
+  min-height: 44px;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+  font: inherit;
+}
+
+.body-gender-button.active {
+  border-width: 3px;
+  font-weight: 700;
+}
+
+.body-option-grid {
+  width: min(960px, 100%);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.body-option-card {
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  cursor: pointer;
+  font: inherit;
+}
+
+.body-option-card.active {
+  border-width: 4px;
+  font-weight: 700;
+}
+
+/* 此區塊使用統一人物顯示框架，避免因截圖尺寸不同造成身材比較失真。 */
+.body-option-image {
+  width: 100%;
+  aspect-ratio: 3 / 5;
+  display: grid;
+  place-items: center;
+  border: 1px solid #000;
+  background: #fff;
+  overflow: hidden;
+}
+
+.body-option-image img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center center;
+}
+
+.body-option-label,
+.body-choice-result {
+  text-align: center;
+}
+
+.body-choice-result {
+  min-height: 28px;
+  margin: 0;
+  font-weight: 700;
+}
 
 .case-row { display: flex; gap: 20px; }
 .case-card {
@@ -908,7 +979,7 @@ body {
     font-size: 17px;
   }
 
-  .choice-row { width: 100%; overflow-x: auto; padding-bottom: 8px; }
+  .body-option-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .case-row { flex-direction: column; }
   .iphone { transform: scale(0.85); transform-origin: center; }
   .inline-row, .action-row { flex-wrap: wrap; justify-content: center; gap: 16px; }
@@ -971,17 +1042,17 @@ body {
     min-height: 48vh;
   }
 
-  .choice-row {
-    width: 100%;
-    overflow-x: auto;
-    display: flex;
-    gap: 16px;
-    padding-bottom: 12px;
+  .body-option-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
   }
 
-  .choice-card {
-    flex: 0 0 68vw;
-    height: 58vh;
+  .body-gender-toggle {
+    width: 100%;
+  }
+
+  .body-gender-button {
+    flex: 1;
   }
 
   .case-row {

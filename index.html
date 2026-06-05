@@ -38,15 +38,13 @@
   <section id="frame-4" class="section reveal">
     <div class="frame-wrap center-col">
       <p class="title">圖表分佈圖</p>
-      <p class="subtitle">你的理想身材是哪個？</p>
-      <div class="choice-row" id="choiceRow">
-        <button class="choice-card" data-choice="A" type="button">A</button>
-        <button class="choice-card" data-choice="B" type="button">B</button>
-        <button class="choice-card" data-choice="C" type="button">C</button>
-        <button class="choice-card" data-choice="D" type="button">D</button>
-        <button class="choice-card" data-choice="E" type="button">E</button>
+      <p class="subtitle">你的理想身材</p>
+      <div class="body-gender-toggle" aria-label="選擇性別">
+        <button class="body-gender-button active" data-gender="female" type="button">女生</button>
+        <button class="body-gender-button" data-gender="male" type="button">男生</button>
       </div>
-      <p id="choiceResult">你和曾點選過的人中，有 XX% 選擇一樣的答案</p>
+      <div class="body-option-grid" id="bodyOptionGrid" aria-live="polite"></div>
+      <p id="choiceResult" class="body-choice-result">請先選擇一張圖片</p>
     </div>
   </section>
 
