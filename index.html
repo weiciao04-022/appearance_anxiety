@@ -252,6 +252,252 @@
         grid-column: 1 / -1;
       }
 
+      #frame-9 .social-trigger-panel,
+      #frame-9 .method-carousel-panel {
+        grid-column: 1 / -1;
+        display: grid;
+        gap: 16px;
+      }
+
+      #frame-9 .social-trigger-panel[hidden],
+      #frame-9 .method-carousel-panel[hidden] {
+        display: none;
+      }
+
+      #frame-9 .body-report-grid {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 16px;
+      }
+
+      #frame-9 .body-report-card,
+      #frame-9 .phone-feed-card,
+      #frame-9 .method-result-card {
+        border: 1px solid #000;
+        border-radius: 8px;
+        padding: 16px;
+        background: #fff;
+        box-sizing: border-box;
+      }
+
+      #frame-9 .body-game-image {
+        min-height: 86px;
+        border: 1px dashed #000;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        color: #555;
+        font-size: 0.86rem;
+      }
+
+      #frame-9 .body-game-image img {
+        width: 100%;
+        max-height: 140px;
+        object-fit: contain;
+        display: block;
+      }
+
+      #frame-9 .body-game-image img:not([hidden]) + .body-game-image-label {
+        display: none;
+      }
+
+      #frame-9 .body-game-image-label {
+        padding: 8px;
+        text-align: center;
+      }
+
+      #frame-9 .phone-feed-list {
+        display: grid;
+        gap: 10px;
+      }
+
+      #frame-9 .phone-feed-post {
+        border: 1px solid #000;
+        border-radius: 8px;
+        padding: 12px;
+        opacity: 0;
+        transform: translateY(8px);
+        animation: bodyMethodFadeIn 0.36s ease forwards;
+      }
+
+      #frame-9 .phone-feed-post:nth-child(2) {
+        animation-delay: 0.12s;
+      }
+
+      #frame-9 .phone-feed-post:nth-child(3) {
+        animation-delay: 0.24s;
+      }
+
+      #frame-9 .carousel-shell {
+        display: grid;
+        grid-template-columns: 44px minmax(0, 1fr) 44px;
+        gap: 12px;
+        align-items: center;
+      }
+
+      #frame-9 .carousel-arrow {
+        width: 44px;
+        height: 44px;
+        border: 1px solid #000;
+        border-radius: 50%;
+        background: #fff;
+        color: #000;
+        cursor: pointer;
+        font: inherit;
+      }
+
+      #frame-9 .product-carousel {
+        min-height: 320px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      #frame-9 .product-card {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: min(360px, 72%);
+        min-height: 300px;
+        display: grid;
+        gap: 10px;
+        padding: 16px;
+        border: 1px solid #000;
+        border-radius: 8px;
+        background: #fff;
+        box-sizing: border-box;
+        opacity: 0;
+        pointer-events: none;
+        transform: translateX(-50%) scale(0.82);
+        transition: transform 0.28s ease, opacity 0.28s ease;
+      }
+
+      #frame-9 .product-card.is-center {
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 3;
+        transform: translateX(-50%) scale(1);
+      }
+
+      #frame-9 .product-card.is-left {
+        opacity: 0.38;
+        z-index: 2;
+        transform: translateX(-112%) scale(0.86);
+      }
+
+      #frame-9 .product-card.is-right {
+        opacity: 0.38;
+        z-index: 2;
+        transform: translateX(12%) scale(0.86);
+      }
+
+      #frame-9 .product-card.is-completed::before {
+        content: "已體驗";
+        width: fit-content;
+        border: 1px solid #000;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 0.78rem;
+      }
+
+      #frame-9 .product-meta {
+        display: grid;
+        gap: 6px;
+        font-size: 0.9rem;
+      }
+
+      #frame-9 .method-stage {
+        display: grid;
+        gap: 12px;
+      }
+
+      #frame-9 .compact-row,
+      #frame-9 .method-choice-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      #frame-9 .method-chip,
+      #frame-9 .method-choice-button {
+        border: 1px solid #000;
+        border-radius: 999px;
+        background: #fff;
+        color: #000;
+        padding: 6px 10px;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      #frame-9 .method-chip.is-selected,
+      #frame-9 .method-choice-button:hover {
+        background: #000;
+        color: #fff;
+      }
+
+      #frame-9 .bowl-layout {
+        display: grid;
+        grid-template-columns: 140px minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      #frame-9 .bowl-dropzone {
+        min-height: 140px;
+        border: 1px solid #000;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 12px;
+      }
+
+      #frame-9 .method-metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      #frame-9 .metric-box {
+        border: 1px solid #000;
+        border-radius: 8px;
+        padding: 8px;
+        text-align: center;
+      }
+
+      #frame-9 .chat-thread,
+      #frame-9 .challenge-feed {
+        display: grid;
+        gap: 8px;
+      }
+
+      #frame-9 .chat-bubble,
+      #frame-9 .challenge-card {
+        border: 1px solid #000;
+        border-radius: 12px;
+        padding: 10px;
+        opacity: 0;
+        transform: translateY(8px);
+        animation: bodyMethodFadeIn 0.32s ease forwards;
+      }
+
+      #frame-9 .chat-bubble.self {
+        margin-left: 44px;
+        background: #f7f7f7;
+      }
+
+      #frame-9 .result-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      @keyframes bodyMethodFadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       #frame-9 .meal-box-game {
         display: grid;
         gap: 12px;
@@ -354,6 +600,11 @@
           grid-template-columns: 1fr;
         }
 
+        #frame-9 .body-report-grid,
+        #frame-9 .bowl-layout {
+          grid-template-columns: 1fr;
+        }
+
         #frame-9 .body-method-card-grid {
           grid-template-columns: 1fr;
         }
@@ -372,6 +623,10 @@
         }
 
         #frame-9 .meal-summary-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        #frame-9 .method-metrics {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
       }
@@ -422,6 +677,14 @@
           </div>
         </form>
       </section>
+      <section class="social-trigger-panel" data-social-panel hidden></section>
+      <section class="method-carousel-panel" data-carousel-panel hidden>
+        <div class="carousel-shell">
+          <button class="carousel-arrow" type="button" data-carousel-prev aria-label="上一個產品">‹</button>
+          <div class="product-carousel" data-product-carousel aria-live="polite"></div>
+          <button class="carousel-arrow" type="button" data-carousel-next aria-label="下一個產品">›</button>
+        </div>
+      </section>
       <div class="body-method-card-grid" data-method-card-grid hidden></div>
       <article class="body-method-detail" data-method-detail hidden aria-live="polite">
         <h3 data-method-title></h3>
@@ -445,33 +708,60 @@
           {
             id: 'meal',
             title: '健康餐',
-            description: '內容待補',
-            imageLabel: 'image placeholder'
+            description: '用一碗餐點組合，測試你是否真的吃得健康。',
+            image: '/pic/body-game/card-healthy-meal.png',
+            cost: '每餐約 NT$180－280',
+            risk: '長期花費高、需要持續選擇'
           },
           {
             id: 'gym',
             title: '健身房',
-            description: '內容待補',
-            imageLabel: 'image placeholder'
+            description: '辦了會員後，你真的會去嗎？',
+            image: '/pic/body-game/card-gym.png',
+            cost: '每月約 NT$1,000－1,800',
+            risk: '時間成本、持續性壓力'
           },
           {
             id: 'injection',
             title: '瘦瘦針',
-            description: '內容待補',
-            imageLabel: 'image placeholder'
+            description: '快速見效背後，也可能伴隨副作用與社交壓力。',
+            image: '/pic/body-game/card-injection.png',
+            cost: '每月約 NT$6,000－15,000',
+            risk: '副作用、費用高、醫療風險'
           },
           {
-            id: 'fasting',
-            title: '斷食',
-            description: '內容待補',
-            imageLabel: 'image placeholder'
+            id: 'influencer',
+            title: '網紅瘦身挑戰',
+            description: '跟著網路上的七天菜單做，真的適合你嗎？',
+            image: '/pic/body-game/card-influencer-challenge.png',
+            cost: '看似低成本',
+            risk: '營養失衡、反彈、焦慮加劇'
           }
         ];
 
         let selectedMethod = null;
-        let bodyProfile = null;
+        let userProfile = null;
+        let carouselIndex = 0;
+        let touchStartX = 0;
+        const gameProgress = {
+          completedMethods: [],
+          currentMethod: null,
+          anxietyScore: 0,
+          comparisonScore: 0
+        };
+        const methodResults = {
+          healthyMealResult: null,
+          gymResult: null,
+          injectionResult: null,
+          influencerChallengeResult: null
+        };
         const profilePanel = explorer.querySelector('[data-profile-panel]');
         const profileForm = explorer.querySelector('[data-profile-form]');
+        const socialPanel = explorer.querySelector('[data-social-panel]');
+        const carouselPanel = explorer.querySelector('[data-carousel-panel]');
+        const productCarousel = explorer.querySelector('[data-product-carousel]');
+        const carouselPrev = explorer.querySelector('[data-carousel-prev]');
+        const carouselNext = explorer.querySelector('[data-carousel-next]');
         const cardGrid = explorer.querySelector('[data-method-card-grid]');
         const detail = explorer.querySelector('[data-method-detail]');
         const detailTitle = explorer.querySelector('[data-method-title]');
@@ -479,46 +769,34 @@
         const detailImage = explorer.querySelector('[data-method-image]');
         const detailCopy = explorer.querySelector('[data-method-copy]');
         const mealGame = explorer.querySelector('[data-meal-game]');
+        const methodActions = explorer.querySelector('.body-method-actions');
         const collapseButton = explorer.querySelector('[data-method-collapse]');
         const nextButton = explorer.querySelector('[data-method-next]');
         const baseOptions = [
+          { name: '生菜', price: 0, kcal: 80, protein: 2, carb: 12, fat: 0 },
           { name: '白飯', price: 20, kcal: 180, protein: 3, carb: 40, fat: 0 },
-          { name: '紫米飯', price: 25, kcal: 170, protein: 4, carb: 35, fat: 1 },
-          { name: '地瓜', price: 25, kcal: 140, protein: 2, carb: 32, fat: 0 },
-          { name: '生菜', price: 20, kcal: 25, protein: 2, carb: 5, fat: 0 },
-          { name: '生菜加白飯', price: 30, kcal: 130, protein: 3, carb: 28, fat: 0 },
-          { name: '生菜加紫米飯', price: 35, kcal: 125, protein: 4, carb: 25, fat: 1 }
+          { name: '紫米飯', price: 25, kcal: 190, protein: 4, carb: 39, fat: 1 },
+          { name: '地瓜', price: 25, kcal: 160, protein: 2, carb: 37, fat: 0 },
+          { name: '生菜＋紫米飯', price: 30, kcal: 220, protein: 5, carb: 45, fat: 1 }
         ];
         const proteinOptions = [
-          { name: '雞胸肉', price: 60, kcal: 160, protein: 30, carb: 0, fat: 3 },
-          { name: '鮭魚', price: 90, kcal: 220, protein: 25, carb: 0, fat: 14 },
+          { name: '雞胸肉', price: 60, kcal: 165, protein: 31, carb: 0, fat: 3 },
+          { name: '鮭魚', price: 90, kcal: 230, protein: 25, carb: 0, fat: 14 },
+          { name: '牛肉', price: 85, kcal: 250, protein: 24, carb: 0, fat: 15 },
           { name: '豆腐', price: 45, kcal: 120, protein: 12, carb: 5, fat: 6 },
-          { name: '牛肉', price: 75, kcal: 230, protein: 24, carb: 0, fat: 15 },
           { name: '水煮蛋', price: 25, kcal: 75, protein: 6, carb: 1, fat: 5 }
         ];
         const veggieOptions = [
-          { name: '花椰菜', price: 10, kcal: 30, protein: 2, carb: 5, fat: 0 },
-          { name: '高麗菜', price: 10, kcal: 25, protein: 1, carb: 5, fat: 0 },
-          { name: '玉米筍', price: 10, kcal: 35, protein: 1, carb: 7, fat: 0 },
-          { name: '菇類', price: 10, kcal: 30, protein: 2, carb: 4, fat: 0 },
-          { name: '小黃瓜', price: 10, kcal: 15, protein: 1, carb: 3, fat: 0 },
-          { name: '毛豆', price: 15, kcal: 80, protein: 8, carb: 7, fat: 3 },
-          { name: '海帶芽', price: 10, kcal: 20, protein: 1, carb: 3, fat: 0 },
-          { name: '番茄', price: 10, kcal: 20, protein: 1, carb: 4, fat: 0 },
-          { name: '玉米粒', price: 15, kcal: 85, protein: 3, carb: 19, fat: 1 },
-          { name: '酪梨', price: 30, kcal: 120, protein: 1, carb: 6, fat: 11 }
+          { name: '花椰菜', price: 20, kcal: 50, protein: 3, carb: 9, fat: 0 },
+          { name: '毛豆', price: 25, kcal: 120, protein: 11, carb: 10, fat: 5 },
+          { name: '玉米筍', price: 20, kcal: 45, protein: 2, carb: 9, fat: 0 },
+          { name: '海帶芽', price: 15, kcal: 30, protein: 1, carb: 6, fat: 0 },
+          { name: '酪梨', price: 35, kcal: 120, protein: 1, carb: 6, fat: 11 }
         ];
         const sauceOptions = [
-          { name: '和風醬', price: 10, kcal: 45, protein: 0, carb: 5, fat: 2 },
+          { name: '和風醬', price: 10, kcal: 50, protein: 0, carb: 5, fat: 2 },
           { name: '胡麻醬', price: 15, kcal: 120, protein: 2, carb: 6, fat: 10 },
-          { name: '優格醬', price: 15, kcal: 70, protein: 3, carb: 5, fat: 4 },
-          { name: '不加醬', price: 0, kcal: 0, protein: 0, carb: 0, fat: 0 }
-        ];
-        const drinkOptions = [
-          { name: '無糖茶', price: 0, kcal: 0, protein: 0, carb: 0, fat: 0 },
-          { name: '黑咖啡', price: 0, kcal: 5, protein: 0, carb: 1, fat: 0 },
-          { name: '豆漿', price: 25, kcal: 130, protein: 9, carb: 12, fat: 5 },
-          { name: '珍珠奶茶', price: 65, kcal: 450, protein: 6, carb: 70, fat: 12 }
+          { name: '優格醬', price: 15, kcal: 70, protein: 3, carb: 5, fat: 4 }
         ];
         const mealOptions = {
           base: {
@@ -540,19 +818,13 @@
             label: '醬料',
             items: sauceOptions,
             type: 'single'
-          },
-          drink: {
-            label: '飲料',
-            items: drinkOptions,
-            type: 'single'
           }
         };
         const mealState = {
           base: null,
           protein: null,
           veggies: [],
-          sauce: null,
-          drink: null
+          sauce: null
         };
 
         function renderCards() {
@@ -560,10 +832,87 @@
             <button class="body-method-card" type="button" data-method-id="${method.id}" aria-pressed="false">
               <h3>${method.title}</h3>
               <p>${method.description}</p>
-              <div class="body-method-image-placeholder">${method.imageLabel}</div>
+              <div class="body-method-image-placeholder">${method.image || 'image placeholder'}</div>
               <span class="body-method-card-cta">點擊查看</span>
             </button>
           `).join('');
+        }
+
+        function imageFrame(path, alt = '') {
+          return `
+            <div class="body-game-image" data-image="${path}">
+              <img src="${path}" alt="${alt}" onerror="this.hidden = true;" />
+              <span class="body-game-image-label">${path}</span>
+            </div>
+          `;
+        }
+
+        function profileReport() {
+          if (!userProfile) return { bmi: 0, estimatedCalories: 0 };
+          const heightM = userProfile.height / 100;
+          const bmi = userProfile.weight / (heightM * heightM);
+          const targets = mealTargets();
+          return {
+            bmi: Number.isFinite(bmi) ? bmi.toFixed(1) : '0.0',
+            estimatedCalories: targets.mealCalories * 3
+          };
+        }
+
+        function renderSocialPanel() {
+          const report = profileReport();
+          socialPanel.innerHTML = `
+            <div class="body-report-grid">
+              <article class="body-report-card">
+                ${imageFrame('/pic/body-game/body-report.png', '體態分析報告示意')}
+                <h3>你的體態分析報告</h3>
+                <p>BMI：${report.bmi}</p>
+                <p>每日粗估需求：約 ${report.estimatedCalories} kcal</p>
+                <p>這不是診斷，而是讓後續互動有一個比較基準。</p>
+              </article>
+              <article class="phone-feed-card">
+                ${imageFrame('/pic/body-game/phone-scroll-feed.png', '滑手機看到社群內容')}
+                <h3>滑手機時，標準開始靠近</h3>
+                <div class="phone-feed-list">
+                  <p class="phone-feed-post">身材網紅分享「一週變瘦」日常。</p>
+                  <p class="phone-feed-post">演算法又推了減肥菜單與前後對比照。</p>
+                  <p class="phone-feed-post">你開始想：我是不是也該做點什麼？</p>
+                </div>
+                <button class="button" type="button" data-enter-carousel>進入產品選擇</button>
+              </article>
+            </div>
+          `;
+        }
+
+        function carouselPosition(index) {
+          const total = methods.length;
+          const diff = (index - carouselIndex + total) % total;
+          if (diff === 0) return 'is-center';
+          if (diff === 1) return 'is-right';
+          if (diff === total - 1) return 'is-left';
+          return '';
+        }
+
+        function renderCarousel() {
+          productCarousel.innerHTML = methods.map((method, index) => `
+            <article class="product-card ${carouselPosition(index)}${gameProgress.completedMethods.includes(method.id) ? ' is-completed' : ''}">
+              ${imageFrame(method.image, `${method.title}代表圖片`)}
+              <h3>${method.title}</h3>
+              <p>${method.description}</p>
+              <div class="product-meta">
+                <span>預估成本：${method.cost}</span>
+                <span>主要代價：${method.risk}</span>
+              </div>
+              <button class="button" type="button" data-start-method="${method.id}">開始體驗</button>
+            </article>
+          `).join('');
+        }
+
+        function showCarousel() {
+          profilePanel.hidden = true;
+          socialPanel.hidden = true;
+          carouselPanel.hidden = false;
+          detail.hidden = true;
+          renderCarousel();
         }
 
         function selectedMealItems() {
@@ -571,8 +920,7 @@
             mealState.base,
             mealState.protein,
             ...mealState.veggies,
-            mealState.sauce,
-            mealState.drink
+            mealState.sauce
           ].filter(Boolean);
         }
 
@@ -590,27 +938,27 @@
         }
 
         function mealTargets() {
-          if (!bodyProfile) {
+          if (!userProfile) {
             return { mealCalories: 0, proteinTarget: 0, carbTarget: 0, veggieTarget: 3 };
           }
 
-          const genderOffset = bodyProfile.gender === 'male'
+          const genderOffset = userProfile.gender === 'male'
             ? 5
-            : bodyProfile.gender === 'female'
+            : userProfile.gender === 'female'
               ? -161
               : -80;
           const activityMultiplier = {
             low: 1.2,
             medium: 1.375,
             high: 1.55
-          }[bodyProfile.activityLevel] || 1.2;
-          const bmr = 10 * bodyProfile.weight + 6.25 * bodyProfile.height - 5 * bodyProfile.age + genderOffset;
+          }[userProfile.activityLevel] || 1.2;
+          const bmr = 10 * userProfile.weight + 6.25 * userProfile.height - 5 * userProfile.age + genderOffset;
           const tdee = bmr * activityMultiplier;
 
           return {
             mealCalories: Math.max(0, Math.round(tdee / 3)),
-            proteinTarget: Math.max(0, Math.round((bodyProfile.weight * 1.2) / 3)),
-            carbTarget: Math.max(0, Math.round((bodyProfile.weight * 3) / 3)),
+            proteinTarget: Math.max(0, Math.round((userProfile.weight * 1.2) / 3)),
+            carbTarget: Math.max(0, Math.round((userProfile.weight * 3) / 3)),
             veggieTarget: 3
           };
         }
@@ -634,9 +982,7 @@
             : calorieStatus === '偏低'
               ? '低於'
               : '高於';
-          const mainDifference = calorieStatus === '偏高' && mealState.drink?.name === '珍珠奶茶'
-            ? '飲料'
-            : calorieStatus === '偏高' && mealState.protein?.fat >= 14
+          const mainDifference = calorieStatus === '偏高' && mealState.protein?.fat >= 14
               ? '高脂蛋白質'
               : proteinStatus === '不足'
                 ? '蛋白質'
@@ -662,26 +1008,32 @@
           mealGame.innerHTML = `
             <div class="meal-game-intro">
               <h3>今天你會怎麼配一碗夏威夷碗／健康餐盒？</h3>
-              <p>選擇主食、蛋白質、配菜、醬料與飲料，系統會用你的身體資料粗估一餐建議範圍。</p>
+              <p>把食材拖曳或點選進碗裡，最多選擇五個主要項目；系統會即時計算價格與營養。</p>
             </div>
-            <div class="meal-option-groups">
-              ${Object.entries(mealOptions).map(([category, group]) => `
-                <section class="meal-option-group">
-                  <h4>${group.label}</h4>
-                  <div class="meal-option-buttons">
-                    ${group.items.map((item) => `
-                      <button
-                        class="meal-option-button${group.type === 'multi'
-                          ? mealState[category].some((selected) => selected.name === item.name) ? ' is-selected' : ''
-                          : mealState[category]?.name === item.name ? ' is-selected' : ''}"
-                        type="button"
-                        data-meal-category="${category}"
-                        data-meal-option="${item.name}"
-                      >${item.name}</button>
-                    `).join('')}
-                  </div>
-                </section>
-              `).join('')}
+            <div class="bowl-layout">
+              <div class="bowl-dropzone" data-meal-dropzone>
+                <span>${selectedMealItems().length ? selectedMealItems().map((item) => item.name).join('、') : '空碗'}</span>
+              </div>
+              <div class="meal-option-groups">
+                ${Object.entries(mealOptions).map(([category, group]) => `
+                  <section class="meal-option-group">
+                    <h4>${group.label}</h4>
+                    <div class="meal-option-buttons">
+                      ${group.items.map((item) => `
+                        <button
+                          class="meal-option-button method-chip${group.type === 'multi'
+                            ? mealState[category].some((selected) => selected.name === item.name) ? ' is-selected' : ''
+                            : mealState[category]?.name === item.name ? ' is-selected' : ''}"
+                          type="button"
+                          draggable="true"
+                          data-meal-category="${category}"
+                          data-meal-option="${item.name}"
+                        >${item.name}</button>
+                      `).join('')}
+                    </div>
+                  </section>
+                `).join('')}
+              </div>
             </div>
             <div class="meal-summary-grid" aria-live="polite">
               <div class="meal-summary-item"><span>總價格</span><b>${totals.price} 元</b></div>
@@ -695,49 +1047,383 @@
               <div class="meal-summary-item"><span>蔬菜</span><b>${judgement.veggieStatus}</b></div>
             </div>
             <p class="meal-feedback">${judgement.summary}<br />一餐粗估：${judgement.targets.mealCalories} kcal、蛋白質 ${judgement.targets.proteinTarget}g、碳水 ${judgement.targets.carbTarget}g。</p>
+            <button class="button" type="button" data-finish-method="meal">完成健康餐體驗</button>
           `;
         }
 
-        function selectMethod(methodId) {
-          selectedMethod = methods.find((method) => method.id === methodId) || null;
-          explorer.querySelectorAll('[data-method-id]').forEach((card) => {
-            const isActive = card.dataset.methodId === selectedMethod?.id;
-            card.classList.toggle('is-active', isActive);
-            card.classList.toggle('is-muted', selectedMethod?.id === 'meal' && !isActive);
-            card.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-          });
+        const gymWeeks = [
+          { text: '第 1 週：剛辦會員，很有動力。', a: '下課後去健身房', b: '今天先回家休息' },
+          { text: '第 2 週：下雨、很累、晚上九點才有空。', a: '還是去健身房', b: '改成在家休息' },
+          { text: '第 3 週：朋友約吃飯或唱歌。', a: '拒絕朋友，去健身', b: '跟朋友出去' },
+          { text: '第 4 週：期中考／作業壓力很大。', a: '擠出時間去健身', b: '暫停一週' }
+        ];
+        const injectionScenes = [
+          { role: '診所醫師', text: '第一次施打前，需要先了解你的身體狀況。這類藥物可能降低食慾，但也可能出現噁心、頭暈、腸胃不適等副作用。', options: ['開始施打', '先再考慮'] },
+          { role: '閨蜜群組', text: '今晚吃麻辣鍋嗎？好久沒聚了！', options: ['去，但可能吃不多', '拒絕聚餐', '去，但不說自己在打針'] },
+          { role: '系統訊息', text: '你最近食慾下降，體重也下降了，但早上起床有點頭暈。', options: ['繼續觀察', '問醫師', '自己加強控制飲食'] },
+          { role: '診所醫師', text: '這週狀況如何？如果副作用明顯，不建議自行增加劑量。', options: ['維持劑量', '想增加劑量', '暫停'] },
+          { role: '社群貼文', text: '她一個月瘦了 8 公斤，看起來差好多。', options: ['覺得自己也應該瘦更快', '先看自己的身體狀況', '開始焦慮比較'] }
+        ];
+        const influencerScenes = [
+          { text: 'Day 1：七天瘦三公斤菜單公開！早餐黑咖啡＋水煮蛋，午餐沙拉，晚餐不吃澱粉。', options: ['完全照做', '稍微調整', '先收藏，明天開始'] },
+          { text: 'Day 2：下午上課時很餓，注意力下降。', options: ['忍住', '買一個飯糰', '喝無糖咖啡撐過去'] },
+          { text: 'Day 3：體重下降 0.6 公斤，你很開心。', options: ['更嚴格執行', '繼續原本計畫', '開始擔心復胖'] },
+          { text: 'Day 4：朋友約吃晚餐。', options: ['不去', '去，但只吃一點', '正常吃'] },
+          { text: 'Day 5：晚上突然很想吃甜食。', options: ['忍住', '吃一點', '暴食'] },
+          { text: 'Day 6：看到另一個網紅說這個方法其實不健康。', options: ['繼續做完七天', '開始查資料', '放棄'] }
+        ];
+        const methodState = {
+          gym: { week: 0, visits: 0, energy: 50, stress: 30, social: 50 },
+          injection: { step: 0, weight: 0, cost: 6000, sideEffect: 0, stress: 30, social: 50 },
+          influencer: { day: 0, weight: 0, hunger: 20, stress: 30, bingeRisk: 10, comparison: 30 }
+        };
 
-          if (!selectedMethod) {
-            detail.hidden = true;
-            detailTitle.hidden = false;
-            detailSubtitle.hidden = false;
-            detailImage.hidden = false;
-            detailCopy.hidden = false;
-            mealGame.hidden = true;
+        function resultKey(methodId) {
+          return {
+            meal: 'healthyMealResult',
+            gym: 'gymResult',
+            injection: 'injectionResult',
+            influencer: 'influencerChallengeResult'
+          }[methodId];
+        }
+
+        function completeMethod(methodId, result) {
+          methodResults[resultKey(methodId)] = result;
+          if (!gameProgress.completedMethods.includes(methodId)) gameProgress.completedMethods.push(methodId);
+          renderResult(methodId, result);
+        }
+
+        function animateResultNumbers(container) {
+          container.querySelectorAll('.metric-box b').forEach((element) => {
+            const original = element.textContent;
+            const match = original.match(/-?\d+(?:\.\d+)?/);
+            if (!match) return;
+            const target = Number(match[0]);
+            const decimals = match[0].includes('.') ? 1 : 0;
+            const prefix = original.slice(0, match.index);
+            const suffix = original.slice(match.index + match[0].length);
+            const startedAt = performance.now();
+
+            function tick(now) {
+              const progress = Math.min((now - startedAt) / 520, 1);
+              const value = target * progress;
+              element.textContent = `${prefix}${value.toFixed(decimals)}${suffix}`;
+              if (progress < 1) requestAnimationFrame(tick);
+            }
+
+            requestAnimationFrame(tick);
+          });
+        }
+
+        function renderResult(methodId, result) {
+          const method = methods.find((item) => item.id === methodId);
+          mealGame.hidden = false;
+          detail.hidden = false;
+          methodActions.hidden = true;
+          mealGame.innerHTML = `
+            <article class="method-result-card">
+              <h3>${method.title}體驗結果</h3>
+              <p>${result.summary}</p>
+              <div class="method-metrics">
+                <div class="metric-box"><span>花費</span><b>${result.cost}</b></div>
+                <div class="metric-box"><span>身體影響</span><b>${result.body}</b></div>
+                <div class="metric-box"><span>心理／社交</span><b>${result.mind}</b></div>
+                <div class="metric-box"><span>提醒</span><b>${result.note}</b></div>
+              </div>
+              <div class="result-actions">
+                <button class="button" type="button" data-back-carousel>回到產品選擇</button>
+                <button class="button" type="button" data-restart-method="${methodId}">重新體驗這個方法</button>
+              </div>
+            </article>
+          `;
+          animateResultNumbers(mealGame);
+          renderCarousel();
+        }
+
+        function finishMeal() {
+          const totals = mealTotals();
+          const judgement = mealJudgement(totals);
+          const monthlyWorkday = totals.price * 22;
+          const monthlyDaily = totals.price * 30;
+          completeMethod('meal', {
+            summary: `這餐共 ${totals.price} 元、${totals.kcal} kcal；22 個上課／上班日中午都吃約 ${monthlyWorkday} 元，每天午餐都吃 30 天約 ${monthlyDaily} 元。`,
+            cost: `NT$${totals.price}／餐`,
+            body: `熱量${judgement.calorieStatus}一餐建議，蛋白質${judgement.proteinStatus}。`,
+            mind: '需要每天持續選擇，也會累積成固定飲食支出。',
+            note: '健康餐不只是一種飲食選擇，也是一種需要長期負擔的消費模式。'
+          });
+        }
+
+        function renderGymGame() {
+          const state = methodState.gym;
+          const week = gymWeeks[state.week];
+          if (!week) {
+            const average = state.visits ? Math.round(1288 / state.visits) : 0;
+            completeMethod('gym', {
+              summary: state.visits
+                ? `這個月去了 ${state.visits} 次，平均每次成本約 NT$${average}。`
+                : '本月沒有實際使用會員。',
+              cost: state.visits ? `NT$${average}／次` : 'NT$1288 但未使用',
+              body: `體力值 ${state.energy}，代表是否有累積活動感。`,
+              mind: `壓力值 ${state.stress}，社交值 ${state.social}。`,
+              note: '健身房的成本不只在月費，也在時間、交通與持續執行的壓力。'
+            });
             return;
           }
 
-          if (selectedMethod.id === 'meal') {
-            detailTitle.hidden = true;
-            detailSubtitle.hidden = true;
-            detailImage.hidden = true;
-            detailCopy.hidden = true;
-            mealGame.hidden = false;
-            renderMealGame();
-          } else {
-            detailTitle.hidden = false;
-            detailSubtitle.hidden = false;
-            detailImage.hidden = false;
-            detailCopy.hidden = false;
-            mealGame.hidden = true;
-            detailTitle.textContent = selectedMethod.title;
-            detailSubtitle.textContent = selectedMethod.description;
-            detailImage.textContent = selectedMethod.imageLabel;
-          }
-          detail.hidden = false;
+          mealGame.innerHTML = `
+            <section class="method-stage">
+              <h3>健身房會員生存挑戰</h3>
+              <p>你已經辦了一個月健身房會員，月費 NT$1,288。每週的選擇會改變使用次數、體力、壓力與社交感受。</p>
+              ${imageFrame('/pic/body-game/gym-card.png', '健身房會員卡示意')}
+              <article class="challenge-card">
+                <h4>${week.text}</h4>
+                <div class="method-choice-row">
+                  <button class="method-choice-button" type="button" data-gym-choice="go">${week.a}</button>
+                  <button class="method-choice-button" type="button" data-gym-choice="rest">${week.b}</button>
+                </div>
+              </article>
+              <div class="method-metrics">
+                <div class="metric-box"><span>已去次數</span><b>${state.visits}</b></div>
+                <div class="metric-box"><span>體力值</span><b>${state.energy}</b></div>
+                <div class="metric-box"><span>壓力值</span><b>${state.stress}</b></div>
+                <div class="metric-box"><span>社交值</span><b>${state.social}</b></div>
+              </div>
+            </section>
+          `;
         }
 
-        renderCards();
+        function handleGymChoice(choice) {
+          const state = methodState.gym;
+          if (choice === 'go') {
+            state.visits += 1;
+            state.energy += 8;
+            state.stress += state.week >= 2 ? 10 : 5;
+            state.social += state.week === 2 ? -12 : -3;
+          } else {
+            state.energy += 2;
+            state.stress += state.week === 3 ? -8 : -3;
+            state.social += state.week === 2 ? 10 : 2;
+          }
+          state.energy = Math.max(0, Math.min(100, state.energy));
+          state.stress = Math.max(0, Math.min(100, state.stress));
+          state.social = Math.max(0, Math.min(100, state.social));
+          state.week += 1;
+          renderGymGame();
+        }
+
+        function renderInjectionGame() {
+          const state = methodState.injection;
+          const scene = injectionScenes[state.step];
+          if (!scene) {
+            completeMethod('injection', {
+              summary: `三週後體重短期變化約 ${state.weight.toFixed(1)} kg，花費約 NT$${state.cost}。`,
+              cost: `約 NT$${state.cost}`,
+              body: `副作用程度 ${state.sideEffect}／100，包含食慾、頭暈或腸胃感受。`,
+              mind: `心理壓力 ${state.stress}／100，社交值 ${state.social}／100。`,
+              note: '快速改變身體的方式，通常也伴隨更高的金錢成本、身體風險與心理壓力。'
+            });
+            return;
+          }
+
+          const previousMessages = injectionScenes.slice(0, state.step + 1).map((item) => `
+            <div class="chat-bubble">
+              <span>${item.role}</span>
+              <p>${item.text}</p>
+            </div>
+          `).join('');
+
+          mealGame.innerHTML = `
+            <section class="method-stage">
+              <h3>手機訊息＋診所對話</h3>
+              <p>這段情境用中性方式呈現花費、身體反應與社交壓力，不代表建議或醫療判斷。</p>
+              <div class="chat-thread">${previousMessages}</div>
+              <div class="method-choice-row">
+                ${scene.options.map((option, index) => `
+                  <button class="method-choice-button" type="button" data-injection-choice="${index}">${option}</button>
+                `).join('')}
+              </div>
+              <div class="method-metrics">
+                <div class="metric-box"><span>體重變化</span><b>${state.weight.toFixed(1)} kg</b></div>
+                <div class="metric-box"><span>花費</span><b>NT$${state.cost}</b></div>
+                <div class="metric-box"><span>副作用</span><b>${state.sideEffect}</b></div>
+                <div class="metric-box"><span>心理壓力</span><b>${state.stress}</b></div>
+              </div>
+            </section>
+          `;
+        }
+
+        function handleInjectionChoice(choiceIndex) {
+          const state = methodState.injection;
+          const step = state.step;
+          if (step === 0 && choiceIndex === 0) {
+            state.weight -= 0.4;
+            state.sideEffect += 12;
+          }
+          if (step === 0 && choiceIndex === 1) state.stress -= 4;
+          if (step === 1 && choiceIndex === 0) {
+            state.social += 8;
+            state.stress += 4;
+          }
+          if (step === 1 && choiceIndex === 1) {
+            state.social -= 10;
+            state.stress += 10;
+          }
+          if (step === 1 && choiceIndex === 2) state.stress += 12;
+          if (step === 2 && choiceIndex === 0) state.sideEffect += 5;
+          if (step === 2 && choiceIndex === 1) state.stress -= 6;
+          if (step === 2 && choiceIndex === 2) {
+            state.weight -= 0.5;
+            state.sideEffect += 12;
+            state.stress += 10;
+          }
+          if (step === 3 && choiceIndex === 0) state.weight -= 0.5;
+          if (step === 3 && choiceIndex === 1) {
+            state.weight -= 0.9;
+            state.sideEffect += 18;
+            state.stress += 12;
+            state.cost += 3000;
+          }
+          if (step === 3 && choiceIndex === 2) state.sideEffect -= 6;
+          if (step === 4 && choiceIndex === 0) {
+            state.stress += 12;
+            gameProgress.comparisonScore += 8;
+          }
+          if (step === 4 && choiceIndex === 1) state.stress -= 6;
+          if (step === 4 && choiceIndex === 2) {
+            state.stress += 14;
+            gameProgress.anxietyScore += 8;
+          }
+          state.sideEffect = Math.max(0, Math.min(100, state.sideEffect));
+          state.stress = Math.max(0, Math.min(100, state.stress));
+          state.social = Math.max(0, Math.min(100, state.social));
+          state.step += 1;
+          renderInjectionGame();
+        }
+
+        function renderInfluencerGame() {
+          const state = methodState.influencer;
+          const scene = influencerScenes[state.day];
+          if (!scene) {
+            completeMethod('influencer', {
+              summary: `七天內體重可能短期下降約 ${Math.abs(state.weight).toFixed(1)} kg，但飢餓與焦慮也可能累積。`,
+              cost: '金錢成本低，但生活成本高',
+              body: `飢餓值 ${state.hunger}／100，飲食失控風險 ${state.bingeRisk}／100。`,
+              mind: `焦慮值 ${state.stress}／100，社群比較值 ${state.comparison}／100。`,
+              note: '網路挑戰看似低成本，但真正的代價可能是營養失衡、焦慮增加與反覆失控。'
+            });
+            return;
+          }
+
+          mealGame.innerHTML = `
+            <section class="method-stage">
+              <h3>七天網紅瘦身挑戰</h3>
+              <p>像滑到貼文後接著執行每日任務，觀察短期數字與心理壓力如何一起變動。</p>
+              <div class="challenge-feed">
+                ${imageFrame(state.day === 0 ? '/pic/body-game/social-post-diet.png' : '/pic/body-game/diet-menu.png', '網紅瘦身挑戰貼文示意')}
+                <article class="challenge-card">
+                  <h4>${scene.text}</h4>
+                  <div class="method-choice-row">
+                    ${scene.options.map((option, index) => `
+                      <button class="method-choice-button" type="button" data-influencer-choice="${index}">${option}</button>
+                    `).join('')}
+                  </div>
+                </article>
+              </div>
+              <div class="method-metrics">
+                <div class="metric-box"><span>體重變化</span><b>${state.weight.toFixed(1)} kg</b></div>
+                <div class="metric-box"><span>飢餓值</span><b>${state.hunger}</b></div>
+                <div class="metric-box"><span>焦慮值</span><b>${state.stress}</b></div>
+                <div class="metric-box"><span>比較值</span><b>${state.comparison}</b></div>
+              </div>
+            </section>
+          `;
+        }
+
+        function handleInfluencerChoice(choiceIndex) {
+          const state = methodState.influencer;
+          if (choiceIndex === 0) {
+            state.weight -= 0.4;
+            state.hunger += 16;
+            state.stress += 10;
+            state.comparison += 8;
+          }
+          if (choiceIndex === 1) {
+            state.weight -= 0.2;
+            state.hunger += 6;
+            state.stress += 2;
+          }
+          if (choiceIndex === 2) {
+            state.stress += 6;
+            state.comparison += 6;
+          }
+          if (state.day === 4 && choiceIndex === 2) state.bingeRisk += 30;
+          if (state.day === 5 && choiceIndex === 1) state.stress -= 8;
+          if (state.day === 5 && choiceIndex === 2) state.hunger -= 8;
+          state.hunger = Math.max(0, Math.min(100, state.hunger));
+          state.stress = Math.max(0, Math.min(100, state.stress));
+          state.bingeRisk = Math.max(0, Math.min(100, state.bingeRisk));
+          state.comparison = Math.max(0, Math.min(100, state.comparison));
+          gameProgress.anxietyScore = state.stress;
+          gameProgress.comparisonScore = state.comparison;
+          state.day += 1;
+          renderInfluencerGame();
+        }
+
+        function resetMethod(methodId) {
+          if (methodId === 'meal') {
+            mealState.base = null;
+            mealState.protein = null;
+            mealState.veggies = [];
+            mealState.sauce = null;
+          }
+          if (methodId === 'gym') methodState.gym = { week: 0, visits: 0, energy: 50, stress: 30, social: 50 };
+          if (methodId === 'injection') methodState.injection = { step: 0, weight: 0, cost: 6000, sideEffect: 0, stress: 30, social: 50 };
+          if (methodId === 'influencer') methodState.influencer = { day: 0, weight: 0, hunger: 20, stress: 30, bingeRisk: 10, comparison: 30 };
+          startMethod(methodId);
+        }
+
+        function startMethod(methodId) {
+          gameProgress.currentMethod = methodId;
+          carouselPanel.hidden = true;
+          detail.hidden = false;
+          detailTitle.hidden = true;
+          detailSubtitle.hidden = true;
+          detailImage.hidden = true;
+          detailCopy.hidden = true;
+          mealGame.hidden = false;
+          methodActions.hidden = false;
+          if (methodId === 'meal') renderMealGame();
+          if (methodId === 'gym') renderGymGame();
+          if (methodId === 'injection') renderInjectionGame();
+          if (methodId === 'influencer') renderInfluencerGame();
+        }
+
+        function updateMealSelection(category, optionName) {
+          const option = mealOptions[category]?.items.find((item) => item.name === optionName);
+          if (!option) return;
+          const totalSelected = selectedMealItems().length;
+
+          if (mealOptions[category].type === 'multi') {
+            const existingIndex = mealState[category].findIndex((item) => item.name === option.name);
+            if (existingIndex >= 0) {
+              mealState[category].splice(existingIndex, 1);
+            } else if (totalSelected < 5) {
+              mealState[category].push(option);
+            }
+          } else {
+            const replacingExisting = Boolean(mealState[category]);
+            if (replacingExisting || totalSelected < 5) {
+              mealState[category] = option;
+            }
+          }
+          renderMealGame();
+        }
+
+        function changeCarousel(direction) {
+          carouselIndex = (carouselIndex + direction + methods.length) % methods.length;
+          renderCarousel();
+        }
 
         profileForm.addEventListener('submit', (event) => {
           event.preventDefault();
@@ -747,49 +1433,124 @@
           const age = Number(data.get('age'));
           if (!height || !weight || !age) return;
 
-          bodyProfile = {
+          const heightM = height / 100;
+          const bmi = weight / (heightM * heightM);
+          userProfile = {
             height,
             weight,
             age,
             gender: data.get('gender'),
-            activityLevel: data.get('activityLevel')
+            activityLevel: data.get('activityLevel'),
+            BMI: Number.isFinite(bmi) ? Number(bmi.toFixed(1)) : 0,
+            estimatedCalories: 0
           };
+          userProfile.estimatedCalories = mealTargets().mealCalories * 3;
           profilePanel.hidden = true;
-          cardGrid.hidden = false;
+          cardGrid.hidden = true;
+          renderSocialPanel();
+          socialPanel.hidden = false;
         });
 
-        cardGrid.addEventListener('click', (event) => {
-          const card = event.target.closest('[data-method-id]');
+        socialPanel.addEventListener('click', (event) => {
+          if (event.target.closest('[data-enter-carousel]')) showCarousel();
+        });
+
+        carouselPrev.addEventListener('click', () => changeCarousel(-1));
+        carouselNext.addEventListener('click', () => changeCarousel(1));
+
+        productCarousel.addEventListener('click', (event) => {
+          const startButton = event.target.closest('[data-start-method]');
+          if (startButton) {
+            resetMethod(startButton.dataset.startMethod);
+            return;
+          }
+
+          const card = event.target.closest('.product-card');
           if (!card) return;
-          selectMethod(card.dataset.methodId);
+          const visibleCards = Array.from(productCarousel.querySelectorAll('.product-card'));
+          const cardIndex = visibleCards.indexOf(card);
+          if (cardIndex >= 0) {
+            carouselIndex = cardIndex;
+            renderCarousel();
+          }
         });
 
-        collapseButton.addEventListener('click', () => selectMethod(null));
+        productCarousel.addEventListener('touchstart', (event) => {
+          touchStartX = event.touches[0].clientX;
+        }, { passive: true });
+
+        productCarousel.addEventListener('touchend', (event) => {
+          const touchEndX = event.changedTouches[0].clientX;
+          const distance = touchEndX - touchStartX;
+          if (Math.abs(distance) > 40) changeCarousel(distance < 0 ? 1 : -1);
+        }, { passive: true });
+
+        collapseButton.addEventListener('click', () => showCarousel());
 
         detail.addEventListener('click', (event) => {
           const optionButton = event.target.closest('[data-meal-option]');
-          if (!optionButton) return;
-          const category = optionButton.dataset.mealCategory;
-          const optionName = optionButton.dataset.mealOption;
-          const option = mealOptions[category]?.items.find((item) => item.name === optionName);
-          if (!option) return;
-          if (mealOptions[category].type === 'multi') {
-            const existingIndex = mealState[category].findIndex((item) => item.name === option.name);
-            if (existingIndex >= 0) {
-              mealState[category].splice(existingIndex, 1);
-            } else if (mealState[category].length < 5) {
-              mealState[category].push(option);
-            }
-          } else {
-            mealState[category] = option;
+          if (optionButton) {
+            updateMealSelection(optionButton.dataset.mealCategory, optionButton.dataset.mealOption);
+            return;
           }
-          renderMealGame();
+
+          const finishButton = event.target.closest('[data-finish-method="meal"]');
+          if (finishButton) {
+            finishMeal();
+            return;
+          }
+
+          const gymChoice = event.target.closest('[data-gym-choice]');
+          if (gymChoice) {
+            handleGymChoice(gymChoice.dataset.gymChoice);
+            return;
+          }
+
+          const injectionChoice = event.target.closest('[data-injection-choice]');
+          if (injectionChoice) {
+            handleInjectionChoice(Number(injectionChoice.dataset.injectionChoice));
+            return;
+          }
+
+          const influencerChoice = event.target.closest('[data-influencer-choice]');
+          if (influencerChoice) {
+            handleInfluencerChoice(Number(influencerChoice.dataset.influencerChoice));
+            return;
+          }
+
+          const backButton = event.target.closest('[data-back-carousel]');
+          if (backButton) {
+            showCarousel();
+            return;
+          }
+
+          const restartButton = event.target.closest('[data-restart-method]');
+          if (restartButton) resetMethod(restartButton.dataset.restartMethod);
+        });
+
+        detail.addEventListener('dragstart', (event) => {
+          const optionButton = event.target.closest('[data-meal-option]');
+          if (!optionButton) return;
+          event.dataTransfer.setData('text/plain', `${optionButton.dataset.mealCategory}::${optionButton.dataset.mealOption}`);
+        });
+
+        detail.addEventListener('dragover', (event) => {
+          if (event.target.closest('[data-meal-dropzone]')) event.preventDefault();
+        });
+
+        detail.addEventListener('drop', (event) => {
+          const dropzone = event.target.closest('[data-meal-dropzone]');
+          if (!dropzone) return;
+          event.preventDefault();
+          const [category, optionName] = event.dataTransfer.getData('text/plain').split('::');
+          updateMealSelection(category, optionName);
         });
 
         nextButton.addEventListener('click', () => {
-          const currentIndex = methods.findIndex((method) => method.id === selectedMethod?.id);
+          const currentIndex = methods.findIndex((method) => method.id === gameProgress.currentMethod);
           const nextIndex = currentIndex < 0 ? 0 : (currentIndex + 1) % methods.length;
-          selectMethod(methods[nextIndex].id);
+          carouselIndex = nextIndex;
+          resetMethod(methods[nextIndex].id);
         });
       })();
     </script>
