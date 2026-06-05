@@ -33,60 +33,231 @@ function initScrollVideoIntro() {
 
 initScrollVideoIntro();
 
-// GitHub Pages 目前直接服務 repository root，所以 public 需保留在路徑中。
-// 若之後改成會把 public 當網站根目錄的 build 流程，可改為 '/pic/B/'。
-const bodyImageBasePath = 'public/pic/B/';
+const bodyImageBasePath = '/pic/B/';
 
 function createBodyImagePath(fileName) {
   return encodeURI(`${bodyImageBasePath}${fileName}`);
 }
 
+const bodyFatImages = [
+  {
+    id: 'female-under-8',
+    label: '女性 <8%',
+    src: createBodyImagePath('B_female<8%.png'),
+    gender: 'female',
+    bodyFatRange: '<8%',
+    bodyFatMin: 0,
+    bodyFatMax: 8
+  },
+  {
+    id: 'female-10-14',
+    label: '女性 10–14%',
+    src: createBodyImagePath('B_female10-14%.png'),
+    gender: 'female',
+    bodyFatRange: '10–14%',
+    bodyFatMin: 10,
+    bodyFatMax: 14
+  },
+  {
+    id: 'female-15-18',
+    label: '女性 15–18%',
+    src: createBodyImagePath('B_female15-18%.png'),
+    gender: 'female',
+    bodyFatRange: '15–18%',
+    bodyFatMin: 15,
+    bodyFatMax: 18
+  },
+  {
+    id: 'female-20-25',
+    label: '女性 20–25%',
+    src: createBodyImagePath('B_female20-25%.png'),
+    gender: 'female',
+    bodyFatRange: '20–25%',
+    bodyFatMin: 20,
+    bodyFatMax: 25
+  },
+  {
+    id: 'female-22-25',
+    label: '女性 22–25%',
+    src: createBodyImagePath('B_female22-25%.png'),
+    gender: 'female',
+    bodyFatRange: '22–25%',
+    bodyFatMin: 22,
+    bodyFatMax: 25
+  },
+  {
+    id: 'female-over-30',
+    label: '女性 >30%',
+    src: createBodyImagePath('B_female>30%.png'),
+    gender: 'female',
+    bodyFatRange: '>30%',
+    bodyFatMin: 30,
+    bodyFatMax: 100
+  },
+  {
+    id: 'male-under-8',
+    label: '男性 <8%',
+    src: createBodyImagePath('B_male<8%.png'),
+    gender: 'male',
+    bodyFatRange: '<8%',
+    bodyFatMin: 0,
+    bodyFatMax: 8
+  },
+  {
+    id: 'male-10-14',
+    label: '男性 10–14%',
+    src: createBodyImagePath('B_male10-14%.png'),
+    gender: 'male',
+    bodyFatRange: '10–14%',
+    bodyFatMin: 10,
+    bodyFatMax: 14
+  },
+  {
+    id: 'male-15-18',
+    label: '男性 15–18%',
+    src: createBodyImagePath('B_male15-18%.png'),
+    gender: 'male',
+    bodyFatRange: '15–18%',
+    bodyFatMin: 15,
+    bodyFatMax: 18
+  },
+  {
+    id: 'male-20-25',
+    label: '男性 20–25%',
+    src: createBodyImagePath('B_male20-25%.png'),
+    gender: 'male',
+    bodyFatRange: '20–25%',
+    bodyFatMin: 20,
+    bodyFatMax: 25
+  },
+  {
+    id: 'male-over-30',
+    label: '男性 >30%',
+    src: createBodyImagePath('B_male>30%.png'),
+    gender: 'male',
+    bodyFatRange: '>30%',
+    bodyFatMin: 30,
+    bodyFatMax: 100
+  }
+];
+
 const bodyOptions = {
-  female: [
-    { id: 'female-under-8', label: '女生身材 1', image: createBodyImagePath('B_female<8%.png') },
-    { id: 'female-10-14', label: '女生身材 2', image: createBodyImagePath('B_female10-14%.png') },
-    { id: 'female-15-18', label: '女生身材 3', image: createBodyImagePath('B_female15-18%.png') },
-    { id: 'female-22-25', label: '女生身材 4', image: createBodyImagePath('B_female22-25%.png') },
-    { id: 'female-over-30', label: '女生身材 5', image: createBodyImagePath('B_female>30%.png') }
-  ],
-  male: [
-    { id: 'male-under-8', label: '男生身材 1', image: createBodyImagePath('B_male<8%.png') },
-    { id: 'male-10-14', label: '男生身材 2', image: createBodyImagePath('B_male10-14%.png') },
-    { id: 'male-15-18', label: '男生身材 3', image: createBodyImagePath('B_male15-18%.png') },
-    { id: 'male-20-25', label: '男生身材 4', image: createBodyImagePath('B_male20-25%.png') },
-    { id: 'male-over-30', label: '男生身材 5', image: createBodyImagePath('B_male>30%.png') }
-  ]
+  female: bodyFatImages.filter((image) => image.gender === 'female'),
+  male: bodyFatImages.filter((image) => image.gender === 'male')
 };
 
 const IdealBodySelector = {
   selectedGender: 'female',
   selectedOptionId: null,
+  selectedBodyImage: null,
   percentage: null,
-  voteCounts: []
+  voteCounts: [],
+  statsSource: 'local'
 };
 
-function calculateBodyChoicePercentage(votes, gender, optionId) {
-  const genderVotes = votes.filter((vote) => vote.gender === gender);
-  if (genderVotes.length === 0) return 100;
-  const sameVotes = genderVotes.filter((vote) => vote.optionId === optionId);
-  return Math.round((sameVotes.length / genderVotes.length) * 100);
+const bodyChoiceStorageKeys = {
+  hasSubmitted: 'hasSubmittedBodyChoice',
+  clientId: 'bodyChoiceClientId',
+  submittedChoiceId: 'submittedBodyChoiceId',
+  submittedAt: 'bodyChoiceSubmittedAt',
+  fallbackStats: 'bodyChoiceStatsFallback'
+};
+
+function getBodyChoiceClientId() {
+  let clientId = localStorage.getItem(bodyChoiceStorageKeys.clientId);
+  if (!clientId) {
+    clientId = `body-choice-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    localStorage.setItem(bodyChoiceStorageKeys.clientId, clientId);
+  }
+  return clientId;
+}
+
+function readLocalBodyChoiceStats() {
+  try {
+    return JSON.parse(localStorage.getItem(bodyChoiceStorageKeys.fallbackStats)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalBodyChoiceStat(choice) {
+  const clientId = getBodyChoiceClientId();
+  const stats = readLocalBodyChoiceStats().filter((item) => item.clientId !== clientId);
+  const record = {
+    clientId,
+    choiceId: choice.id,
+    bodyFatRange: choice.bodyFatRange,
+    bodyFatMin: choice.bodyFatMin,
+    bodyFatMax: choice.bodyFatMax,
+    gender: choice.gender,
+    updatedAt: Date.now()
+  };
+
+  stats.push(record);
+  localStorage.setItem(bodyChoiceStorageKeys.fallbackStats, JSON.stringify(stats));
+  localStorage.setItem(bodyChoiceStorageKeys.hasSubmitted, 'true');
+  localStorage.setItem(bodyChoiceStorageKeys.submittedChoiceId, choice.id);
+  localStorage.setItem(bodyChoiceStorageKeys.submittedAt, String(record.updatedAt));
+  return stats;
+}
+
+function calculateBodyChoiceStats(stats, selectedBodyImage) {
+  if (!selectedBodyImage || stats.length === 0) {
+    return {
+      totalCount: stats.length,
+      sameRangeCount: 0,
+      percentage: 0
+    };
+  }
+
+  const sameRangeCount = stats.filter((item) => item.bodyFatRange === selectedBodyImage.bodyFatRange).length;
+  return {
+    totalCount: stats.length,
+    sameRangeCount,
+    percentage: Math.round((sameRangeCount / stats.length) * 100)
+  };
 }
 
 function updateBodyChoiceResult() {
   const choiceResult = document.getElementById('choiceResult');
   if (!choiceResult) return;
 
-  if (!IdealBodySelector.selectedOptionId) {
+  if (!IdealBodySelector.selectedBodyImage) {
     choiceResult.textContent = '請先選擇一張圖片';
     return;
   }
 
-  IdealBodySelector.percentage = calculateBodyChoicePercentage(
-    IdealBodySelector.voteCounts,
-    IdealBodySelector.selectedGender,
-    IdealBodySelector.selectedOptionId
-  );
-  choiceResult.textContent = `有 ${IdealBodySelector.percentage}% 的人和你選擇一樣`;
+  const stats = calculateBodyChoiceStats(IdealBodySelector.voteCounts, IdealBodySelector.selectedBodyImage);
+  IdealBodySelector.percentage = stats.percentage;
+
+  if (stats.totalCount === 0) {
+    choiceResult.innerHTML = `
+      <article class="body-choice-stat-card">
+        <p class="body-choice-selected">你的選擇：${IdealBodySelector.selectedBodyImage.label}</p>
+        <p>目前還沒有足夠資料進行比較。</p>
+        <button class="button body-choice-next-button" type="button" onclick="scrollToSection('frame-9')">繼續進入體態分析</button>
+      </article>
+    `;
+    return;
+  }
+
+  choiceResult.innerHTML = `
+    <article class="body-choice-stat-card">
+      <p class="body-choice-selected">你的選擇：${IdealBodySelector.selectedBodyImage.label}</p>
+      <div class="body-choice-stat-main">
+        <strong>${stats.percentage}%</strong>
+        <span>選擇相同區間</span>
+      </div>
+      <div class="body-choice-progress" aria-label="選擇相同體脂區間比例">
+        <span style="width: ${stats.percentage}%"></span>
+      </div>
+      <p class="body-choice-stat-count">${stats.sameRangeCount} / ${stats.totalCount} 人選擇這個體脂區間</p>
+      <p>目前共有 ${stats.totalCount} 位使用者完成選擇。其中有 ${stats.sameRangeCount} 位使用者也選擇了 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間，約佔所有選擇的 ${stats.percentage}%。</p>
+      <p>這代表在目前樣本中，這個體脂區間是較常被選作理想體態的範圍之一。</p>
+      ${IdealBodySelector.statsSource === 'local' ? '<p class="body-choice-local-note">目前僅顯示本機暫存資料。</p>' : ''}
+      <button class="button body-choice-next-button" type="button" onclick="scrollToSection('frame-9')">繼續進入體態分析</button>
+    </article>
+  `;
 }
 
 function renderBodyOptions() {
@@ -102,7 +273,7 @@ function renderBodyOptions() {
     button.classList.toggle('active', option.id === IdealBodySelector.selectedOptionId);
     button.innerHTML = `
       <span class="body-option-image">
-        <img src="${option.image}" alt="${option.label}" loading="lazy" />
+        <img src="${option.src}" alt="${option.label}" loading="lazy" />
       </span>
       <span class="body-option-label">${option.label}</span>
     `;
@@ -127,6 +298,13 @@ async function initIdealBodySelector() {
       listenBodyShapeVotes: (onVotesChange) => {
         onVotesChange([]);
         return () => {};
+      },
+      saveBodyChoiceStat: async () => {
+        console.warn('Firebase config missing, skip saving.');
+      },
+      listenBodyChoiceStats: (onStatsChange) => {
+        onStatsChange(readLocalBodyChoiceStats());
+        return () => {};
       }
     };
     renderBodyOptions();
@@ -137,6 +315,7 @@ async function initIdealBodySelector() {
   function setGender(gender) {
     IdealBodySelector.selectedGender = gender;
     IdealBodySelector.selectedOptionId = null;
+    IdealBodySelector.selectedBodyImage = null;
     genderButtons.forEach((button) => {
       button.classList.toggle('active', button.dataset.gender === gender);
     });
@@ -157,26 +336,48 @@ async function initIdealBodySelector() {
     if (!card) return;
 
     IdealBodySelector.selectedOptionId = card.dataset.optionId;
+    IdealBodySelector.selectedBodyImage = bodyFatImages.find((image) => image.id === IdealBodySelector.selectedOptionId) || null;
     renderBodyOptions();
     updateBodyChoiceResult();
 
+    if (!IdealBodySelector.selectedBodyImage) return;
+
+    const localStats = writeLocalBodyChoiceStat(IdealBodySelector.selectedBodyImage);
+    IdealBodySelector.voteCounts = localStats;
+    IdealBodySelector.statsSource = 'local';
+    updateBodyChoiceResult();
+
     try {
-      await firebase.addBodyShapeVote({
-        gender: IdealBodySelector.selectedGender,
-        optionId: IdealBodySelector.selectedOptionId
-      });
+      if (firebase.isFirebaseReady()) {
+        await firebase.saveBodyChoiceStat({
+          clientId: getBodyChoiceClientId(),
+          choiceId: IdealBodySelector.selectedBodyImage.id,
+          bodyFatRange: IdealBodySelector.selectedBodyImage.bodyFatRange,
+          bodyFatMin: IdealBodySelector.selectedBodyImage.bodyFatMin,
+          bodyFatMax: IdealBodySelector.selectedBodyImage.bodyFatMax,
+          gender: IdealBodySelector.selectedBodyImage.gender
+        });
+        IdealBodySelector.statsSource = 'firebase';
+      }
     } catch {
       console.warn('Firebase config missing, skip saving.');
+      IdealBodySelector.statsSource = 'local';
+      IdealBodySelector.voteCounts = readLocalBodyChoiceStats();
+      updateBodyChoiceResult();
     }
   });
 
-  firebase.listenBodyShapeVotes(
-    (votes) => {
-      IdealBodySelector.voteCounts = votes;
+  firebase.listenBodyChoiceStats(
+    (stats) => {
+      IdealBodySelector.statsSource = firebase.isFirebaseReady() ? 'firebase' : 'local';
+      IdealBodySelector.voteCounts = stats.length ? stats : readLocalBodyChoiceStats();
       updateBodyChoiceResult();
     },
     () => {
       console.warn('Firebase config missing, skip saving.');
+      IdealBodySelector.statsSource = 'local';
+      IdealBodySelector.voteCounts = readLocalBodyChoiceStats();
+      updateBodyChoiceResult();
     }
   );
 

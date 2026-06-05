@@ -2,7 +2,9 @@
 
 ## Firebase Firestore
 
-理想身材投票使用 Firestore collection：`body_shape_votes`。
+理想身材舊投票使用 Firestore collection：`body_shape_votes`。
+
+體脂區間選擇統計使用 Firestore collection：`bodyChoiceStats`，document id 使用匿名 `bodyChoiceClientId`，同一台裝置更改選擇時會更新同一筆資料。
 
 Firebase web config 請填在 `src/firebase.js` 的 `firebaseConfig`。不要把私人金鑰放進前端。
 
@@ -10,6 +12,8 @@ Firebase web config 請填在 `src/firebase.js` 的 `firebaseConfig`。不要把
 
 ## 理想身材圖片
 
-圖片放在 `public/pic/B/`，資料陣列在 `script.js` 的 `bodyOptions`。
+圖片來源放在 `public/pic/B/`，目前也同步一份到 `pic/B/`，讓 GitHub Pages 直接服務 repository root 時能使用 `/pic/B/檔名` 顯示。
 
-目前專案是直接以 GitHub Pages 服務 repository root，因此圖片路徑使用 `public/pic/B/檔名`。若之後改成會把 `public` 當網站根目錄的 build 流程，可將 `script.js` 的 `bodyImageBasePath` 改成 `/pic/B/`。
+資料陣列在 `script.js` 的 `bodyFatImages`。
+
+網頁引用圖片路徑使用 `/pic/B/檔名`，不要使用本機絕對路徑。

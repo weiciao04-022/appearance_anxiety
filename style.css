@@ -303,6 +303,66 @@ body {
   font-weight: 700;
 }
 
+.body-choice-stat-card {
+  width: min(720px, 100%);
+  margin: 0 auto;
+  padding: 18px;
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  display: grid;
+  gap: 12px;
+  box-sizing: border-box;
+  text-align: left;
+  font-weight: 400;
+}
+
+.body-choice-stat-card p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.body-choice-selected {
+  font-weight: 700;
+  text-align: center;
+}
+
+.body-choice-stat-main {
+  display: grid;
+  gap: 4px;
+  place-items: center;
+  padding: 10px;
+  border: 1px solid #000;
+}
+
+.body-choice-stat-main strong {
+  font-size: clamp(2rem, 7vw, 4rem);
+  line-height: 1;
+}
+
+.body-choice-stat-main span,
+.body-choice-stat-count,
+.body-choice-local-note {
+  font-size: 0.92rem;
+}
+
+.body-choice-progress {
+  height: 14px;
+  border: 1px solid #000;
+  background: #fff;
+  overflow: hidden;
+}
+
+.body-choice-progress span {
+  display: block;
+  height: 100%;
+  background: #000;
+}
+
+.body-choice-next-button {
+  justify-self: center;
+}
+
 @media (max-width: 1024px) {
   .body-option-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));

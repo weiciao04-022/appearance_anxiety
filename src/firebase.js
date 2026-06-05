@@ -2,9 +2,11 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.5/fireba
 import {
   addDoc,
   collection,
+  doc,
   getFirestore,
   onSnapshot,
-  serverTimestamp
+  serverTimestamp,
+  setDoc
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
 const firebaseConfig = {
@@ -22,6 +24,7 @@ const hasFirebaseConfig = !Object.values(firebaseConfig).some((value) => value.s
 const app = hasFirebaseConfig ? initializeApp(firebaseConfig) : null;
 const db = app ? getFirestore(app) : null;
 const collectionName = 'body_shape_votes';
+const bodyChoiceStatsCollection = 'bodyChoiceStats';
 
 export function isFirebaseReady() {
   return Boolean(db);
@@ -54,6 +57,49 @@ export function listenBodyShapeVotes(onVotesChange, onError) {
         ...doc.data()
       }));
       onVotesChange(votes);
+    },
+    onError
+  );
+}
+
+export async function saveBodyChoiceStat({
+  clientId,
+  choiceId,
+  bodyFatRange,
+  bodyFatMin,
+  bodyFatMax,
+  gender
+}) {
+  if (!db) {
+    console.warn('Firebase config missing, skip saving.');
+    return;
+  }
+
+  await setDoc(doc(db, bodyChoiceStatsCollection, clientId), {
+    clientId,
+    choiceId,
+    bodyFatRange,
+    bodyFatMin,
+    bodyFatMax,
+    gender,
+    updatedAt: serverTimestamp()
+  });
+}
+
+export function listenBodyChoiceStats(onStatsChange, onError) {
+  if (!db) {
+    onStatsChange([]);
+    return () => {};
+  }
+
+  return onSnapshot(
+    collection(db, bodyChoiceStatsCollection),
+    (snapshot) => {
+      const stats = snapshot.docs.map((docSnapshot) => ({
+        id: docSnapshot.id,
+        ...docSnapshot.data()
+      }));
+      onStatsChange(stats);
     },
     onError
   );
