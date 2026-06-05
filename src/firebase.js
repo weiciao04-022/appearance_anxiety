@@ -29,7 +29,8 @@ export function isFirebaseReady() {
 
 export async function addBodyShapeVote({ gender, optionId }) {
   if (!db) {
-    throw new Error('Firebase config is not set.');
+    console.warn('Firebase config missing, skip saving.');
+    return;
   }
 
   await addDoc(collection(db, collectionName), {

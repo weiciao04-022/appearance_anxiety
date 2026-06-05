@@ -118,10 +118,18 @@ async function initIdealBodySelector() {
   try {
     firebase = await import('./src/firebase.js');
   } catch {
+    console.warn('Firebase config missing, skip saving.');
+    firebase = {
+      isFirebaseReady: () => false,
+      addBodyShapeVote: async () => {
+        console.warn('Firebase config missing, skip saving.');
+      },
+      listenBodyShapeVotes: (onVotesChange) => {
+        onVotesChange([]);
+        return () => {};
+      }
+    };
     renderBodyOptions();
-    const choiceResult = document.getElementById('choiceResult');
-    if (choiceResult) choiceResult.textContent = 'Firebase 載入失敗，請確認網路與 config。';
-    return;
   }
 
   const genderButtons = document.querySelectorAll('.body-gender-button');
@@ -158,8 +166,7 @@ async function initIdealBodySelector() {
         optionId: IdealBodySelector.selectedOptionId
       });
     } catch {
-      const choiceResult = document.getElementById('choiceResult');
-      if (choiceResult) choiceResult.textContent = 'Firebase 尚未設定完成，請先填入 config。';
+      console.warn('Firebase config missing, skip saving.');
     }
   });
 
@@ -169,8 +176,7 @@ async function initIdealBodySelector() {
       updateBodyChoiceResult();
     },
     () => {
-      const choiceResult = document.getElementById('choiceResult');
-      if (choiceResult) choiceResult.textContent = 'Firebase 讀取失敗，請確認 config 與 Firestore rules。';
+      console.warn('Firebase config missing, skip saving.');
     }
   );
 
