@@ -270,6 +270,71 @@
         gap: 16px;
       }
 
+      #frame-9 .body-overview-dashboard {
+        border: 1px solid #000;
+        border-radius: 8px;
+        padding: 18px;
+        background: #fff;
+        display: grid;
+        gap: 16px;
+      }
+
+      #frame-9 .body-overview-header {
+        display: grid;
+        gap: 6px;
+      }
+
+      #frame-9 .body-overview-header h3,
+      #frame-9 .body-overview-header p {
+        margin: 0;
+      }
+
+      #frame-9 .body-overview-header p {
+        line-height: 1.55;
+      }
+
+      #frame-9 .overview-card-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      #frame-9 .overview-card {
+        border: 1px solid #000;
+        border-radius: 8px;
+        padding: 12px;
+        min-height: 78px;
+        display: grid;
+        align-content: center;
+        gap: 6px;
+        text-align: center;
+      }
+
+      #frame-9 .overview-card span {
+        font-size: 0.82rem;
+      }
+
+      #frame-9 .overview-card b {
+        font-size: 1.1rem;
+      }
+
+      #frame-9 .overview-section-title {
+        margin: 0;
+        font-size: 1rem;
+      }
+
+      #frame-9 .overview-note-list {
+        border: 1px solid #000;
+        border-radius: 8px;
+        padding: 12px;
+        display: grid;
+        gap: 8px;
+      }
+
+      #frame-9 .overview-note-list p {
+        margin: 0;
+      }
+
       #frame-9 .body-report-card,
       #frame-9 .phone-feed-card,
       #frame-9 .method-result-card {
@@ -629,10 +694,18 @@
         #frame-9 .method-metrics {
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
+
+        #frame-9 .overview-card-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
       }
 
       @media (max-width: 420px) {
         #frame-9 .meal-summary-grid {
+          grid-template-columns: 1fr;
+        }
+
+        #frame-9 .overview-card-grid {
           grid-template-columns: 1fr;
         }
       }
@@ -848,38 +921,75 @@
         }
 
         function profileReport() {
-          if (!userProfile) return { bmi: 0, estimatedCalories: 0 };
+          if (!userProfile) {
+            return {
+              bmi: '0.0',
+              calories: 0,
+              protein: 0,
+              carb: 0,
+              fat: 0,
+              water: 0
+            };
+          }
           const heightM = userProfile.height / 100;
           const bmi = userProfile.weight / (heightM * heightM);
           const targets = mealTargets();
+          const calories = targets.mealCalories * 3;
           return {
             bmi: Number.isFinite(bmi) ? bmi.toFixed(1) : '0.0',
-            estimatedCalories: targets.mealCalories * 3
+            calories,
+            protein: Math.round(userProfile.weight * 1.2),
+            carb: Math.round(userProfile.weight * 3),
+            fat: Math.round((calories * 0.25) / 9),
+            water: Math.round(userProfile.weight * 35)
           };
         }
 
         function renderSocialPanel() {
           const report = profileReport();
           socialPanel.innerHTML = `
-            <div class="body-report-grid">
-              <article class="body-report-card">
-                ${imageFrame('/pic/body-game/body-report.png', '體態分析報告示意')}
-                <h3>你的體態分析報告</h3>
-                <p>BMI：${report.bmi}</p>
-                <p>每日粗估需求：約 ${report.estimatedCalories} kcal</p>
-                <p>這不是診斷，而是讓後續互動有一個比較基準。</p>
-              </article>
-              <article class="phone-feed-card">
-                ${imageFrame('/pic/body-game/phone-scroll-feed.png', '滑手機看到社群內容')}
-                <h3>滑手機時，標準開始靠近</h3>
-                <div class="phone-feed-list">
-                  <p class="phone-feed-post">身材網紅分享「一週變瘦」日常。</p>
-                  <p class="phone-feed-post">演算法又推了減肥菜單與前後對比照。</p>
-                  <p class="phone-feed-post">你開始想：我是不是也該做點什麼？</p>
-                </div>
-                <button class="button" type="button" data-enter-carousel>進入產品選擇</button>
-              </article>
-            </div>
+            <article class="body-overview-dashboard">
+              <div class="body-overview-header">
+                <h3>你的身體概況</h3>
+                <p>接下來的每個體驗，<br />都會根據你的身體資料產生不同結果。</p>
+              </div>
+              <div class="overview-card-grid" aria-label="基本身體資料">
+                <div class="overview-card"><span>身高</span><b>${userProfile.height} cm</b></div>
+                <div class="overview-card"><span>體重</span><b>${userProfile.weight} kg</b></div>
+                <div class="overview-card"><span>年齡</span><b>${userProfile.age}</b></div>
+                <div class="overview-card"><span>BMI</span><b>${report.bmi}</b></div>
+              </div>
+              <h4 class="overview-section-title">每日建議攝取量</h4>
+              <div class="overview-card-grid" aria-label="每日建議攝取量">
+                <div class="overview-card"><span>熱量</span><b>${report.calories} kcal</b></div>
+                <div class="overview-card"><span>蛋白質</span><b>${report.protein} g</b></div>
+                <div class="overview-card"><span>碳水</span><b>${report.carb} g</b></div>
+                <div class="overview-card"><span>脂肪</span><b>${report.fat} g</b></div>
+                <div class="overview-card"><span>飲水量</span><b>${report.water} ml</b></div>
+              </div>
+              <div class="overview-note-list">
+                <p>系統將依據你的資料：</p>
+                <p>✓ 計算健康餐是否符合需求</p>
+                <p>✓ 模擬不同減肥方式的影響</p>
+                <p>✓ 產生個人化體驗結果</p>
+              </div>
+              <button class="button" type="button" data-start-social>開始探索</button>
+            </article>
+          `;
+        }
+
+        function renderPhoneFeedPanel() {
+          socialPanel.innerHTML = `
+            <article class="phone-feed-card">
+              ${imageFrame('/pic/body-game/phone-scroll-feed.png', '滑手機看到社群內容')}
+              <h3>滑手機時，標準開始靠近</h3>
+              <div class="phone-feed-list">
+                <p class="phone-feed-post">身材網紅分享「一週變瘦」日常。</p>
+                <p class="phone-feed-post">演算法又推了減肥菜單與前後對比照。</p>
+                <p class="phone-feed-post">你開始想：我是不是也該做點什麼？</p>
+              </div>
+              <button class="button" type="button" data-enter-carousel>進入產品選擇</button>
+            </article>
           `;
         }
 
@@ -1452,6 +1562,10 @@
         });
 
         socialPanel.addEventListener('click', (event) => {
+          if (event.target.closest('[data-start-social]')) {
+            renderPhoneFeedPanel();
+            return;
+          }
           if (event.target.closest('[data-enter-carousel]')) showCarousel();
         });
 
