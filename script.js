@@ -1,3 +1,111 @@
+const siteAssetManifest = [
+  './pic/B/B_female%3C8%25.png',
+  './pic/B/B_female10-14%25.png',
+  './pic/B/B_female15-18%25.png',
+  './pic/B/B_female20-25%25.png',
+  './pic/B/B_female%3E30%25.png',
+  './pic/B/B_male%3C8%25.png',
+  './pic/B/B_male10-14%25.png',
+  './pic/B/B_male15-18%25.png',
+  './pic/B/B_male20-25%25.png',
+  './pic/B/B_male%3E30%25.png'
+];
+
+function preloadImage(src) {
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = resolve;
+    image.onerror = resolve;
+    image.src = src;
+    if (image.complete) resolve();
+  });
+}
+
+function preloadVideo(src) {
+  return new Promise((resolve) => {
+    const video = document.createElement('video');
+    const finish = () => {
+      video.removeAttribute('src');
+      video.load();
+      resolve();
+    };
+    video.preload = 'metadata';
+    video.onloadedmetadata = finish;
+    video.onerror = finish;
+    video.src = src;
+    video.load();
+  });
+}
+
+async function initSitePreloader() {
+  const preloader = document.querySelector('[data-site-preloader]');
+  const progressBar = document.querySelector('[data-preload-progress]');
+  const status = document.querySelector('[data-preload-status]');
+  if (!preloader) {
+    document.documentElement.classList.remove('is-preloading');
+    return;
+  }
+
+  const pageImages = Array.from(document.querySelectorAll('img[src], video[poster]'))
+    .map((element) => element.currentSrc || element.getAttribute('src') || element.getAttribute('poster'))
+    .filter(Boolean);
+  const pageVideos = Array.from(document.querySelectorAll('video[src], video source[src]'))
+    .map((element) => element.currentSrc || element.getAttribute('src'))
+    .filter(Boolean);
+  const imageAssets = [...new Set([...siteAssetManifest, ...pageImages])];
+  const videoAssets = [...new Set(pageVideos)];
+  const totalAssets = Math.max(1, imageAssets.length + videoAssets.length);
+  const startedAt = performance.now();
+  let completed = 0;
+  const updateProgress = () => {
+    const percentage = Math.round((completed / totalAssets) * 100);
+    if (progressBar) progressBar.style.width = `${percentage}%`;
+    if (status) status.textContent = `載入素材 ${percentage}%`;
+  };
+
+  const preloadTask = Promise.all(
+    [
+      ...imageAssets.map((src) => preloadImage(src)),
+      ...videoAssets.map((src) => preloadVideo(src))
+    ].map((task) =>
+      task.finally(() => {
+        completed += 1;
+        updateProgress();
+      })
+    )
+  );
+  const timeoutTask = new Promise((resolve) => window.setTimeout(resolve, 8000));
+
+  await Promise.race([preloadTask, timeoutTask]);
+  await document.fonts?.ready;
+  const minimumDisplayTime = Math.max(0, 500 - (performance.now() - startedAt));
+  await new Promise((resolve) => window.setTimeout(resolve, minimumDisplayTime));
+
+  if (progressBar) progressBar.style.width = '100%';
+  if (status) status.textContent = '準備完成';
+  document.documentElement.classList.remove('is-preloading');
+  preloader.classList.add('is-complete');
+  window.setTimeout(() => preloader.remove(), 500);
+}
+
+function initDynamicContentTransitions() {
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      mutation.addedNodes.forEach((node) => {
+        if (!(node instanceof HTMLElement) || node.classList.contains('site-preloader')) return;
+        node.classList.remove('ui-enter');
+        void node.offsetWidth;
+        node.classList.add('ui-enter');
+      });
+    });
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+}
+
 function scrollToSection(id) {
   const target = document.getElementById(id);
   if (!target) return;
@@ -969,3 +1077,6 @@ const revealObserver = new IntersectionObserver(
 document.querySelectorAll('.reveal').forEach((element) => {
   revealObserver.observe(element);
 });
+
+initDynamicContentTransitions();
+initSitePreloader();
