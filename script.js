@@ -42,7 +42,7 @@ function createBodyImagePath(fileName) {
 const bodyFatImages = [
   {
     id: 'female-under-8',
-    label: '女性 <8%',
+    label: '女生身材 1',
     src: createBodyImagePath('B_female<8%.png'),
     gender: 'female',
     bodyFatRange: '<8%',
@@ -51,7 +51,7 @@ const bodyFatImages = [
   },
   {
     id: 'female-10-14',
-    label: '女性 10–14%',
+    label: '女生身材 2',
     src: createBodyImagePath('B_female10-14%.png'),
     gender: 'female',
     bodyFatRange: '10–14%',
@@ -60,7 +60,7 @@ const bodyFatImages = [
   },
   {
     id: 'female-15-18',
-    label: '女性 15–18%',
+    label: '女生身材 3',
     src: createBodyImagePath('B_female15-18%.png'),
     gender: 'female',
     bodyFatRange: '15–18%',
@@ -69,7 +69,7 @@ const bodyFatImages = [
   },
   {
     id: 'female-20-25',
-    label: '女性 20–25%',
+    label: '女生身材 4',
     src: createBodyImagePath('B_female20-25%.png'),
     gender: 'female',
     bodyFatRange: '20–25%',
@@ -78,7 +78,7 @@ const bodyFatImages = [
   },
   {
     id: 'female-over-30',
-    label: '女性 >30%',
+    label: '女生身材 5',
     src: createBodyImagePath('B_female>30%.png'),
     gender: 'female',
     bodyFatRange: '>30%',
@@ -87,7 +87,7 @@ const bodyFatImages = [
   },
   {
     id: 'male-under-8',
-    label: '男性 <8%',
+    label: '男生身材 1',
     src: createBodyImagePath('B_male<8%.png'),
     gender: 'male',
     bodyFatRange: '<8%',
@@ -96,7 +96,7 @@ const bodyFatImages = [
   },
   {
     id: 'male-10-14',
-    label: '男性 10–14%',
+    label: '男生身材 2',
     src: createBodyImagePath('B_male10-14%.png'),
     gender: 'male',
     bodyFatRange: '10–14%',
@@ -105,7 +105,7 @@ const bodyFatImages = [
   },
   {
     id: 'male-15-18',
-    label: '男性 15–18%',
+    label: '男生身材 3',
     src: createBodyImagePath('B_male15-18%.png'),
     gender: 'male',
     bodyFatRange: '15–18%',
@@ -114,7 +114,7 @@ const bodyFatImages = [
   },
   {
     id: 'male-20-25',
-    label: '男性 20–25%',
+    label: '男生身材 4',
     src: createBodyImagePath('B_male20-25%.png'),
     gender: 'male',
     bodyFatRange: '20–25%',
@@ -123,7 +123,7 @@ const bodyFatImages = [
   },
   {
     id: 'male-over-30',
-    label: '男性 >30%',
+    label: '男生身材 5',
     src: createBodyImagePath('B_male>30%.png'),
     gender: 'male',
     bodyFatRange: '>30%',
@@ -225,6 +225,7 @@ function updateBodyChoiceResult() {
     choiceResult.innerHTML = `
       <article class="body-choice-stat-card">
         <p class="body-choice-selected">你的選擇：${IdealBodySelector.selectedBodyImage.label}</p>
+        <p>你選擇的體態大約落在 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間。</p>
         <p>目前還沒有足夠資料進行比較。</p>
         <button class="button body-choice-next-button" type="button" onclick="scrollToSection('frame-9')">繼續進入體態分析</button>
       </article>
@@ -235,6 +236,7 @@ function updateBodyChoiceResult() {
   choiceResult.innerHTML = `
     <article class="body-choice-stat-card">
       <p class="body-choice-selected">你的選擇：${IdealBodySelector.selectedBodyImage.label}</p>
+      <p>你選擇的體態大約落在 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間。</p>
       <div class="body-choice-stat-main">
         <strong>${stats.percentage}%</strong>
         <span>選擇相同區間</span>
