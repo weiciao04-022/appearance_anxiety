@@ -14,7 +14,14 @@
   <link rel="preload" as="image" href="./pic/B/B_male15-18%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male20-25%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male%3E30%25.png" />
-  <link rel="stylesheet" href="style.css?v=20260606-5" />
+  <link rel="stylesheet" href="style.css?v=20260606-7" />
+  <script>
+    window.sitePreloaderFallback = window.setTimeout(function () {
+      document.documentElement.classList.remove('is-preloading');
+      var preloader = document.querySelector('[data-site-preloader]');
+      if (preloader) preloader.remove();
+    }, 6000);
+  </script>
 </head>
 <body>
   <div class="site-preloader" data-site-preloader role="status" aria-live="polite">
@@ -1692,6 +1699,6 @@
     </script>
   </section>
 
-  <script src="script.js?v=20260606-6"></script>
+  <script src="script.js?v=20260606-7"></script>
 </body>
 </html>

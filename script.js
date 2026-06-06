@@ -83,6 +83,7 @@ async function initSitePreloader() {
 
   if (progressBar) progressBar.style.width = '100%';
   if (status) status.textContent = '準備完成';
+  window.clearTimeout(window.sitePreloaderFallback);
   document.documentElement.classList.remove('is-preloading');
   preloader.classList.add('is-complete');
   window.setTimeout(() => preloader.remove(), 500);
