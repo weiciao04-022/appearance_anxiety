@@ -10,12 +10,13 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js';
 
 const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_AUTH_DOMAIN',
-  projectId: 'YOUR_PROJECT_ID',
-  storageBucket: 'YOUR_STORAGE_BUCKET',
-  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-  appId: 'YOUR_APP_ID'
+  apiKey: 'AIzaSyAqMqzSkq-mTqJ_oOTIuDeGzyZYGGRK4lA',
+  authDomain: 'appearance-anxiety.firebaseapp.com',
+  projectId: 'appearance-anxiety',
+  storageBucket: 'appearance-anxiety.firebasestorage.app',
+  messagingSenderId: '441083299377',
+  appId: '1:441083299377:web:909574ae0cef25b558f710',
+  measurementId: 'G-W70NL8DR05'
 };
 
 // Firebase web config 可以放在前端，但 Firestore rules 必須限制寫入格式。

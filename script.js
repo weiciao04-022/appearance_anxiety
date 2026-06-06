@@ -316,7 +316,7 @@ async function initIdealBodySelector() {
 
   let firebase;
   try {
-    firebase = await import('./src/firebase.js');
+    firebase = await import('./src/firebase.js?v=20260606-1');
   } catch {
     console.warn('Firebase config missing, skip saving.');
     firebase = {
