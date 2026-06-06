@@ -342,7 +342,7 @@
       }
 
       #frame-9 .body-overview-dashboard {
-        width: min(1040px, 100%);
+        width: min(880px, 100%);
         margin: 0 auto;
         display: grid;
         gap: 18px;
@@ -351,8 +351,8 @@
       #frame-9 .body-health-report {
         position: relative;
         display: grid;
-        gap: 24px;
-        padding: clamp(24px, 4vw, 44px);
+        gap: 20px;
+        padding: clamp(22px, 3vw, 34px);
         border: 1px solid #bdb6ac;
         border-radius: 28px;
         background: #fff;
@@ -649,8 +649,8 @@
 
       #frame-9 .health-report-main {
         display: grid;
-        grid-template-columns: minmax(190px, 0.85fr) minmax(220px, 1fr) minmax(210px, 0.9fr);
-        gap: 22px;
+        grid-template-columns: minmax(170px, 0.82fr) minmax(190px, 0.9fr) minmax(185px, 0.88fr);
+        gap: 18px;
         align-items: stretch;
       }
 
@@ -721,7 +721,7 @@
       }
 
       #frame-9 .report-figure {
-        min-height: 440px;
+        min-height: 370px;
         display: grid;
         place-items: center;
         align-content: center;
@@ -734,7 +734,7 @@
 
       #frame-9 .report-figure img {
         width: 100%;
-        height: 400px;
+        height: 340px;
         object-fit: contain;
         object-position: center;
         display: block;
@@ -799,7 +799,7 @@
       #frame-9 .report-nutrition-band {
         display: grid;
         gap: 16px;
-        padding: 22px;
+        padding: 18px;
         border: 1px solid #bdb6ac;
         border-radius: 20px;
         background: #fff;
@@ -1827,6 +1827,7 @@
         async function downloadHealthReport() {
           const report = socialPanel.querySelector('[data-health-report-capture]');
           const status = socialPanel.querySelector('[data-report-download-status]');
+          const downloadButton = socialPanel.querySelector('[data-download-health-report]');
           if (!report || !status) return;
 
           if (!window.html2canvas) {
@@ -1836,27 +1837,64 @@
 
           report.classList.add('is-exporting');
           status.textContent = '正在產生報告圖片…';
+          if (downloadButton) downloadButton.disabled = true;
           if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
 
           try {
+            await document.fonts?.ready;
+            await Promise.all(
+              Array.from(report.querySelectorAll('img')).map(async (image) => {
+                if (image.complete) {
+                  try {
+                    await image.decode();
+                  } catch {
+                    // The report can still be exported when an optional image is unavailable.
+                  }
+                  return;
+                }
+                await new Promise((resolve) => {
+                  image.addEventListener('load', resolve, { once: true });
+                  image.addEventListener('error', resolve, { once: true });
+                });
+              })
+            );
+
             const canvas = await window.html2canvas(report, {
               backgroundColor: '#ffffff',
               scale: Math.min(2, window.devicePixelRatio || 1.5),
               useCORS: true,
-              logging: false,
-              windowWidth: report.scrollWidth,
-              windowHeight: report.scrollHeight
+              allowTaint: false,
+              logging: false
             });
+
+            const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
             const link = document.createElement('a');
             link.download = 'body-health-report.png';
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+            link.style.display = 'none';
+
+            if (blob) {
+              const objectUrl = URL.createObjectURL(blob);
+              link.href = objectUrl;
+              document.body.appendChild(link);
+              link.click();
+              window.setTimeout(() => {
+                URL.revokeObjectURL(objectUrl);
+                link.remove();
+              }, 1000);
+            } else {
+              link.href = canvas.toDataURL('image/png');
+              document.body.appendChild(link);
+              link.click();
+              link.remove();
+            }
+
             status.textContent = '報告圖片已下載。';
           } catch (error) {
             console.warn('Unable to export body health report.', error);
             status.textContent = '圖片產生失敗，請稍後再試。';
           } finally {
             report.classList.remove('is-exporting');
+            if (downloadButton) downloadButton.disabled = false;
           }
         }
 
