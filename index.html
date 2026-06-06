@@ -94,8 +94,8 @@
   <section id="frame-9" class="section reveal body-method-section">
     <style>
       #frame-9.body-method-section {
-        background: #f5f7f4;
-        color: #24302b;
+        background: #fff;
+        color: #111;
       }
 
       #frame-9 .BodyMethodExplorer {
@@ -183,6 +183,10 @@
         border-radius: 6px;
         background: #fff;
         color: inherit;
+      }
+
+      #frame-9 .body-method-image-placeholder[hidden] {
+        display: none;
       }
 
       #frame-9 .body-method-card.is-active .body-method-image-placeholder {
@@ -312,11 +316,11 @@
 
       #frame-9 .body-profile-actions .button {
         min-width: 150px;
-        border: 0;
+        border: 1px solid #111;
         border-radius: 12px;
-        background: #263c32;
+        background: #111;
         color: #fff;
-        box-shadow: 0 8px 20px rgba(38, 60, 50, 0.2);
+        box-shadow: none;
       }
 
       #frame-9 .social-trigger-panel,
@@ -347,12 +351,12 @@
       #frame-9 .body-health-report {
         position: relative;
         display: grid;
-        gap: 28px;
+        gap: 24px;
         padding: clamp(24px, 4vw, 44px);
-        border: 1px solid rgba(190, 203, 195, 0.8);
+        border: 1px solid #bdb6ac;
         border-radius: 28px;
-        background: rgba(255, 255, 255, 0.96);
-        box-shadow: 0 24px 64px rgba(44, 62, 53, 0.12);
+        background: #fff;
+        box-shadow: 0 18px 44px rgba(0, 0, 0, 0.08);
         overflow: hidden;
         box-sizing: border-box;
       }
@@ -361,8 +365,8 @@
         content: "";
         position: absolute;
         inset: 0 0 auto;
-        height: 7px;
-        background: linear-gradient(90deg, #789886, #9aabb7, #c7ad8b);
+        height: 5px;
+        background: #111;
       }
 
       #frame-9 .health-report-header {
@@ -385,20 +389,20 @@
       }
 
       #frame-9 .health-report-eyebrow {
-        color: #6c7e74;
+        color: #766e64;
         font-size: 0.78rem;
         font-weight: 750;
         text-transform: uppercase;
       }
 
       #frame-9 .health-report-heading h3 {
-        color: #1d2a24;
+        color: #111;
         font-size: clamp(1.65rem, 3.3vw, 2.45rem);
         line-height: 1.2;
       }
 
       #frame-9 .health-report-heading > p:last-child {
-        color: #647069;
+        color: #66615b;
         line-height: 1.65;
       }
 
@@ -410,8 +414,8 @@
         padding: 8px 11px;
         border: 1px solid #d9e1dc;
         border-radius: 999px;
-        background: #f2f6f3;
-        color: #52665b;
+        background: #f4f2ef;
+        color: #4e4943;
         font-size: 0.82rem;
         font-weight: 700;
       }
@@ -643,6 +647,226 @@
         box-shadow: none;
       }
 
+      #frame-9 .health-report-main {
+        display: grid;
+        grid-template-columns: minmax(190px, 0.85fr) minmax(220px, 1fr) minmax(210px, 0.9fr);
+        gap: 22px;
+        align-items: stretch;
+      }
+
+      #frame-9 .report-column {
+        min-width: 0;
+        display: grid;
+        align-content: start;
+        gap: 18px;
+      }
+
+      #frame-9 .report-panel-title {
+        margin: 0;
+        padding-bottom: 9px;
+        border-bottom: 1px solid #bdb6ac;
+        color: #4c463f;
+        font-size: 1rem;
+      }
+
+      #frame-9 .report-data-list {
+        display: grid;
+        gap: 0;
+      }
+
+      #frame-9 .report-data-row {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 2px;
+        border-bottom: 1px solid #e5e0da;
+        color: #514b44;
+      }
+
+      #frame-9 .report-data-row span {
+        font-size: 0.84rem;
+      }
+
+      #frame-9 .report-data-row b {
+        text-align: right;
+      }
+
+      #frame-9 .report-bmi-card {
+        display: grid;
+        gap: 8px;
+        padding: 16px;
+        border: 1px solid #c9c1b7;
+        border-radius: 14px;
+        background: #faf9f7;
+      }
+
+      #frame-9 .report-bmi-label {
+        color: #6b635a;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      #frame-9 .report-bmi-value {
+        color: #111;
+        font-size: 2.7rem;
+        line-height: 1;
+      }
+
+      #frame-9 .report-bmi-note {
+        margin: 0;
+        color: #6b635a;
+        font-size: 0.8rem;
+        line-height: 1.55;
+      }
+
+      #frame-9 .report-figure {
+        min-height: 440px;
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 10px;
+        padding: 10px;
+        border-right: 1px solid #e1ddd7;
+        border-left: 1px solid #e1ddd7;
+        overflow: hidden;
+      }
+
+      #frame-9 .report-figure img {
+        width: 100%;
+        height: 400px;
+        object-fit: contain;
+        object-position: center;
+        display: block;
+      }
+
+      #frame-9 .report-figure-label {
+        margin: 0;
+        color: #777068;
+        font-size: 0.76rem;
+        text-align: center;
+      }
+
+      #frame-9 .report-energy-number {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        color: #111;
+      }
+
+      #frame-9 .report-energy-number b {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        line-height: 1;
+      }
+
+      #frame-9 .report-energy-number span {
+        color: #6b635a;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      #frame-9 .report-chart {
+        display: grid;
+        gap: 13px;
+      }
+
+      #frame-9 .report-chart-row {
+        display: grid;
+        gap: 6px;
+      }
+
+      #frame-9 .report-chart-copy {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        color: #575149;
+        font-size: 0.78rem;
+      }
+
+      #frame-9 .report-chart-track {
+        height: 8px;
+        border: 1px solid #bdb6ac;
+        background: #fff;
+        overflow: hidden;
+      }
+
+      #frame-9 .report-chart-fill {
+        display: block;
+        height: 100%;
+        background: #8e8170;
+      }
+
+      #frame-9 .report-nutrition-band {
+        display: grid;
+        gap: 16px;
+        padding: 22px;
+        border: 1px solid #bdb6ac;
+        border-radius: 20px;
+        background: #fff;
+      }
+
+      #frame-9 .report-nutrition-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+
+      #frame-9 .report-nutrition-item {
+        min-width: 0;
+        display: grid;
+        gap: 8px;
+        padding: 6px 14px;
+        border-right: 1px solid #d8d1c8;
+        text-align: center;
+      }
+
+      #frame-9 .report-nutrition-item:last-child {
+        border-right: 0;
+      }
+
+      #frame-9 .report-nutrition-item span {
+        color: #625b53;
+        font-size: 0.78rem;
+      }
+
+      #frame-9 .report-nutrition-item b {
+        color: #111;
+        font-size: clamp(1.15rem, 2vw, 1.55rem);
+      }
+
+      #frame-9 .report-nutrition-item small {
+        color: #7c746b;
+      }
+
+      #frame-9 .health-report-uses {
+        border-color: #d1cbc3;
+        background: #faf9f7;
+      }
+
+      #frame-9 .health-report-use-item {
+        color: #4f4942;
+      }
+
+      #frame-9 .health-report-check {
+        background: #111;
+      }
+
+      #frame-9 .health-report-disclaimer {
+        border-color: #d8d2ca;
+        background: #f6f4f1;
+        color: #5f5952;
+      }
+
+      #frame-9 .health-report-download {
+        border-color: #111;
+        color: #111;
+      }
+
+      #frame-9 .health-report-start {
+        border-color: #111;
+        background: #111;
+        box-shadow: none;
+      }
+
       #frame-9 .body-report-card,
       #frame-9 .phone-feed-card,
       #frame-9 .method-result-card {
@@ -654,19 +878,20 @@
       }
 
       #frame-9 .body-game-image {
-        min-height: 86px;
+        min-height: 150px;
         border: 1px dashed #000;
         border-radius: 8px;
         display: grid;
         place-items: center;
         overflow: hidden;
+        background: #f7f7f7;
         color: #555;
         font-size: 0.86rem;
       }
 
       #frame-9 .body-game-image img {
         width: 100%;
-        max-height: 140px;
+        height: 180px;
         object-fit: contain;
         display: block;
       }
@@ -676,7 +901,7 @@
       }
 
       #frame-9 .body-game-image-label {
-        padding: 8px;
+        padding: 18px;
         text-align: center;
       }
 
@@ -721,7 +946,7 @@
       }
 
       #frame-9 .product-carousel {
-        min-height: 320px;
+        min-height: 490px;
         position: relative;
         overflow: hidden;
       }
@@ -731,7 +956,8 @@
         top: 0;
         left: 50%;
         width: min(360px, 72%);
-        min-height: 300px;
+        min-height: 460px;
+        align-content: start;
         display: grid;
         gap: 10px;
         padding: 16px;
@@ -754,12 +980,14 @@
 
       #frame-9 .product-card.is-left {
         opacity: 0.38;
+        pointer-events: auto;
         z-index: 2;
         transform: translateX(-112%) scale(0.86);
       }
 
       #frame-9 .product-card.is-right {
         opacity: 0.38;
+        pointer-events: auto;
         z-index: 2;
         transform: translateX(12%) scale(0.86);
       }
@@ -777,6 +1005,10 @@
         display: grid;
         gap: 6px;
         font-size: 0.9rem;
+      }
+
+      #frame-9 .product-card > .button {
+        margin-top: auto;
       }
 
       #frame-9 .method-stage {
@@ -1010,6 +1242,30 @@
         #frame-9 .health-report-use-grid {
           grid-template-columns: 1fr;
         }
+
+        #frame-9 .health-report-main {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        #frame-9 .report-figure {
+          grid-column: 1 / -1;
+          grid-row: 1;
+          min-height: 340px;
+          border: 1px solid #e1ddd7;
+        }
+
+        #frame-9 .report-figure img {
+          height: 310px;
+        }
+
+        #frame-9 .report-nutrition-grid {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 16px 0;
+        }
+
+        #frame-9 .report-nutrition-item:nth-child(3) {
+          border-right: 0;
+        }
       }
 
       @media (max-width: 420px) {
@@ -1061,6 +1317,63 @@
 
         #frame-9 .health-report-download-status {
           text-align: center;
+        }
+
+        #frame-9 .health-report-main {
+          grid-template-columns: 1fr;
+        }
+
+        #frame-9 .report-figure {
+          grid-column: auto;
+          grid-row: auto;
+          min-height: 300px;
+        }
+
+        #frame-9 .report-figure img {
+          height: 270px;
+        }
+
+        #frame-9 .report-nutrition-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        #frame-9 .report-nutrition-item,
+        #frame-9 .report-nutrition-item:nth-child(3) {
+          border-right: 0;
+          border-bottom: 1px solid #e1ddd7;
+          padding: 12px 6px;
+        }
+
+        #frame-9 .report-nutrition-item:last-child {
+          grid-column: 1 / -1;
+          border-bottom: 0;
+        }
+
+        #frame-9 .carousel-shell {
+          grid-template-columns: 36px minmax(0, 1fr) 36px;
+          gap: 4px;
+        }
+
+        #frame-9 .carousel-arrow {
+          width: 36px;
+          height: 36px;
+        }
+
+        #frame-9 .product-carousel {
+          min-height: 470px;
+        }
+
+        #frame-9 .product-card {
+          width: 88%;
+          min-height: 440px;
+        }
+
+        #frame-9 .product-card.is-left {
+          transform: translateX(-118%) scale(0.82);
+        }
+
+        #frame-9 .product-card.is-right {
+          transform: translateX(18%) scale(0.82);
         }
       }
     </style>
@@ -1149,7 +1462,8 @@
             id: 'meal',
             title: '健康餐',
             description: '用一碗餐點組合，測試你是否真的吃得健康。',
-            image: '/pic/body-game/card-healthy-meal.png',
+            image: './pic/body-game/card-healthy-meal.png',
+            imageLabel: '健康餐封面待置入',
             cost: '每餐約 NT$180－280',
             risk: '長期花費高、需要持續選擇'
           },
@@ -1157,7 +1471,8 @@
             id: 'gym',
             title: '健身房',
             description: '辦了會員後，你真的會去嗎？',
-            image: '/pic/body-game/card-gym.png',
+            image: './pic/body-game/card-gym.png',
+            imageLabel: '健身房封面待置入',
             cost: '每月約 NT$1,000－1,800',
             risk: '時間成本、持續性壓力'
           },
@@ -1165,7 +1480,8 @@
             id: 'injection',
             title: '瘦瘦針',
             description: '快速見效背後，也可能伴隨副作用與社交壓力。',
-            image: '/pic/body-game/card-injection.png',
+            image: './pic/body-game/card-injection.png',
+            imageLabel: '瘦瘦針封面待置入',
             cost: '每月約 NT$6,000－15,000',
             risk: '副作用、費用高、醫療風險'
           },
@@ -1173,7 +1489,8 @@
             id: 'influencer',
             title: '網紅瘦身挑戰',
             description: '跟著網路上的七天菜單做，真的適合你嗎？',
-            image: '/pic/body-game/card-influencer-challenge.png',
+            image: './pic/body-game/card-influencer-challenge.png',
+            imageLabel: '網紅瘦身挑戰封面待置入',
             cost: '看似低成本',
             risk: '營養失衡、反彈、焦慮加劇'
           }
@@ -1280,11 +1597,11 @@
           `).join('');
         }
 
-        function imageFrame(path, alt = '') {
+        function imageFrame(path, alt = '', placeholder = '圖片待置入') {
           return `
             <div class="body-game-image" data-image="${path}">
               <img src="${path}" alt="${alt}" onerror="this.hidden = true;" />
-              <span class="body-game-image-label">${path}</span>
+              <span class="body-game-image-label">${placeholder}</span>
             </div>
           `;
         }
@@ -1339,10 +1656,68 @@
           `;
         }
 
+        function reportGenderLabel(gender) {
+          return {
+            female: '女',
+            male: '男',
+            private: '不透露'
+          }[gender] || '不透露';
+        }
+
+        function reportActivityLabel(level) {
+          return {
+            low: '低',
+            medium: '中',
+            high: '高'
+          }[level] || '低';
+        }
+
+        function reportFigureData() {
+          if (typeof IdealBodySelector !== 'undefined' && IdealBodySelector.selectedBodyImage) {
+            return {
+              src: IdealBodySelector.selectedBodyImage.src,
+              label: '你先前選擇的體態圖像'
+            };
+          }
+
+          if (typeof bodyFatImages !== 'undefined' && userProfile.bodyFat != null) {
+            const matchingImage = bodyFatImages.find((image) => {
+              const genderMatches = userProfile.gender === 'private' || image.gender === userProfile.gender;
+              return genderMatches
+                && userProfile.bodyFat >= image.bodyFatMin
+                && userProfile.bodyFat <= image.bodyFatMax;
+            });
+            if (matchingImage) return { src: matchingImage.src, label: '依輸入區間顯示的示意圖像' };
+          }
+
+          const fileName = userProfile.gender === 'male'
+            ? 'B_male15-18%.png'
+            : 'B_female15-18%.png';
+          return {
+            src: encodeURI(`./pic/B/${fileName}`),
+            label: '人物比例示意圖'
+          };
+        }
+
+        function reportChartRow(label, value, unit, percentage) {
+          return `
+            <div class="report-chart-row">
+              <div class="report-chart-copy">
+                <span>${label}</span>
+                <b>${value} ${unit}</b>
+              </div>
+              <div class="report-chart-track" aria-hidden="true">
+                <span class="report-chart-fill" style="width: ${Math.max(4, Math.min(100, percentage))}%"></span>
+              </div>
+            </div>
+          `;
+        }
+
         function renderSocialPanel() {
           const report = profileReport();
           const bodyFatValue = userProfile.bodyFat == null ? '未提供' : userProfile.bodyFat;
           const bodyFatUnit = userProfile.bodyFat == null ? '' : '%';
+          const figure = reportFigureData();
           socialPanel.innerHTML = `
             <article class="body-overview-dashboard">
               <div class="body-health-report" data-health-report-capture>
@@ -1358,90 +1733,64 @@
                   </span>
                 </header>
 
-                <section class="health-report-section" aria-labelledby="bodyOverviewTitle">
-                  <div class="health-report-section-heading">
-                    <h4 id="bodyOverviewTitle">你的身體概況</h4>
-                    <p>根據本次輸入資料整理</p>
+                <section class="health-report-main" aria-label="身體概況與每日需求圖表">
+                  <div class="report-column">
+                    <section>
+                      <h4 class="report-panel-title">基本資料</h4>
+                      <div class="report-data-list">
+                        <div class="report-data-row"><span>身高</span><b>${userProfile.height} cm</b></div>
+                        <div class="report-data-row"><span>體重</span><b>${userProfile.weight} kg</b></div>
+                        <div class="report-data-row"><span>年齡</span><b>${userProfile.age} 歲</b></div>
+                        <div class="report-data-row"><span>性別</span><b>${reportGenderLabel(userProfile.gender)}</b></div>
+                        <div class="report-data-row"><span>活動量</span><b>${reportActivityLabel(userProfile.activityLevel)}</b></div>
+                      </div>
+                    </section>
+                    <section>
+                      <h4 class="report-panel-title">身體組成指標</h4>
+                      <div class="report-bmi-card">
+                        <span class="report-bmi-label">BMI</span>
+                        <b class="report-bmi-value">${report.bmi}</b>
+                        <p class="report-bmi-note">由本次輸入的身高與體重換算，僅作為後續互動計算基準。</p>
+                      </div>
+                      <div class="report-data-row">
+                        <span>體脂率</span>
+                        <b>${bodyFatValue}${bodyFatUnit}</b>
+                      </div>
+                    </section>
                   </div>
-                  <div class="health-metric-grid" aria-label="基本身體資料">
-                    ${healthMetricCard({
-                      icon: 'ruler',
-                      label: '身高',
-                      value: userProfile.height,
-                      unit: 'cm',
-                      note: '用於估算 BMI 與基礎需求'
-                    })}
-                    ${healthMetricCard({
-                      icon: 'scale',
-                      label: '體重',
-                      value: userProfile.weight,
-                      unit: 'kg',
-                      note: '作為每日需求估算基準'
-                    })}
-                    ${healthMetricCard({
-                      icon: 'calendar-days',
-                      label: '年齡',
-                      value: userProfile.age,
-                      unit: '歲',
-                      note: '影響基礎熱量需求估算'
-                    })}
-                    ${healthMetricCard({
-                      icon: 'activity',
-                      label: 'BMI',
-                      value: report.bmi,
-                      note: '依身高與體重換算'
-                    })}
-                    ${healthMetricCard({
-                      icon: 'percent',
-                      label: '體脂率',
-                      value: bodyFatValue,
-                      unit: bodyFatUnit,
-                      note: userProfile.bodyFat == null ? '本次未填寫此選填資料' : '保留供後續互動功能使用'
-                    })}
+
+                  <figure class="report-figure">
+                    <img src="${figure.src}" alt="${figure.label}" onerror="this.hidden = true; this.nextElementSibling.textContent = '人物圖像待置入';" />
+                    <figcaption class="report-figure-label">${figure.label}</figcaption>
+                  </figure>
+
+                  <div class="report-column">
+                    <section>
+                      <h4 class="report-panel-title">每日能量估算</h4>
+                      <div class="report-energy-number">
+                        <b>${report.calories}</b>
+                        <span>kcal / 日</span>
+                      </div>
+                    </section>
+                    <section class="report-chart" aria-label="每日建議攝取量圖表">
+                      ${reportChartRow('熱量', report.calories, 'kcal', (report.calories / 2500) * 100)}
+                      ${reportChartRow('蛋白質', report.protein, 'g', (report.protein / 120) * 100)}
+                      ${reportChartRow('碳水', report.carb, 'g', (report.carb / 350) * 100)}
+                      ${reportChartRow('脂肪', report.fat, 'g', (report.fat / 100) * 100)}
+                      ${reportChartRow('飲水', report.water, 'ml', (report.water / 3000) * 100)}
+                    </section>
+                    <p class="report-bmi-note">圖表用於快速比較各項估算值的相對份量，不代表健康評分。</p>
                   </div>
                 </section>
 
-                <section class="health-report-section" aria-labelledby="nutritionTitle">
-                  <div class="health-report-section-heading">
-                    <h4 id="nutritionTitle">每日建議攝取量</h4>
-                    <p>簡化公式估算值</p>
-                  </div>
-                  <div class="health-metric-grid" aria-label="每日建議攝取量">
-                    ${healthMetricCard({
-                      icon: 'flame',
-                      label: '熱量',
-                      value: report.calories,
-                      unit: 'kcal',
-                      note: '每日建議攝取量'
-                    })}
-                    ${healthMetricCard({
-                      icon: 'drumstick',
-                      label: '蛋白質',
-                      value: report.protein,
-                      unit: 'g',
-                      note: '每日建議攝取量'
-                    })}
-                    ${healthMetricCard({
-                      icon: 'wheat',
-                      label: '碳水',
-                      value: report.carb,
-                      unit: 'g',
-                      note: '每日建議攝取量'
-                    })}
-                    ${healthMetricCard({
-                      icon: 'droplets',
-                      label: '脂肪',
-                      value: report.fat,
-                      unit: 'g',
-                      note: '每日建議攝取量'
-                    })}
-                    ${healthMetricCard({
-                      icon: 'glass-water',
-                      label: '飲水量',
-                      value: report.water,
-                      unit: 'ml',
-                      note: '每日建議飲水量'
-                    })}
+                <section class="report-nutrition-band" aria-labelledby="nutritionTitle">
+                  <h4 class="report-panel-title" id="nutritionTitle">每日飲食建議摘要</h4>
+                  <div class="report-nutrition-grid">
+                    <div class="report-nutrition-item"><span>熱量</span><b>${report.calories}</b><small>kcal</small></div>
+                    <div class="report-nutrition-item"><span>蛋白質</span><b>${report.protein}</b><small>g</small></div>
+                    <div class="report-nutrition-item"><span>碳水化合物</span><b>${report.carb}</b><small>g</small></div>
+                    <div class="report-nutrition-item"><span>脂肪</span><b>${report.fat}</b><small>g</small></div>
+                    <div class="report-nutrition-item"><span>飲水量</span><b>${report.water}</b><small>ml</small></div>
                   </div>
                 </section>
 
@@ -1514,7 +1863,7 @@
         function renderPhoneFeedPanel() {
           socialPanel.innerHTML = `
             <article class="phone-feed-card">
-              ${imageFrame('/pic/body-game/phone-scroll-feed.png', '滑手機看到社群內容')}
+              ${imageFrame('./pic/body-game/phone-scroll-feed.png', '滑手機看到社群內容', '社群滑手機情境圖待置入')}
               <h3>滑手機時，標準開始靠近</h3>
               <div class="phone-feed-list">
                 <p class="phone-feed-post">身材網紅分享「一週變瘦」日常。</p>
@@ -1538,7 +1887,7 @@
         function renderCarousel() {
           productCarousel.innerHTML = methods.map((method, index) => `
             <article class="product-card ${carouselPosition(index)}${gameProgress.completedMethods.includes(method.id) ? ' is-completed' : ''}">
-              ${imageFrame(method.image, `${method.title}代表圖片`)}
+              ${imageFrame(method.image, `${method.title}代表圖片`, method.imageLabel)}
               <h3>${method.title}</h3>
               <p>${method.description}</p>
               <div class="product-meta">
@@ -1818,7 +2167,7 @@
             <section class="method-stage">
               <h3>健身房會員生存挑戰</h3>
               <p>你已經辦了一個月健身房會員，月費 NT$1,288。每週的選擇會改變使用次數、體力、壓力與社交感受。</p>
-              ${imageFrame('/pic/body-game/gym-card.png', '健身房會員卡示意')}
+              ${imageFrame('./pic/body-game/gym-card.png', '健身房會員卡示意', '健身房情境圖待置入')}
               <article class="challenge-card">
                 <h4>${week.text}</h4>
                 <div class="method-choice-row">
@@ -1963,7 +2312,7 @@
               <h3>七天網紅瘦身挑戰</h3>
               <p>像滑到貼文後接著執行每日任務，觀察短期數字與心理壓力如何一起變動。</p>
               <div class="challenge-feed">
-                ${imageFrame(state.day === 0 ? '/pic/body-game/social-post-diet.png' : '/pic/body-game/diet-menu.png', '網紅瘦身挑戰貼文示意')}
+                ${imageFrame(state.day === 0 ? './pic/body-game/social-post-diet.png' : './pic/body-game/diet-menu.png', '網紅瘦身挑戰貼文示意', '網紅瘦身挑戰情境圖待置入')}
                 <article class="challenge-card">
                   <h4>${scene.text}</h4>
                   <div class="method-choice-row">
@@ -2139,6 +2488,16 @@
         productCarousel.addEventListener('click', (event) => {
           const startButton = event.target.closest('[data-start-method]');
           if (startButton) {
+            const productCard = startButton.closest('.product-card');
+            if (productCard && !productCard.classList.contains('is-center')) {
+              const cards = Array.from(productCarousel.querySelectorAll('.product-card'));
+              const selectedIndex = cards.indexOf(productCard);
+              if (selectedIndex >= 0) {
+                carouselIndex = selectedIndex;
+                renderCarousel();
+              }
+              return;
+            }
             resetMethod(startButton.dataset.startMethod);
             return;
           }
