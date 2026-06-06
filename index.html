@@ -15,6 +15,8 @@
   <link rel="preload" as="image" href="./pic/B/B_male20-25%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male%3E30%25.png" />
   <link rel="stylesheet" href="style.css?v=20260606-7" />
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
+  <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
     window.sitePreloaderFallback = window.setTimeout(function () {
       document.documentElement.classList.remove('is-preloading');
@@ -92,8 +94,8 @@
   <section id="frame-9" class="section reveal body-method-section">
     <style>
       #frame-9.body-method-section {
-        background: #fff;
-        color: #000;
+        background: #f5f7f4;
+        color: #24302b;
       }
 
       #frame-9 .BodyMethodExplorer {
@@ -231,10 +233,11 @@
         grid-column: 1 / -1;
         width: min(720px, 100%);
         margin: 0 auto;
-        padding: 24px;
-        border: 1px solid #000;
-        border-radius: 8px;
-        background: #fff;
+        padding: clamp(24px, 4vw, 38px);
+        border: 1px solid #dce3de;
+        border-radius: 24px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 18px 48px rgba(47, 65, 56, 0.1);
         box-sizing: border-box;
       }
 
@@ -247,9 +250,15 @@
         margin: 0;
       }
 
+      #frame-9 .body-profile-panel h3 {
+        font-size: clamp(1.45rem, 3vw, 2rem);
+        color: #1d2a24;
+      }
+
       #frame-9 .body-profile-panel p {
         margin-top: 8px;
         line-height: 1.6;
+        color: #647069;
       }
 
       #frame-9 .body-profile-form {
@@ -262,23 +271,52 @@
       #frame-9 .body-profile-form label {
         display: grid;
         gap: 6px;
+        color: #35433c;
+        font-size: 0.92rem;
+        font-weight: 650;
       }
 
       #frame-9 .body-profile-form input,
       #frame-9 .body-profile-form select {
         width: 100%;
-        min-height: 42px;
-        border: 1px solid #000;
-        border-radius: 8px;
-        background: #fff;
-        color: #000;
-        padding: 8px 10px;
+        min-height: 46px;
+        border: 1px solid #cfd8d2;
+        border-radius: 12px;
+        background: #fbfcfb;
+        color: #1d2a24;
+        padding: 9px 12px;
         font: inherit;
         box-sizing: border-box;
       }
 
+      #frame-9 .body-profile-form input:focus,
+      #frame-9 .body-profile-form select:focus {
+        outline: 3px solid rgba(83, 116, 98, 0.16);
+        border-color: #6f8f7d;
+      }
+
+      #frame-9 .body-profile-form input[aria-invalid="true"] {
+        border-color: #9f665f;
+      }
+
+      #frame-9 .body-profile-field-error {
+        min-height: 1.2em;
+        color: #8b514b;
+        font-size: 0.8rem;
+        font-weight: 500;
+      }
+
       #frame-9 .body-profile-actions {
         grid-column: 1 / -1;
+      }
+
+      #frame-9 .body-profile-actions .button {
+        min-width: 150px;
+        border: 0;
+        border-radius: 12px;
+        background: #263c32;
+        color: #fff;
+        box-shadow: 0 8px 20px rgba(38, 60, 50, 0.2);
       }
 
       #frame-9 .social-trigger-panel,
@@ -300,68 +338,309 @@
       }
 
       #frame-9 .body-overview-dashboard {
-        border: 1px solid #000;
-        border-radius: 8px;
-        padding: 18px;
-        background: #fff;
+        width: min(1040px, 100%);
+        margin: 0 auto;
         display: grid;
+        gap: 18px;
+      }
+
+      #frame-9 .body-health-report {
+        position: relative;
+        display: grid;
+        gap: 28px;
+        padding: clamp(24px, 4vw, 44px);
+        border: 1px solid rgba(190, 203, 195, 0.8);
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.96);
+        box-shadow: 0 24px 64px rgba(44, 62, 53, 0.12);
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+
+      #frame-9 .body-health-report::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 7px;
+        background: linear-gradient(90deg, #789886, #9aabb7, #c7ad8b);
+      }
+
+      #frame-9 .health-report-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 24px;
+      }
+
+      #frame-9 .health-report-heading {
+        display: grid;
+        gap: 8px;
+        max-width: 700px;
+      }
+
+      #frame-9 .health-report-heading h3,
+      #frame-9 .health-report-heading p,
+      #frame-9 .health-report-eyebrow {
+        margin: 0;
+      }
+
+      #frame-9 .health-report-eyebrow {
+        color: #6c7e74;
+        font-size: 0.78rem;
+        font-weight: 750;
+        text-transform: uppercase;
+      }
+
+      #frame-9 .health-report-heading h3 {
+        color: #1d2a24;
+        font-size: clamp(1.65rem, 3.3vw, 2.45rem);
+        line-height: 1.2;
+      }
+
+      #frame-9 .health-report-heading > p:last-child {
+        color: #647069;
+        line-height: 1.65;
+      }
+
+      #frame-9 .health-report-badge {
+        flex: 0 0 auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 11px;
+        border: 1px solid #d9e1dc;
+        border-radius: 999px;
+        background: #f2f6f3;
+        color: #52665b;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      #frame-9 .health-report-badge svg,
+      #frame-9 .health-report-disclaimer svg,
+      #frame-9 .health-report-actions svg {
+        width: 17px;
+        height: 17px;
+        flex: 0 0 auto;
+      }
+
+      #frame-9 .health-report-section {
+        display: grid;
+        gap: 14px;
+      }
+
+      #frame-9 .health-report-section-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
         gap: 16px;
       }
 
-      #frame-9 .body-overview-header {
-        display: grid;
-        gap: 6px;
-      }
-
-      #frame-9 .body-overview-header h3,
-      #frame-9 .body-overview-header p {
+      #frame-9 .health-report-section-heading h4,
+      #frame-9 .health-report-section-heading p {
         margin: 0;
       }
 
-      #frame-9 .body-overview-header p {
-        line-height: 1.55;
+      #frame-9 .health-report-section-heading h4 {
+        color: #26352e;
+        font-size: 1.08rem;
       }
 
-      #frame-9 .overview-card-grid {
+      #frame-9 .health-report-section-heading p {
+        color: #7a8680;
+        font-size: 0.84rem;
+      }
+
+      #frame-9 .health-metric-grid {
         display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 10px;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
       }
 
-      #frame-9 .overview-card {
-        border: 1px solid #000;
-        border-radius: 8px;
-        padding: 12px;
-        min-height: 78px;
+      #frame-9 .health-metric-card {
+        min-width: 0;
+        min-height: 154px;
         display: grid;
-        align-content: center;
-        gap: 6px;
-        text-align: center;
+        align-content: start;
+        gap: 9px;
+        padding: 16px;
+        border: 1px solid #e0e6e2;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 6px 18px rgba(49, 66, 57, 0.06);
+        box-sizing: border-box;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
       }
 
-      #frame-9 .overview-card span {
-        font-size: 0.82rem;
+      #frame-9 .health-metric-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(49, 66, 57, 0.1);
       }
 
-      #frame-9 .overview-card b {
-        font-size: 1.1rem;
+      #frame-9 .health-metric-icon {
+        width: 40px;
+        height: 40px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #edf4ef;
+        color: #537260;
       }
 
-      #frame-9 .overview-section-title {
+      #frame-9 .health-metric-card:nth-child(3n + 2) .health-metric-icon {
+        background: #eef3f6;
+        color: #5e7481;
+      }
+
+      #frame-9 .health-metric-card:nth-child(3n) .health-metric-icon {
+        background: #f6f1e9;
+        color: #856f54;
+      }
+
+      #frame-9 .health-metric-icon svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      #frame-9 .health-metric-label,
+      #frame-9 .health-metric-note {
         margin: 0;
+        color: #6f7b75;
+        font-size: 0.78rem;
+      }
+
+      #frame-9 .health-metric-value {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 4px;
+        min-width: 0;
+        color: #1d2a24;
+      }
+
+      #frame-9 .health-metric-value b {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+        line-height: 1.1;
+      }
+
+      #frame-9 .health-metric-value span {
+        color: #6f7b75;
+        font-size: 0.76rem;
+        font-weight: 650;
+      }
+
+      #frame-9 .health-report-uses {
+        padding: 20px;
+        border: 1px solid #dce5df;
+        border-radius: 18px;
+        background: #f5f8f6;
+        display: grid;
+        gap: 12px;
+      }
+
+      #frame-9 .health-report-uses h4,
+      #frame-9 .health-report-uses p {
+        margin: 0;
+      }
+
+      #frame-9 .health-report-uses h4 {
         font-size: 1rem;
       }
 
-      #frame-9 .overview-note-list {
-        border: 1px solid #000;
-        border-radius: 8px;
-        padding: 12px;
+      #frame-9 .health-report-use-grid {
         display: grid;
-        gap: 8px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
       }
 
-      #frame-9 .overview-note-list p {
-        margin: 0;
+      #frame-9 .health-report-use-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        color: #4d5e55;
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      #frame-9 .health-report-check {
+        width: 21px;
+        height: 21px;
+        flex: 0 0 auto;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        background: #789886;
+        color: #fff;
+        font-size: 0.75rem;
+        font-weight: 800;
+      }
+
+      #frame-9 .health-report-disclaimer {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 15px 17px;
+        border: 1px solid #dfe4e6;
+        border-radius: 16px;
+        background: #f5f7f8;
+        color: #5f696d;
+        font-size: 0.82rem;
+        line-height: 1.65;
+      }
+
+      #frame-9 .health-report-disclaimer strong {
+        color: #35434a;
+      }
+
+      #frame-9 .health-report-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      #frame-9 .health-report-actions .button {
+        min-height: 48px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        border-radius: 13px;
+        padding: 11px 18px;
+        font-weight: 750;
+      }
+
+      #frame-9 .health-report-download {
+        border: 1px solid #cbd6d0;
+        background: #fff;
+        color: #35483e;
+      }
+
+      #frame-9 .health-report-start {
+        border: 1px solid #263c32;
+        background: #263c32;
+        color: #fff;
+        box-shadow: 0 9px 22px rgba(38, 60, 50, 0.22);
+      }
+
+      #frame-9 .health-report-actions .button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(38, 60, 50, 0.16);
+      }
+
+      #frame-9 .health-report-download-status {
+        width: 100%;
+        min-height: 1.3em;
+        color: #647069;
+        font-size: 0.82rem;
+        text-align: right;
+      }
+
+      #frame-9 .body-health-report.is-exporting {
+        box-shadow: none;
       }
 
       #frame-9 .body-report-card,
@@ -724,8 +1003,12 @@
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
-        #frame-9 .overview-card-grid {
+        #frame-9 .health-metric-grid {
           grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        #frame-9 .health-report-use-grid {
+          grid-template-columns: 1fr;
         }
       }
 
@@ -734,8 +1017,50 @@
           grid-template-columns: 1fr;
         }
 
-        #frame-9 .overview-card-grid {
+        #frame-9 .body-health-report {
+          gap: 22px;
+          padding: 22px 16px;
+          border-radius: 22px;
+        }
+
+        #frame-9 .health-report-header {
+          display: grid;
+          gap: 14px;
+        }
+
+        #frame-9 .health-report-badge {
+          justify-self: start;
+        }
+
+        #frame-9 .health-report-section-heading {
+          display: grid;
+          gap: 4px;
+        }
+
+        #frame-9 .health-metric-grid {
+          gap: 9px;
+        }
+
+        #frame-9 .health-metric-card {
+          min-height: 145px;
+          padding: 13px;
+        }
+
+        #frame-9 .health-report-actions {
+          display: grid;
           grid-template-columns: 1fr;
+        }
+
+        #frame-9 .health-report-actions .button {
+          width: 100%;
+        }
+
+        #frame-9 .health-report-start {
+          order: -1;
+        }
+
+        #frame-9 .health-report-download-status {
+          text-align: center;
         }
       }
     </style>
@@ -757,6 +1082,19 @@
           <label>
             年齡
             <input name="age" type="number" min="1" required />
+          </label>
+          <label>
+            體脂率（選填）%
+            <input
+              name="bodyFat"
+              type="number"
+              min="3"
+              max="70"
+              step="0.1"
+              placeholder="選填，例如 28"
+              aria-describedby="bodyFatError"
+            />
+            <span class="body-profile-field-error" id="bodyFatError" data-body-fat-error aria-live="polite"></span>
           </label>
           <label>
             性別
@@ -859,6 +1197,8 @@
         };
         const profilePanel = explorer.querySelector('[data-profile-panel]');
         const profileForm = explorer.querySelector('[data-profile-form]');
+        const bodyFatInput = profileForm.elements.bodyFat;
+        const bodyFatError = profileForm.querySelector('[data-body-fat-error]');
         const socialPanel = explorer.querySelector('[data-social-panel]');
         const carouselPanel = explorer.querySelector('[data-carousel-panel]');
         const productCarousel = explorer.querySelector('[data-product-carousel]');
@@ -974,37 +1314,201 @@
           };
         }
 
-        function renderSocialPanel() {
-          const report = profileReport();
-          socialPanel.innerHTML = `
-            <article class="body-overview-dashboard">
-              <div class="body-overview-header">
-                <h3>你的身體概況</h3>
-                <p>接下來的每個體驗，<br />都會根據你的身體資料產生不同結果。</p>
+        function refreshHealthReportIcons() {
+          if (window.lucide?.createIcons) {
+            window.lucide.createIcons({
+              attrs: {
+                'aria-hidden': 'true',
+                'stroke-width': 1.8
+              }
+            });
+          }
+        }
+
+        function healthMetricCard({ icon, label, value, unit = '', note }) {
+          return `
+            <article class="health-metric-card">
+              <span class="health-metric-icon"><i data-lucide="${icon}"></i></span>
+              <p class="health-metric-label">${label}</p>
+              <div class="health-metric-value">
+                <b>${value}</b>
+                ${unit ? `<span>${unit}</span>` : ''}
               </div>
-              <div class="overview-card-grid" aria-label="基本身體資料">
-                <div class="overview-card"><span>身高</span><b>${userProfile.height} cm</b></div>
-                <div class="overview-card"><span>體重</span><b>${userProfile.weight} kg</b></div>
-                <div class="overview-card"><span>年齡</span><b>${userProfile.age}</b></div>
-                <div class="overview-card"><span>BMI</span><b>${report.bmi}</b></div>
-              </div>
-              <h4 class="overview-section-title">每日建議攝取量</h4>
-              <div class="overview-card-grid" aria-label="每日建議攝取量">
-                <div class="overview-card"><span>熱量</span><b>${report.calories} kcal</b></div>
-                <div class="overview-card"><span>蛋白質</span><b>${report.protein} g</b></div>
-                <div class="overview-card"><span>碳水</span><b>${report.carb} g</b></div>
-                <div class="overview-card"><span>脂肪</span><b>${report.fat} g</b></div>
-                <div class="overview-card"><span>飲水量</span><b>${report.water} ml</b></div>
-              </div>
-              <div class="overview-note-list">
-                <p>系統將依據你的資料：</p>
-                <p>✓ 計算健康餐是否符合需求</p>
-                <p>✓ 模擬不同減肥方式的影響</p>
-                <p>✓ 產生個人化體驗結果</p>
-              </div>
-              <button class="button" type="button" data-start-social>開始探索</button>
+              <p class="health-metric-note">${note}</p>
             </article>
           `;
+        }
+
+        function renderSocialPanel() {
+          const report = profileReport();
+          const bodyFatValue = userProfile.bodyFat == null ? '未提供' : userProfile.bodyFat;
+          const bodyFatUnit = userProfile.bodyFat == null ? '' : '%';
+          socialPanel.innerHTML = `
+            <article class="body-overview-dashboard">
+              <div class="body-health-report" data-health-report-capture>
+                <header class="health-report-header">
+                  <div class="health-report-heading">
+                    <p class="health-report-eyebrow">Personal Body Report</p>
+                    <h3>個人身體健康報告</h3>
+                    <p>根據你輸入的身體資料，系統將估算每日基本營養需求，並作為後續互動體驗的參考。</p>
+                  </div>
+                  <span class="health-report-badge">
+                    <i data-lucide="info"></i>
+                    僅供參考
+                  </span>
+                </header>
+
+                <section class="health-report-section" aria-labelledby="bodyOverviewTitle">
+                  <div class="health-report-section-heading">
+                    <h4 id="bodyOverviewTitle">你的身體概況</h4>
+                    <p>根據本次輸入資料整理</p>
+                  </div>
+                  <div class="health-metric-grid" aria-label="基本身體資料">
+                    ${healthMetricCard({
+                      icon: 'ruler',
+                      label: '身高',
+                      value: userProfile.height,
+                      unit: 'cm',
+                      note: '用於估算 BMI 與基礎需求'
+                    })}
+                    ${healthMetricCard({
+                      icon: 'scale',
+                      label: '體重',
+                      value: userProfile.weight,
+                      unit: 'kg',
+                      note: '作為每日需求估算基準'
+                    })}
+                    ${healthMetricCard({
+                      icon: 'calendar-days',
+                      label: '年齡',
+                      value: userProfile.age,
+                      unit: '歲',
+                      note: '影響基礎熱量需求估算'
+                    })}
+                    ${healthMetricCard({
+                      icon: 'activity',
+                      label: 'BMI',
+                      value: report.bmi,
+                      note: '依身高與體重換算'
+                    })}
+                    ${healthMetricCard({
+                      icon: 'percent',
+                      label: '體脂率',
+                      value: bodyFatValue,
+                      unit: bodyFatUnit,
+                      note: userProfile.bodyFat == null ? '本次未填寫此選填資料' : '保留供後續互動功能使用'
+                    })}
+                  </div>
+                </section>
+
+                <section class="health-report-section" aria-labelledby="nutritionTitle">
+                  <div class="health-report-section-heading">
+                    <h4 id="nutritionTitle">每日建議攝取量</h4>
+                    <p>簡化公式估算值</p>
+                  </div>
+                  <div class="health-metric-grid" aria-label="每日建議攝取量">
+                    ${healthMetricCard({
+                      icon: 'flame',
+                      label: '熱量',
+                      value: report.calories,
+                      unit: 'kcal',
+                      note: '每日建議攝取量'
+                    })}
+                    ${healthMetricCard({
+                      icon: 'drumstick',
+                      label: '蛋白質',
+                      value: report.protein,
+                      unit: 'g',
+                      note: '每日建議攝取量'
+                    })}
+                    ${healthMetricCard({
+                      icon: 'wheat',
+                      label: '碳水',
+                      value: report.carb,
+                      unit: 'g',
+                      note: '每日建議攝取量'
+                    })}
+                    ${healthMetricCard({
+                      icon: 'droplets',
+                      label: '脂肪',
+                      value: report.fat,
+                      unit: 'g',
+                      note: '每日建議攝取量'
+                    })}
+                    ${healthMetricCard({
+                      icon: 'glass-water',
+                      label: '飲水量',
+                      value: report.water,
+                      unit: 'ml',
+                      note: '每日建議飲水量'
+                    })}
+                  </div>
+                </section>
+
+                <section class="health-report-uses">
+                  <h4>系統將依據你的資料：</h4>
+                  <div class="health-report-use-grid">
+                    <p class="health-report-use-item"><span class="health-report-check">✓</span>計算健康餐是否符合需求</p>
+                    <p class="health-report-use-item"><span class="health-report-check">✓</span>模擬不同體態管理方式的影響</p>
+                    <p class="health-report-use-item"><span class="health-report-check">✓</span>產生個人化體驗結果</p>
+                  </div>
+                </section>
+
+                <aside class="health-report-disclaimer">
+                  <i data-lucide="info"></i>
+                  <span><strong>免責聲明：</strong>本網站並非專業醫療、營養或健康診斷單位，所有估算結果僅供新聞專題互動體驗與一般參考，不能取代醫師、營養師或其他專業人員建議。</span>
+                </aside>
+              </div>
+              <div class="health-report-actions" data-html2canvas-ignore="true">
+                <button class="button health-report-download" type="button" data-download-health-report>
+                  <i data-lucide="download"></i>
+                  儲存報告圖片
+                </button>
+                <button class="button health-report-start" type="button" data-start-social>
+                  開始探索
+                  <i data-lucide="arrow-right"></i>
+                </button>
+                <span class="health-report-download-status" data-report-download-status aria-live="polite"></span>
+              </div>
+            </article>
+          `;
+          refreshHealthReportIcons();
+        }
+
+        async function downloadHealthReport() {
+          const report = socialPanel.querySelector('[data-health-report-capture]');
+          const status = socialPanel.querySelector('[data-report-download-status]');
+          if (!report || !status) return;
+
+          if (!window.html2canvas) {
+            status.textContent = '圖片工具尚未載入完成，請稍後再試。';
+            return;
+          }
+
+          report.classList.add('is-exporting');
+          status.textContent = '正在產生報告圖片…';
+          if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+
+          try {
+            const canvas = await window.html2canvas(report, {
+              backgroundColor: '#ffffff',
+              scale: Math.min(2, window.devicePixelRatio || 1.5),
+              useCORS: true,
+              logging: false,
+              windowWidth: report.scrollWidth,
+              windowHeight: report.scrollHeight
+            });
+            const link = document.createElement('a');
+            link.download = 'body-health-report.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+            status.textContent = '報告圖片已下載。';
+          } catch (error) {
+            console.warn('Unable to export body health report.', error);
+            status.textContent = '圖片產生失敗，請稍後再試。';
+          } finally {
+            report.classList.remove('is-exporting');
+          }
         }
 
         function renderPhoneFeedPanel() {
@@ -1564,13 +2068,34 @@
           renderCarousel();
         }
 
+        function validateBodyFatInput() {
+          const rawValue = bodyFatInput.value.trim();
+          const value = rawValue === '' ? null : Number(rawValue);
+          const isInvalid = value !== null && (!Number.isFinite(value) || value < 3 || value > 70);
+          const message = isInvalid ? '體脂率請輸入 3 至 70 之間的數值。' : '';
+          bodyFatInput.setCustomValidity(message);
+          bodyFatInput.toggleAttribute('aria-invalid', isInvalid);
+          bodyFatError.textContent = message;
+          return !isInvalid;
+        }
+
+        bodyFatInput.addEventListener('input', validateBodyFatInput);
+        bodyFatInput.addEventListener('invalid', validateBodyFatInput);
+
         profileForm.addEventListener('submit', (event) => {
           event.preventDefault();
           const data = new FormData(profileForm);
           const height = Number(data.get('height'));
           const weight = Number(data.get('weight'));
           const age = Number(data.get('age'));
+          const bodyFatRaw = String(data.get('bodyFat') || '').trim();
+          const bodyFat = bodyFatRaw === '' ? null : Number(bodyFatRaw);
           if (!height || !weight || !age) return;
+
+          if (!validateBodyFatInput()) {
+            bodyFatInput.focus();
+            return;
+          }
 
           const heightM = height / 100;
           const bmi = weight / (heightM * heightM);
@@ -1578,12 +2103,18 @@
             height,
             weight,
             age,
+            bodyFat,
             gender: data.get('gender'),
             activityLevel: data.get('activityLevel'),
             BMI: Number.isFinite(bmi) ? Number(bmi.toFixed(1)) : 0,
             estimatedCalories: 0
           };
           userProfile.estimatedCalories = mealTargets().mealCalories * 3;
+          try {
+            localStorage.setItem('bodyHealthProfile', JSON.stringify(userProfile));
+          } catch (error) {
+            console.warn('Unable to save body profile locally.', error);
+          }
           profilePanel.hidden = true;
           cardGrid.hidden = true;
           renderSocialPanel();
@@ -1591,6 +2122,10 @@
         });
 
         socialPanel.addEventListener('click', (event) => {
+          if (event.target.closest('[data-download-health-report]')) {
+            downloadHealthReport();
+            return;
+          }
           if (event.target.closest('[data-start-social]')) {
             renderPhoneFeedPanel();
             return;
