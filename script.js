@@ -33,7 +33,7 @@ function initScrollVideoIntro() {
 
 initScrollVideoIntro();
 
-const bodyImageBasePath = '/pic/B/';
+const bodyImageBasePath = './pic/B/';
 
 function createBodyImagePath(fileName) {
   return encodeURI(`${bodyImageBasePath}${fileName}`);

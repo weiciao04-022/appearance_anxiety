@@ -12,8 +12,8 @@ Firebase web config 請填在 `src/firebase.js` 的 `firebaseConfig`。不要把
 
 ## 理想身材圖片
 
-圖片來源放在 `public/pic/B/`，目前也同步一份到 `pic/B/`，讓 GitHub Pages 直接服務 repository root 時能使用 `/pic/B/檔名` 顯示。
+圖片來源放在 `public/pic/B/`，目前也同步一份到 `pic/B/`，讓 GitHub Pages 專案頁能使用 `./pic/B/檔名` 顯示。
 
 資料陣列在 `script.js` 的 `bodyFatImages`。
 
-網頁引用圖片路徑使用 `/pic/B/檔名`，不要使用本機絕對路徑。
+網頁引用圖片路徑使用 `./pic/B/檔名`，不要使用本機絕對路徑。
