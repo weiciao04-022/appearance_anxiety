@@ -837,6 +837,69 @@
         color: #7c746b;
       }
 
+      #frame-9 .body-fat-reference {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(210px, 0.42fr);
+        gap: 18px;
+        padding: 18px;
+        border: 1px solid #bdb6ac;
+        border-radius: 18px;
+        background: #faf9f7;
+      }
+
+      #frame-9 .body-fat-reference-copy {
+        display: grid;
+        align-content: start;
+        gap: 8px;
+      }
+
+      #frame-9 .body-fat-reference-copy h4,
+      #frame-9 .body-fat-reference-copy p {
+        margin: 0;
+      }
+
+      #frame-9 .body-fat-reference-copy p {
+        color: #5f5952;
+        font-size: 0.84rem;
+        line-height: 1.6;
+      }
+
+      #frame-9 .body-fat-reference-source {
+        color: #6f675e;
+        font-size: 0.76rem;
+      }
+
+      #frame-9 .body-fat-reference-source a {
+        color: inherit;
+        text-underline-offset: 3px;
+      }
+
+      #frame-9 .body-fat-reference-stat {
+        display: grid;
+        place-items: center;
+        align-content: center;
+        gap: 5px;
+        min-height: 132px;
+        padding: 14px;
+        border: 1px solid #111;
+        background: #fff;
+        text-align: center;
+      }
+
+      #frame-9 .body-fat-reference-stat strong {
+        font-size: clamp(2rem, 4vw, 3.2rem);
+        line-height: 1;
+      }
+
+      #frame-9 .body-fat-reference-stat span,
+      #frame-9 .body-fat-reference-stat small {
+        color: #5f5952;
+      }
+
+      #frame-9 .body-fat-reference-stat small {
+        font-size: 0.72rem;
+      }
+
       #frame-9 .health-report-uses {
         border-color: #d1cbc3;
         background: #faf9f7;
@@ -1263,6 +1326,10 @@
           gap: 16px 0;
         }
 
+        #frame-9 .body-fat-reference {
+          grid-template-columns: 1fr;
+        }
+
         #frame-9 .report-nutrition-item:nth-child(3) {
           border-right: 0;
         }
@@ -1347,6 +1414,10 @@
         #frame-9 .report-nutrition-item:last-child {
           grid-column: 1 / -1;
           border-bottom: 0;
+        }
+
+        #frame-9 .body-fat-reference {
+          padding: 14px;
         }
 
         #frame-9 .carousel-shell {
@@ -1713,11 +1784,70 @@
           `;
         }
 
+        const bodyFatSurveyRates = {
+          male: [
+            { minAge: 19, maxAge: 30, label: '19–30 歲男性', rate: 65.06 },
+            { minAge: 31, maxAge: 44, label: '31–44 歲男性', rate: 86.32 },
+            { minAge: 45, maxAge: 64, label: '45–64 歲男性', rate: 82.95 },
+            { minAge: 65, maxAge: Infinity, label: '65 歲以上男性', rate: 85.99 }
+          ],
+          female: [
+            { minAge: 19, maxAge: 30, label: '19–30 歲女性', rate: 89.94 },
+            { minAge: 31, maxAge: 44, label: '31–44 歲女性', rate: 86.39 },
+            { minAge: 45, maxAge: 64, label: '45–64 歲女性', rate: 94.25 },
+            { minAge: 65, maxAge: Infinity, label: '65 歲以上女性', rate: 96.07 }
+          ]
+        };
+
+        function bodyFatReferenceData() {
+          const threshold = userProfile.gender === 'male'
+            ? 25
+            : userProfile.gender === 'female'
+              ? 30
+              : null;
+          const group = bodyFatSurveyRates[userProfile.gender]?.find(
+            (item) => userProfile.age >= item.minAge && userProfile.age <= item.maxAge
+          ) || null;
+
+          if (userProfile.gender === 'private') {
+            return {
+              group: null,
+              threshold: null,
+              comparison: '你選擇不透露性別，因此不套用調查中的男女門檻與分組比例。'
+            };
+          }
+
+          if (userProfile.age < 19) {
+            return {
+              group: null,
+              threshold,
+              comparison: '這份成人調查的年齡範圍為 19 歲以上，因此不提供同齡分組比較。'
+            };
+          }
+
+          if (userProfile.bodyFat == null) {
+            return {
+              group,
+              threshold,
+              comparison: '你尚未提供體脂率，因此僅顯示同年齡與同性別組別的調查資料。'
+            };
+          }
+
+          return {
+            group,
+            threshold,
+            comparison: userProfile.bodyFat >= threshold
+              ? `你輸入的 ${userProfile.bodyFat}% 達到這份調查所使用的「體脂肪過高」定義門檻。`
+              : `你輸入的 ${userProfile.bodyFat}% 低於這份調查所使用的「體脂肪過高」定義門檻。`
+          };
+        }
+
         function renderSocialPanel() {
           const report = profileReport();
           const bodyFatValue = userProfile.bodyFat == null ? '未提供' : userProfile.bodyFat;
           const bodyFatUnit = userProfile.bodyFat == null ? '' : '%';
           const figure = reportFigureData();
+          const bodyFatReference = bodyFatReferenceData();
           socialPanel.innerHTML = `
             <article class="body-overview-dashboard">
               <div class="body-health-report" data-health-report-capture>
@@ -1791,6 +1921,29 @@
                     <div class="report-nutrition-item"><span>碳水化合物</span><b>${report.carb}</b><small>g</small></div>
                     <div class="report-nutrition-item"><span>脂肪</span><b>${report.fat}</b><small>g</small></div>
                     <div class="report-nutrition-item"><span>飲水量</span><b>${report.water}</b><small>ml</small></div>
+                  </div>
+                </section>
+
+                <section class="body-fat-reference" aria-labelledby="bodyFatReferenceTitle">
+                  <div class="body-fat-reference-copy">
+                    <h4 id="bodyFatReferenceTitle">台灣成人體脂率參考</h4>
+                    <p>${bodyFatReference.comparison}</p>
+                    <p>該調查將男性體脂肪 ≥25%、女性體脂肪 ≥30% 定義為體脂肪過高。BMI 與體脂率衡量的是不同面向；即使 BMI 在一般範圍內，也不能只靠體脂率判定肌少型肥胖，仍需肌肉量、身體組成與專業評估。</p>
+                    <p class="body-fat-reference-source">
+                      資料：2017–2020 年國民營養健康調查，製表日期 2022/06/15。此處呈現調查原始比例，不採用社群文章延伸推估的肌少型肥胖盛行率。
+                    </p>
+                  </div>
+                  <div class="body-fat-reference-stat">
+                    ${bodyFatReference.group
+                      ? `
+                        <strong>${bodyFatReference.group.rate}%</strong>
+                        <span>${bodyFatReference.group.label}</span>
+                        <small>調查中體脂肪過高比率</small>
+                      `
+                      : `
+                        <strong>—</strong>
+                        <span>無對應分組資料</span>
+                      `}
                   </div>
                 </section>
 

@@ -380,19 +380,23 @@ button:active,
 }
 
 .body-choice-workspace.has-selection {
-  grid-template-columns: minmax(240px, 340px) minmax(0, 1fr);
+  max-width: 960px;
+  grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
+  gap: 14px;
   align-items: stretch;
 }
 
 .body-choice-workspace.has-selection .body-option-grid {
   grid-template-columns: 1fr;
-  max-width: 340px;
+  max-width: 270px;
   height: 100%;
 }
 
 .body-choice-workspace.has-selection .body-option-card {
   cursor: default;
   height: 100%;
+  gap: 7px;
+  padding: 7px;
 }
 
 .body-choice-workspace.has-selection .body-choice-result {
@@ -456,12 +460,12 @@ button:active,
 .body-choice-stat-card {
   width: min(720px, 100%);
   margin: 0 auto;
-  padding: 18px;
+  padding: 14px;
   border: 1px solid #000;
   background: #fff;
   color: #000;
   display: grid;
-  gap: 12px;
+  gap: 9px;
   box-sizing: border-box;
   text-align: left;
   font-weight: 400;
@@ -469,7 +473,7 @@ button:active,
 
 .body-choice-stat-card p {
   margin: 0;
-  line-height: 1.55;
+  line-height: 1.45;
 }
 
 .body-choice-selected {
@@ -481,12 +485,12 @@ button:active,
   display: grid;
   gap: 4px;
   place-items: center;
-  padding: 10px;
+  padding: 8px;
   border: 1px solid #000;
 }
 
 .body-choice-stat-main strong {
-  font-size: clamp(2rem, 7vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3.25rem);
   line-height: 1;
 }
 
@@ -497,7 +501,7 @@ button:active,
 }
 
 .body-choice-progress {
-  height: 14px;
+  height: 10px;
   border: 1px solid #000;
   background: #fff;
   overflow: hidden;
@@ -509,24 +513,18 @@ button:active,
   background: #000;
 }
 
-.body-choice-next-button {
-  justify-self: center;
-}
-
-.body-choice-action-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-}
-
 @media (max-width: 1024px) {
   .body-option-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
   .body-choice-workspace.has-selection {
-    grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+    max-width: 860px;
+    grid-template-columns: minmax(210px, 250px) minmax(0, 1fr);
+  }
+
+  .body-choice-workspace.has-selection .body-option-grid {
+    max-width: 250px;
   }
 }
 
@@ -541,7 +539,7 @@ button:active,
   }
 
   .body-choice-workspace.has-selection .body-option-grid {
-    width: min(300px, 100%);
+    width: min(240px, 100%);
   }
 }
 

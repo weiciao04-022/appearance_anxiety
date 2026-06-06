@@ -361,10 +361,6 @@ function updateBodyChoiceResult() {
         </div>
         <p>${statsMessage}</p>
         ${hasSharedStats ? '' : '<p class="body-choice-local-note">目前僅顯示本機暫存資料。</p>'}
-        <div class="body-choice-action-row">
-          <button class="button" type="button" data-reset-body-choice>重新選擇</button>
-          <button class="button body-choice-next-button" type="button" onclick="scrollToSection('frame-9')">繼續進入體態分析</button>
-        </div>
       </article>
     `;
     return;
@@ -385,10 +381,6 @@ function updateBodyChoiceResult() {
       <p class="body-choice-stat-count">${stats.sameRangeCount} / ${stats.totalCount} 人選擇這個體脂區間</p>
       <p>目前共有 ${stats.totalCount} 位使用者完成選擇。其中有 ${stats.sameRangeCount} 位使用者也選擇了 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間，約佔所有選擇的 ${stats.percentage}%。</p>
       <p>這個比例只代表目前收集到的選擇分布，不代表健康程度或最佳體態。</p>
-      <div class="body-choice-action-row">
-        <button class="button" type="button" data-reset-body-choice>重新選擇</button>
-        <button class="button body-choice-next-button" type="button" onclick="scrollToSection('frame-9')">繼續進入體態分析</button>
-      </div>
     </article>
   `;
 }
@@ -503,14 +495,6 @@ async function initIdealBodySelector() {
       IdealBodySelector.voteCounts = readLocalBodyChoiceStats();
       updateBodyChoiceResult();
     }
-  });
-
-  choiceResult?.addEventListener('click', (event) => {
-    if (!event.target.closest('[data-reset-body-choice]')) return;
-    IdealBodySelector.selectedOptionId = null;
-    IdealBodySelector.selectedBodyImage = null;
-    renderBodyOptions();
-    updateBodyChoiceResult();
   });
 
   firebase.listenBodyChoiceStats(
