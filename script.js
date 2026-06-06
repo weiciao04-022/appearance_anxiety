@@ -77,15 +77,6 @@ const bodyFatImages = [
     bodyFatMax: 25
   },
   {
-    id: 'female-22-25',
-    label: '女性 22–25%',
-    src: createBodyImagePath('B_female22-25%.png'),
-    gender: 'female',
-    bodyFatRange: '22–25%',
-    bodyFatMin: 22,
-    bodyFatMax: 25
-  },
-  {
     id: 'female-over-30',
     label: '女性 >30%',
     src: createBodyImagePath('B_female>30%.png'),
