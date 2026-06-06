@@ -10,6 +10,17 @@ Firebase web config 請填在 `src/firebase.js` 的 `firebaseConfig`。不要把
 
 目前為專題展示用途，Firestore rules 需限制寫入格式，避免被濫用。
 
+### Firebase 連線步驟
+
+1. 到 Firebase Console 建立專案。
+2. 在專案設定中新增 Web App，複製 Firebase web config。
+3. 建立 Cloud Firestore database。
+4. 將 web config 填入 `src/firebase.js` 的 `firebaseConfig`。
+5. 到 Firestore 的 Rules 頁籤，貼上專案根目錄 `firestore.rules` 的內容並發布。
+6. commit 並 push `src/firebase.js` 後，GitHub Pages 才會開始讀寫共用統計。
+
+Firebase 尚未連線或共用樣本少於 5 筆時，頁面只顯示「資料不足」，不會將單一裝置的本機資料顯示為 100%。
+
 ## 理想身材圖片
 
 圖片來源放在 `public/pic/B/`，目前也同步一份到 `pic/B/`，讓 GitHub Pages 專案頁能使用 `./pic/B/檔名` 顯示。

@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /bodyChoiceStats/{clientId} {
+      allow read: if true;
+
+      allow create, update: if
+        request.resource.data.keys().hasOnly([
+          'clientId',
+          'choiceId',
+          'bodyFatRange',
+          'bodyFatMin',
+          'bodyFatMax',
+          'gender',
+          'updatedAt'
+        ]) &&
+        request.resource.data.clientId == clientId &&
+        request.resource.data.clientId is string &&
+        request.resource.data.choiceId is string &&
+        request.resource.data.bodyFatRange is string &&
+        request.resource.data.bodyFatMin is number &&
+        request.resource.data.bodyFatMax is number &&
+        request.resource.data.bodyFatMin >= 0 &&
+        request.resource.data.bodyFatMax <= 100 &&
+        request.resource.data.bodyFatMin <= request.resource.data.bodyFatMax &&
+        request.resource.data.gender in ['female', 'male', 'neutral'] &&
+        request.resource.data.updatedAt is timestamp;
+
+      allow delete: if false;
+    }
+  }
+}

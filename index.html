@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>體態、社群與健康焦慮互動專題</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=20260606-4" />
 </head>
 <body>
   <section id="opening-video-section" class="section reveal scroll-video-intro" data-video-intro>
@@ -43,8 +43,10 @@
         <button class="body-gender-button active" data-gender="female" type="button">女生</button>
         <button class="body-gender-button" data-gender="male" type="button">男生</button>
       </div>
-      <div class="body-option-grid" id="bodyOptionGrid" aria-live="polite"></div>
-      <div id="choiceResult" class="body-choice-result">請先選擇一張圖片</div>
+      <div class="body-choice-workspace" data-body-choice-workspace>
+        <div class="body-option-grid" id="bodyOptionGrid" aria-live="polite"></div>
+        <div id="choiceResult" class="body-choice-result">請先選擇一張圖片</div>
+      </div>
     </div>
   </section>
 
@@ -1670,6 +1672,6 @@
     </script>
   </section>
 
-  <script src="script.js?v=20260606-2"></script>
+  <script src="script.js?v=20260606-4"></script>
 </body>
 </html>

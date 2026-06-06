@@ -47,7 +47,8 @@ const bodyFatImages = [
     gender: 'female',
     bodyFatRange: '<8%',
     bodyFatMin: 0,
-    bodyFatMax: 8
+    bodyFatMax: 8,
+    selectionNote: '你選擇的是線條較精瘦、肌肉輪廓較明顯的體態。'
   },
   {
     id: 'female-10-14',
@@ -56,7 +57,8 @@ const bodyFatImages = [
     gender: 'female',
     bodyFatRange: '10–14%',
     bodyFatMin: 10,
-    bodyFatMax: 14
+    bodyFatMax: 14,
+    selectionNote: '你選擇的是整體偏精實、腰腹線條較明顯的體態。'
   },
   {
     id: 'female-15-18',
@@ -65,7 +67,8 @@ const bodyFatImages = [
     gender: 'female',
     bodyFatRange: '15–18%',
     bodyFatMin: 15,
-    bodyFatMax: 18
+    bodyFatMax: 18,
+    selectionNote: '你選擇的是保有部分線條、外觀較自然均衡的體態。'
   },
   {
     id: 'female-20-25',
@@ -74,7 +77,8 @@ const bodyFatImages = [
     gender: 'female',
     bodyFatRange: '20–25%',
     bodyFatMin: 20,
-    bodyFatMax: 25
+    bodyFatMax: 25,
+    selectionNote: '你選擇的是線條較柔和、身形曲線較明顯的體態。'
   },
   {
     id: 'female-over-30',
@@ -83,7 +87,8 @@ const bodyFatImages = [
     gender: 'female',
     bodyFatRange: '>30%',
     bodyFatMin: 30,
-    bodyFatMax: 100
+    bodyFatMax: 100,
+    selectionNote: '你選擇的是整體較圓潤、身形曲線較豐滿的體態。'
   },
   {
     id: 'male-under-8',
@@ -92,7 +97,8 @@ const bodyFatImages = [
     gender: 'male',
     bodyFatRange: '<8%',
     bodyFatMin: 0,
-    bodyFatMax: 8
+    bodyFatMax: 8,
+    selectionNote: '你選擇的是線條較精瘦、肌肉輪廓較明顯的體態。'
   },
   {
     id: 'male-10-14',
@@ -101,7 +107,8 @@ const bodyFatImages = [
     gender: 'male',
     bodyFatRange: '10–14%',
     bodyFatMin: 10,
-    bodyFatMax: 14
+    bodyFatMax: 14,
+    selectionNote: '你選擇的是整體偏精實、軀幹線條較明顯的體態。'
   },
   {
     id: 'male-15-18',
@@ -110,7 +117,8 @@ const bodyFatImages = [
     gender: 'male',
     bodyFatRange: '15–18%',
     bodyFatMin: 15,
-    bodyFatMax: 18
+    bodyFatMax: 18,
+    selectionNote: '你選擇的是保有部分線條、外觀較自然均衡的體態。'
   },
   {
     id: 'male-20-25',
@@ -119,7 +127,8 @@ const bodyFatImages = [
     gender: 'male',
     bodyFatRange: '20–25%',
     bodyFatMin: 20,
-    bodyFatMax: 25
+    bodyFatMax: 25,
+    selectionNote: '你選擇的是線條較柔和、整體輪廓較厚實的體態。'
   },
   {
     id: 'male-over-30',
@@ -128,7 +137,8 @@ const bodyFatImages = [
     gender: 'male',
     bodyFatRange: '>30%',
     bodyFatMin: 30,
-    bodyFatMax: 100
+    bodyFatMax: 100,
+    selectionNote: '你選擇的是整體較圓潤、身形輪廓較豐滿的體態。'
   }
 ];
 
@@ -211,23 +221,41 @@ function calculateBodyChoiceStats(stats, selectedBodyImage) {
 
 function updateBodyChoiceResult() {
   const choiceResult = document.getElementById('choiceResult');
+  const workspace = document.querySelector('[data-body-choice-workspace]');
   if (!choiceResult) return;
 
   if (!IdealBodySelector.selectedBodyImage) {
+    workspace?.classList.remove('has-selection');
     choiceResult.textContent = '請先選擇一張圖片';
     return;
   }
 
+  workspace?.classList.add('has-selection');
   const stats = calculateBodyChoiceStats(IdealBodySelector.voteCounts, IdealBodySelector.selectedBodyImage);
   IdealBodySelector.percentage = stats.percentage;
+  const minimumSharedSampleSize = 5;
+  const hasSharedStats = IdealBodySelector.statsSource === 'firebase';
+  const hasEnoughSharedStats = hasSharedStats && stats.totalCount >= minimumSharedSampleSize;
 
-  if (stats.totalCount === 0) {
+  if (!hasEnoughSharedStats) {
+    const statsMessage = hasSharedStats
+      ? `目前共有 ${stats.totalCount} 位使用者完成選擇，樣本尚未達 ${minimumSharedSampleSize} 筆，因此暫不顯示比例。`
+      : 'Firebase 尚未連線，目前只有本機暫存選擇，因此暫不顯示百分比。';
     choiceResult.innerHTML = `
       <article class="body-choice-stat-card">
         <p class="body-choice-selected">你的選擇：${IdealBodySelector.selectedBodyImage.label}</p>
+        <p>${IdealBodySelector.selectedBodyImage.selectionNote}</p>
         <p>你選擇的體態大約落在 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間。</p>
-        <p>目前還沒有足夠資料進行比較。</p>
-        <button class="button body-choice-next-button" type="button" onclick="scrollToSection('frame-9')">繼續進入體態分析</button>
+        <div class="body-choice-stat-main">
+          <strong>資料不足</strong>
+          <span>連線共用統計後再進行比較</span>
+        </div>
+        <p>${statsMessage}</p>
+        ${hasSharedStats ? '' : '<p class="body-choice-local-note">目前僅顯示本機暫存資料。</p>'}
+        <div class="body-choice-action-row">
+          <button class="button" type="button" data-reset-body-choice>重新選擇</button>
+          <button class="button body-choice-next-button" type="button" onclick="scrollToSection('frame-9')">繼續進入體態分析</button>
+        </div>
       </article>
     `;
     return;
@@ -236,6 +264,7 @@ function updateBodyChoiceResult() {
   choiceResult.innerHTML = `
     <article class="body-choice-stat-card">
       <p class="body-choice-selected">你的選擇：${IdealBodySelector.selectedBodyImage.label}</p>
+      <p>${IdealBodySelector.selectedBodyImage.selectionNote}</p>
       <p>你選擇的體態大約落在 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間。</p>
       <div class="body-choice-stat-main">
         <strong>${stats.percentage}%</strong>
@@ -246,9 +275,11 @@ function updateBodyChoiceResult() {
       </div>
       <p class="body-choice-stat-count">${stats.sameRangeCount} / ${stats.totalCount} 人選擇這個體脂區間</p>
       <p>目前共有 ${stats.totalCount} 位使用者完成選擇。其中有 ${stats.sameRangeCount} 位使用者也選擇了 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間，約佔所有選擇的 ${stats.percentage}%。</p>
-      <p>這代表在目前樣本中，這個體脂區間是較常被選作理想體態的範圍之一。</p>
-      ${IdealBodySelector.statsSource === 'local' ? '<p class="body-choice-local-note">目前僅顯示本機暫存資料。</p>' : ''}
-      <button class="button body-choice-next-button" type="button" onclick="scrollToSection('frame-9')">繼續進入體態分析</button>
+      <p>這個比例只代表目前收集到的選擇分布，不代表健康程度或最佳體態。</p>
+      <div class="body-choice-action-row">
+        <button class="button" type="button" data-reset-body-choice>重新選擇</button>
+        <button class="button body-choice-next-button" type="button" onclick="scrollToSection('frame-9')">繼續進入體態分析</button>
+      </div>
     </article>
   `;
 }
@@ -258,7 +289,11 @@ function renderBodyOptions() {
   if (!optionGrid) return;
 
   optionGrid.innerHTML = '';
-  bodyOptions[IdealBodySelector.selectedGender].forEach((option) => {
+  const visibleOptions = IdealBodySelector.selectedBodyImage
+    ? [IdealBodySelector.selectedBodyImage]
+    : bodyOptions[IdealBodySelector.selectedGender];
+
+  visibleOptions.forEach((option) => {
     const button = document.createElement('button');
     button.className = 'body-option-card';
     button.type = 'button';
@@ -276,6 +311,7 @@ function renderBodyOptions() {
 
 async function initIdealBodySelector() {
   const optionGrid = document.getElementById('bodyOptionGrid');
+  const choiceResult = document.getElementById('choiceResult');
   if (!optionGrid) return;
 
   let firebase;
@@ -358,6 +394,14 @@ async function initIdealBodySelector() {
       IdealBodySelector.voteCounts = readLocalBodyChoiceStats();
       updateBodyChoiceResult();
     }
+  });
+
+  choiceResult?.addEventListener('click', (event) => {
+    if (!event.target.closest('[data-reset-body-choice]')) return;
+    IdealBodySelector.selectedOptionId = null;
+    IdealBodySelector.selectedBodyImage = null;
+    renderBodyOptions();
+    updateBodyChoiceResult();
   });
 
   firebase.listenBodyChoiceStats(
