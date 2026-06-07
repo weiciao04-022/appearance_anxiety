@@ -17,6 +17,12 @@ const siteAssetManifest = [
   './pic/E/male_2.png',
   './pic/E/male_3.png',
   './pic/E/male_4.png',
+  './pic/health-magnifier/A.png',
+  './pic/health-magnifier/B.png',
+  './pic/health-magnifier/C.png',
+  './pic/health-magnifier/behindA.png',
+  './pic/health-magnifier/behindB.png',
+  './pic/health-magnifier/behindC.png',
   './pic/body-game/card-healthy-meal.png',
   './pic/body-game/card-gym.png',
   './pic/body-game/card-injection.png',
@@ -1196,6 +1202,264 @@ function initBodyMangaScroll() {
   }
 }
 
+class HealthMagnifierChallenge {
+  constructor(root) {
+    this.root = root;
+    this.selectedPerson = null;
+    this.magnifierStarted = false;
+    this.viewedPersons = [];
+    this.activePerson = null;
+    this.people = [
+      {
+        id: 'fitness-creator',
+        name: '社群健身達人',
+        image: './pic/health-magnifier/A.png',
+        behindImage: './pic/health-magnifier/behindA.png',
+        visual: '運動服、線條明顯，經常分享健身內容',
+        impression: '體態很好、肌肉明顯，看起來非常自律',
+        facts: [
+          ['睡眠', '每天約 4–5 小時'],
+          ['運動', '高強度訓練'],
+          ['恢復', '長期恢復不足'],
+          ['飲食', '經常嚴格控制'],
+          ['心理狀態', '擔心身材退步']
+        ],
+        conclusion: '看起來最自律的人，不一定身心狀態最穩定。'
+      },
+      {
+        id: 'overworked-student',
+        name: '熬夜卷王',
+        image: './pic/health-magnifier/B.png',
+        behindImage: './pic/health-magnifier/behindB.png',
+        visual: '帽 T、電腦包，看起來像很認真念書的人',
+        impression: '外表與體態看起來普通',
+        facts: [
+          ['睡眠', '常常只睡 3–4 小時'],
+          ['運動', '久坐時間長'],
+          ['飲食', '三餐不固定'],
+          ['壓力', '長期偏高'],
+          ['心理狀態', '容易疲憊']
+        ],
+        conclusion: '外表正常，不代表身體正在被好好照顧。'
+      },
+      {
+        id: 'everyday-student',
+        name: '一般生活型學生',
+        image: './pic/health-magnifier/C.png',
+        behindImage: './pic/health-magnifier/behindC.png',
+        visual: '日常穿搭，沒有特別突出的體態',
+        impression: '沒有腹肌或馬甲線，體態看起來普通',
+        facts: [
+          ['睡眠', '約 7 小時'],
+          ['運動', '每週活動 2–3 次'],
+          ['飲食', '三餐規律'],
+          ['壓力', '大致穩定'],
+          ['心理狀態', '沒有長期身材焦慮']
+        ],
+        conclusion: '健康不一定最顯眼。'
+      }
+    ];
+  }
+
+  personVisual(person, revealLife = false) {
+    const image = revealLife ? person.behindImage : person.image;
+    return `
+      <div class="health-person-visual ${revealLife ? 'is-life-revealed' : ''}">
+        <img
+          src="${image}"
+          alt="${revealLife ? `${person.name}的生活狀態` : `${person.name}人物圖`}"
+          onerror="this.hidden=true;this.parentElement.classList.add('is-placeholder')"
+        />
+        <span class="health-person-silhouette" aria-hidden="true"></span>
+        <small>圖片預留位置</small>
+      </div>
+    `;
+  }
+
+  selectionCards() {
+    return this.people.map((person, index) => `
+      <article class="health-person-card" style="--card-order:${index}">
+        ${this.personVisual(person)}
+        <div class="health-person-card-copy">
+          <p>角色 ${String.fromCharCode(65 + index)}</p>
+          <h3>${person.name}</h3>
+          <span>${person.visual}</span>
+          <button type="button" data-select-health-person="${person.id}">我選這位</button>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  magnifierCards() {
+    return this.people.map((person, index) => {
+      const viewed = this.viewedPersons.includes(person.id);
+      const selected = this.selectedPerson === person.id;
+      const active = this.activePerson === person.id;
+      return `
+        <article class="health-person-card health-person-card-review ${viewed ? 'is-viewed' : ''} ${active ? 'is-active' : ''}" style="--card-order:${index}">
+          ${this.personVisual(person, active)}
+          <div class="health-person-card-copy">
+            <div class="health-person-card-meta">
+              <p>角色 ${String.fromCharCode(65 + index)}</p>
+              ${selected ? '<span>你起初的選擇</span>' : ''}
+            </div>
+            <h3>${person.name}</h3>
+            <span>${person.impression}</span>
+            <button type="button" data-view-health-person="${person.id}">
+              ${viewed ? '再次查看' : '用放大鏡查看'}
+            </button>
+          </div>
+        </article>
+      `;
+    }).join('');
+  }
+
+  detailCard() {
+    const person = this.people.find((item) => item.id === this.activePerson);
+    if (!person) {
+      return `
+        <div class="health-magnifier-empty">
+          <span class="health-magnifier-icon" aria-hidden="true"></span>
+          <p>點選任一角色，看看外表之外的生活狀態。</p>
+        </div>
+      `;
+    }
+
+    return `
+      <article class="health-magnifier-detail" aria-live="polite">
+        <header>
+          <span class="health-magnifier-icon" aria-hidden="true"></span>
+          <div>
+            <p>健康放大鏡看到</p>
+            <h3>${person.name}</h3>
+          </div>
+        </header>
+        <div class="health-magnifier-facts">
+          ${person.facts.map(([label, value]) => `
+            <div>
+              <span>${label}</span>
+              <b>${value}</b>
+            </div>
+          `).join('')}
+        </div>
+        <p class="health-magnifier-conclusion">${person.conclusion}</p>
+      </article>
+    `;
+  }
+
+  summaryCard() {
+    if (this.viewedPersons.length !== this.people.length) return '';
+    return `
+      <article class="health-magnifier-summary">
+        <p>三個人的外表，都只說出了一小部分</p>
+        <h2>健康不是長得像誰</h2>
+        <div>
+          <p>我們很容易透過體型、體重或肌肉線條，判斷一個人是否健康。</p>
+          <p>但真正影響健康的，往往是外表看不見的睡眠、飲食、運動習慣、壓力、心理狀態，以及身體恢復能力。</p>
+          <p>體態與健康確實存在關係；可是當對體態的在意變成長期焦慮、嚴格控制或心理壓力，追求健康的行為也可能反過來消耗健康。</p>
+        </div>
+        <strong>健康體態，不該只有一種樣子。</strong>
+      </article>
+    `;
+  }
+
+  renderSelection() {
+    return `
+      <div class="health-magnifier-inner health-magnifier-step">
+        <header class="health-magnifier-heading">
+          <p>健康放大鏡挑戰</p>
+          <h2>誰看起來最健康？</h2>
+          <span>如果只能看外表，你會選哪一位？</span>
+          <small>
+            體態與健康確實存在關係。但當對體態的在意逐漸變成壓力，
+            影響睡眠、飲食、情緒與生活，追求健康的過程也可能反過來消耗健康。
+          </small>
+        </header>
+        <div class="health-person-grid">${this.selectionCards()}</div>
+        <p class="health-magnifier-caption">先憑第一印象選擇。這裡沒有標準答案。</p>
+      </div>
+    `;
+  }
+
+  renderTransition() {
+    const person = this.people.find((item) => item.id === this.selectedPerson);
+    return `
+      <div class="health-magnifier-inner health-magnifier-transition">
+        <p>你選擇了「${person?.name || ''}」</p>
+        <h2>你看到的，<br />真的是健康的全部嗎？</h2>
+        <button type="button" data-start-magnifier>
+          <span class="health-magnifier-icon" aria-hidden="true"></span>
+          拿起健康放大鏡
+        </button>
+      </div>
+    `;
+  }
+
+  renderMagnifier() {
+    return `
+      <div class="health-magnifier-inner health-magnifier-step">
+        <header class="health-magnifier-heading health-magnifier-heading-compact">
+          <p>外表之外</p>
+          <h2>用放大鏡看看他們的生活</h2>
+          <span>已查看 ${this.viewedPersons.length} / ${this.people.length} 位</span>
+        </header>
+        <div class="health-person-grid">${this.magnifierCards()}</div>
+        <div class="health-magnifier-reveal">${this.detailCard()}</div>
+        ${this.summaryCard()}
+      </div>
+    `;
+  }
+
+  render() {
+    this.root.classList.remove('is-ready');
+    if (!this.selectedPerson) {
+      this.root.innerHTML = this.renderSelection();
+    } else if (!this.magnifierStarted) {
+      this.root.innerHTML = this.renderTransition();
+    } else {
+      this.root.innerHTML = this.renderMagnifier();
+    }
+    window.requestAnimationFrame(() => this.root.classList.add('is-ready'));
+  }
+
+  handleClick(event) {
+    const selectButton = event.target.closest('[data-select-health-person]');
+    if (selectButton) {
+      this.selectedPerson = selectButton.dataset.selectHealthPerson;
+      this.render();
+      return;
+    }
+
+    if (event.target.closest('[data-start-magnifier]')) {
+      this.magnifierStarted = true;
+      this.render();
+      return;
+    }
+
+    const viewButton = event.target.closest('[data-view-health-person]');
+    if (viewButton) {
+      this.activePerson = viewButton.dataset.viewHealthPerson;
+      if (!this.viewedPersons.includes(this.activePerson)) {
+        this.viewedPersons = [...this.viewedPersons, this.activePerson];
+      }
+      this.render();
+    }
+  }
+
+  mount() {
+    this.root.addEventListener('click', (event) => this.handleClick(event));
+    this.render();
+  }
+}
+
+function initHealthMagnifierChallenge() {
+  const root = document.querySelector('[data-health-magnifier-challenge]');
+  if (!root) return;
+  window.healthMagnifierChallenge = new HealthMagnifierChallenge(root);
+  window.healthMagnifierChallenge.mount();
+}
+
 initDynamicContentTransitions();
+initHealthMagnifierChallenge();
 initBodyMangaScroll();
 initSitePreloader();
