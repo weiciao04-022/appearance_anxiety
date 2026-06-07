@@ -14,7 +14,7 @@
   <link rel="preload" as="image" href="./pic/B/B_male15-18%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male20-25%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male%3E30%25.png" />
-  <link rel="stylesheet" href="style.css?v=20260607-3" />
+  <link rel="stylesheet" href="style.css?v=20260607-4" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
@@ -3097,14 +3097,26 @@
           <span>03</span>
           <p>當我們想找到答案，搜尋欄也開始把焦慮整理成一個又一個看似可執行的問題。</p>
         </div>
-        <div class="search-widget" data-manga-search>
-          <button class="search-field" type="button" aria-expanded="false" aria-controls="mangaSearchSuggestions">
+        <div class="search-streams" aria-label="持續出現的體態相關搜尋">
+          <div class="search-field search-field-typing">
             <span class="search-icon" aria-hidden="true"></span>
-            <span class="search-query" data-search-query>搜尋你想改變的地方</span>
-          </button>
-          <div class="search-suggestions" id="mangaSearchSuggestions" hidden>
-            <p>熱門搜尋</p>
-            <div data-search-suggestions></div>
+            <span class="search-query" data-typing-search="0"></span>
+          </div>
+          <div class="search-field search-field-typing">
+            <span class="search-icon" aria-hidden="true"></span>
+            <span class="search-query" data-typing-search="1"></span>
+          </div>
+          <div class="search-field search-field-typing">
+            <span class="search-icon" aria-hidden="true"></span>
+            <span class="search-query" data-typing-search="2"></span>
+          </div>
+          <div class="search-field search-field-typing">
+            <span class="search-icon" aria-hidden="true"></span>
+            <span class="search-query" data-typing-search="3"></span>
+          </div>
+          <div class="search-field search-field-typing">
+            <span class="search-icon" aria-hidden="true"></span>
+            <span class="search-query" data-typing-search="4"></span>
           </div>
         </div>
       </div>
@@ -3128,8 +3140,30 @@
         </div>
       </div>
     </article>
+
+    <section id="healthy-body-definition" class="healthy-body-definition" aria-labelledby="healthyBodyDefinitionTitle">
+      <p>回到身體本身</p>
+      <h2 id="healthyBodyDefinitionTitle">什麼是健康的體態？</h2>
+      <div class="healthy-body-definition-grid">
+        <article>
+          <span>01</span>
+          <h3>能支持日常生活</h3>
+          <p>有足夠體力完成學習、工作、移動與休息，而不是只追求外觀看起來符合某種標準。</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>能穩定地照顧身體</h3>
+          <p>飲食、活動與睡眠可以長期維持，不需要用極端限制換取短時間的數字改變。</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>不被單一數字定義</h3>
+          <p>BMI、體脂與體重只是理解身體的部分線索，也需要一起看身體感受與心理狀態。</p>
+        </article>
+      </div>
+    </section>
   </section>
 
-  <script src="script.js?v=20260607-3"></script>
+  <script src="script.js?v=20260607-4"></script>
 </body>
 </html>

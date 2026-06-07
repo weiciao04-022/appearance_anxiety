@@ -1081,7 +1081,7 @@ function initBodyMangaScroll() {
 
   const panels = Array.from(section.querySelectorAll('[data-manga-panel]'));
   const videoOrbit = section.querySelector('[data-video-orbit]');
-  const searchWidget = section.querySelector('[data-manga-search]');
+  const typingSearchFields = Array.from(section.querySelectorAll('[data-typing-search]'));
 
   const videoCards = [
     { type: 'video', src: './video/body-feed/weightloss.m4v', title: '減脂訓練' },
@@ -1099,7 +1099,29 @@ function initBodyMangaScroll() {
     '瘦手臂最快方法',
     '不吃晚餐會瘦嗎',
     '如何改善梨形身材',
-    '短時間變瘦方法'
+    '短時間變瘦方法',
+    '男生胸肌怎麼練',
+    '怎麼讓肩膀變寬',
+    '怎麼瘦小腹',
+    '一個月可以瘦幾公斤',
+    '早餐不吃會變瘦嗎',
+    '低碳飲食有效嗎',
+    '每天量體重正常嗎',
+    'BMI正常但看起來胖',
+    '體脂多少才算好看',
+    '怎麼練出腰線',
+    '如何消除副乳',
+    '小腿肌怎麼消',
+    '增肌一定要喝乳清嗎',
+    '吃健康餐真的會瘦嗎',
+    '每天運動多久才會瘦',
+    '怎麼避免復胖',
+    '體重沒變但看起來變胖',
+    '如何快速增加肌肉',
+    '瘦瘦針效果多久',
+    '網紅減脂菜單可以照吃嗎',
+    '晚上幾點後不能吃東西',
+    '怎麼停止和別人比較身材'
   ];
 
   if (videoOrbit) {
@@ -1128,47 +1150,48 @@ function initBodyMangaScroll() {
           entry.target.classList.add('is-visible');
           videos.forEach((video) => video.play().catch(() => {}));
         } else {
+          entry.target.classList.remove('is-visible');
           videos.forEach((video) => video.pause());
         }
       });
-    }, { threshold: 0.35 });
+    }, { threshold: 0.22 });
 
     panels.forEach((panel) => mangaObserver.observe(panel));
   } else {
     panels.forEach((panel) => panel.classList.add('is-visible'));
   }
 
-  if (searchWidget) {
-    const searchField = searchWidget.querySelector('.search-field');
-    const query = searchWidget.querySelector('[data-search-query]');
-    const suggestions = searchWidget.querySelector('.search-suggestions');
-    const suggestionList = searchWidget.querySelector('[data-search-suggestions]');
+  if (typingSearchFields.length) {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
 
-    if (suggestionList) {
-      suggestionList.innerHTML = searchTerms.map((term) => (
-        `<button class="search-suggestion" type="button" data-search-term="${term}">${term}</button>`
-      )).join('');
-    }
+    typingSearchFields.forEach((field, fieldIndex) => {
+      const assignedTerms = searchTerms.filter((_, termIndex) => termIndex % typingSearchFields.length === fieldIndex);
+      if (prefersReducedMotion) {
+        field.textContent = assignedTerms[0];
+        return;
+      }
 
-    const setSuggestionsOpen = (isOpen) => {
-      if (!searchField || !suggestions) return;
-      searchField.setAttribute('aria-expanded', String(isOpen));
-      suggestions.hidden = !isOpen;
-    };
+      const runTypingLoop = async () => {
+        let termIndex = 0;
+        await wait(fieldIndex * 320);
+        while (document.documentElement.contains(field)) {
+          const term = assignedTerms[termIndex % assignedTerms.length];
+          for (let characterIndex = 1; characterIndex <= term.length; characterIndex += 1) {
+            field.textContent = term.slice(0, characterIndex);
+            await wait(75 + fieldIndex * 4);
+          }
+          await wait(1150 + fieldIndex * 130);
+          for (let characterIndex = term.length - 1; characterIndex >= 0; characterIndex -= 1) {
+            field.textContent = term.slice(0, characterIndex);
+            await wait(34);
+          }
+          await wait(280);
+          termIndex += 1;
+        }
+      };
 
-    searchField?.addEventListener('click', () => {
-      setSuggestionsOpen(searchField.getAttribute('aria-expanded') !== 'true');
-    });
-
-    suggestionList?.addEventListener('click', (event) => {
-      const suggestion = event.target.closest('[data-search-term]');
-      if (!suggestion) return;
-      if (query) query.textContent = suggestion.dataset.searchTerm;
-      setSuggestionsOpen(false);
-    });
-
-    document.addEventListener('click', (event) => {
-      if (!searchWidget.contains(event.target)) setSuggestionsOpen(false);
+      runTypingLoop();
     });
   }
 }
