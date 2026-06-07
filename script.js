@@ -8,7 +8,15 @@ const siteAssetManifest = [
   './pic/B/B_male10-14%25.png',
   './pic/B/B_male15-18%25.png',
   './pic/B/B_male20-25%25.png',
-  './pic/B/B_male%3E30%25.png'
+  './pic/B/B_male%3E30%25.png',
+  './pic/C/01.png',
+  './pic/C/02.png',
+  './pic/C/03.png',
+  './pic/C/04.png',
+  './pic/body-game/card-healthy-meal.png',
+  './pic/body-game/card-gym.png',
+  './pic/body-game/card-injection.png',
+  './pic/body-game/card-influencer-challenge.png'
 ];
 
 function preloadImage(src) {
@@ -1063,5 +1071,90 @@ document.querySelectorAll('.reveal').forEach((element) => {
   revealObserver.observe(element);
 });
 
+function initBodyMangaScroll() {
+  const section = document.querySelector('[data-manga-scroll], #body-manga-scroll');
+  if (!section) return;
+
+  const panels = Array.from(section.querySelectorAll('[data-manga-panel]'));
+  const videoOrbit = section.querySelector('[data-video-orbit]');
+  const searchWidget = section.querySelector('[data-manga-search]');
+
+  // 保留短影音資料結構，之後填入 src 即可改成真實影片預覽。
+  const videoCards = [
+    { type: 'video', src: '', title: '一週瘦身挑戰' },
+    { type: 'video', src: '', title: '燃脂運動' },
+    { type: 'video', src: '', title: '健康餐日記' },
+    { type: 'video', src: '', title: '體態改造紀錄' },
+    { type: 'video', src: '', title: '減脂菜單' }
+  ];
+
+  const searchTerms = [
+    '7天內瘦5公斤',
+    '如何減大腿肉',
+    '體脂怎麼降最快',
+    '女生如何練腹肌',
+    '瘦手臂最快方法',
+    '不吃晚餐會瘦嗎',
+    '如何改善梨形身材',
+    '短時間變瘦方法'
+  ];
+
+  if (videoOrbit) {
+    videoOrbit.innerHTML = videoCards.map((card) => `
+      <article class="video-card" data-video-src="${card.src}">
+        <span class="video-card-play" aria-hidden="true"></span>
+        <span class="video-card-title">${card.title}</span>
+      </article>
+    `).join('');
+  }
+
+  if ('IntersectionObserver' in window) {
+    const mangaObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.35 });
+
+    panels.forEach((panel) => mangaObserver.observe(panel));
+  } else {
+    panels.forEach((panel) => panel.classList.add('is-visible'));
+  }
+
+  if (searchWidget) {
+    const searchField = searchWidget.querySelector('.search-field');
+    const query = searchWidget.querySelector('[data-search-query]');
+    const suggestions = searchWidget.querySelector('.search-suggestions');
+    const suggestionList = searchWidget.querySelector('[data-search-suggestions]');
+
+    if (suggestionList) {
+      suggestionList.innerHTML = searchTerms.map((term) => (
+        `<button class="search-suggestion" type="button" data-search-term="${term}">${term}</button>`
+      )).join('');
+    }
+
+    const setSuggestionsOpen = (isOpen) => {
+      if (!searchField || !suggestions) return;
+      searchField.setAttribute('aria-expanded', String(isOpen));
+      suggestions.hidden = !isOpen;
+    };
+
+    searchField?.addEventListener('click', () => {
+      setSuggestionsOpen(searchField.getAttribute('aria-expanded') !== 'true');
+    });
+
+    suggestionList?.addEventListener('click', (event) => {
+      const suggestion = event.target.closest('[data-search-term]');
+      if (!suggestion) return;
+      if (query) query.textContent = suggestion.dataset.searchTerm;
+      setSuggestionsOpen(false);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!searchWidget.contains(event.target)) setSuggestionsOpen(false);
+    });
+  }
+}
+
 initDynamicContentTransitions();
+initBodyMangaScroll();
 initSitePreloader();

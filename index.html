@@ -14,7 +14,7 @@
   <link rel="preload" as="image" href="./pic/B/B_male15-18%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male20-25%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male%3E30%25.png" />
-  <link rel="stylesheet" href="style.css?v=20260606-7" />
+  <link rel="stylesheet" href="style.css?v=20260607-1" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
@@ -1005,6 +1005,8 @@
       }
 
       #frame-9 .product-carousel {
+        --carousel-card-width: min(360px, 34vw);
+        --carousel-side-offset: clamp(250px, 25vw, 390px);
         min-height: 490px;
         position: relative;
         overflow: hidden;
@@ -1014,7 +1016,7 @@
         position: absolute;
         top: 0;
         left: 50%;
-        width: min(360px, 72%);
+        width: var(--carousel-card-width);
         min-height: 460px;
         align-content: start;
         display: grid;
@@ -1038,17 +1040,28 @@
       }
 
       #frame-9 .product-card.is-left {
-        opacity: 0.38;
+        left: calc(50% - var(--carousel-side-offset));
+        opacity: 0.5;
         pointer-events: auto;
         z-index: 2;
-        transform: translateX(-112%) scale(0.86);
+        transform: translateX(-50%) scale(0.84);
       }
 
       #frame-9 .product-card.is-right {
-        opacity: 0.38;
+        left: calc(50% + var(--carousel-side-offset));
+        opacity: 0.5;
         pointer-events: auto;
         z-index: 2;
-        transform: translateX(12%) scale(0.86);
+        transform: translateX(-50%) scale(0.84);
+      }
+
+      #frame-9 .product-card.is-left:hover,
+      #frame-9 .product-card.is-right:hover {
+        opacity: 0.72;
+      }
+
+      #frame-9 .product-card .body-game-image img {
+        object-fit: cover;
       }
 
       #frame-9 .product-card.is-completed::before {
@@ -1427,20 +1440,21 @@
         }
 
         #frame-9 .product-carousel {
+          --carousel-card-width: min(340px, 76vw);
+          --carousel-side-offset: 68vw;
           min-height: 470px;
         }
 
         #frame-9 .product-card {
-          width: 88%;
           min-height: 440px;
         }
 
         #frame-9 .product-card.is-left {
-          transform: translateX(-118%) scale(0.82);
+          transform: translateX(-50%) scale(0.78);
         }
 
         #frame-9 .product-card.is-right {
-          transform: translateX(18%) scale(0.82);
+          transform: translateX(-50%) scale(0.78);
         }
       }
     </style>
@@ -1956,17 +1970,6 @@
                   <i data-lucide="info"></i>
                   <span><strong>免責聲明：</strong>本網站並非專業醫療、營養或健康診斷單位，所有估算結果僅供新聞專題互動體驗與一般參考，不能取代醫師、營養師或其他專業人員建議。</span>
                 </aside>
-              </div>
-              <div class="health-report-actions" data-html2canvas-ignore="true">
-                <button class="button health-report-download" type="button" data-download-health-report>
-                  <i data-lucide="download"></i>
-                  儲存報告圖片
-                </button>
-                <button class="button health-report-start" type="button" data-start-social>
-                  開始探索
-                  <i data-lucide="arrow-right"></i>
-                </button>
-                <span class="health-report-download-status" data-report-download-status aria-live="polite"></span>
               </div>
             </article>
           `;
@@ -2795,6 +2798,66 @@
     </script>
   </section>
 
-  <script src="script.js?v=20260606-7"></script>
+  <section id="body-manga-scroll" class="manga-scroll-section" aria-label="體態焦慮滾動漫畫">
+    <header class="manga-scroll-intro">
+      <p>從數據走進日常</p>
+      <h2>當身體開始被一則則內容重新定義</h2>
+    </header>
+
+    <article class="manga-panel from-left" data-manga-panel>
+      <div class="manga-visual">
+        <img class="manga-image" src="./pic/C/01.png" alt="鏡子與社群影像漫畫" />
+      </div>
+      <div class="manga-dialogue">
+        <span>01</span>
+        <p>她不是突然開始在意身體，而是在一次又一次滑過別人的照片後，開始懷疑鏡子裡的自己。</p>
+      </div>
+    </article>
+
+    <article class="manga-panel from-right manga-video-panel" data-manga-panel>
+      <div class="manga-visual manga-video-scene">
+        <img class="manga-image" src="./pic/C/02.png" alt="被健身與減肥影片包圍的漫畫" />
+        <div class="video-orbit" data-video-orbit aria-label="推薦短影音"></div>
+      </div>
+      <div class="manga-dialogue">
+        <span>02</span>
+        <p>演算法沒有明說標準，卻不斷把健身、減脂、飲食控制與身材改造推到她眼前。</p>
+      </div>
+    </article>
+
+    <article class="manga-panel from-left manga-search-panel" data-manga-panel>
+      <div class="manga-visual">
+        <img class="manga-image" src="./pic/C/03.png" alt="搜尋身材問題的漫畫" />
+      </div>
+      <div class="manga-panel-side">
+        <div class="manga-dialogue">
+          <span>03</span>
+          <p>當她想找到答案，搜尋欄也開始把焦慮整理成一個又一個看似可執行的問題。</p>
+        </div>
+        <div class="search-widget" data-manga-search>
+          <button class="search-field" type="button" aria-expanded="false" aria-controls="mangaSearchSuggestions">
+            <span class="search-icon" aria-hidden="true"></span>
+            <span class="search-query" data-search-query>搜尋你想改變的地方</span>
+          </button>
+          <div class="search-suggestions" id="mangaSearchSuggestions" hidden>
+            <p>熱門搜尋</p>
+            <div data-search-suggestions></div>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="manga-panel from-right" data-manga-panel>
+      <div class="manga-visual">
+        <img class="manga-image" src="./pic/C/04.png" alt="身體數據報告漫畫" />
+      </div>
+      <div class="manga-dialogue">
+        <span>04</span>
+        <p>數字看起來客觀，卻也可能把身體切成一欄欄需要改善的指標。問題不只是數據本身，而是我們如何解讀它。</p>
+      </div>
+    </article>
+  </section>
+
+  <script src="script.js?v=20260607-1"></script>
 </body>
 </html>
