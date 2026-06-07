@@ -1537,19 +1537,6 @@ button:active,
   background: #dfe2e1;
 }
 
-.manga-frame figcaption {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  padding: 5px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 4px;
-  background: rgba(25, 31, 32, 0.68);
-  color: #fff;
-  font-size: 0.68rem;
-  backdrop-filter: blur(8px);
-}
-
 .manga-center {
   position: absolute;
   top: 50%;
@@ -1902,13 +1889,6 @@ button:active,
 
   .manga-image {
     height: min(70vh, 660px);
-  }
-
-  .manga-frame figcaption {
-    right: 7px;
-    bottom: 7px;
-    padding: 4px 6px;
-    font-size: 0.58rem;
   }
 
   .manga-center {

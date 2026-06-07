@@ -934,13 +934,14 @@
         }
 
         #frame-9 .body-overview-dashboard {
-          width: min(860px, 88vw);
+          width: min(675px, 82vw);
           gap: 8px;
         }
 
         #frame-9 .body-health-report {
-          gap: 6px;
-          padding: 13px 22px;
+          gap: 14px;
+          min-height: 900px;
+          padding: 22px 26px;
           border-radius: 20px;
           box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
         }
@@ -958,7 +959,7 @@
         }
 
         #frame-9 .health-report-heading h3 {
-          font-size: 1.65rem;
+          font-size: 1.9rem;
         }
 
         #frame-9 .health-report-heading > p:last-child {
@@ -973,20 +974,12 @@
         }
 
         #frame-9 .health-report-main {
-          grid-template-columns: minmax(145px, 0.9fr) minmax(135px, 0.78fr) minmax(145px, 0.8fr) minmax(205px, 1.18fr);
-          gap: 15px;
+          grid-template-columns: minmax(150px, 0.9fr) minmax(130px, 0.72fr) minmax(205px, 1.15fr);
+          gap: 18px;
         }
 
         #frame-9 .report-column {
-          gap: 10px;
-        }
-
-        #frame-9 .report-column:first-child {
-          display: contents;
-        }
-
-        #frame-9 .report-column:first-child > section {
-          min-width: 0;
+          gap: 18px;
         }
 
         #frame-9 .report-panel-title {
@@ -995,7 +988,7 @@
         }
 
         #frame-9 .report-data-row {
-          padding: 6px 2px;
+          padding: 9px 2px;
           font-size: 0.8rem;
         }
 
@@ -1004,8 +997,8 @@
         }
 
         #frame-9 .report-bmi-card {
-          gap: 4px;
-          padding: 9px 11px;
+          gap: 6px;
+          padding: 13px;
           border-radius: 10px;
         }
 
@@ -1023,19 +1016,12 @@
         }
 
         #frame-9 .report-figure {
-          min-height: 225px;
-          gap: 5px;
-          padding: 5px;
+          min-height: 390px;
+          padding: 8px;
         }
 
         #frame-9 .report-figure img {
-          height: 205px;
-        }
-
-        #frame-9 .report-figure-label {
-          max-width: 120px;
-          font-size: 0.68rem;
-          line-height: 1.45;
+          height: 360px;
         }
 
         #frame-9 .report-energy-number b {
@@ -1048,49 +1034,21 @@
         }
 
         #frame-9 .report-chart {
-          gap: 4px;
+          gap: 10px;
         }
 
         #frame-9 .report-chart-row {
-          gap: 3px;
+          gap: 5px;
         }
 
         #frame-9 .report-chart-track {
-          height: 4px;
-        }
-
-        #frame-9 .report-nutrition-band {
-          grid-template-columns: 145px minmax(0, 1fr);
-          align-items: center;
-          gap: 8px;
-          padding: 7px 10px;
-          border-radius: 14px;
-        }
-
-        #frame-9 .report-nutrition-band > .report-panel-title {
-          padding: 0;
-          border-bottom: 0;
-          line-height: 1.35;
-        }
-
-        #frame-9 .report-nutrition-item {
-          gap: 3px;
-          padding: 2px 8px;
-        }
-
-        #frame-9 .report-nutrition-item span,
-        #frame-9 .report-nutrition-item small {
-          font-size: 0.7rem;
-        }
-
-        #frame-9 .report-nutrition-item b {
-          font-size: 1.08rem;
+          height: 6px;
         }
 
         #frame-9 .body-fat-reference {
-          grid-template-columns: minmax(0, 1fr) 165px;
+          grid-template-columns: minmax(0, 1fr) 145px;
           gap: 16px;
-          padding: 9px 12px;
+          padding: 14px;
           border-radius: 14px;
         }
 
@@ -1103,8 +1061,8 @@
         }
 
         #frame-9 .body-fat-reference-copy p {
-          font-size: 0.7rem;
-          line-height: 1.5;
+          font-size: 0.76rem;
+          line-height: 1.6;
         }
 
         #frame-9 .body-fat-reference-source {
@@ -1113,7 +1071,7 @@
         }
 
         #frame-9 .body-fat-reference-stat {
-          min-height: 92px;
+          min-height: 112px;
           padding: 8px;
         }
 
@@ -1129,38 +1087,12 @@
           font-size: 0.6rem;
         }
 
-        #frame-9 .health-report-uses {
-          gap: 6px;
-          padding: 7px 10px;
-          border-radius: 12px;
-        }
-
-        #frame-9 .health-report-uses h4 {
-          font-size: 0.8rem;
-        }
-
-        #frame-9 .health-report-use-grid {
-          gap: 14px;
-        }
-
-        #frame-9 .health-report-use-item {
-          gap: 7px;
-          font-size: 0.7rem;
-          line-height: 1.4;
-        }
-
-        #frame-9 .health-report-check {
-          width: 16px;
-          height: 16px;
-          font-size: 0.62rem;
-        }
-
         #frame-9 .health-report-disclaimer {
           gap: 9px;
-          padding: 7px 11px;
+          padding: 11px 13px;
           border-radius: 11px;
-          font-size: 0.68rem;
-          line-height: 1.5;
+          font-size: 0.72rem;
+          line-height: 1.55;
         }
       }
 
@@ -2103,7 +2035,7 @@
                   <div class="health-report-heading">
                     <p class="health-report-eyebrow">Personal Body Report</p>
                     <h3>個人身體健康報告</h3>
-                    <p>根據你輸入的身體資料，系統將估算每日基本營養需求，並作為後續互動體驗的參考。</p>
+                    <p>依據你輸入的資料，整理身體概況與每日基本營養估算。</p>
                   </div>
                   <span class="health-report-badge">
                     <i data-lucide="info"></i>
@@ -2119,8 +2051,6 @@
                         <div class="report-data-row"><span>身高</span><b>${userProfile.height} cm</b></div>
                         <div class="report-data-row"><span>體重</span><b>${userProfile.weight} kg</b></div>
                         <div class="report-data-row"><span>年齡</span><b>${userProfile.age} 歲</b></div>
-                        <div class="report-data-row"><span>性別</span><b>${reportGenderLabel(userProfile.gender)}</b></div>
-                        <div class="report-data-row"><span>活動量</span><b>${reportActivityLabel(userProfile.activityLevel)}</b></div>
                       </div>
                     </section>
                     <section>
@@ -2139,7 +2069,6 @@
 
                   <figure class="report-figure">
                     <img src="${figure.src}" alt="${figure.label}" onerror="this.hidden = true; this.nextElementSibling.textContent = '人物圖像待置入';" />
-                    <figcaption class="report-figure-label">${figure.label}</figcaption>
                   </figure>
 
                   <div class="report-column">
@@ -2157,18 +2086,6 @@
                       ${reportChartRow('脂肪', report.fat, 'g', (report.fat / 100) * 100)}
                       ${reportChartRow('飲水', report.water, 'ml', (report.water / 3000) * 100)}
                     </section>
-                    <p class="report-bmi-note">圖表用於快速比較各項估算值的相對份量，不代表健康評分。</p>
-                  </div>
-                </section>
-
-                <section class="report-nutrition-band" aria-labelledby="nutritionTitle">
-                  <h4 class="report-panel-title" id="nutritionTitle">每日飲食建議摘要</h4>
-                  <div class="report-nutrition-grid">
-                    <div class="report-nutrition-item"><span>熱量</span><b>${report.calories}</b><small>kcal</small></div>
-                    <div class="report-nutrition-item"><span>蛋白質</span><b>${report.protein}</b><small>g</small></div>
-                    <div class="report-nutrition-item"><span>碳水化合物</span><b>${report.carb}</b><small>g</small></div>
-                    <div class="report-nutrition-item"><span>脂肪</span><b>${report.fat}</b><small>g</small></div>
-                    <div class="report-nutrition-item"><span>飲水量</span><b>${report.water}</b><small>ml</small></div>
                   </div>
                 </section>
 
@@ -2176,9 +2093,8 @@
                   <div class="body-fat-reference-copy">
                     <h4 id="bodyFatReferenceTitle">台灣成人體脂率參考</h4>
                     <p>${bodyFatReference.comparison}</p>
-                    <p>該調查將男性體脂肪 ≥25%、女性體脂肪 ≥30% 定義為體脂肪過高。BMI 與體脂率衡量的是不同面向；即使 BMI 在一般範圍內，也不能只靠體脂率判定肌少型肥胖，仍需肌肉量、身體組成與專業評估。</p>
                     <p class="body-fat-reference-source">
-                      資料：2017–2020 年國民營養健康調查，製表日期 2022/06/15。此處呈現調查原始比例，不採用社群文章延伸推估的肌少型肥胖盛行率。
+                      調查門檻：男性 ≥25%、女性 ≥30%。資料：2017–2020 年國民營養健康調查。
                     </p>
                   </div>
                   <div class="body-fat-reference-stat">
@@ -2192,15 +2108,6 @@
                         <strong>—</strong>
                         <span>無對應分組資料</span>
                       `}
-                  </div>
-                </section>
-
-                <section class="health-report-uses">
-                  <h4>系統將依據你的資料：</h4>
-                  <div class="health-report-use-grid">
-                    <p class="health-report-use-item"><span class="health-report-check">✓</span>計算健康餐是否符合需求</p>
-                    <p class="health-report-use-item"><span class="health-report-check">✓</span>模擬不同體態管理方式的影響</p>
-                    <p class="health-report-use-item"><span class="health-report-check">✓</span>產生個人化體驗結果</p>
                   </div>
                 </section>
 
@@ -3046,11 +2953,9 @@
       <div class="manga-pair">
         <figure class="manga-frame manga-frame-female">
           <img class="manga-image" src="./pic/E/female_1.png" alt="女性閱讀身體數據報告" />
-          <figcaption>女性視角</figcaption>
         </figure>
         <figure class="manga-frame manga-frame-male">
           <img class="manga-image" src="./pic/E/male_1.png" alt="男性閱讀身體數據報告" />
-          <figcaption>男性視角</figcaption>
         </figure>
       </div>
       <div class="manga-center">
@@ -3065,11 +2970,9 @@
       <div class="manga-pair">
         <figure class="manga-frame manga-frame-female">
           <img class="manga-image" src="./pic/E/female_2.png" alt="女性瀏覽健身與飲食內容" />
-          <figcaption>女性視角</figcaption>
         </figure>
         <figure class="manga-frame manga-frame-male">
           <img class="manga-image" src="./pic/E/male_2.png" alt="男性瀏覽健身與飲食內容" />
-          <figcaption>男性視角</figcaption>
         </figure>
       </div>
       <div class="video-orbit" data-video-orbit aria-label="推薦短影音"></div>
@@ -3085,11 +2988,9 @@
       <div class="manga-pair">
         <figure class="manga-frame manga-frame-female">
           <img class="manga-image" src="./pic/E/female_3.png" alt="女性被大量社群體態內容包圍" />
-          <figcaption>女性視角</figcaption>
         </figure>
         <figure class="manga-frame manga-frame-male">
           <img class="manga-image" src="./pic/E/male_3.png" alt="男性被大量社群體態內容包圍" />
-          <figcaption>男性視角</figcaption>
         </figure>
       </div>
       <div class="manga-center">
@@ -3126,11 +3027,9 @@
       <div class="manga-pair">
         <figure class="manga-frame manga-frame-female">
           <img class="manga-image" src="./pic/E/female_4.png" alt="女性在鏡中重新審視自己的身體" />
-          <figcaption>女性視角</figcaption>
         </figure>
         <figure class="manga-frame manga-frame-male">
           <img class="manga-image" src="./pic/E/male_4.png" alt="男性在鏡中重新審視自己的身體" />
-          <figcaption>男性視角</figcaption>
         </figure>
       </div>
       <div class="manga-center">
