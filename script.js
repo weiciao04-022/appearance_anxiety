@@ -23,6 +23,10 @@ const siteAssetManifest = [
   './pic/health-magnifier/behindA.png',
   './pic/health-magnifier/behindB.png',
   './pic/health-magnifier/behindC.png',
+  './pic/product-experience/healthmeal.png',
+  './pic/product-experience/gym.png',
+  './pic/product-experience/silmshot.png',
+  './pic/product-experience/influencerchallenge.png',
   './pic/body-game/card-healthy-meal.png',
   './pic/body-game/card-gym.png',
   './pic/body-game/card-injection.png',
@@ -1211,52 +1215,52 @@ class HealthMagnifierChallenge {
     this.activePerson = null;
     this.people = [
       {
-        id: 'fitness-creator',
-        name: '社群健身達人',
+        id: 'outdoor-student',
+        name: '戶外活動型學生',
         image: './pic/health-magnifier/A.png',
         behindImage: './pic/health-magnifier/behindA.png',
-        visual: '運動服、線條明顯，經常分享健身內容',
-        impression: '體態很好、肌肉明顯，看起來非常自律',
+        visual: '襯衫與休閒長褲，外表斯文，看不出明顯運動習慣',
+        impression: '外表偏瘦、穿著日常，看起來不像經常運動的人',
         facts: [
-          ['睡眠', '每天約 4–5 小時'],
-          ['運動', '高強度訓練'],
-          ['恢復', '長期恢復不足'],
-          ['飲食', '經常嚴格控制'],
-          ['心理狀態', '擔心身材退步']
+          ['睡眠', '大多維持約 7 小時'],
+          ['活動', '週末健行，平日步行移動'],
+          ['恢復', '會依疲勞程度調整行程'],
+          ['飲食', '三餐規律，不刻意極端限制'],
+          ['心理狀態', '重視體能感受多於外觀']
         ],
-        conclusion: '看起來最自律的人，不一定身心狀態最穩定。'
+        conclusion: '外表看不出肌肉線條，也可能擁有穩定而充足的日常活動。'
       },
       {
-        id: 'overworked-student',
-        name: '熬夜卷王',
+        id: 'high-intensity-student',
+        name: '高強度健身型學生',
         image: './pic/health-magnifier/B.png',
         behindImage: './pic/health-magnifier/behindB.png',
-        visual: '帽 T、電腦包，看起來像很認真念書的人',
-        impression: '外表與體態看起來普通',
+        visual: '貼身運動上衣與短褲，肌肉線條明顯',
+        impression: '體態精實、肌肉明顯，看起來非常自律',
         facts: [
-          ['睡眠', '常常只睡 3–4 小時'],
-          ['運動', '久坐時間長'],
-          ['飲食', '三餐不固定'],
-          ['壓力', '長期偏高'],
-          ['心理狀態', '容易疲憊']
+          ['睡眠', '經常只有 4–5 小時'],
+          ['運動', '頻繁安排高強度訓練'],
+          ['恢復', '疲累時仍擔心中斷進度'],
+          ['飲食', '長期嚴格控制份量'],
+          ['心理狀態', '害怕體態與表現退步']
         ],
-        conclusion: '外表正常，不代表身體正在被好好照顧。'
+        conclusion: '看起來最強壯的人，也可能正在承受恢復不足與維持體態的壓力。'
       },
       {
-        id: 'everyday-student',
-        name: '一般生活型學生',
+        id: 'steady-training-student',
+        name: '規律重訓型學生',
         image: './pic/health-magnifier/C.png',
         behindImage: './pic/health-magnifier/behindC.png',
-        visual: '日常穿搭，沒有特別突出的體態',
-        impression: '沒有腹肌或馬甲線，體態看起來普通',
+        visual: '寬鬆帽 T 與長褲，穿著看不出身體線條',
+        impression: '日常穿搭寬鬆，外表看不出固定重訓習慣',
         facts: [
-          ['睡眠', '約 7 小時'],
-          ['運動', '每週活動 2–3 次'],
-          ['飲食', '三餐規律'],
-          ['壓力', '大致穩定'],
-          ['心理狀態', '沒有長期身材焦慮']
+          ['睡眠', '平均維持 6–7 小時'],
+          ['運動', '每週規律重訓 2–3 次'],
+          ['恢復', '訓練日之間安排休息'],
+          ['飲食', '維持日常飲食與基本份量'],
+          ['心理狀態', '重視力量進步，不追求快速改變']
         ],
-        conclusion: '健康不一定最顯眼。'
+        conclusion: '寬鬆衣著遮住了訓練痕跡，也提醒我們無法只靠外表理解一個人的生活。'
       }
     ];
   }
@@ -1459,7 +1463,204 @@ function initHealthMagnifierChallenge() {
   window.healthMagnifierChallenge.mount();
 }
 
+class BodyManagementExperienceHub {
+  constructor(root) {
+    this.root = root;
+    this.activeMethod = null;
+    this.selectedChoice = null;
+    this.completedMethods = [];
+    this.lastFocusedElement = null;
+    this.methods = [
+      {
+        id: 'meal',
+        title: '健康餐',
+        image: './pic/product-experience/healthmeal.png',
+        description: '用一餐的選擇，看看營養、價格與持續執行之間如何拉扯。',
+        cost: '每餐約 NT$180－280',
+        prompt: '今天中午，你會怎麼選？',
+        choices: ['仔細搭配營養與份量', '先看價格再決定', '選最像社群健康餐的組合'],
+        result: '同一份「健康餐」，可能同時牽涉營養需求、預算與外表想像。'
+      },
+      {
+        id: 'gym',
+        title: '健身房',
+        image: './pic/product-experience/gym.png',
+        description: '會員費之外，時間、疲勞與社交安排也會影響能否持續。',
+        cost: '每月約 NT$1,000－1,800',
+        prompt: '忙碌的一天結束後，你會怎麼做？',
+        choices: ['照原訂計畫去健身', '改成短時間活動', '今天休息，明天再安排'],
+        result: '健身的成本不只在月費，也包含時間、恢復與持續執行的壓力。'
+      },
+      {
+        id: 'influencer',
+        title: '網紅減肥挑戰',
+        image: './pic/product-experience/influencerchallenge.png',
+        description: '看似簡單的挑戰，可能改變飢餓、情緒與看待自己的方式。',
+        cost: '看似低成本',
+        prompt: '看到「七天快速改變」貼文時，你會？',
+        choices: ['完全照著挑戰執行', '先查資料再調整', '收藏但不立刻開始'],
+        result: '低金錢門檻不代表沒有代價，焦慮、飢餓與反覆失控也值得被計入。'
+      },
+      {
+        id: 'injection',
+        title: '施打瘦瘦針',
+        image: './pic/product-experience/silmshot.png',
+        description: '快速改變的期待，也伴隨費用、身體反應與醫療評估。',
+        cost: '每月約 NT$6,000－15,000',
+        prompt: '面對快速見效的資訊，你第一步會？',
+        choices: ['先尋求合格醫療評估', '詢問使用過的朋友', '只比較價格與效果'],
+        result: '涉及藥物的體態管理，需要把身體狀況、風險與專業評估放在效果之前。'
+      }
+    ];
+  }
+
+  cards() {
+    return this.methods.map((method, index) => `
+      <article class="body-experience-card" style="--experience-order:${index}">
+        <div class="body-experience-card-image">
+          <img src="${method.image}" alt="${method.title}體驗封面" />
+          ${this.completedMethods.includes(method.id) ? '<span>已體驗</span>' : ''}
+        </div>
+        <div class="body-experience-card-copy">
+          <p>0${index + 1}</p>
+          <h3>${method.title}</h3>
+          <span>${method.description}</span>
+          <small>${method.cost}</small>
+          <button type="button" data-open-body-experience="${method.id}">開始體驗</button>
+        </div>
+      </article>
+    `).join('');
+  }
+
+  modal() {
+    const method = this.methods.find((item) => item.id === this.activeMethod);
+    if (!method) return '';
+    const finished = this.selectedChoice !== null;
+    return `
+      <div class="body-experience-modal" data-body-experience-modal>
+        <button class="body-experience-backdrop" type="button" data-close-body-experience aria-label="關閉體驗"></button>
+        <section class="body-experience-dialog" role="dialog" aria-modal="true" aria-labelledby="bodyExperienceTitle">
+          <button class="body-experience-close" type="button" data-close-body-experience aria-label="關閉體驗">×</button>
+          <div class="body-experience-dialog-media">
+            <img src="${method.image}" alt="" />
+          </div>
+          <div class="body-experience-dialog-content">
+            <p>體態管理方式體驗</p>
+            <h2 id="bodyExperienceTitle">${method.title}</h2>
+            ${finished ? `
+              <div class="body-experience-result" aria-live="polite">
+                <span>你的選擇</span>
+                <h3>${method.choices[this.selectedChoice]}</h3>
+                <p>${method.result}</p>
+              </div>
+              <div class="body-experience-modal-actions">
+                <button type="button" data-return-body-experience>返回選擇其他方式</button>
+                <button type="button" data-continue-report>繼續向下閱讀</button>
+              </div>
+            ` : `
+              <h3 class="body-experience-prompt">${method.prompt}</h3>
+              <div class="body-experience-choices">
+                ${method.choices.map((choice, index) => `
+                  <button type="button" data-body-experience-choice="${index}">
+                    <span>${String.fromCharCode(65 + index)}</span>
+                    ${choice}
+                  </button>
+                `).join('')}
+              </div>
+              <small>這一版先建立互動骨架，後續可在此擴充完整小遊戲。</small>
+            `}
+          </div>
+        </section>
+      </div>
+    `;
+  }
+
+  render() {
+    this.root.innerHTML = `
+      <div class="body-experience-inner">
+        <header class="body-experience-heading">
+          <p>從搜尋走向選擇</p>
+          <h2>如果現在要管理體態，你會選哪一種方式？</h2>
+          <span>點開圖卡進入短體驗。你可以隨時退出，也可以完成後嘗試其他方式。</span>
+        </header>
+        <div class="body-experience-grid">${this.cards()}</div>
+        <a class="body-experience-skip" href="#manga-panel-four">先不體驗，繼續向下閱讀</a>
+      </div>
+      ${this.modal()}
+    `;
+    document.body.classList.toggle('has-body-experience-modal', Boolean(this.activeMethod));
+    if (this.activeMethod) {
+      window.requestAnimationFrame(() => {
+        this.root.querySelector('.body-experience-close')?.focus();
+      });
+    }
+  }
+
+  open(methodId, trigger) {
+    this.activeMethod = methodId;
+    this.selectedChoice = null;
+    this.lastFocusedElement = trigger;
+    this.render();
+  }
+
+  close() {
+    this.activeMethod = null;
+    this.selectedChoice = null;
+    this.render();
+    this.lastFocusedElement?.focus();
+  }
+
+  finish(choiceIndex) {
+    this.selectedChoice = choiceIndex;
+    if (!this.completedMethods.includes(this.activeMethod)) {
+      this.completedMethods = [...this.completedMethods, this.activeMethod];
+    }
+    this.render();
+  }
+
+  continueReading() {
+    this.activeMethod = null;
+    this.selectedChoice = null;
+    this.render();
+    document.getElementById('manga-panel-four')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  handleClick(event) {
+    const openButton = event.target.closest('[data-open-body-experience]');
+    if (openButton) {
+      this.open(openButton.dataset.openBodyExperience, openButton);
+      return;
+    }
+    if (event.target.closest('[data-close-body-experience], [data-return-body-experience]')) {
+      this.close();
+      return;
+    }
+    const choiceButton = event.target.closest('[data-body-experience-choice]');
+    if (choiceButton) {
+      this.finish(Number(choiceButton.dataset.bodyExperienceChoice));
+      return;
+    }
+    if (event.target.closest('[data-continue-report]')) this.continueReading();
+  }
+
+  mount() {
+    this.root.addEventListener('click', (event) => this.handleClick(event));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && this.activeMethod) this.close();
+    });
+    this.render();
+  }
+}
+
+function initBodyManagementExperienceHub() {
+  const root = document.querySelector('[data-body-management-experience]');
+  if (!root) return;
+  window.bodyManagementExperienceHub = new BodyManagementExperienceHub(root);
+  window.bodyManagementExperienceHub.mount();
+}
+
 initDynamicContentTransitions();
 initHealthMagnifierChallenge();
+initBodyManagementExperienceHub();
 initBodyMangaScroll();
 initSitePreloader();
