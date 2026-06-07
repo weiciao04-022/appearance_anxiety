@@ -9,10 +9,14 @@ const siteAssetManifest = [
   './pic/B/B_male15-18%25.png',
   './pic/B/B_male20-25%25.png',
   './pic/B/B_male%3E30%25.png',
-  './pic/C/01.png',
-  './pic/C/02.png',
-  './pic/C/03.png',
-  './pic/C/04.png',
+  './pic/E/female_1.png',
+  './pic/E/female_2.png',
+  './pic/E/female_3.png',
+  './pic/E/female_4.png',
+  './pic/E/male_1.png',
+  './pic/E/male_2.png',
+  './pic/E/male_3.png',
+  './pic/E/male_4.png',
   './pic/body-game/card-healthy-meal.png',
   './pic/body-game/card-gym.png',
   './pic/body-game/card-injection.png',
@@ -1079,13 +1083,12 @@ function initBodyMangaScroll() {
   const videoOrbit = section.querySelector('[data-video-orbit]');
   const searchWidget = section.querySelector('[data-manga-search]');
 
-  // 保留短影音資料結構，之後填入 src 即可改成真實影片預覽。
   const videoCards = [
-    { type: 'video', src: '', title: '一週瘦身挑戰' },
-    { type: 'video', src: '', title: '燃脂運動' },
-    { type: 'video', src: '', title: '健康餐日記' },
-    { type: 'video', src: '', title: '體態改造紀錄' },
-    { type: 'video', src: '', title: '減脂菜單' }
+    { type: 'video', src: './video/body-feed/weightloss.m4v', title: '減脂訓練' },
+    { type: 'video', src: './video/body-feed/butttraining.m4v', title: '臀腿訓練' },
+    { type: 'video', src: './video/body-feed/healthyfood.m4v', title: '健康飲食' },
+    { type: 'video', src: './video/body-feed/chesttraining.m4v', title: '胸部訓練' },
+    { type: 'video', src: './video/body-feed/moremusle.m4v', title: '增肌訓練' }
   ];
 
   const searchTerms = [
@@ -1102,7 +1105,16 @@ function initBodyMangaScroll() {
   if (videoOrbit) {
     videoOrbit.innerHTML = videoCards.map((card) => `
       <article class="video-card" data-video-src="${card.src}">
-        <span class="video-card-play" aria-hidden="true"></span>
+        <video
+          class="video-card-media"
+          src="${card.src}"
+          aria-label="${card.title}"
+          muted
+          loop
+          autoplay
+          playsinline
+          preload="metadata"
+        ></video>
         <span class="video-card-title">${card.title}</span>
       </article>
     `).join('');
@@ -1111,7 +1123,13 @@ function initBodyMangaScroll() {
   if ('IntersectionObserver' in window) {
     const mangaObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (entry.isIntersecting) entry.target.classList.add('is-visible');
+        const videos = entry.target.querySelectorAll('.video-card-media');
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          videos.forEach((video) => video.play().catch(() => {}));
+        } else {
+          videos.forEach((video) => video.pause());
+        }
       });
     }, { threshold: 0.35 });
 
