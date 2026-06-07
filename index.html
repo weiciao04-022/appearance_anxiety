@@ -643,10 +643,6 @@
         text-align: right;
       }
 
-      #frame-9 .body-health-report.is-exporting {
-        box-shadow: none;
-      }
-
       #frame-9 .health-report-main {
         display: grid;
         grid-template-columns: minmax(170px, 0.82fr) minmax(190px, 0.9fr) minmax(185px, 0.88fr);
@@ -1988,7 +1984,6 @@
             return;
           }
 
-          report.classList.add('is-exporting');
           status.textContent = '正在產生報告圖片…';
           if (downloadButton) downloadButton.disabled = true;
           if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
@@ -2012,12 +2007,29 @@
               })
             );
 
+            const reportRect = report.getBoundingClientRect();
             const canvas = await window.html2canvas(report, {
               backgroundColor: '#ffffff',
-              scale: Math.min(2, window.devicePixelRatio || 1.5),
+              scale: 2,
               useCORS: true,
               allowTaint: false,
-              logging: false
+              logging: false,
+              width: Math.ceil(reportRect.width),
+              height: Math.ceil(report.scrollHeight),
+              windowWidth: document.documentElement.clientWidth,
+              windowHeight: document.documentElement.clientHeight,
+              scrollX: 0,
+              scrollY: -window.scrollY,
+              onclone: (clonedDocument) => {
+                const clonedReport = clonedDocument.querySelector('[data-health-report-capture]');
+                if (!clonedReport) return;
+                clonedReport.style.width = `${reportRect.width}px`;
+                clonedReport.style.maxWidth = 'none';
+                clonedReport.querySelectorAll('*').forEach((element) => {
+                  element.style.animation = 'none';
+                  element.style.transition = 'none';
+                });
+              }
             });
 
             const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
@@ -2046,7 +2058,6 @@
             console.warn('Unable to export body health report.', error);
             status.textContent = '圖片產生失敗，請稍後再試。';
           } finally {
-            report.classList.remove('is-exporting');
             if (downloadButton) downloadButton.disabled = false;
           }
         }
