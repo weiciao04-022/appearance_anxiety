@@ -645,9 +645,9 @@
 
       #frame-9 .health-report-main {
         display: grid;
-        grid-template-columns: minmax(170px, 0.82fr) minmax(190px, 0.9fr) minmax(185px, 0.88fr);
-        gap: 18px;
-        align-items: stretch;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px;
+        align-items: start;
       }
 
       #frame-9 .report-column {
@@ -764,6 +764,12 @@
       #frame-9 .report-chart {
         display: grid;
         gap: 13px;
+      }
+
+      #frame-9 .report-chart-title {
+        margin: 0 0 2px;
+        color: #4c463f;
+        font-size: 0.84rem;
       }
 
       #frame-9 .report-chart-row {
@@ -940,7 +946,6 @@
 
         #frame-9 .body-health-report {
           gap: 14px;
-          min-height: 900px;
           padding: 22px 26px;
           border-radius: 20px;
           box-shadow: 0 12px 30px rgba(0, 0, 0, 0.07);
@@ -974,8 +979,8 @@
         }
 
         #frame-9 .health-report-main {
-          grid-template-columns: minmax(150px, 0.9fr) minmax(130px, 0.72fr) minmax(205px, 1.15fr);
-          gap: 18px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 30px;
         }
 
         #frame-9 .report-column {
@@ -1013,15 +1018,6 @@
 
         #frame-9 .report-bmi-value {
           font-size: 2rem;
-        }
-
-        #frame-9 .report-figure {
-          min-height: 390px;
-          padding: 8px;
-        }
-
-        #frame-9 .report-figure img {
-          height: 360px;
         }
 
         #frame-9 .report-energy-number b {
@@ -2026,7 +2022,6 @@
           const report = profileReport();
           const bodyFatValue = userProfile.bodyFat == null ? '未提供' : userProfile.bodyFat;
           const bodyFatUnit = userProfile.bodyFat == null ? '' : '%';
-          const figure = reportFigureData();
           const bodyFatReference = bodyFatReferenceData();
           socialPanel.innerHTML = `
             <article class="body-overview-dashboard">
@@ -2067,20 +2062,16 @@
                     </section>
                   </div>
 
-                  <figure class="report-figure">
-                    <img src="${figure.src}" alt="${figure.label}" onerror="this.hidden = true; this.nextElementSibling.textContent = '人物圖像待置入';" />
-                  </figure>
-
                   <div class="report-column">
                     <section>
-                      <h4 class="report-panel-title">每日能量估算</h4>
+                      <h4 class="report-panel-title">每日總消耗熱量估算</h4>
                       <div class="report-energy-number">
                         <b>${report.calories}</b>
-                        <span>kcal / 日</span>
+                        <span>kcal / 日（TDEE）</span>
                       </div>
                     </section>
-                    <section class="report-chart" aria-label="每日建議攝取量圖表">
-                      ${reportChartRow('熱量', report.calories, 'kcal', (report.calories / 2500) * 100)}
+                    <section class="report-chart" aria-label="每日建議攝取參考">
+                      <h4 class="report-chart-title">每日建議攝取參考</h4>
                       ${reportChartRow('蛋白質', report.protein, 'g', (report.protein / 120) * 100)}
                       ${reportChartRow('碳水', report.carb, 'g', (report.carb / 350) * 100)}
                       ${reportChartRow('脂肪', report.fat, 'g', (report.fat / 100) * 100)}
