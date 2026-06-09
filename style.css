@@ -560,9 +560,10 @@ button:active,
 }
 
 .case-card {
+  position: relative;
   width: 100%;
   min-height: 210px;
-  padding: 18px;
+  padding: 0;
   cursor: pointer;
   color: #000;
   text-decoration: none;
@@ -571,6 +572,26 @@ button:active,
   font-size: 1.25rem;
   line-height: 1.4;
   box-sizing: border-box;
+  overflow: hidden;
+}
+
+.case-card-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+  object-fit: cover;
+}
+
+.case-card span {
+  position: relative;
+  z-index: 1;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #000;
+  font-weight: 700;
 }
 
 .case-card:hover {
