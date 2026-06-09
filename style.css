@@ -2671,6 +2671,12 @@ body,
   animation: body-experience-dialog-in 300ms ease both;
 }
 
+.body-experience-dialog.is-meal-dialog {
+  grid-template-columns: 1fr;
+  width: min(980px, 94vw);
+  background: #fff;
+}
+
 .body-experience-close {
   position: absolute;
   z-index: 3;
@@ -2805,44 +2811,21 @@ body,
 .body-poke-game,
 .body-poke-result {
   display: grid;
-  gap: 18px;
+  gap: 16px;
   margin-top: 26px;
-}
-
-.body-poke-progress {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-}
-
-.body-poke-progress span {
-  display: grid;
-  min-height: 34px;
-  place-items: center;
-  border: 1px solid rgba(47, 47, 47, 0.35);
-  border-radius: 999px;
-  background: #fff;
-  font-weight: 800;
-}
-
-.body-poke-progress .is-current {
-  background: #2f2f2f;
-  color: #fff;
-}
-
-.body-poke-progress .is-done {
-  background: #eef1e8;
 }
 
 .body-poke-layout,
 .body-poke-result {
-  grid-template-columns: minmax(190px, 0.7fr) minmax(0, 1fr);
+  display: grid;
+  grid-template-columns: minmax(210px, 0.58fr) minmax(0, 1fr);
+  gap: 24px;
   align-items: start;
 }
 
 .body-poke-bowl {
   position: relative;
-  width: min(280px, 100%);
+  width: min(300px, 100%);
   aspect-ratio: 1;
   margin: 0 auto;
   overflow: hidden;
@@ -2918,7 +2901,7 @@ body,
 
 .body-poke-options {
   display: grid;
-  gap: 10px;
+  gap: 14px;
 }
 
 .body-poke-options h3,
@@ -2936,8 +2919,32 @@ body,
 
 .body-poke-option-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(124px, 1fr));
   gap: 8px;
+}
+
+.body-poke-option-section {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(47, 47, 47, 0.14);
+}
+
+.body-poke-option-section > div:first-child {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.body-poke-option-section b {
+  font-size: 0.95rem;
+}
+
+.body-poke-option-section span {
+  color: #657985;
+  font-size: 0.72rem;
+  font-weight: 800;
 }
 
 .body-poke-option-grid button {
@@ -2985,7 +2992,7 @@ body,
 .body-poke-summary,
 .body-poke-result-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 8px;
 }
 
@@ -3212,8 +3219,8 @@ body,
     grid-template-columns: 1fr;
   }
 
-  .body-poke-progress {
-    grid-template-columns: repeat(2, 1fr);
+  .body-experience-dialog.is-meal-dialog {
+    width: min(94vw, 620px);
   }
 }
 

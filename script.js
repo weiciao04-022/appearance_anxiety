@@ -1633,19 +1633,18 @@ class BodyManagementExperienceHub {
 
   mealStepConfig() {
     return {
-      base: { order: 1, title: '先選澱粉', category: 'base', next: 'protein', hint: '紫米飯、地瓜、生菜或生菜飯各半。' },
-      protein: { order: 2, title: '再選主食', category: 'protein', next: 'veggies', previous: 'base', hint: '主食會大幅影響蛋白質、脂肪與價格。' },
-      veggies: { order: 3, title: '夾 3 到 5 種蔬菜', category: 'veggies', next: 'sauce', previous: 'protein', hint: '配料越多，營養與價格都會一起變動。' },
-      sauce: { order: 4, title: '最後選醬料', category: 'sauce', previous: 'veggies', hint: '醬料是容易被忽略的熱量來源。' }
+      base: { order: 1, title: '澱粉', category: 'base', hint: '選 1 種' },
+      protein: { order: 2, title: '主食', category: 'protein', hint: '選 1 種' },
+      veggies: { order: 3, title: '蔬菜', category: 'veggies', hint: '選 3 到 5 種' },
+      sauce: { order: 4, title: '醬料', category: 'sauce', hint: '選 1 種' }
     };
   }
 
-  canAdvanceMeal() {
-    if (this.mealStep === 'base') return Boolean(this.mealBowl.base);
-    if (this.mealStep === 'protein') return Boolean(this.mealBowl.protein);
-    if (this.mealStep === 'veggies') return this.mealBowl.veggies.length >= 3;
-    if (this.mealStep === 'sauce') return Boolean(this.mealBowl.sauce);
-    return false;
+  canFinishMeal() {
+    return Boolean(this.mealBowl.base)
+      && Boolean(this.mealBowl.protein)
+      && this.mealBowl.veggies.length >= 3
+      && Boolean(this.mealBowl.sauce);
   }
 
   mealBowlMarkup(isResult = false) {
@@ -1683,29 +1682,40 @@ class BodyManagementExperienceHub {
   mealGameContent() {
     if (this.mealStep === 'result') return this.mealResultContent();
     const steps = this.mealStepConfig();
-    const current = steps[this.mealStep];
     const totals = this.mealTotals();
+    const selectedCount = [
+      this.mealBowl.base,
+      this.mealBowl.protein,
+      ...this.mealBowl.veggies,
+      this.mealBowl.sauce
+    ].filter(Boolean).length;
     return `
       <div class="body-poke-game">
-        <div class="body-poke-progress">
-          ${Object.entries(steps).map(([key, step]) => `<span class="${key === this.mealStep ? 'is-current' : step.order < current.order ? 'is-done' : ''}">${step.order}</span>`).join('')}
-        </div>
         <div class="body-poke-layout">
           ${this.mealBowlMarkup(false)}
           <section class="body-poke-options">
-            <h3>${current.title}</h3>
-            <p>${current.hint}</p>
-            <div class="body-poke-option-grid">${this.mealOptionButtons(current.category)}</div>
+            <h3>直接把食材夾進碗裡</h3>
+            <p>點選食材會立即放進碗裡；選完澱粉、主食、3 到 5 種蔬菜與醬料後，再生成結果。</p>
+            ${Object.values(steps).map((step) => `
+              <div class="body-poke-option-section">
+                <div>
+                  <b>${step.title}</b>
+                  <span>${step.hint}</span>
+                </div>
+                <div class="body-poke-option-grid">${this.mealOptionButtons(step.category)}</div>
+              </div>
+            `).join('')}
           </section>
         </div>
         <div class="body-poke-summary">
+          <span>已放入 ${selectedCount} 項</span>
           <span>目前 ${totals.kcal} kcal</span>
           <span>蛋白質 ${totals.protein} g</span>
           <span>價格 NT$${totals.price}</span>
         </div>
         <div class="body-experience-modal-actions">
-          ${current.previous ? '<button type="button" data-body-meal-prev>上一步</button>' : ''}
-          <button type="button" data-body-meal-next ${this.canAdvanceMeal() ? '' : 'disabled'}>${current.next ? '下一步' : '生成結果'}</button>
+          <button type="button" data-body-meal-restart>重新夾一碗</button>
+          <button type="button" data-body-meal-next ${this.canFinishMeal() ? '' : 'disabled'}>生成結果</button>
         </div>
       </div>
     `;
@@ -1754,11 +1764,13 @@ class BodyManagementExperienceHub {
     return `
       <div class="body-experience-modal" data-body-experience-modal>
         <button class="body-experience-backdrop" type="button" data-close-body-experience aria-label="關閉體驗"></button>
-        <section class="body-experience-dialog" role="dialog" aria-modal="true" aria-labelledby="bodyExperienceTitle">
+        <section class="body-experience-dialog ${isMealGame ? 'is-meal-dialog' : ''}" role="dialog" aria-modal="true" aria-labelledby="bodyExperienceTitle">
           <button class="body-experience-close" type="button" data-close-body-experience aria-label="關閉體驗">×</button>
-          <div class="body-experience-dialog-media">
-            <img src="${method.image}" alt="" />
-          </div>
+          ${isMealGame ? '' : `
+            <div class="body-experience-dialog-media">
+              <img src="${method.image}" alt="" />
+            </div>
+          `}
           <div class="body-experience-dialog-content">
             <p>體態管理方式體驗</p>
             <h2 id="bodyExperienceTitle">${method.title}</h2>
@@ -1804,11 +1816,12 @@ class BodyManagementExperienceHub {
       ${this.modal()}
     `;
     document.body.classList.toggle('has-body-experience-modal', Boolean(this.activeMethod));
-    if (this.activeMethod) {
+    if (this.activeMethod && !this.isUpdatingMeal) {
       window.requestAnimationFrame(() => {
         this.root.querySelector('.body-experience-close')?.focus();
       });
     }
+    this.isUpdatingMeal = false;
   }
 
   open(methodId, trigger) {
@@ -1857,13 +1870,13 @@ class BodyManagementExperienceHub {
     } else {
       this.mealBowl[category] = this.mealBowl[category]?.name === name ? null : option;
     }
+    this.isUpdatingMeal = true;
     this.render();
   }
 
   advanceMealGame() {
-    if (!this.canAdvanceMeal()) return;
-    const next = this.mealStepConfig()[this.mealStep]?.next;
-    this.mealStep = next || 'result';
+    if (!this.canFinishMeal()) return;
+    this.mealStep = 'result';
     this.render();
   }
 
