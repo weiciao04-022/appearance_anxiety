@@ -1210,9 +1210,6 @@ class HealthMagnifierChallenge {
   constructor(root) {
     this.root = root;
     this.selectedPerson = null;
-    this.magnifierStarted = false;
-    this.viewedPersons = [];
-    this.activePerson = null;
     this.people = [
       {
         id: 'outdoor-student',
@@ -1282,89 +1279,15 @@ class HealthMagnifierChallenge {
 
   selectionCards() {
     return this.people.map((person, index) => `
-      <article class="health-person-card" style="--card-order:${index}">
+      <button class="health-person-card" type="button" data-select-health-person="${person.id}" style="--card-order:${index}">
         ${this.personVisual(person)}
         <div class="health-person-card-copy">
           <p>角色 ${String.fromCharCode(65 + index)}</p>
           <h3>${person.name}</h3>
           <span>${person.visual}</span>
-          <button type="button" data-select-health-person="${person.id}">我選這位</button>
         </div>
-      </article>
+      </button>
     `).join('');
-  }
-
-  magnifierCards() {
-    return this.people.map((person, index) => {
-      const viewed = this.viewedPersons.includes(person.id);
-      const selected = this.selectedPerson === person.id;
-      const active = this.activePerson === person.id;
-      return `
-        <article class="health-person-card health-person-card-review ${viewed ? 'is-viewed' : ''} ${active ? 'is-active' : ''}" style="--card-order:${index}">
-          ${this.personVisual(person, active)}
-          <div class="health-person-card-copy">
-            <div class="health-person-card-meta">
-              <p>角色 ${String.fromCharCode(65 + index)}</p>
-              ${selected ? '<span>你起初的選擇</span>' : ''}
-            </div>
-            <h3>${person.name}</h3>
-            <span>${person.impression}</span>
-            <button type="button" data-view-health-person="${person.id}">
-              ${viewed ? '再次查看' : '用放大鏡查看'}
-            </button>
-          </div>
-        </article>
-      `;
-    }).join('');
-  }
-
-  detailCard() {
-    const person = this.people.find((item) => item.id === this.activePerson);
-    if (!person) {
-      return `
-        <div class="health-magnifier-empty">
-          <span class="health-magnifier-icon" aria-hidden="true"></span>
-          <p>點選任一角色，看看外表之外的生活狀態。</p>
-        </div>
-      `;
-    }
-
-    return `
-      <article class="health-magnifier-detail" aria-live="polite">
-        <header>
-          <span class="health-magnifier-icon" aria-hidden="true"></span>
-          <div>
-            <p>健康放大鏡看到</p>
-            <h3>${person.name}</h3>
-          </div>
-        </header>
-        <div class="health-magnifier-facts">
-          ${person.facts.map(([label, value]) => `
-            <div>
-              <span>${label}</span>
-              <b>${value}</b>
-            </div>
-          `).join('')}
-        </div>
-        <p class="health-magnifier-conclusion">${person.conclusion}</p>
-      </article>
-    `;
-  }
-
-  summaryCard() {
-    if (this.viewedPersons.length !== this.people.length) return '';
-    return `
-      <article class="health-magnifier-summary">
-        <p>三個人的外表，都只說出了一小部分</p>
-        <h2>健康不是長得像誰</h2>
-        <div>
-          <p>我們很容易透過體型、體重或肌肉線條，判斷一個人是否健康。</p>
-          <p>但真正影響健康的，往往是外表看不見的睡眠、飲食、運動習慣、壓力、心理狀態，以及身體恢復能力。</p>
-          <p>體態與健康確實存在關係；可是當對體態的在意變成長期焦慮、嚴格控制或心理壓力，追求健康的行為也可能反過來消耗健康。</p>
-        </div>
-        <strong>健康體態，不該只有一種樣子。</strong>
-      </article>
-    `;
   }
 
   renderSelection() {
@@ -1380,49 +1303,62 @@ class HealthMagnifierChallenge {
           </small>
         </header>
         <div class="health-person-grid">${this.selectionCards()}</div>
-        <p class="health-magnifier-caption">先憑第一印象選擇。這裡沒有標準答案。</p>
-      </div>
-    `;
-  }
-
-  renderTransition() {
-    const person = this.people.find((item) => item.id === this.selectedPerson);
-    return `
-      <div class="health-magnifier-inner health-magnifier-transition">
-        <p>你選擇了「${person?.name || ''}」</p>
-        <h2>你看到的，<br />真的是健康的全部嗎？</h2>
-        <button type="button" data-start-magnifier>
-          <span class="health-magnifier-icon" aria-hidden="true"></span>
-          拿起健康放大鏡
-        </button>
+        <p class="health-magnifier-caption">直接點選一位角色，用放大鏡看看外表背後的生活狀態。</p>
       </div>
     `;
   }
 
   renderMagnifier() {
+    const person = this.people.find((item) => item.id === this.selectedPerson);
     return `
       <div class="health-magnifier-inner health-magnifier-step">
         <header class="health-magnifier-heading health-magnifier-heading-compact">
-          <p>外表之外</p>
-          <h2>用放大鏡看看他們的生活</h2>
-          <span>已查看 ${this.viewedPersons.length} / ${this.people.length} 位</span>
+          <p>你選擇了「${person?.name || ''}」</p>
+          <h2>你看到的，真的是健康的全部嗎？</h2>
+          <span>把滑鼠移到圖片上，放大鏡範圍會顯示外表背後的生活狀態。</span>
         </header>
-        <div class="health-person-grid">${this.magnifierCards()}</div>
-        <div class="health-magnifier-reveal">${this.detailCard()}</div>
-        ${this.summaryCard()}
+        <section class="health-magnifier-viewer">
+          <div class="health-magnifier-stage" data-health-lens-stage>
+            <img class="health-magnifier-front" src="${person?.image || ''}" alt="${person?.name || ''}人物外觀" />
+            <img class="health-magnifier-behind" src="${person?.behindImage || ''}" alt="${person?.name || ''}生活狀態" />
+            <span class="health-magnifier-lens" aria-hidden="true"></span>
+          </div>
+          <article class="health-magnifier-detail" aria-live="polite">
+            <header>
+              <span class="health-magnifier-icon" aria-hidden="true"></span>
+              <div>
+                <p>健康放大鏡看到</p>
+                <h3>${person?.name || ''}</h3>
+              </div>
+            </header>
+            <div class="health-magnifier-facts">
+              ${(person?.facts || []).map(([label, value]) => `
+                <div>
+                  <span>${label}</span>
+                  <b>${value}</b>
+                </div>
+              `).join('')}
+            </div>
+            <p class="health-magnifier-conclusion">${person?.conclusion || ''}</p>
+          </article>
+        </section>
+        <article class="health-magnifier-story">
+          <p>長期面臨體型過瘦的 Sam（化名），一直都被增肌所困擾。對他而言，理想中的身材不需要非常壯碩，只需要擁有適量的肌肉線條，能夠支撐起衣服的版型，展現出好看的體態即可。</p>
+          <p>Sam 主要透過抖音及小紅書建立增肌相關的知識，從中學習健身訓練動作與飲食攝取建議。然而，增肌的過程並不比減重簡單。他坦言，自己食量並不小，也有努力健身，但效果卻沒有預想中明顯。</p>
+          <p>隨著增肌逐漸成為生活的一部分，Sam 每個月生活支出也隨之增加，其中包括健身房會費與乳清蛋白粉。在飲食質與量的雙重要求下，日常開銷的提高幾乎無法避免。</p>
+          <p>面對社群媒體對「男性應擁有肌肉身材」的標準，Sam 認為每個人都能追求自己想要的理想身材；但他也坦言，社群審美確實在無形中提高了他對自身體態的要求。</p>
+          <nav class="health-magnifier-story-links" aria-label="健康放大鏡後續閱讀">
+            <a href="#story-1-page">看看更多故事</a>
+            <a href="pages/case3.html">下一個案例</a>
+          </nav>
+        </article>
       </div>
     `;
   }
 
   render() {
     this.root.classList.remove('is-ready');
-    if (!this.selectedPerson) {
-      this.root.innerHTML = this.renderSelection();
-    } else if (!this.magnifierStarted) {
-      this.root.innerHTML = this.renderTransition();
-    } else {
-      this.root.innerHTML = this.renderMagnifier();
-    }
+    this.root.innerHTML = this.selectedPerson ? this.renderMagnifier() : this.renderSelection();
     window.requestAnimationFrame(() => this.root.classList.add('is-ready'));
   }
 
@@ -1431,27 +1367,29 @@ class HealthMagnifierChallenge {
     if (selectButton) {
       this.selectedPerson = selectButton.dataset.selectHealthPerson;
       this.render();
-      return;
     }
+  }
 
-    if (event.target.closest('[data-start-magnifier]')) {
-      this.magnifierStarted = true;
-      this.render();
-      return;
-    }
+  handlePointerMove(event) {
+    const stage = event.target.closest('[data-health-lens-stage]');
+    if (!stage) return;
+    const rect = stage.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / rect.width) * 100;
+    const y = ((event.clientY - rect.top) / rect.height) * 100;
+    stage.style.setProperty('--lens-x', `${Math.max(0, Math.min(100, x))}%`);
+    stage.style.setProperty('--lens-y', `${Math.max(0, Math.min(100, y))}%`);
+    stage.classList.add('is-lens-active');
+  }
 
-    const viewButton = event.target.closest('[data-view-health-person]');
-    if (viewButton) {
-      this.activePerson = viewButton.dataset.viewHealthPerson;
-      if (!this.viewedPersons.includes(this.activePerson)) {
-        this.viewedPersons = [...this.viewedPersons, this.activePerson];
-      }
-      this.render();
-    }
+  handlePointerLeave(event) {
+    const stage = event.target.closest('[data-health-lens-stage]');
+    if (stage) stage.classList.remove('is-lens-active');
   }
 
   mount() {
     this.root.addEventListener('click', (event) => this.handleClick(event));
+    this.root.addEventListener('pointermove', (event) => this.handlePointerMove(event));
+    this.root.addEventListener('pointerleave', (event) => this.handlePointerLeave(event), true);
     this.render();
   }
 }
