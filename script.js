@@ -167,7 +167,7 @@ initScrollVideoIntro();
 const bodyImageBasePath = './pic/B/';
 
 function createBodyImagePath(fileName) {
-  return encodeURI(`${bodyImageBasePath}${fileName}`);
+  return `${bodyImageBasePath}${encodeURIComponent(fileName)}`;
 }
 
 const bodyFatImages = [

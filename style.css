@@ -549,13 +549,43 @@ button:active,
   }
 }
 
-.case-row { display: flex; gap: 20px; }
+.case-row {
+  width: min(860px, 100%);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+  padding: 24px;
+  border: 1px solid #000;
+  box-sizing: border-box;
+}
+
 .case-card {
-  width: 220px;
-  height: 360px;
+  width: 100%;
+  min-height: 210px;
+  padding: 18px;
   cursor: pointer;
   color: #000;
   text-decoration: none;
+  display: grid;
+  place-items: center;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+.case-card:hover {
+  border-width: 2px;
+}
+
+.case-more-link {
+  color: #000;
+  font-size: 1.08rem;
+  text-decoration: none;
+}
+
+.case-more-link:hover,
+.case-link-row a:hover {
+  text-decoration: underline;
 }
 
 .story-card,
@@ -1261,6 +1291,65 @@ button:active,
   margin-top: 32px;
 }
 
+.case-page {
+  min-height: 100vh;
+  background: #fff;
+}
+
+.case-article {
+  min-height: 100vh;
+  width: min(720px, 100%);
+  margin: 0 auto;
+  padding: 72px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.case-title-frame {
+  width: min(460px, 100%);
+  aspect-ratio: 1 / 1.1;
+  border: 1px solid #000;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+}
+
+.case-title-frame h1 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.case-article-copy {
+  width: min(520px, 100%);
+  display: grid;
+  gap: 1em;
+  line-height: 1.9;
+  font-size: 1.08rem;
+}
+
+.case-article-copy p {
+  margin: 0;
+}
+
+.case-link-row {
+  width: min(520px, 100%);
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.case-link-row a {
+  color: #000;
+  text-decoration: none;
+}
+
 
 @media (max-width: 900px) {
   body {
@@ -1300,14 +1389,26 @@ button:active,
   }
 
   .case-row {
-    flex-direction: column;
-    gap: 24px;
-    width: 100%;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    width: min(360px, 100%);
+    padding: 18px;
   }
 
   .case-card {
-    width: 100%;
-    min-height: 56vh;
+    min-height: 150px;
+  }
+
+  .case-article {
+    padding: 56px 22px;
+  }
+
+  .case-title-frame {
+    width: min(372px, 100%);
+  }
+
+  .case-article-copy {
+    font-size: 1rem;
   }
 
   .text-page {
