@@ -1470,13 +1470,62 @@ class BodyManagementExperienceHub {
     this.selectedChoice = null;
     this.completedMethods = [];
     this.lastFocusedElement = null;
+    this.mealStep = 'base';
+    this.mealBowl = {
+      base: null,
+      protein: null,
+      veggies: [],
+      sauce: null
+    };
+    this.mealOptions = {
+      base: [
+        { name: '紫米飯', icon: '🍚', price: 25, kcal: 210, protein: 5, carb: 43, fat: 2, color: '#8d6a96' },
+        { name: '地瓜', icon: '🍠', price: 25, kcal: 165, protein: 2, carb: 38, fat: 0, color: '#e69b43' },
+        { name: '生菜', icon: '🥬', price: 0, kcal: 35, protein: 2, carb: 7, fat: 0, color: '#91bd64' },
+        { name: '生菜飯各半', icon: '🥗', price: 15, kcal: 125, protein: 4, carb: 25, fat: 1, color: '#b9c879' }
+      ],
+      protein: [
+        { name: '蝦仁', icon: '🦐', price: 70, kcal: 120, protein: 24, carb: 1, fat: 2, color: '#f39a7a' },
+        { name: '鮭魚', icon: '🍣', price: 95, kcal: 235, protein: 25, carb: 0, fat: 15, color: '#ee8f73' },
+        { name: '雞胸肉', icon: '🍗', price: 65, kcal: 165, protein: 31, carb: 0, fat: 4, color: '#dfb887' },
+        { name: '鮪魚', icon: '🐟', price: 80, kcal: 150, protein: 30, carb: 0, fat: 3, color: '#b95d61' },
+        { name: '牛肉', icon: '🥩', price: 85, kcal: 230, protein: 25, carb: 0, fat: 14, color: '#bd7358' }
+      ],
+      veggies: [
+        { name: '玉米筍', icon: '🌽', price: 15, kcal: 28, protein: 1, carb: 6, fat: 0, color: '#f2cc67' },
+        { name: '豆腐', icon: '◻️', price: 20, kcal: 95, protein: 10, carb: 3, fat: 5, color: '#f0e6d8' },
+        { name: '番茄', icon: '🍅', price: 15, kcal: 22, protein: 1, carb: 5, fat: 0, color: '#de5f4a' },
+        { name: '小黃瓜', icon: '🥒', price: 15, kcal: 18, protein: 1, carb: 4, fat: 0, color: '#82b96f' },
+        { name: '馬鈴薯沙拉', icon: '🥔', price: 25, kcal: 130, protein: 2, carb: 18, fat: 6, color: '#e2c57b' },
+        { name: '洋蔥', icon: '🧅', price: 10, kcal: 20, protein: 1, carb: 5, fat: 0, color: '#d9b7d2' },
+        { name: '甜椒', icon: '🫑', price: 15, kcal: 20, protein: 1, carb: 5, fat: 0, color: '#e48248' },
+        { name: '毛豆', icon: '🫘', price: 25, kcal: 95, protein: 9, carb: 8, fat: 4, color: '#8abd63' },
+        { name: '海藻沙拉', icon: '🌿', price: 20, kcal: 35, protein: 1, carb: 7, fat: 1, color: '#4f8e69' },
+        { name: '鳳梨', icon: '🍍', price: 20, kcal: 50, protein: 1, carb: 13, fat: 0, color: '#eec85a' },
+        { name: '蘋果', icon: '🍎', price: 20, kcal: 48, protein: 0, carb: 13, fat: 0, color: '#d95555' },
+        { name: '玉米', icon: '🌽', price: 15, kcal: 70, protein: 2, carb: 16, fat: 1, color: '#f1c64f' },
+        { name: '海帶', icon: '🟩', price: 15, kcal: 25, protein: 1, carb: 5, fat: 0, color: '#416d59' },
+        { name: '秋葵', icon: '🌱', price: 15, kcal: 30, protein: 2, carb: 6, fat: 0, color: '#6da356' },
+        { name: '泡菜', icon: '🥬', price: 20, kcal: 35, protein: 2, carb: 7, fat: 0, color: '#d65d43' },
+        { name: '花椰菜', icon: '🥦', price: 20, kcal: 35, protein: 3, carb: 7, fat: 0, color: '#79b35c' },
+        { name: '杏鮑菇', icon: '🍄', price: 20, kcal: 36, protein: 2, carb: 7, fat: 0, color: '#d6bd92' }
+      ],
+      sauce: [
+        { name: '辣美乃滋', icon: '🌶️', price: 15, kcal: 115, protein: 0, carb: 3, fat: 11, color: '#e27a55' },
+        { name: '胡麻醬', icon: '🥜', price: 15, kcal: 95, protein: 2, carb: 4, fat: 8, color: '#cfa35d' },
+        { name: '油醋醬', icon: '🫒', price: 10, kcal: 70, protein: 0, carb: 2, fat: 7, color: '#a8a85a' },
+        { name: '優格醬', icon: '🥛', price: 15, kcal: 60, protein: 3, carb: 5, fat: 3, color: '#efe6d7' },
+        { name: '柚香甜醬油', icon: '🍊', price: 10, kcal: 45, protein: 1, carb: 10, fat: 0, color: '#d7a35f' },
+        { name: '墨西哥辣醬', icon: '🔥', price: 10, kcal: 35, protein: 1, carb: 7, fat: 0, color: '#ce5748' }
+      ]
+    };
     this.methods = [
       {
         id: 'meal',
-        title: '健康餐',
+        title: '夏威夷碗',
         image: './pic/product-experience/healthmeal.png',
-        description: '用一餐的選擇，看看營養、價格與持續執行之間如何拉扯。',
-        cost: '每餐約 NT$180－280',
+        description: '用夾取食材的方式，看看看似健康的一碗是否符合自己的需求。',
+        cost: '每餐約 NT$190－330',
         prompt: '今天中午，你會怎麼選？',
         choices: ['仔細搭配營養與份量', '先看價格再決定', '選最像社群健康餐的組合'],
         result: '同一份「健康餐」，可能同時牽涉營養需求、預算與外表想像。'
@@ -1532,9 +1581,175 @@ class BodyManagementExperienceHub {
     `).join('');
   }
 
+  mealProfile() {
+    try {
+      return JSON.parse(localStorage.getItem('bodyHealthProfile')) || null;
+    } catch {
+      return null;
+    }
+  }
+
+  mealItems() {
+    return [this.mealBowl.base, this.mealBowl.protein, ...this.mealBowl.veggies, this.mealBowl.sauce].filter(Boolean);
+  }
+
+  mealTotals() {
+    return this.mealItems().reduce(
+      (total, item) => ({
+        price: total.price + item.price,
+        kcal: total.kcal + item.kcal,
+        protein: total.protein + item.protein,
+        carb: total.carb + item.carb,
+        fat: total.fat + item.fat
+      }),
+      { price: 160, kcal: 0, protein: 0, carb: 0, fat: 0 }
+    );
+  }
+
+  mealTargets() {
+    const profile = this.mealProfile();
+    if (!profile) return { kcal: 650, protein: 25, carb: 70, veggie: 3 };
+    const genderOffset = profile.gender === 'male' ? 5 : profile.gender === 'female' ? -161 : -80;
+    const activity = { low: 1.2, medium: 1.375, high: 1.55 }[profile.activityLevel] || 1.2;
+    const bmr = 10 * profile.weight + 6.25 * profile.height - 5 * profile.age + genderOffset;
+    const mealKcal = Math.round((bmr * activity) / 3);
+    return {
+      kcal: mealKcal,
+      protein: Math.round((profile.weight * 1.2) / 3),
+      carb: Math.round(profile.weight),
+      veggie: 3
+    };
+  }
+
+  mealJudgement() {
+    const totals = this.mealTotals();
+    const targets = this.mealTargets();
+    const kcalStatus = totals.kcal < targets.kcal * 0.8 ? '偏低' : totals.kcal > targets.kcal * 1.2 ? '偏高' : '接近';
+    const proteinStatus = totals.protein < targets.protein * 0.8 ? '不足' : '足夠';
+    const carbStatus = totals.carb < targets.carb * 0.7 ? '不足' : totals.carb > targets.carb * 1.3 ? '偏高' : '接近';
+    const veggieStatus = this.mealBowl.veggies.length >= targets.veggie ? '足夠' : '不足';
+    return { totals, targets, kcalStatus, proteinStatus, carbStatus, veggieStatus };
+  }
+
+  mealStepConfig() {
+    return {
+      base: { order: 1, title: '先選澱粉', category: 'base', next: 'protein', hint: '紫米飯、地瓜、生菜或生菜飯各半。' },
+      protein: { order: 2, title: '再選主食', category: 'protein', next: 'veggies', previous: 'base', hint: '主食會大幅影響蛋白質、脂肪與價格。' },
+      veggies: { order: 3, title: '夾 3 到 5 種蔬菜', category: 'veggies', next: 'sauce', previous: 'protein', hint: '配料越多，營養與價格都會一起變動。' },
+      sauce: { order: 4, title: '最後選醬料', category: 'sauce', previous: 'veggies', hint: '醬料是容易被忽略的熱量來源。' }
+    };
+  }
+
+  canAdvanceMeal() {
+    if (this.mealStep === 'base') return Boolean(this.mealBowl.base);
+    if (this.mealStep === 'protein') return Boolean(this.mealBowl.protein);
+    if (this.mealStep === 'veggies') return this.mealBowl.veggies.length >= 3;
+    if (this.mealStep === 'sauce') return Boolean(this.mealBowl.sauce);
+    return false;
+  }
+
+  mealBowlMarkup(isResult = false) {
+    const veggies = this.mealBowl.veggies.map((item, index) => `
+      <span class="body-poke-piece body-poke-veggie piece-${index + 1}" style="--piece-color:${item.color}" title="${item.name}">${item.icon}</span>
+    `).join('');
+    return `
+      <div class="body-poke-bowl ${isResult ? 'is-result' : ''}">
+        <div class="body-poke-base" style="--piece-color:${this.mealBowl.base?.color || '#f5e8ce'}">
+          ${this.mealBowl.base ? `<span>${this.mealBowl.base.icon}</span><small>${this.mealBowl.base.name}</small>` : '<small>空碗</small>'}
+        </div>
+        ${veggies}
+        ${this.mealBowl.protein ? `<span class="body-poke-piece body-poke-protein" style="--piece-color:${this.mealBowl.protein.color}" title="${this.mealBowl.protein.name}">${this.mealBowl.protein.icon}</span>` : ''}
+        ${this.mealBowl.sauce ? `<span class="body-poke-sauce" style="--piece-color:${this.mealBowl.sauce.color}">${this.mealBowl.sauce.icon} ${this.mealBowl.sauce.name}</span>` : ''}
+      </div>
+    `;
+  }
+
+  mealOptionButtons(category) {
+    return this.mealOptions[category].map((item) => {
+      const selected = category === 'veggies'
+        ? this.mealBowl.veggies.some((selectedItem) => selectedItem.name === item.name)
+        : this.mealBowl[category]?.name === item.name;
+      const disabled = category === 'veggies' && this.mealBowl.veggies.length >= 5 && !selected;
+      return `
+        <button class="${selected ? 'is-selected' : ''}" type="button" data-body-meal-option="${category}" data-body-meal-name="${item.name}" ${disabled ? 'disabled' : ''}>
+          <span style="--piece-color:${item.color}">${item.icon}</span>
+          <b>${item.name}</b>
+          <small>${item.kcal} kcal / +${item.price} 元</small>
+        </button>
+      `;
+    }).join('');
+  }
+
+  mealGameContent() {
+    if (this.mealStep === 'result') return this.mealResultContent();
+    const steps = this.mealStepConfig();
+    const current = steps[this.mealStep];
+    const totals = this.mealTotals();
+    return `
+      <div class="body-poke-game">
+        <div class="body-poke-progress">
+          ${Object.entries(steps).map(([key, step]) => `<span class="${key === this.mealStep ? 'is-current' : step.order < current.order ? 'is-done' : ''}">${step.order}</span>`).join('')}
+        </div>
+        <div class="body-poke-layout">
+          ${this.mealBowlMarkup(false)}
+          <section class="body-poke-options">
+            <h3>${current.title}</h3>
+            <p>${current.hint}</p>
+            <div class="body-poke-option-grid">${this.mealOptionButtons(current.category)}</div>
+          </section>
+        </div>
+        <div class="body-poke-summary">
+          <span>目前 ${totals.kcal} kcal</span>
+          <span>蛋白質 ${totals.protein} g</span>
+          <span>價格 NT$${totals.price}</span>
+        </div>
+        <div class="body-experience-modal-actions">
+          ${current.previous ? '<button type="button" data-body-meal-prev>上一步</button>' : ''}
+          <button type="button" data-body-meal-next ${this.canAdvanceMeal() ? '' : 'disabled'}>${current.next ? '下一步' : '生成結果'}</button>
+        </div>
+      </div>
+    `;
+  }
+
+  mealResultContent() {
+    const { totals, targets, kcalStatus, proteinStatus, carbStatus, veggieStatus } = this.mealJudgement();
+    const monthly = totals.price * 22;
+    const rows = [
+      ['熱量', `${totals.kcal} kcal`, `建議 ${targets.kcal} kcal`, kcalStatus],
+      ['蛋白質', `${totals.protein} g`, `建議 ${targets.protein} g 以上`, proteinStatus],
+      ['碳水', `${totals.carb} g`, `建議約 ${targets.carb} g`, carbStatus],
+      ['蔬菜', `${this.mealBowl.veggies.length} 種`, `建議至少 ${targets.veggie} 種`, veggieStatus]
+    ];
+    return `
+      <div class="body-poke-result">
+        ${this.mealBowlMarkup(true)}
+        <section>
+          <h3>你的夏威夷碗完成了</h3>
+          <p>這碗約 NT$${totals.price}、${totals.kcal} kcal。若 22 個上課／上班日都吃，約 NT$${monthly}。</p>
+          <div class="body-poke-result-grid">
+            ${rows.map(([label, value, target, status]) => `
+              <article>
+                <span>${label}</span>
+                <b>${value}</b>
+                <small>${target}</small>
+                <em>${status}</em>
+              </article>
+            `).join('')}
+          </div>
+          <p>營養與價格皆為估算，之後可再用你生成的正式食材圖片與更精準資料替換。</p>
+          <div class="body-experience-modal-actions">
+            <button type="button" data-body-meal-restart>重新夾一碗</button>
+            <button type="button" data-body-meal-finish>完成體驗</button>
+          </div>
+        </section>
+      </div>
+    `;
+  }
+
   modal() {
     const method = this.methods.find((item) => item.id === this.activeMethod);
     if (!method) return '';
+    const isMealGame = method.id === 'meal';
     const finished = this.selectedChoice !== null;
     return `
       <div class="body-experience-modal" data-body-experience-modal>
@@ -1547,7 +1762,7 @@ class BodyManagementExperienceHub {
           <div class="body-experience-dialog-content">
             <p>體態管理方式體驗</p>
             <h2 id="bodyExperienceTitle">${method.title}</h2>
-            ${finished ? `
+            ${isMealGame ? this.mealGameContent() : finished ? `
               <div class="body-experience-result" aria-live="polite">
                 <span>你的選擇</span>
                 <h3>${method.choices[this.selectedChoice]}</h3>
@@ -1599,6 +1814,7 @@ class BodyManagementExperienceHub {
   open(methodId, trigger) {
     this.activeMethod = methodId;
     this.selectedChoice = null;
+    if (methodId === 'meal') this.resetMealGame();
     this.lastFocusedElement = trigger;
     this.render();
   }
@@ -1616,6 +1832,46 @@ class BodyManagementExperienceHub {
       this.completedMethods = [...this.completedMethods, this.activeMethod];
     }
     this.render();
+  }
+
+  resetMealGame() {
+    this.mealStep = 'base';
+    this.mealBowl = {
+      base: null,
+      protein: null,
+      veggies: [],
+      sauce: null
+    };
+  }
+
+  chooseMealOption(category, name) {
+    const option = this.mealOptions[category]?.find((item) => item.name === name);
+    if (!option) return;
+    if (category === 'veggies') {
+      const index = this.mealBowl.veggies.findIndex((item) => item.name === name);
+      if (index >= 0) {
+        this.mealBowl.veggies.splice(index, 1);
+      } else if (this.mealBowl.veggies.length < 5) {
+        this.mealBowl.veggies.push(option);
+      }
+    } else {
+      this.mealBowl[category] = this.mealBowl[category]?.name === name ? null : option;
+    }
+    this.render();
+  }
+
+  advanceMealGame() {
+    if (!this.canAdvanceMeal()) return;
+    const next = this.mealStepConfig()[this.mealStep]?.next;
+    this.mealStep = next || 'result';
+    this.render();
+  }
+
+  finishMealGame() {
+    if (!this.completedMethods.includes('meal')) {
+      this.completedMethods = [...this.completedMethods, 'meal'];
+    }
+    this.close();
   }
 
   continueReading() {
@@ -1638,6 +1894,29 @@ class BodyManagementExperienceHub {
     const choiceButton = event.target.closest('[data-body-experience-choice]');
     if (choiceButton) {
       this.finish(Number(choiceButton.dataset.bodyExperienceChoice));
+      return;
+    }
+    const mealOption = event.target.closest('[data-body-meal-option]');
+    if (mealOption) {
+      this.chooseMealOption(mealOption.dataset.bodyMealOption, mealOption.dataset.bodyMealName);
+      return;
+    }
+    if (event.target.closest('[data-body-meal-next]')) {
+      this.advanceMealGame();
+      return;
+    }
+    if (event.target.closest('[data-body-meal-prev]')) {
+      this.mealStep = this.mealStepConfig()[this.mealStep]?.previous || this.mealStep;
+      this.render();
+      return;
+    }
+    if (event.target.closest('[data-body-meal-restart]')) {
+      this.resetMealGame();
+      this.render();
+      return;
+    }
+    if (event.target.closest('[data-body-meal-finish]')) {
+      this.finishMealGame();
       return;
     }
     if (event.target.closest('[data-continue-report]')) this.continueReading();

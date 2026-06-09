@@ -1294,18 +1294,101 @@
 
       #frame-9 .bowl-layout {
         display: grid;
-        grid-template-columns: 140px minmax(0, 1fr);
-        gap: 12px;
+        grid-template-columns: minmax(210px, 0.72fr) minmax(0, 1fr);
+        gap: 18px;
+        align-items: start;
       }
 
-      #frame-9 .bowl-dropzone {
-        min-height: 140px;
-        border: 1px solid #000;
+      #frame-9 .poke-bowl {
+        position: relative;
+        width: min(310px, 100%);
+        aspect-ratio: 1;
+        margin: 0 auto;
+        border: 8px solid #000;
         border-radius: 50%;
+        background: radial-gradient(circle at 50% 42%, #fffdf7 0 44%, #f2eee2 45% 68%, #d8c7a8 69% 100%);
+        box-shadow: inset 0 -18px 0 rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+      }
+
+      #frame-9 .poke-bowl.is-result {
+        width: min(360px, 100%);
+      }
+
+      #frame-9 .poke-bowl-base {
+        position: absolute;
+        inset: 13%;
         display: grid;
         place-items: center;
+        border-radius: 50%;
+        background: var(--piece-color, #f5e8ce);
+        font-size: 2rem;
         text-align: center;
-        padding: 12px;
+      }
+
+      #frame-9 .poke-bowl-base small {
+        display: block;
+        max-width: 8em;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        font-size: 0.72rem;
+        font-weight: 800;
+      }
+
+      #frame-9 .poke-bowl-piece {
+        position: absolute;
+        display: grid;
+        place-items: center;
+        width: 24%;
+        aspect-ratio: 1;
+        border: 1px solid #000;
+        border-radius: 50%;
+        background: var(--piece-color, #fff);
+        font-size: 1.5rem;
+        box-shadow: 0 6px 0 rgba(0, 0, 0, 0.08);
+      }
+
+      #frame-9 .poke-veggie.piece-1 { left: 18%; top: 18%; }
+      #frame-9 .poke-veggie.piece-2 { right: 18%; top: 18%; }
+      #frame-9 .poke-veggie.piece-3 { left: 12%; bottom: 26%; }
+      #frame-9 .poke-veggie.piece-4 { right: 12%; bottom: 26%; }
+      #frame-9 .poke-veggie.piece-5 { left: 38%; bottom: 12%; }
+
+      #frame-9 .poke-protein {
+        left: 35%;
+        top: 33%;
+        width: 30%;
+        z-index: 3;
+      }
+
+      #frame-9 .poke-bowl-sauce {
+        position: absolute;
+        left: 50%;
+        top: 52%;
+        z-index: 5;
+        transform: translate(-50%, -50%);
+        padding: 8px 10px;
+        border: 1px solid #000;
+        border-radius: 999px;
+        background: var(--piece-color, #fff);
+        font-size: 0.82rem;
+        font-weight: 800;
+        white-space: nowrap;
+      }
+
+      #frame-9 .poke-bowl-caption {
+        position: absolute;
+        left: 50%;
+        bottom: 14px;
+        width: 78%;
+        transform: translateX(-50%);
+        padding: 6px 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.82);
+        font-size: 0.72rem;
+        line-height: 1.3;
+        text-align: center;
       }
 
       #frame-9 .method-metrics {
@@ -1374,9 +1457,31 @@
         line-height: 1.55;
       }
 
+      #frame-9 .meal-step-track {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      #frame-9 .meal-step-track span {
+        border: 1px solid #000;
+        border-radius: 999px;
+        padding: 7px 8px;
+        text-align: center;
+        font-size: 0.82rem;
+      }
+
+      #frame-9 .meal-step-track .is-current {
+        background: #000;
+        color: #fff;
+      }
+
+      #frame-9 .meal-step-track .is-done {
+        background: #eef6df;
+      }
+
       #frame-9 .meal-option-groups {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 12px;
       }
 
@@ -1387,25 +1492,57 @@
 
       #frame-9 .meal-option-group h4 {
         margin: 0;
-        font-size: 0.95rem;
+        font-size: 1.05rem;
+      }
+
+      #frame-9 .meal-option-group p {
+        margin: 0;
+        line-height: 1.55;
       }
 
       #frame-9 .meal-option-buttons {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 8px;
       }
 
       #frame-9 .meal-option-button {
+        display: grid;
+        grid-template-columns: 38px minmax(0, 1fr);
+        gap: 8px;
+        align-items: center;
         border: 1px solid #000;
-        border-radius: 999px;
+        border-radius: 12px;
         background: #fff;
         color: #000;
-        padding: 6px 9px;
+        padding: 8px;
         cursor: pointer;
         font: inherit;
         font-size: 0.86rem;
+        text-align: left;
         transition: background 0.16s ease, color 0.16s ease, transform 0.16s ease;
+      }
+
+      #frame-9 .meal-option-button:disabled {
+        opacity: 0.38;
+        cursor: not-allowed;
+      }
+
+      #frame-9 .meal-option-icon {
+        grid-row: span 2;
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border: 1px solid #000;
+        border-radius: 50%;
+        background: var(--piece-color, #fff);
+        font-size: 1.1rem;
+      }
+
+      #frame-9 .meal-option-button small {
+        font-size: 0.72rem;
+        opacity: 0.72;
       }
 
       #frame-9 .meal-option-button:hover {
@@ -1452,14 +1589,71 @@
         line-height: 1.55;
       }
 
+      #frame-9 .meal-flow-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      #frame-9 .poke-result-card {
+        display: grid;
+        grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1fr);
+        gap: 24px;
+        align-items: start;
+      }
+
+      #frame-9 .poke-result-copy {
+        display: grid;
+        gap: 12px;
+      }
+
+      #frame-9 .poke-result-copy h3,
+      #frame-9 .poke-result-copy p {
+        margin: 0;
+      }
+
+      #frame-9 .poke-result-macros {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      #frame-9 .poke-result-macro {
+        display: grid;
+        gap: 4px;
+        border: 1px solid #000;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      #frame-9 .poke-result-macro em {
+        width: fit-content;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: #eef6df;
+        font-style: normal;
+        font-weight: 800;
+      }
+
+      #frame-9 .poke-result-macro.is-high em,
+      #frame-9 .poke-result-macro.is-low em {
+        background: #f6ead2;
+      }
+
       @media (max-width: 900px) {
         #frame-9 .BodyMethodExplorer {
           grid-template-columns: 1fr;
         }
 
         #frame-9 .body-report-grid,
-        #frame-9 .bowl-layout {
+        #frame-9 .bowl-layout,
+        #frame-9 .poke-result-card {
           grid-template-columns: 1fr;
+        }
+
+        #frame-9 .meal-step-track,
+        #frame-9 .poke-result-macros {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
         }
 
         #frame-9 .body-method-card-grid {
@@ -1721,12 +1915,12 @@
         const methods = [
           {
             id: 'meal',
-            title: '健康餐',
-            description: '用一碗餐點組合，測試你是否真的吃得健康。',
+            title: '夏威夷碗',
+            description: '用夾取食材的方式，看看一碗看似健康的餐是否符合自己的需求。',
             image: './pic/body-game/card-healthy-meal.png',
-            imageLabel: '健康餐封面待置入',
-            cost: '每餐約 NT$180－280',
-            risk: '長期花費高、需要持續選擇'
+            imageLabel: '夏威夷碗封面待置入',
+            cost: '每餐約 NT$190－330',
+            risk: '營養比例、價格與醬料熱量'
           },
           {
             id: 'gym',
@@ -1793,30 +1987,44 @@
         const collapseButton = explorer.querySelector('[data-method-collapse]');
         const nextButton = explorer.querySelector('[data-method-next]');
         const baseOptions = [
-          { name: '生菜', price: 0, kcal: 80, protein: 2, carb: 12, fat: 0 },
-          { name: '白飯', price: 20, kcal: 180, protein: 3, carb: 40, fat: 0 },
-          { name: '紫米飯', price: 25, kcal: 190, protein: 4, carb: 39, fat: 1 },
-          { name: '地瓜', price: 25, kcal: 160, protein: 2, carb: 37, fat: 0 },
-          { name: '生菜＋紫米飯', price: 30, kcal: 220, protein: 5, carb: 45, fat: 1 }
+          { name: '紫米飯', icon: '🍚', price: 25, kcal: 210, protein: 5, carb: 43, fat: 2, color: '#8d6a96' },
+          { name: '地瓜', icon: '🍠', price: 25, kcal: 165, protein: 2, carb: 38, fat: 0, color: '#e69b43' },
+          { name: '生菜', icon: '🥬', price: 0, kcal: 35, protein: 2, carb: 7, fat: 0, color: '#91bd64' },
+          { name: '生菜飯各半', icon: '🥗', price: 15, kcal: 125, protein: 4, carb: 25, fat: 1, color: '#b9c879' }
         ];
         const proteinOptions = [
-          { name: '雞胸肉', price: 60, kcal: 165, protein: 31, carb: 0, fat: 3 },
-          { name: '鮭魚', price: 90, kcal: 230, protein: 25, carb: 0, fat: 14 },
-          { name: '牛肉', price: 85, kcal: 250, protein: 24, carb: 0, fat: 15 },
-          { name: '豆腐', price: 45, kcal: 120, protein: 12, carb: 5, fat: 6 },
-          { name: '水煮蛋', price: 25, kcal: 75, protein: 6, carb: 1, fat: 5 }
+          { name: '蝦仁', icon: '🦐', price: 70, kcal: 120, protein: 24, carb: 1, fat: 2, color: '#f39a7a' },
+          { name: '鮭魚', icon: '🍣', price: 95, kcal: 235, protein: 25, carb: 0, fat: 15, color: '#ee8f73' },
+          { name: '雞胸肉', icon: '🍗', price: 65, kcal: 165, protein: 31, carb: 0, fat: 4, color: '#dfb887' },
+          { name: '鮪魚', icon: '🐟', price: 80, kcal: 150, protein: 30, carb: 0, fat: 3, color: '#b95d61' },
+          { name: '牛肉', icon: '🥩', price: 85, kcal: 230, protein: 25, carb: 0, fat: 14, color: '#bd7358' }
         ];
         const veggieOptions = [
-          { name: '花椰菜', price: 20, kcal: 50, protein: 3, carb: 9, fat: 0 },
-          { name: '毛豆', price: 25, kcal: 120, protein: 11, carb: 10, fat: 5 },
-          { name: '玉米筍', price: 20, kcal: 45, protein: 2, carb: 9, fat: 0 },
-          { name: '海帶芽', price: 15, kcal: 30, protein: 1, carb: 6, fat: 0 },
-          { name: '酪梨', price: 35, kcal: 120, protein: 1, carb: 6, fat: 11 }
+          { name: '玉米筍', icon: '🌽', price: 15, kcal: 28, protein: 1, carb: 6, fat: 0, color: '#f2cc67' },
+          { name: '豆腐', icon: '◻️', price: 20, kcal: 95, protein: 10, carb: 3, fat: 5, color: '#f0e6d8' },
+          { name: '番茄', icon: '🍅', price: 15, kcal: 22, protein: 1, carb: 5, fat: 0, color: '#de5f4a' },
+          { name: '小黃瓜', icon: '🥒', price: 15, kcal: 18, protein: 1, carb: 4, fat: 0, color: '#82b96f' },
+          { name: '馬鈴薯沙拉', icon: '🥔', price: 25, kcal: 130, protein: 2, carb: 18, fat: 6, color: '#e2c57b' },
+          { name: '洋蔥', icon: '🧅', price: 10, kcal: 20, protein: 1, carb: 5, fat: 0, color: '#d9b7d2' },
+          { name: '甜椒', icon: '🫑', price: 15, kcal: 20, protein: 1, carb: 5, fat: 0, color: '#e48248' },
+          { name: '毛豆', icon: '🫘', price: 25, kcal: 95, protein: 9, carb: 8, fat: 4, color: '#8abd63' },
+          { name: '海藻沙拉', icon: '🌿', price: 20, kcal: 35, protein: 1, carb: 7, fat: 1, color: '#4f8e69' },
+          { name: '鳳梨', icon: '🍍', price: 20, kcal: 50, protein: 1, carb: 13, fat: 0, color: '#eec85a' },
+          { name: '蘋果', icon: '🍎', price: 20, kcal: 48, protein: 0, carb: 13, fat: 0, color: '#d95555' },
+          { name: '玉米', icon: '🌽', price: 15, kcal: 70, protein: 2, carb: 16, fat: 1, color: '#f1c64f' },
+          { name: '海帶', icon: '🟩', price: 15, kcal: 25, protein: 1, carb: 5, fat: 0, color: '#416d59' },
+          { name: '秋葵', icon: '🌱', price: 15, kcal: 30, protein: 2, carb: 6, fat: 0, color: '#6da356' },
+          { name: '泡菜', icon: '🥬', price: 20, kcal: 35, protein: 2, carb: 7, fat: 0, color: '#d65d43' },
+          { name: '花椰菜', icon: '🥦', price: 20, kcal: 35, protein: 3, carb: 7, fat: 0, color: '#79b35c' },
+          { name: '杏鮑菇', icon: '🍄', price: 20, kcal: 36, protein: 2, carb: 7, fat: 0, color: '#d6bd92' }
         ];
         const sauceOptions = [
-          { name: '和風醬', price: 10, kcal: 50, protein: 0, carb: 5, fat: 2 },
-          { name: '胡麻醬', price: 15, kcal: 120, protein: 2, carb: 6, fat: 10 },
-          { name: '優格醬', price: 15, kcal: 70, protein: 3, carb: 5, fat: 4 }
+          { name: '辣美乃滋', icon: '🌶️', price: 15, kcal: 115, protein: 0, carb: 3, fat: 11, color: '#e27a55' },
+          { name: '胡麻醬', icon: '🥜', price: 15, kcal: 95, protein: 2, carb: 4, fat: 8, color: '#cfa35d' },
+          { name: '油醋醬', icon: '🫒', price: 10, kcal: 70, protein: 0, carb: 2, fat: 7, color: '#a8a85a' },
+          { name: '優格醬', icon: '🥛', price: 15, kcal: 60, protein: 3, carb: 5, fat: 3, color: '#efe6d7' },
+          { name: '柚香甜醬油', icon: '🍊', price: 10, kcal: 45, protein: 1, carb: 10, fat: 0, color: '#d7a35f' },
+          { name: '墨西哥辣醬', icon: '🔥', price: 10, kcal: 35, protein: 1, carb: 7, fat: 0, color: '#ce5748' }
         ];
         const mealOptions = {
           base: {
@@ -1830,7 +2038,7 @@
             type: 'single'
           },
           veggies: {
-            label: '配菜（最多 5 個）',
+            label: '蔬菜與配料',
             items: veggieOptions,
             type: 'multi'
           },
@@ -1844,7 +2052,8 @@
           base: null,
           protein: null,
           veggies: [],
-          sauce: null
+          sauce: null,
+          step: 'base'
         };
 
         function renderCards() {
@@ -2271,6 +2480,53 @@
           ].filter(Boolean);
         }
 
+        function mealStepConfig() {
+          return {
+            base: {
+              order: 1,
+              label: '澱粉',
+              title: '第一步：選澱粉',
+              hint: '紫米飯和地瓜提供主要碳水，生菜能降低整碗熱量。',
+              category: 'base',
+              next: 'protein'
+            },
+            protein: {
+              order: 2,
+              label: '主食',
+              title: '第二步：選主食',
+              hint: '選一份主要蛋白質，會影響蛋白質、脂肪和價格。',
+              category: 'protein',
+              next: 'veggies',
+              previous: 'base'
+            },
+            veggies: {
+              order: 3,
+              label: '蔬菜',
+              title: '第三步：夾蔬菜與配料',
+              hint: '請選 3 到 5 種。毛豆、豆腐和馬鈴薯沙拉會讓營養與熱量更明顯增加。',
+              category: 'veggies',
+              next: 'sauce',
+              previous: 'protein'
+            },
+            sauce: {
+              order: 4,
+              label: '醬料',
+              title: '第四步：選醬料',
+              hint: '醬料是最容易被忽略的熱量來源。選完就能產生你的夏威夷碗分析。',
+              category: 'sauce',
+              previous: 'veggies'
+            }
+          };
+        }
+
+        function canAdvanceMealStep() {
+          if (mealState.step === 'base') return Boolean(mealState.base);
+          if (mealState.step === 'protein') return Boolean(mealState.protein);
+          if (mealState.step === 'veggies') return mealState.veggies.length >= 3;
+          if (mealState.step === 'sauce') return Boolean(mealState.sauce);
+          return false;
+        }
+
         function mealTotals() {
           return selectedMealItems().reduce(
             (total, item) => ({
@@ -2349,37 +2605,108 @@
           };
         }
 
+        function mealStatusClass(status) {
+          return status === '接近' || status === '足夠' ? 'is-good' : status === '偏高' ? 'is-high' : 'is-low';
+        }
+
+        function mealBowlMarkup(isResult = false) {
+          const allItems = selectedMealItems();
+          const vegetableItems = mealState.veggies.map((item, index) => `
+            <span class="poke-bowl-piece poke-veggie piece-${index + 1}" style="--piece-color: ${item.color};" title="${item.name}">
+              ${item.icon}
+            </span>
+          `).join('');
+
+          return `
+            <div class="poke-bowl ${isResult ? 'is-result' : ''}" data-meal-dropzone aria-label="目前夏威夷碗">
+              <div class="poke-bowl-base" style="--piece-color: ${mealState.base?.color || '#f5e8ce'};">
+                ${mealState.base ? `<span>${mealState.base.icon}</span><small>${mealState.base.name}</small>` : '<small>空碗</small>'}
+              </div>
+              ${vegetableItems}
+              ${mealState.protein ? `
+                <span class="poke-bowl-piece poke-protein" style="--piece-color: ${mealState.protein.color};" title="${mealState.protein.name}">
+                  ${mealState.protein.icon}
+                </span>
+              ` : ''}
+              ${mealState.sauce ? `
+                <span class="poke-bowl-sauce" style="--piece-color: ${mealState.sauce.color};">
+                  ${mealState.sauce.icon} ${mealState.sauce.name}
+                </span>
+              ` : ''}
+              <div class="poke-bowl-caption">${allItems.length ? allItems.map((item) => item.name).join('、') : '從澱粉開始夾'}</div>
+            </div>
+          `;
+        }
+
+        function mealOptionMarkup(category, group) {
+          return group.items.map((item) => {
+            const isSelected = group.type === 'multi'
+              ? mealState[category].some((selected) => selected.name === item.name)
+              : mealState[category]?.name === item.name;
+            const isDisabled = category === 'veggies' && mealState.veggies.length >= 5 && !isSelected;
+            return `
+              <button
+                class="meal-option-button method-chip${isSelected ? ' is-selected' : ''}"
+                type="button"
+                draggable="true"
+                ${isDisabled ? 'disabled' : ''}
+                data-meal-category="${category}"
+                data-meal-option="${item.name}"
+              >
+                <span class="meal-option-icon" style="--piece-color: ${item.color};">${item.icon}</span>
+                <span>${item.name}</span>
+                <small>${item.kcal} kcal / +${item.price} 元</small>
+              </button>
+            `;
+          }).join('');
+        }
+
+        function advanceMealStep() {
+          const current = mealStepConfig()[mealState.step];
+          if (!current || !canAdvanceMealStep()) return;
+          if (current.next) {
+            mealState.step = current.next;
+            renderMealGame();
+            return;
+          }
+          renderMealResultGame();
+        }
+
+        function goBackMealStep() {
+          const previous = mealStepConfig()[mealState.step]?.previous;
+          if (!previous) return;
+          mealState.step = previous;
+          renderMealGame();
+        }
+
         function renderMealGame() {
           const totals = mealTotals();
           const judgement = mealJudgement(totals);
+          const steps = mealStepConfig();
+          const current = steps[mealState.step];
+          const group = mealOptions[current.category];
           mealGame.innerHTML = `
             <div class="meal-game-intro">
-              <h3>今天你會怎麼配一碗夏威夷碗／健康餐盒？</h3>
-              <p>把食材拖曳或點選進碗裡，最多選擇五個主要項目；系統會即時計算價格與營養。</p>
+              <h3>夾一碗夏威夷碗</h3>
+              <p>依序選澱粉、主食、蔬菜與醬料。系統會用你前面填的身高、體重、年齡與活動量估算這一餐是否接近需求。</p>
+              <div class="meal-step-track" aria-label="夏威夷碗製作步驟">
+                ${Object.entries(steps).map(([key, step]) => `
+                  <span class="${key === mealState.step ? 'is-current' : step.order < current.order ? 'is-done' : ''}">
+                    ${step.order}. ${step.label}
+                  </span>
+                `).join('')}
+              </div>
             </div>
             <div class="bowl-layout">
-              <div class="bowl-dropzone" data-meal-dropzone>
-                <span>${selectedMealItems().length ? selectedMealItems().map((item) => item.name).join('、') : '空碗'}</span>
-              </div>
+              ${mealBowlMarkup(false)}
               <div class="meal-option-groups">
-                ${Object.entries(mealOptions).map(([category, group]) => `
-                  <section class="meal-option-group">
-                    <h4>${group.label}</h4>
-                    <div class="meal-option-buttons">
-                      ${group.items.map((item) => `
-                        <button
-                          class="meal-option-button method-chip${group.type === 'multi'
-                            ? mealState[category].some((selected) => selected.name === item.name) ? ' is-selected' : ''
-                            : mealState[category]?.name === item.name ? ' is-selected' : ''}"
-                          type="button"
-                          draggable="true"
-                          data-meal-category="${category}"
-                          data-meal-option="${item.name}"
-                        >${item.name}</button>
-                      `).join('')}
-                    </div>
-                  </section>
-                `).join('')}
+                <section class="meal-option-group">
+                  <h4>${current.title}</h4>
+                  <p>${current.hint}</p>
+                  <div class="meal-option-buttons">
+                    ${mealOptionMarkup(current.category, group)}
+                  </div>
+                </section>
               </div>
             </div>
             <div class="meal-summary-grid" aria-live="polite">
@@ -2394,7 +2721,51 @@
               <div class="meal-summary-item"><span>蔬菜</span><b>${judgement.veggieStatus}</b></div>
             </div>
             <p class="meal-feedback">${judgement.summary}<br />一餐粗估：${judgement.targets.mealCalories} kcal、蛋白質 ${judgement.targets.proteinTarget}g、碳水 ${judgement.targets.carbTarget}g。</p>
-            <button class="button" type="button" data-finish-method="meal">完成健康餐體驗</button>
+            <div class="meal-flow-actions">
+              ${current.previous ? '<button class="button" type="button" data-meal-prev>上一步</button>' : ''}
+              <button class="button" type="button" data-meal-next ${canAdvanceMealStep() ? '' : 'disabled'}>
+                ${current.next ? '下一步' : '生成結果'}
+              </button>
+            </div>
+          `;
+        }
+
+        function renderMealResultGame() {
+          const totals = mealTotals();
+          const judgement = mealJudgement(totals);
+          const monthlyWorkday = totals.price * 22;
+          const macroRows = [
+            ['熱量', `${totals.kcal} kcal`, `建議 ${judgement.targets.mealCalories} kcal`, judgement.calorieStatus],
+            ['蛋白質', `${totals.protein} g`, `建議 ${judgement.targets.proteinTarget} g 以上`, judgement.proteinStatus],
+            ['碳水', `${totals.carb} g`, `建議約 ${judgement.targets.carbTarget} g`, judgement.carbStatus],
+            ['蔬菜', `${mealState.veggies.length} 種`, `建議至少 ${judgement.targets.veggieTarget} 種`, judgement.veggieStatus]
+          ];
+          mealGame.innerHTML = `
+            <article class="poke-result-card">
+              <div class="poke-result-visual">
+                ${mealBowlMarkup(true)}
+                <p class="meal-total">NT$${totals.price} / ${totals.kcal} kcal</p>
+              </div>
+              <div class="poke-result-copy">
+                <h3>你的夏威夷碗完成了</h3>
+                <p>${judgement.summary}</p>
+                <div class="poke-result-macros">
+                  ${macroRows.map(([label, value, target, status]) => `
+                    <div class="poke-result-macro ${mealStatusClass(status)}">
+                      <span>${label}</span>
+                      <b>${value}</b>
+                      <small>${target}</small>
+                      <em>${status}</em>
+                    </div>
+                  `).join('')}
+                </div>
+                <p class="meal-feedback">這份餐點約 ${totals.price} 元；若 22 個上課／上班日都吃，約 NT$${monthlyWorkday}。價格與營養皆為估算，之後可再用正式食材資料校正。</p>
+                <div class="meal-flow-actions">
+                  <button class="button" type="button" data-restart-method="meal">重新夾一碗</button>
+                  <button class="button" type="button" data-finish-method="meal">完成夏威夷碗體驗</button>
+                </div>
+              </div>
+            </article>
           `;
         }
 
@@ -2723,6 +3094,7 @@
             mealState.protein = null;
             mealState.veggies = [];
             mealState.sauce = null;
+            mealState.step = 'base';
           }
           if (methodId === 'gym') methodState.gym = { week: 0, visits: 0, energy: 50, stress: 30, social: 50 };
           if (methodId === 'injection') methodState.injection = { step: 0, weight: 0, cost: 6000, sideEffect: 0, stress: 30, social: 50 };
@@ -2749,20 +3121,16 @@
         function updateMealSelection(category, optionName) {
           const option = mealOptions[category]?.items.find((item) => item.name === optionName);
           if (!option) return;
-          const totalSelected = selectedMealItems().length;
 
           if (mealOptions[category].type === 'multi') {
             const existingIndex = mealState[category].findIndex((item) => item.name === option.name);
             if (existingIndex >= 0) {
               mealState[category].splice(existingIndex, 1);
-            } else if (totalSelected < 5) {
+            } else if (mealState[category].length < 5) {
               mealState[category].push(option);
             }
           } else {
-            const replacingExisting = Boolean(mealState[category]);
-            if (replacingExisting || totalSelected < 5) {
-              mealState[category] = option;
-            }
+            mealState[category] = mealState[category]?.name === option.name ? null : option;
           }
           renderMealGame();
         }
@@ -2889,6 +3257,18 @@
           const finishButton = event.target.closest('[data-finish-method="meal"]');
           if (finishButton) {
             finishMeal();
+            return;
+          }
+
+          const mealNextButton = event.target.closest('[data-meal-next]');
+          if (mealNextButton) {
+            advanceMealStep();
+            return;
+          }
+
+          const mealPrevButton = event.target.closest('[data-meal-prev]');
+          if (mealPrevButton) {
+            goBackMealStep();
             return;
           }
 
