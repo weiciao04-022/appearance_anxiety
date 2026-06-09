@@ -550,10 +550,10 @@ button:active,
 }
 
 .case-row {
-  width: min(860px, 100%);
+  width: min(980px, 100%);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 28px;
+  gap: 22px;
   padding: 24px;
   border: 1px solid #000;
   box-sizing: border-box;
@@ -562,7 +562,8 @@ button:active,
 .case-card {
   position: relative;
   width: 100%;
-  min-height: 210px;
+  aspect-ratio: 9 / 16;
+  min-height: 0;
   padding: 0;
   cursor: pointer;
   color: #000;
@@ -573,6 +574,8 @@ button:active,
   line-height: 1.4;
   box-sizing: border-box;
   overflow: hidden;
+  border: 1px solid #000;
+  background: #fff;
 }
 
 .case-card-media {
@@ -588,10 +591,27 @@ button:active,
 .case-card span {
   position: relative;
   z-index: 1;
-  padding: 6px 10px;
-  background: rgba(255, 255, 255, 0.78);
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.72);
   color: #000;
   font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  box-sizing: border-box;
+}
+
+.case-card:hover span,
+.case-card:focus-visible span,
+.case-card:focus-within span {
+  opacity: 1;
+}
+
+.case-card-placeholder span {
+  background: transparent;
 }
 
 .case-card:hover {
@@ -1410,14 +1430,14 @@ button:active,
   }
 
   .case-row {
-    grid-template-columns: 1fr;
-    gap: 18px;
-    width: min(360px, 100%);
-    padding: 18px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    width: min(430px, 100%);
+    padding: 14px;
   }
 
   .case-card {
-    min-height: 150px;
+    aspect-ratio: 9 / 16;
   }
 
   .case-article {
@@ -1566,6 +1586,44 @@ button:active,
   #frame-12 .meal-inline-button {
     width: 100%;
   }
+}
+
+/* White-background reset requested for the current prototype. */
+body,
+.section,
+.site-preloader,
+#frame-12,
+#frame-9.body-method-section,
+.manga-scroll-section,
+.manga-panel,
+.manga-frame,
+.manga-image,
+.manga-dialogue,
+.body-management-experience,
+.body-experience-card,
+.body-experience-dialog,
+.body-experience-dialog-media,
+.body-experience-dialog-content,
+.body-poke-bowl,
+.health-magnifier-challenge,
+.health-magnifier-inner,
+.health-person-card,
+.health-magnifier-detail,
+.health-magnifier-summary,
+#frame-12 .meal-story-panel,
+#frame-12 .meal-game-panel,
+#frame-12 .meal-profile-form,
+#frame-12 .meal-box-zone,
+#frame-12 .meal-ingredient-zone,
+#frame-12 .meal-checkout-counter,
+#frame-12 .meal-waiting-box,
+#frame-12 .meal-result-layout,
+#frame-12 .meal-option,
+#frame-12 .meal-lunchbox,
+#frame-12 .meal-macro-card,
+#frame-12 .meal-comparison-card {
+  background: #fff !important;
+  background-image: none !important;
 }
 
 /* 滾動漫畫只作用於健康報告之後，不影響既有頁面區塊。 */
