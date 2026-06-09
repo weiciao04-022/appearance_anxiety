@@ -1799,7 +1799,7 @@ class BodyManagementExperienceHub {
           <span>點開圖卡進入短體驗。你可以隨時退出，也可以完成後嘗試其他方式。</span>
         </header>
         <div class="body-experience-grid">${this.cards()}</div>
-        <a class="body-experience-skip" href="#manga-panel-four">先不體驗，繼續向下閱讀</a>
+        <a class="body-experience-skip" href="#manga-panel-after-experience">先不體驗，繼續向下閱讀</a>
       </div>
       ${this.modal()}
     `;
@@ -1878,7 +1878,7 @@ class BodyManagementExperienceHub {
     this.activeMethod = null;
     this.selectedChoice = null;
     this.render();
-    document.getElementById('manga-panel-four')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById('manga-panel-after-experience')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   handleClick(event) {
