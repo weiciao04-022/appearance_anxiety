@@ -1417,44 +1417,44 @@ class BodyManagementExperienceHub {
     };
     this.mealOptions = {
       base: [
-        { name: '紫米飯', icon: '🍚', price: 25, kcal: 210, protein: 5, carb: 43, fat: 2, color: '#8d6a96' },
-        { name: '地瓜', icon: '🍠', price: 25, kcal: 165, protein: 2, carb: 38, fat: 0, color: '#e69b43' },
-        { name: '生菜', icon: '🥬', price: 0, kcal: 35, protein: 2, carb: 7, fat: 0, color: '#91bd64' },
-        { name: '生菜飯各半', icon: '🥗', price: 15, kcal: 125, protein: 4, carb: 25, fat: 1, color: '#b9c879' }
+        { name: '紫米飯', icon: '🍚', image: './pic/poke-ingredients/1-1.png', price: 25, kcal: 210, protein: 5, carb: 43, fat: 2, color: '#8d6a96' },
+        { name: '地瓜', icon: '🍠', image: './pic/poke-ingredients/1-2.png', price: 25, kcal: 165, protein: 2, carb: 38, fat: 0, color: '#e69b43' },
+        { name: '生菜', icon: '🥬', image: './pic/poke-ingredients/1-3.png', price: 0, kcal: 35, protein: 2, carb: 7, fat: 0, color: '#91bd64' },
+        { name: '生菜飯各半', icon: '🥗', image: './pic/poke-ingredients/1-4.png', price: 15, kcal: 125, protein: 4, carb: 25, fat: 1, color: '#b9c879' }
       ],
       protein: [
-        { name: '蝦仁', icon: '🦐', price: 70, kcal: 120, protein: 24, carb: 1, fat: 2, color: '#f39a7a' },
-        { name: '鮭魚', icon: '🍣', price: 95, kcal: 235, protein: 25, carb: 0, fat: 15, color: '#ee8f73' },
-        { name: '雞胸肉', icon: '🍗', price: 65, kcal: 165, protein: 31, carb: 0, fat: 4, color: '#dfb887' },
-        { name: '鮪魚', icon: '🐟', price: 80, kcal: 150, protein: 30, carb: 0, fat: 3, color: '#b95d61' },
-        { name: '牛肉', icon: '🥩', price: 85, kcal: 230, protein: 25, carb: 0, fat: 14, color: '#bd7358' }
+        { name: '蝦仁', icon: '🦐', image: './pic/poke-ingredients/2-1.png', price: 70, kcal: 120, protein: 24, carb: 1, fat: 2, color: '#f39a7a' },
+        { name: '鮭魚', icon: '🍣', image: './pic/poke-ingredients/2-2.png', price: 95, kcal: 235, protein: 25, carb: 0, fat: 15, color: '#ee8f73' },
+        { name: '雞胸肉', icon: '🍗', image: './pic/poke-ingredients/2-3.png', price: 65, kcal: 165, protein: 31, carb: 0, fat: 4, color: '#dfb887' },
+        { name: '鮪魚', icon: '🐟', image: './pic/poke-ingredients/2-4.png', price: 80, kcal: 150, protein: 30, carb: 0, fat: 3, color: '#b95d61' },
+        { name: '牛肉', icon: '🥩', image: './pic/poke-ingredients/2-5.png', price: 85, kcal: 230, protein: 25, carb: 0, fat: 14, color: '#bd7358' }
       ],
       veggies: [
-        { name: '玉米筍', icon: '🌽', price: 15, kcal: 28, protein: 1, carb: 6, fat: 0, color: '#f2cc67' },
-        { name: '豆腐', icon: '◻️', price: 20, kcal: 95, protein: 10, carb: 3, fat: 5, color: '#f0e6d8' },
-        { name: '番茄', icon: '🍅', price: 15, kcal: 22, protein: 1, carb: 5, fat: 0, color: '#de5f4a' },
-        { name: '小黃瓜', icon: '🥒', price: 15, kcal: 18, protein: 1, carb: 4, fat: 0, color: '#82b96f' },
-        { name: '馬鈴薯沙拉', icon: '🥔', price: 25, kcal: 130, protein: 2, carb: 18, fat: 6, color: '#e2c57b' },
-        { name: '洋蔥', icon: '🧅', price: 10, kcal: 20, protein: 1, carb: 5, fat: 0, color: '#d9b7d2' },
-        { name: '甜椒', icon: '🫑', price: 15, kcal: 20, protein: 1, carb: 5, fat: 0, color: '#e48248' },
-        { name: '毛豆', icon: '🫘', price: 25, kcal: 95, protein: 9, carb: 8, fat: 4, color: '#8abd63' },
-        { name: '海藻沙拉', icon: '🌿', price: 20, kcal: 35, protein: 1, carb: 7, fat: 1, color: '#4f8e69' },
-        { name: '鳳梨', icon: '🍍', price: 20, kcal: 50, protein: 1, carb: 13, fat: 0, color: '#eec85a' },
-        { name: '蘋果', icon: '🍎', price: 20, kcal: 48, protein: 0, carb: 13, fat: 0, color: '#d95555' },
-        { name: '玉米', icon: '🌽', price: 15, kcal: 70, protein: 2, carb: 16, fat: 1, color: '#f1c64f' },
-        { name: '海帶', icon: '🟩', price: 15, kcal: 25, protein: 1, carb: 5, fat: 0, color: '#416d59' },
-        { name: '秋葵', icon: '🌱', price: 15, kcal: 30, protein: 2, carb: 6, fat: 0, color: '#6da356' },
-        { name: '泡菜', icon: '🥬', price: 20, kcal: 35, protein: 2, carb: 7, fat: 0, color: '#d65d43' },
-        { name: '花椰菜', icon: '🥦', price: 20, kcal: 35, protein: 3, carb: 7, fat: 0, color: '#79b35c' },
-        { name: '杏鮑菇', icon: '🍄', price: 20, kcal: 36, protein: 2, carb: 7, fat: 0, color: '#d6bd92' }
+        { name: '玉米筍', icon: '🌽', image: './pic/poke-ingredients/3-1.png', price: 15, kcal: 28, protein: 1, carb: 6, fat: 0, color: '#f2cc67' },
+        { name: '豆腐', icon: '◻️', image: './pic/poke-ingredients/3-2.png', price: 20, kcal: 95, protein: 10, carb: 3, fat: 5, color: '#f0e6d8' },
+        { name: '番茄', icon: '🍅', image: './pic/poke-ingredients/3-3.png', price: 15, kcal: 22, protein: 1, carb: 5, fat: 0, color: '#de5f4a' },
+        { name: '小黃瓜', icon: '🥒', image: './pic/poke-ingredients/3-4.png', price: 15, kcal: 18, protein: 1, carb: 4, fat: 0, color: '#82b96f' },
+        { name: '馬鈴薯沙拉', icon: '🥔', image: './pic/poke-ingredients/3-5.png', price: 25, kcal: 130, protein: 2, carb: 18, fat: 6, color: '#e2c57b' },
+        { name: '洋蔥', icon: '🧅', image: './pic/poke-ingredients/3-6.png', price: 10, kcal: 20, protein: 1, carb: 5, fat: 0, color: '#d9b7d2' },
+        { name: '甜椒', icon: '🫑', image: './pic/poke-ingredients/3-7.png', price: 15, kcal: 20, protein: 1, carb: 5, fat: 0, color: '#e48248' },
+        { name: '毛豆', icon: '🫘', image: './pic/poke-ingredients/3-8.png', price: 25, kcal: 95, protein: 9, carb: 8, fat: 4, color: '#8abd63' },
+        { name: '海藻沙拉', icon: '🌿', image: './pic/poke-ingredients/3-9.png', price: 20, kcal: 35, protein: 1, carb: 7, fat: 1, color: '#4f8e69' },
+        { name: '鳳梨', icon: '🍍', image: './pic/poke-ingredients/3-10.png', price: 20, kcal: 50, protein: 1, carb: 13, fat: 0, color: '#eec85a' },
+        { name: '蘋果', icon: '🍎', image: './pic/poke-ingredients/3-11.png', price: 20, kcal: 48, protein: 0, carb: 13, fat: 0, color: '#d95555' },
+        { name: '玉米', icon: '🌽', image: './pic/poke-ingredients/3-12.png', price: 15, kcal: 70, protein: 2, carb: 16, fat: 1, color: '#f1c64f' },
+        { name: '海帶', icon: '🟩', image: './pic/poke-ingredients/3-13.png', price: 15, kcal: 25, protein: 1, carb: 5, fat: 0, color: '#416d59' },
+        { name: '秋葵', icon: '🌱', image: './pic/poke-ingredients/3-14.png', price: 15, kcal: 30, protein: 2, carb: 6, fat: 0, color: '#6da356' },
+        { name: '泡菜', icon: '🥬', image: './pic/poke-ingredients/3-15.png', price: 20, kcal: 35, protein: 2, carb: 7, fat: 0, color: '#d65d43' },
+        { name: '花椰菜', icon: '🥦', image: './pic/poke-ingredients/3-16.png', price: 20, kcal: 35, protein: 3, carb: 7, fat: 0, color: '#79b35c' },
+        { name: '杏鮑菇', icon: '🍄', image: './pic/poke-ingredients/3-17.png', price: 20, kcal: 36, protein: 2, carb: 7, fat: 0, color: '#d6bd92' }
       ],
       sauce: [
-        { name: '辣美乃滋', icon: '🌶️', price: 15, kcal: 115, protein: 0, carb: 3, fat: 11, color: '#e27a55' },
-        { name: '胡麻醬', icon: '🥜', price: 15, kcal: 95, protein: 2, carb: 4, fat: 8, color: '#cfa35d' },
-        { name: '油醋醬', icon: '🫒', price: 10, kcal: 70, protein: 0, carb: 2, fat: 7, color: '#a8a85a' },
-        { name: '優格醬', icon: '🥛', price: 15, kcal: 60, protein: 3, carb: 5, fat: 3, color: '#efe6d7' },
-        { name: '柚香甜醬油', icon: '🍊', price: 10, kcal: 45, protein: 1, carb: 10, fat: 0, color: '#d7a35f' },
-        { name: '墨西哥辣醬', icon: '🔥', price: 10, kcal: 35, protein: 1, carb: 7, fat: 0, color: '#ce5748' }
+        { name: '辣美乃滋', icon: '🌶️', image: './pic/poke-ingredients/4-1.png', price: 15, kcal: 115, protein: 0, carb: 3, fat: 11, color: '#e27a55' },
+        { name: '胡麻醬', icon: '🥜', image: './pic/poke-ingredients/4-2.png', price: 15, kcal: 95, protein: 2, carb: 4, fat: 8, color: '#cfa35d' },
+        { name: '油醋醬', icon: '🫒', image: './pic/poke-ingredients/4-3.png', price: 10, kcal: 70, protein: 0, carb: 2, fat: 7, color: '#a8a85a' },
+        { name: '優格醬', icon: '🥛', image: './pic/poke-ingredients/4-4.png', price: 15, kcal: 60, protein: 3, carb: 5, fat: 3, color: '#efe6d7' },
+        { name: '柚香甜醬油', icon: '🍊', image: './pic/poke-ingredients/4-5.png', price: 10, kcal: 45, protein: 1, carb: 10, fat: 0, color: '#d7a35f' },
+        { name: '墨西哥辣醬', icon: '🔥', image: './pic/poke-ingredients/4-6.png', price: 10, kcal: 35, protein: 1, carb: 7, fat: 0, color: '#ce5748' }
       ]
     };
     this.methods = [
@@ -1588,18 +1588,25 @@ class BodyManagementExperienceHub {
       && Boolean(this.mealBowl.sauce);
   }
 
+  mealIcon(item) {
+    if (!item) return '';
+    return item.image
+      ? `<img class="body-poke-food-img" src="${item.image}" alt="${item.name}" loading="lazy" />`
+      : item.icon;
+  }
+
   mealBowlMarkup(isResult = false) {
     const veggies = this.mealBowl.veggies.map((item, index) => `
-      <span class="body-poke-piece body-poke-veggie piece-${index + 1}" style="--piece-color:${item.color}" title="${item.name}">${item.icon}</span>
+      <span class="body-poke-piece body-poke-veggie piece-${index + 1}" style="--piece-color:${item.color}" title="${item.name}">${this.mealIcon(item)}</span>
     `).join('');
     return `
       <div class="body-poke-bowl ${isResult ? 'is-result' : ''}">
         <div class="body-poke-base" style="--piece-color:${this.mealBowl.base?.color || '#f5e8ce'}">
-          ${this.mealBowl.base ? `<span>${this.mealBowl.base.icon}</span><small>${this.mealBowl.base.name}</small>` : '<small>空碗</small>'}
+          ${this.mealBowl.base ? `<span>${this.mealIcon(this.mealBowl.base)}</span><small>${this.mealBowl.base.name}</small>` : '<small>空碗</small>'}
         </div>
         ${veggies}
-        ${this.mealBowl.protein ? `<span class="body-poke-piece body-poke-protein" style="--piece-color:${this.mealBowl.protein.color}" title="${this.mealBowl.protein.name}">${this.mealBowl.protein.icon}</span>` : ''}
-        ${this.mealBowl.sauce ? `<span class="body-poke-sauce" style="--piece-color:${this.mealBowl.sauce.color}">${this.mealBowl.sauce.icon} ${this.mealBowl.sauce.name}</span>` : ''}
+        ${this.mealBowl.protein ? `<span class="body-poke-piece body-poke-protein" style="--piece-color:${this.mealBowl.protein.color}" title="${this.mealBowl.protein.name}">${this.mealIcon(this.mealBowl.protein)}</span>` : ''}
+        ${this.mealBowl.sauce ? `<span class="body-poke-sauce" style="--piece-color:${this.mealBowl.sauce.color}">${this.mealIcon(this.mealBowl.sauce)} <span>${this.mealBowl.sauce.name}</span></span>` : ''}
       </div>
     `;
   }
@@ -1612,7 +1619,7 @@ class BodyManagementExperienceHub {
       const disabled = category === 'veggies' && this.mealBowl.veggies.length >= 5 && !selected;
       return `
         <button class="${selected ? 'is-selected' : ''}" type="button" data-body-meal-option="${category}" data-body-meal-name="${item.name}" ${disabled ? 'disabled' : ''}>
-          <span style="--piece-color:${item.color}">${item.icon}</span>
+          <span style="--piece-color:${item.color}">${this.mealIcon(item)}</span>
           <b>${item.name}</b>
           <small>${item.kcal} kcal / +${item.price} 元</small>
         </button>

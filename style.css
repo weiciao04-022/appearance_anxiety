@@ -3059,6 +3059,20 @@ body,
   font-weight: 800;
 }
 
+.body-poke-food-img {
+  display: block;
+  width: 100%;
+  max-width: 42px;
+  height: 42px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.body-poke-base .body-poke-food-img {
+  max-width: 58px;
+  height: 58px;
+}
+
 .body-poke-piece {
   position: absolute;
   display: grid;
@@ -3090,6 +3104,9 @@ body,
   left: 50%;
   top: 52%;
   z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   transform: translate(-50%, -50%);
   padding: 8px 10px;
   border: 1px solid #2f2f2f;
@@ -3098,6 +3115,11 @@ body,
   font-size: 0.78rem;
   font-weight: 800;
   white-space: nowrap;
+}
+
+.body-poke-sauce .body-poke-food-img {
+  width: 28px;
+  height: 28px;
 }
 
 .body-poke-options {
@@ -3183,6 +3205,12 @@ body,
   border: 1px solid #2f2f2f;
   border-radius: 50%;
   background: var(--piece-color, #fff);
+  overflow: hidden;
+}
+
+.body-poke-option-grid button > span .body-poke-food-img {
+  max-width: 32px;
+  height: 32px;
 }
 
 .body-poke-option-grid button small {
