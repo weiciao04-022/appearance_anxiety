@@ -20,6 +20,20 @@
   <script>
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.addEventListener('load', function () {
+      if (window.location.hash) {
+        var target = null;
+        try {
+          target = document.querySelector(window.location.hash);
+        } catch (error) {
+          target = null;
+        }
+        if (target) {
+          window.requestAnimationFrame(function () {
+            target.scrollIntoView({ block: 'start' });
+          });
+          return;
+        }
+      }
       window.scrollTo(0, 0);
     });
   </script>
