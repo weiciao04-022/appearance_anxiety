@@ -50,22 +50,6 @@ function preloadImage(src) {
   });
 }
 
-function preloadVideo(src) {
-  return new Promise((resolve) => {
-    const video = document.createElement('video');
-    const finish = () => {
-      video.removeAttribute('src');
-      video.load();
-      resolve();
-    };
-    video.preload = 'metadata';
-    video.onloadedmetadata = finish;
-    video.onerror = finish;
-    video.src = src;
-    video.load();
-  });
-}
-
 async function initSitePreloader() {
   const preloader = document.querySelector('[data-site-preloader]');
   const progressBar = document.querySelector('[data-preload-progress]');
@@ -78,12 +62,8 @@ async function initSitePreloader() {
   const pageImages = Array.from(document.querySelectorAll('img[src], video[poster]'))
     .map((element) => element.currentSrc || element.getAttribute('src') || element.getAttribute('poster'))
     .filter(Boolean);
-  const pageVideos = Array.from(document.querySelectorAll('video[src], video source[src]'))
-    .map((element) => element.currentSrc || element.getAttribute('src'))
-    .filter(Boolean);
   const imageAssets = [...new Set([...siteAssetManifest, ...pageImages])];
-  const videoAssets = [...new Set(pageVideos)];
-  const totalAssets = Math.max(1, imageAssets.length + videoAssets.length);
+  const totalAssets = Math.max(1, imageAssets.length);
   const startedAt = performance.now();
   let completed = 0;
   const updateProgress = () => {
@@ -94,8 +74,7 @@ async function initSitePreloader() {
 
   const preloadTask = Promise.all(
     [
-      ...imageAssets.map((src) => preloadImage(src)),
-      ...videoAssets.map((src) => preloadVideo(src))
+      ...imageAssets.map((src) => preloadImage(src))
     ].map((task) =>
       task.finally(() => {
         completed += 1;
