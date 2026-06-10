@@ -1470,7 +1470,7 @@ class BodyManagementExperienceHub {
       },
       {
         id: 'gym',
-        title: '健身房',
+        title: '演算法把我送進健身房',
         image: './pic/product-experience/gym.png',
         description: '會員費之外，時間、疲勞與社交安排也會影響能否持續。',
         cost: '每月約 NT$1,000－1,800',
@@ -1480,7 +1480,7 @@ class BodyManagementExperienceHub {
       },
       {
         id: 'influencer',
-        title: '網紅減肥挑戰',
+        title: '爆紅之後',
         image: './pic/product-experience/influencerchallenge.png',
         description: '看似簡單的挑戰，可能改變飢餓、情緒與看待自己的方式。',
         cost: '看似低成本',
@@ -1630,7 +1630,6 @@ class BodyManagementExperienceHub {
   mealGameContent() {
     if (this.mealStep === 'result') return this.mealResultContent();
     const steps = this.mealStepConfig();
-    const totals = this.mealTotals();
     const selectedCount = [
       this.mealBowl.base,
       this.mealBowl.protein,
@@ -1657,9 +1656,7 @@ class BodyManagementExperienceHub {
         </div>
         <div class="body-poke-summary">
           <span>已放入 ${selectedCount} 項</span>
-          <span>目前 ${totals.kcal} kcal</span>
-          <span>蛋白質 ${totals.protein} g</span>
-          <span>價格 NT$${totals.price}</span>
+          <span>${this.canFinishMeal() ? '可以生成結果' : '選完後再計算營養與價格'}</span>
         </div>
         <div class="body-experience-modal-actions">
           <button type="button" data-body-meal-restart>重新夾一碗</button>
@@ -1743,16 +1740,36 @@ class BodyManagementExperienceHub {
     `;
   }
 
+  // 之後若要改三個互動遊戲的核心提示文字，可以先改這裡。
+  simTradeoffText() {
+    return {
+      gym: 'Trade-off：健康期待、金錢支出、自信與焦慮會互相拉扯。',
+      influencer: 'Trade-off：流量、生活、信任與真實感不會同時滿分。',
+      injection: 'Trade-off：短期變化、預算、身體反應與長期維持成本會一起出現。'
+    }[this.activeMethod] || '';
+  }
+
   phoneFrame(title, subtitle, body, stats, message = '') {
+    const slotLabel = this.activeMethod === 'gym' ? '健身房背景預留' : '照片預留';
+    const slotNote = this.activeMethod === 'gym'
+      ? '之後可放健身房環境照，讓玩家知道自己正在進入哪一種消費場景。'
+      : '之後可放對應的情境照片，不會影響目前互動流程。';
     return `
       <div class="body-sim-game">
-        <div class="body-sim-phone">
-          <header>
-            <span>${subtitle}</span>
-            <h3>${title}</h3>
-          </header>
-          ${body}
-          ${message ? `<p class="body-sim-message">${message}</p>` : ''}
+        <div class="body-sim-wide">
+          <aside class="body-sim-photo-slot ${this.activeMethod === 'gym' ? 'is-gym-bg' : ''}" aria-label="${slotLabel}">
+            <b>${slotLabel}</b>
+            <span>${slotNote}</span>
+          </aside>
+          <div class="body-sim-phone">
+            <div class="body-sim-tradeoff">${this.simTradeoffText()}</div>
+            <header>
+              <span>${subtitle}</span>
+              <h3>${title}</h3>
+            </header>
+            ${body}
+            ${message ? `<p class="body-sim-message">${message}</p>` : ''}
+          </div>
         </div>
         ${this.statBars(stats)}
       </div>
@@ -1800,7 +1817,10 @@ class BodyManagementExperienceHub {
       return this.phoneFrame('演算法把我送進健身房', '滑手機 Feed', `
         <p class="body-sim-copy">你以為你只是想變健康，其實你正在被推進一套消費系統。</p>
         <div class="body-sim-feed">${visible.map((item, index) => `<article class="${index === visible.length - 1 ? 'is-hot' : ''}">${item}</article>`).join('')}</div>
-        <button class="body-sim-primary" type="button" data-body-gym-feed>往下滑</button>
+        <div class="body-sim-scroll-zone" data-body-gym-scroll tabindex="0">
+          <b>往下滑手機</b>
+          <span>在這個區域滑動，演算法會繼續推內容給你。</span>
+        </div>
       `, this.gymStats(), g.lastMessage);
     }
     if (g.phase === 'home') {
@@ -2192,12 +2212,15 @@ class BodyManagementExperienceHub {
     if (!method) return '';
     const isMealGame = method.id === 'meal';
     const isSimGame = ['gym', 'influencer', 'injection'].includes(method.id);
-    const gameContent = {
-      meal: this.mealGameContent(),
-      gym: this.gymGameContent(),
-      influencer: this.influencerGameContent(),
-      injection: this.injectionGameContent()
-    }[method.id];
+    const gameContent = method.id === 'meal'
+      ? this.mealGameContent()
+      : method.id === 'gym'
+        ? this.gymGameContent()
+        : method.id === 'influencer'
+          ? this.influencerGameContent()
+          : method.id === 'injection'
+            ? this.injectionGameContent()
+            : '';
     const finished = this.selectedChoice !== null;
     return `
       <div class="body-experience-modal" data-body-experience-modal>
@@ -2312,8 +2335,36 @@ class BodyManagementExperienceHub {
     } else {
       this.mealBowl[category] = this.mealBowl[category]?.name === name ? null : option;
     }
-    this.isUpdatingMeal = true;
-    this.render();
+    this.updateMealSelectionDom();
+  }
+
+  updateMealSelectionDom() {
+    const bowl = this.root.querySelector('.body-poke-bowl');
+    if (bowl) bowl.outerHTML = this.mealBowlMarkup(false);
+
+    this.root.querySelectorAll('[data-body-meal-option]').forEach((button) => {
+      const category = button.dataset.bodyMealOption;
+      const name = button.dataset.bodyMealName;
+      const selected = category === 'veggies'
+        ? this.mealBowl.veggies.some((item) => item.name === name)
+        : this.mealBowl[category]?.name === name;
+      button.classList.toggle('is-selected', selected);
+      if (category === 'veggies') {
+        button.disabled = this.mealBowl.veggies.length >= 5 && !selected;
+      }
+    });
+
+    const selectedCount = this.mealItems().length;
+    const summary = this.root.querySelector('.body-poke-summary');
+    if (summary) {
+      summary.innerHTML = `
+        <span>已放入 ${selectedCount} 項</span>
+        <span>${this.canFinishMeal() ? '可以生成結果' : '選完後再計算營養與價格'}</span>
+      `;
+    }
+
+    const nextButton = this.root.querySelector('[data-body-meal-next]');
+    if (nextButton) nextButton.disabled = !this.canFinishMeal();
   }
 
   advanceMealGame() {
@@ -2413,8 +2464,38 @@ class BodyManagementExperienceHub {
     if (event.target.closest('[data-continue-report]')) this.continueReading();
   }
 
+  handleWheel(event) {
+    const scrollZone = event.target.closest('[data-body-gym-scroll]');
+    if (!scrollZone || this.activeMethod !== 'gym' || this.gymGame.phase !== 'feed') return;
+    event.preventDefault();
+    if (Math.abs(event.deltaY) < 8) return;
+    const now = Date.now();
+    if (this.lastGymScrollAt && now - this.lastGymScrollAt < 420) return;
+    this.lastGymScrollAt = now;
+    this.handleGymAction('feed');
+  }
+
+  handleTouchStart(event) {
+    if (!event.target.closest('[data-body-gym-scroll]')) return;
+    this.gymScrollTouchY = event.touches?.[0]?.clientY || 0;
+  }
+
+  handleTouchEnd(event) {
+    const scrollZone = event.target.closest('[data-body-gym-scroll]');
+    if (!scrollZone || this.activeMethod !== 'gym' || this.gymGame.phase !== 'feed') return;
+    const endY = event.changedTouches?.[0]?.clientY || 0;
+    if (this.gymScrollTouchY - endY < 16) return;
+    const now = Date.now();
+    if (this.lastGymScrollAt && now - this.lastGymScrollAt < 420) return;
+    this.lastGymScrollAt = now;
+    this.handleGymAction('feed');
+  }
+
   mount() {
     this.root.addEventListener('click', (event) => this.handleClick(event));
+    this.root.addEventListener('wheel', (event) => this.handleWheel(event), { passive: false });
+    this.root.addEventListener('touchstart', (event) => this.handleTouchStart(event), { passive: true });
+    this.root.addEventListener('touchend', (event) => this.handleTouchEnd(event));
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && this.activeMethod) this.close();
     });
