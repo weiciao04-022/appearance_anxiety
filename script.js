@@ -96,16 +96,13 @@ async function initSitePreloader() {
       })
     )
   );
-  const timeoutTask = new Promise((resolve) => window.setTimeout(resolve, 8000));
-
-  await Promise.race([preloadTask, timeoutTask]);
+  await preloadTask;
   await document.fonts?.ready;
   const minimumDisplayTime = Math.max(0, 500 - (performance.now() - startedAt));
   await new Promise((resolve) => window.setTimeout(resolve, minimumDisplayTime));
 
   if (progressBar) progressBar.style.width = '100%';
   if (status) status.textContent = '準備完成';
-  window.clearTimeout(window.sitePreloaderFallback);
   document.documentElement.classList.remove('is-preloading');
   preloader.classList.add('is-complete');
   window.setTimeout(() => preloader.remove(), 500);
@@ -1290,6 +1287,18 @@ class HealthMagnifierChallenge {
     `).join('');
   }
 
+  storyText() {
+    return `
+      <article class="health-magnifier-story">
+        <p>長期面臨體型過瘦的 Sam（化名），一直都被增肌所困擾。對他而言，理想中的身材不需要非常壯碩，只需要擁有適量的肌肉線條，能夠支撐起衣服的版型，展現出好看的體態即可。</p>
+        <p>Sam 主要透過抖音及小紅書建立增肌相關的知識，從中學習健身訓練動作與飲食攝取建議。然而，增肌的過程並不比減重簡單。他坦言，自己食量並不小，也有努力健身，但效果卻沒有預想中明顯。</p>
+        <p>隨著增肌逐漸成為生活的一部分，Sam 每個月生活支出也隨之增加，其中包括健身房會費與乳清蛋白粉。在飲食質與量的雙重要求下，日常開銷的提高幾乎無法避免。</p>
+        <p>面對社群媒體對「男性應擁有肌肉身材」的標準，Sam 認為每個人都能追求自己想要的理想身材；但他也坦言，社群審美確實在無形中提高了他對自身體態的要求。</p>
+        <p class="health-magnifier-final-note">健康不一定只用體態來判斷，請勿將體態作為唯一判斷標準，進而影響心理健康。</p>
+      </article>
+    `;
+  }
+
   renderSelection() {
     return `
       <div class="health-magnifier-inner health-magnifier-step">
@@ -1304,6 +1313,7 @@ class HealthMagnifierChallenge {
         </header>
         <div class="health-person-grid">${this.selectionCards()}</div>
         <p class="health-magnifier-caption">直接點選一位角色，用放大鏡看看外表背後的生活狀態。</p>
+        ${this.storyText()}
       </div>
     `;
   }
@@ -1342,16 +1352,7 @@ class HealthMagnifierChallenge {
             <p class="health-magnifier-conclusion">${person?.conclusion || ''}</p>
           </article>
         </section>
-        <article class="health-magnifier-story">
-          <p>長期面臨體型過瘦的 Sam（化名），一直都被增肌所困擾。對他而言，理想中的身材不需要非常壯碩，只需要擁有適量的肌肉線條，能夠支撐起衣服的版型，展現出好看的體態即可。</p>
-          <p>Sam 主要透過抖音及小紅書建立增肌相關的知識，從中學習健身訓練動作與飲食攝取建議。然而，增肌的過程並不比減重簡單。他坦言，自己食量並不小，也有努力健身，但效果卻沒有預想中明顯。</p>
-          <p>隨著增肌逐漸成為生活的一部分，Sam 每個月生活支出也隨之增加，其中包括健身房會費與乳清蛋白粉。在飲食質與量的雙重要求下，日常開銷的提高幾乎無法避免。</p>
-          <p>面對社群媒體對「男性應擁有肌肉身材」的標準，Sam 認為每個人都能追求自己想要的理想身材；但他也坦言，社群審美確實在無形中提高了他對自身體態的要求。</p>
-          <nav class="health-magnifier-story-links" aria-label="健康放大鏡後續閱讀">
-            <a href="#story-1-page">看看更多故事</a>
-            <a href="pages/case3.html">下一個案例</a>
-          </nav>
-        </article>
+        ${this.storyText()}
       </div>
     `;
   }
@@ -2242,7 +2243,6 @@ class BodyManagementExperienceHub {
                 <p>${method.result}</p>
               </div>
               <div class="body-experience-modal-actions">
-                <button type="button" data-return-body-experience>返回選擇其他方式</button>
                 <button type="button" data-continue-report>繼續向下閱讀</button>
               </div>
             ` : `
@@ -2393,7 +2393,7 @@ class BodyManagementExperienceHub {
       this.open(openButton.dataset.openBodyExperience, openButton);
       return;
     }
-    if (event.target.closest('[data-close-body-experience], [data-return-body-experience]')) {
+    if (event.target.closest('[data-close-body-experience]')) {
       this.close();
       return;
     }

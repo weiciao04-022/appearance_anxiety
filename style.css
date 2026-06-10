@@ -21,7 +21,6 @@ html.is-preloading {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.45s ease, visibility 0.45s ease;
-  animation: preloaderFailsafe 0.01s linear 6s forwards;
 }
 
 .site-preloader.is-complete {
@@ -29,14 +28,6 @@ html.is-preloading {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-}
-
-@keyframes preloaderFailsafe {
-  to {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
 }
 
 .site-preloader-inner {
@@ -619,13 +610,6 @@ button:active,
   border-width: 2px;
 }
 
-.case-more-link {
-  color: #000;
-  font-size: 1.08rem;
-  text-decoration: none;
-}
-
-.case-more-link:hover,
 .case-link-row a:hover {
   text-decoration: underline;
 }
@@ -1609,10 +1593,6 @@ button:active,
   aspect-ratio: 9 / 16;
 }
 
-.case-more-link {
-  margin-top: 12px;
-}
-
 .health-magnifier-challenge {
   padding: clamp(46px, 6vw, 82px) 0;
   border-block: 0;
@@ -1752,20 +1732,11 @@ button:active,
   margin: 0 0 24px;
 }
 
-.health-magnifier-story-links {
-  display: flex;
-  justify-content: center;
-  gap: 34px;
-  margin-top: 30px;
-}
-
-.health-magnifier-story-links a {
-  color: #111;
-  text-decoration: none;
-}
-
-.health-magnifier-story-links a:hover {
-  text-decoration: underline;
+.health-magnifier-final-note {
+  padding-top: 18px;
+  border-top: 1px solid rgba(47, 47, 47, 0.18);
+  font-weight: 900;
+  text-align: center;
 }
 
 @media (max-width: 900px) {
