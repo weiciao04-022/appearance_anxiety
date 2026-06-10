@@ -1499,6 +1499,9 @@ class BodyManagementExperienceHub {
         result: '涉及藥物的體態管理，需要把身體狀況、風險與專業評估放在效果之前。'
       }
     ];
+    this.resetGymGame();
+    this.resetInfluencerGame();
+    this.resetInjectionGame();
   }
 
   cards() {
@@ -1694,17 +1697,507 @@ class BodyManagementExperienceHub {
     `;
   }
 
+  clampStat(value) {
+    return Math.max(0, Math.min(100, value));
+  }
+
+  formatMoney(value) {
+    return `NT$${Math.abs(value).toLocaleString('zh-TW')}`;
+  }
+
+  statBars(stats) {
+    return `
+      <div class="body-sim-stats">
+        ${stats.map((stat) => {
+          const isMoney = stat.type === 'money';
+          const raw = isMoney ? Math.min(100, Math.abs(stat.value) / (stat.max || 300)) : this.clampStat(stat.value);
+          return `
+            <div class="body-sim-stat">
+              <span>${stat.label}</span>
+              <b>${isMoney ? this.formatMoney(stat.value) : stat.value}</b>
+              <i><em style="width:${raw}%"></em></i>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    `;
+  }
+
+  choiceButtons(choices, action) {
+    return `
+      <div class="body-sim-choice-grid">
+        ${choices.map((choice, index) => `
+          <button type="button" data-body-sim-action="${action}" data-body-sim-choice="${index}">
+            <b>${choice.label}</b>
+            ${choice.hint ? `<small>${choice.hint}</small>` : ''}
+          </button>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  phoneFrame(title, subtitle, body, stats, message = '') {
+    return `
+      <div class="body-sim-game">
+        <div class="body-sim-phone">
+          <header>
+            <span>${subtitle}</span>
+            <h3>${title}</h3>
+          </header>
+          ${body}
+          ${message ? `<p class="body-sim-message">${message}</p>` : ''}
+        </div>
+        ${this.statBars(stats)}
+      </div>
+    `;
+  }
+
+  resetGymGame() {
+    this.gymGame = {
+      phase: 'feed',
+      feedIndex: 0,
+      homeStep: 0,
+      salesStep: 0,
+      gymVisitCount: 0,
+      anxiety: 20,
+      money: 0,
+      energy: 100,
+      confidence: 80,
+      signedContract: false,
+      selectedItems: [],
+      lastMessage: ''
+    };
+  }
+
+  gymStats() {
+    const g = this.gymGame;
+    return [
+      { label: '焦慮值', value: g.anxiety },
+      { label: '累積花費', value: g.money, type: 'money', max: 26000 },
+      { label: '精力', value: g.energy },
+      { label: '自信', value: g.confidence }
+    ];
+  }
+
+  gymGameContent() {
+    const g = this.gymGame;
+    const feed = ['朋友聚餐', '貓咪影片', '旅遊照片', '日常生活', '7天瘦3公斤', '健身網紅的一天', '高蛋白飲食', '體脂率挑戰', '練出馬甲線', '健身房體驗課'];
+    const salesLines = [
+      '你這樣自己練很難有效果。',
+      '如果沒有教練，其實很容易受傷。',
+      '你如果真的想改變，兩年約比較划算。',
+      '預算不夠的話，可能要先想清楚自己有多想改變。'
+    ];
+    if (g.phase === 'feed') {
+      const visible = feed.slice(Math.max(0, g.feedIndex - 2), g.feedIndex + 4);
+      return this.phoneFrame('演算法把我送進健身房', '滑手機 Feed', `
+        <p class="body-sim-copy">你以為你只是想變健康，其實你正在被推進一套消費系統。</p>
+        <div class="body-sim-feed">${visible.map((item, index) => `<article class="${index === visible.length - 1 ? 'is-hot' : ''}">${item}</article>`).join('')}</div>
+        <button class="body-sim-primary" type="button" data-body-gym-feed>往下滑</button>
+      `, this.gymStats(), g.lastMessage);
+    }
+    if (g.phase === 'home') {
+      const tasks = [
+        { title: 'Day 1', text: '你打開手機運動影片。', choices: ['跟著影片運動 20 分鐘', '先收藏影片明天做'] },
+        { title: 'Day 3', text: '下課後，你看到瑜珈墊還攤在房間。', choices: ['下課後運動', '太累了，先休息'] },
+        { title: 'Day 5', text: '朋友約你聚餐，但今天原本排了訓練。', choices: ['拒絕朋友聚餐去運動', '去聚餐，明天再補'] }
+      ][g.homeStep];
+      return this.phoneFrame('在家運動挑戰', tasks.title, `
+        <div class="body-sim-room">🧘‍♀️<span>房間 / 瑜珈墊 / 手機運動影片</span></div>
+        <p class="body-sim-copy">${tasks.text}</p>
+        ${this.choiceButtons(tasks.choices.map((label) => ({ label })), 'gym-home')}
+      `, this.gymStats(), g.lastMessage);
+    }
+    if (g.phase === 'flyer') {
+      return this.phoneFrame('樓下健身房傳單', '免費體驗', `
+        <div class="body-sim-flyer">
+          <b>首月 299</b><span>專人指導</span><span>快速達成目標</span>
+        </div>
+        ${this.choiceButtons([{ label: '只是看看' }, { label: '預約免費體驗' }], 'gym-flyer')}
+      `, this.gymStats(), g.lastMessage);
+    }
+    if (g.phase === 'sales') {
+      if (g.salesStep < salesLines.length) {
+        return this.phoneFrame('推銷壓力互動', '合約桌', `
+          <div class="body-sim-contract">
+            <span>基本月費：1288 / 月</span><span>兩年合約：綁約 24 個月</span><span>教練課：2400 / 堂</span>
+            <span>體組成分析：免費但會被解讀</span><span>飲食計畫：1800 / 月</span><span>補充品：2500</span>
+          </div>
+          <article class="body-sim-sales-line">${salesLines[g.salesStep]}</article>
+          <button class="body-sim-primary" type="button" data-body-gym-sales>繼續聽</button>
+        `, this.gymStats(), g.lastMessage);
+      }
+      return this.phoneFrame('你要怎麼回應？', '諮詢結尾', `
+        ${this.choiceButtons([
+          { label: '只買月費', hint: '+1288' },
+          { label: '加購教練課', hint: '+四堂課' },
+          { label: '加購完整方案', hint: '+飲食與補充品' },
+          { label: '離開', hint: '不簽約' }
+        ], 'gym-contract')}
+      `, this.gymStats(), g.lastMessage);
+    }
+    if (g.phase === 'visit') {
+      return this.phoneFrame('健身房內部', `第 ${g.gymVisitCount + 1} 次選擇`, `
+        <div class="body-sim-zone-grid">
+          ${['跑步機', '重訓區', '鏡子', '自拍區', '教練區'].map((label, index) => `
+            <button type="button" data-body-sim-action="gym-zone" data-body-sim-choice="${index}">${['🏃', '🏋️', '🪞', '📱', '🧑‍🏫'][index]}<span>${label}</span></button>
+          `).join('')}
+        </div>
+      `, this.gymStats(), g.lastMessage);
+    }
+    return this.phoneFrame('你原本只是想變健康。', '結局', `
+      <div class="body-sim-result-list">
+        <p>累積花費：${this.formatMoney(g.money)}</p>
+        <p>焦慮值：${g.anxiety}</p>
+        <p>精力值：${g.energy}</p>
+        <p>自信值：${g.confidence}</p>
+        <p>已選擇項目：${g.selectedItems.length ? g.selectedItems.join('、') : '沒有簽約'}</p>
+      </div>
+      <p class="body-sim-copy">這個遊戲不是在否定健身，而是在呈現：當健康被包裝成消費承諾時，普通人可能會承擔看不見的時間、金錢與心理成本。</p>
+      <div class="body-sim-actions"><button type="button" data-body-gym-reset>重新體驗</button><button type="button" data-body-sim-scroll>回到健身房區塊開頭</button></div>
+    `, this.gymStats(), g.lastMessage);
+  }
+
+  handleGymAction(action, choiceIndex = 0) {
+    const g = this.gymGame;
+    if (action === 'feed') {
+      g.feedIndex += 1;
+      g.anxiety += 8;
+      g.confidence -= 5;
+      g.lastMessage = '滑到越多健身內容，你越覺得自己是不是也該開始改變。';
+      if (g.feedIndex > 6) g.phase = 'home';
+    }
+    if (action === 'home') {
+      const didExercise = choiceIndex === 0;
+      g.energy += didExercise ? -20 : 5;
+      g.anxiety += didExercise ? -5 : 8;
+      g.confidence += didExercise ? 5 : -5;
+      g.lastMessage = didExercise ? '你完成了訓練，但精力也被消耗。' : '你休息了一下，卻又開始覺得自己不夠努力。';
+      g.homeStep += 1;
+      if (g.homeStep >= 3) g.phase = 'flyer';
+    }
+    if (action === 'flyer') {
+      g.lastMessage = choiceIndex === 0 ? '你只是想了解一下，但櫃台說今天剛好有優惠。' : '你以為只是體驗，但諮詢從體脂分析開始。';
+      g.phase = 'sales';
+    }
+    if (action === 'sales') {
+      g.salesStep += 1;
+      g.anxiety += 10;
+      g.confidence -= 8;
+    }
+    if (action === 'contract') {
+      const plans = [
+        { money: 1288, anxiety: 10, confidence: -5, items: ['基本月費'], msg: '你只買月費，但仍開始擔心自己會不會浪費這筆錢。' },
+        { money: 1288 + 2400 * 4, anxiety: 20, confidence: -10, items: ['基本月費', '教練課四堂'], msg: '你買下教練課，也買下了每週都要證明自己有進步的壓力。' },
+        { money: 1288 + 2400 * 8 + 1800 + 2500, anxiety: 35, confidence: -20, items: ['基本月費', '教練課八堂', '飲食計畫', '補充品'], msg: '完整方案看起來最有保障，也讓花費和壓力一起變大。' },
+        { money: 0, anxiety: 15, confidence: -15, items: [], msg: '你沒有花錢，但開始懷疑是不是自己不夠努力。' }
+      ][choiceIndex];
+      g.money += plans.money;
+      g.anxiety += plans.anxiety;
+      g.confidence += plans.confidence;
+      g.selectedItems = plans.items;
+      g.signedContract = choiceIndex !== 3;
+      g.lastMessage = plans.msg;
+      g.phase = 'visit';
+    }
+    if (action === 'zone') {
+      const zones = [
+        { confidence: -8, anxiety: 8, money: 0, msg: '旁邊的人跑得比你快。' },
+        { confidence: -10, anxiety: 12, money: 0, msg: '你不知道器材怎麼調，後面有人在等。' },
+        { confidence: -12, anxiety: 15, money: 0, msg: '你開始反覆檢查自己的身形。' },
+        { confidence: -10, anxiety: 10, money: 0, msg: '你看到別人拍出漂亮的健身成果照。' },
+        { confidence: 0, anxiety: 10, money: 2400, msg: '教練提醒你，如果沒有持續上課，很難看到成果。' }
+      ][choiceIndex];
+      g.confidence += zones.confidence;
+      g.anxiety += zones.anxiety;
+      g.money += zones.money;
+      g.lastMessage = zones.msg;
+      g.gymVisitCount += 1;
+      if (g.gymVisitCount >= 3) g.phase = 'result';
+    }
+    g.anxiety = this.clampStat(g.anxiety);
+    g.energy = this.clampStat(g.energy);
+    g.confidence = this.clampStat(g.confidence);
+    this.isUpdatingSim = true;
+    this.render();
+  }
+
+  resetInfluencerGame() {
+    this.influencerGame = {
+      phase: 'post',
+      postSelected: '',
+      eventIndex: 0,
+      traffic: 20,
+      bodyImage: 60,
+      life: 70,
+      stress: 20,
+      trust: 70,
+      authenticity: 70,
+      money: 0,
+      lastMessage: '',
+      selectedChoices: []
+    };
+  }
+
+  influencerStats() {
+    const s = this.influencerGame;
+    return [
+      { label: '流量', value: s.traffic },
+      { label: '體態', value: s.bodyImage },
+      { label: '生活', value: s.life },
+      { label: '心理壓力', value: s.stress },
+      { label: '信任感', value: s.trust },
+      { label: '真實感', value: s.authenticity },
+      { label: '金錢', value: s.money, type: 'money', max: 5000 }
+    ];
+  }
+
+  influencerEnding() {
+    const s = this.influencerGame;
+    if (s.traffic >= 80 && s.stress >= 60) return ['你維持住了流量，但失去生活。', '你看起來越來越成功，但每天都在擔心身材、觀看數和下一支影片。'];
+    if (s.traffic < 60 && s.life >= 70) return ['你沒有成為大網紅，但生活回來了。', '你失去了一部分關注，但重新拿回時間、睡眠和朋友關係。'];
+    if (s.trust >= 75 && s.traffic >= 50) return ['你選擇慢慢經營。', '你沒有最快爆紅，但你的內容比較接近真實生活，也比較能長期維持。'];
+    if (s.money > 0 && s.trust < 60) return ['你把焦慮變成了商品。', '你的帳戶開始賺錢，但你也開始懷疑：自己是在分享健康，還是在販賣不安？'];
+    return ['你還在交換不同代價。', '你沒有明確失敗，也沒有完全成功。你只是發現，維持一個健身人設比想像中更耗費生活。'];
+  }
+
+  influencerGameContent() {
+    const s = this.influencerGame;
+    if (s.phase === 'post') {
+      return this.phoneFrame('爆紅之後', '普通大學生', `
+        <p class="body-sim-copy">你原本只是想紀錄自己開始運動，沒有想過這支影片會被這麼多人看到。</p>
+        ${this.choiceButtons(['今天第一次去健身房', '七天體態變化', '學生也能做到的自律生活', '我如何開始控制飲食'].map((label) => ({ label })), 'influencer-post')}
+      `, this.influencerStats(), s.lastMessage);
+    }
+    if (s.phase === 'event') {
+      const events = [
+        {
+          title: '同學約吃宵夜',
+          sub: '爆紅後的第一週',
+          body: '<div class="body-sim-notifications"><span>求飲食菜單</span><span>可以分享訓練課表嗎</span><span>你是不是瘦很多？</span><span>拜託更新 Day 8</span><span>你以前比較胖欸</span></div>',
+          choices: [{ label: '去吃' }, { label: '拒絕' }]
+        },
+        {
+          title: '今晚要不要拍片？',
+          sub: '演算法開始要求你更新',
+          body: '<p class="body-sim-copy">你今天有期中報告，但昨天影片觀看數很好。留言開始問你什麼時候更新。</p>',
+          choices: [{ label: '熬夜剪片' }, { label: '先做報告' }]
+        },
+        {
+          title: '接不接業配？',
+          sub: '品牌私訊',
+          body: '<div class="body-sim-dm">我們想找你合作一款代餐／燃脂產品／健身課程。</div>',
+          choices: [{ label: '接代餐合作' }, { label: '拒絕合作' }, { label: '接合作但誠實標註限制' }]
+        },
+        {
+          title: '你今天狀態很差',
+          sub: '人設壓力',
+          body: '<p class="body-sim-copy">但粉絲期待你更新「自律的一天」。</p>',
+          choices: [{ label: '照樣拍完美版本' }, { label: '拍真實版本' }, { label: '不更新' }]
+        }
+      ][s.eventIndex];
+      return this.phoneFrame(events.title, events.sub, `${events.body}${this.choiceButtons(events.choices, 'influencer-event')}`, this.influencerStats(), s.lastMessage);
+    }
+    const [title, text] = this.influencerEnding();
+    return this.phoneFrame(title, '結局', `
+      <p class="body-sim-copy">${text}</p>
+      <div class="body-sim-result-list">
+        ${['流量', '體態', '生活', '心理壓力', '信任感', '真實感'].map((label, index) => `<p>${label}：${[s.traffic, s.bodyImage, s.life, s.stress, s.trust, s.authenticity][index]}</p>`).join('')}
+        <p>金錢：${this.formatMoney(s.money)}</p>
+        <p>選擇紀錄：${s.selectedChoices.join('、') || '尚無'}</p>
+      </div>
+      <p class="body-sim-copy">這個遊戲不是在否定健身內容創作者，而是在呈現：當自律、體態與健康被放進流量系統裡，創作者也可能被迫在生活、信任、金錢與心理壓力之間交換。</p>
+      <div class="body-sim-actions"><button type="button" data-body-influencer-reset>重新體驗</button><button type="button" data-body-sim-scroll>回到網紅挑戰區塊開頭</button></div>
+    `, this.influencerStats(), s.lastMessage);
+  }
+
+  handleInfluencerAction(action, choiceIndex = 0) {
+    const s = this.influencerGame;
+    if (action === 'post') {
+      const posts = ['今天第一次去健身房', '七天體態變化', '學生也能做到的自律生活', '我如何開始控制飲食'];
+      s.postSelected = posts[choiceIndex];
+      s.traffic += 50;
+      s.stress += 15;
+      s.bodyImage += 20;
+      s.lastMessage = '這支影片意外爆紅。觀看數不是結束，而是下一支影片的壓力。';
+      s.selectedChoices.push(s.postSelected);
+      s.phase = 'event';
+    } else {
+      const changes = [
+        [
+          { life: 20, stress: -5, bodyImage: -10, traffic: -5, msg: '你很開心，但隔天拍攝時開始在意自己的臉是不是腫了。', label: '去吃宵夜' },
+          { bodyImage: 10, traffic: 5, life: -15, stress: 10, msg: '你維持住了計畫，但朋友說你最近變得很難約。', label: '拒絕宵夜' }
+        ],
+        [
+          { traffic: 25, life: -20, stress: 15, bodyImage: -5, msg: '影片成績很好，但你隔天上課幾乎睡著。', label: '熬夜剪片' },
+          { life: 20, stress: -5, traffic: -15, msg: '你完成了該做的事，但留言開始問你是不是放棄了。', label: '先做報告' }
+        ],
+        [
+          { traffic: 20, money: 3000, stress: 20, trust: -15, msg: '你賺到了錢，但開始擔心自己是不是在推一個你也沒完全相信的東西。', label: '接代餐合作' },
+          { trust: 15, stress: -5, traffic: -10, msg: '你保留了界線，但也錯過第一次變現的機會。', label: '拒絕合作' },
+          { money: 1500, trust: 5, traffic: 5, stress: 10, msg: '你試著負責任地溝通，但品牌覺得文案不夠有銷售力。', label: '誠實標註合作限制' }
+        ],
+        [
+          { traffic: 20, bodyImage: 5, stress: 25, authenticity: -20, msg: '畫面很好看，但你知道這不是你今天真正的生活。', label: '拍完美版本' },
+          { authenticity: 20, traffic: -10, stress: -10, msg: '有人說你很真實，也有人說你變懶了。', label: '拍真實版本' },
+          { stress: -5, life: 10, traffic: -20, msg: '你休息了一天，但演算法沒有等你。', label: '不更新' }
+        ]
+      ][s.eventIndex][choiceIndex];
+      Object.entries(changes).forEach(([key, value]) => {
+        if (['msg', 'label'].includes(key)) return;
+        s[key] += value;
+      });
+      s.lastMessage = changes.msg;
+      s.selectedChoices.push(changes.label);
+      s.eventIndex += 1;
+      if (s.eventIndex >= 4) s.phase = 'result';
+    }
+    ['traffic', 'bodyImage', 'life', 'stress', 'trust', 'authenticity'].forEach((key) => { s[key] = this.clampStat(s[key]); });
+    this.isUpdatingSim = true;
+    this.render();
+  }
+
+  resetInjectionGame() {
+    this.injectionGame = {
+      phase: 'choice',
+      money: 12000,
+      bodyExpectation: 45,
+      anxiety: 25,
+      satisfaction: 45,
+      sideEffect: 10,
+      energy: 75,
+      socialLife: 65,
+      maintenance: 40,
+      reboundRisk: 30,
+      routinePressure: 20,
+      lastMessage: ''
+    };
+  }
+
+  injectionStats() {
+    const s = this.injectionGame;
+    return [
+      { label: '預算', value: s.money, type: 'money', max: 12000 },
+      { label: '外表期待', value: s.bodyExpectation },
+      { label: '焦慮', value: s.anxiety },
+      { label: '滿意度', value: s.satisfaction },
+      { label: '副作用', value: s.sideEffect },
+      { label: '精力', value: s.energy },
+      { label: '社交', value: s.socialLife },
+      { label: '維持能力', value: s.maintenance },
+      { label: '復胖風險', value: s.reboundRisk },
+      { label: '維持壓力', value: s.routinePressure }
+    ];
+  }
+
+  injectionEnding() {
+    const s = this.injectionGame;
+    if (s.money < 1000) return ['你變瘦了一點，但生活被預算壓縮。', '療程讓你看見變化，也讓你開始取消購物、聚餐和其他日常支出。真正困難的不是開始，而是每個月都要重新計算自己還能不能負擔。'];
+    if (s.sideEffect >= 45 || s.energy <= 35) return ['身體變化比想像中更複雜。', '你期待的是體態改變，但真正影響每天生活的，是頭暈、疲憊、食慾下降和不確定感。體重下降不代表生活品質一定上升。'];
+    if (s.socialLife <= 45) return ['你省下了熱量，也錯過了一些生活。', '你不是不想和朋友見面，而是每一次吃飯、聚餐、出門，都開始和療程、食慾、預算與復胖焦慮綁在一起。'];
+    if (s.reboundRisk >= 60) return ['停止之後，焦慮沒有停止。', '你原本以為療程結束就能鬆一口氣，但真正困難的是後續維持。當飲食、運動和作息沒有一起改變，復胖風險又變成新的壓力來源。'];
+    if (s.maintenance >= 65 && s.routinePressure >= 50) return ['你維持住了變化，但付出新的時間成本。', '你不只是花錢打針，也開始花時間備餐、運動、安排作息。體態變化留下來了，但生活被新的維持規則重新分配。'];
+    if (s.satisfaction >= 65 && s.sideEffect < 35 && s.reboundRisk < 60) return ['你把決定權慢慢拿回來。', '你沒有把療程當成唯一答案，而是開始觀察身體、預算與生活能不能承受。這不代表問題消失，而是你不再只用體重判斷自己。'];
+    return ['你還在計算這一針值不值得。', '變瘦、花錢、副作用、社交缺席、復胖風險與外表期待混在一起。這不是單一選擇，而是一串持續發生的生活取捨。'];
+  }
+
+  injectionGameContent() {
+    const s = this.injectionGame;
+    if (s.phase === 'choice') {
+      return this.phoneFrame('施打瘦瘦針', '醫療與生活取捨', `
+        <p class="body-sim-copy">短期變化不是故事的結尾。停止或減少療程後，仍然需要飲食、運動與生活習慣維持。</p>
+        ${this.choiceButtons([{ label: '先做醫療評估' }, { label: '比較價格與效果' }, { label: '問朋友經驗' }], 'injection-start')}
+      `, this.injectionStats(), s.lastMessage);
+    }
+    if (s.phase === 'week4') {
+      return this.phoneFrame('第四週，成果與維持壓力', '體重紀錄 / 留言 / 預算表', `
+        <div class="body-sim-notifications"><span>你是不是瘦了？</span><span>效果也太明顯</span><span>停掉之後會不會復胖？</span><span>再瘦一點應該更好看</span></div>
+        <p class="body-sim-copy">你開始看到一些變化，但新的問題也出現了：如果不繼續花錢、控制飲食、安排運動，這些變化可能很難維持。</p>
+        ${this.choiceButtons([
+          { label: '繼續下一個月療程' },
+          { label: '停止療程，改成自己安排飲食和運動' },
+          { label: '停止療程，也不特別維持' },
+          { label: '把錢改拿去買衣服和正常吃飯' }
+        ], 'injection-week4')}
+      `, this.injectionStats(), s.lastMessage);
+    }
+    if (s.phase === 'maintain') {
+      return this.phoneFrame('停下來之後', '一個月後的日常行事曆', `
+        <div class="body-sim-calendar"><span>早八</span><span>打工</span><span>小組報告</span><span>朋友聚餐</span><span>運動</span><span>備餐</span><span>睡覺</span></div>
+        <p class="body-sim-copy">療程不是故事的最後一頁。停止或減少療程後，你還是要決定怎麼維持。</p>
+        ${this.choiceButtons([
+          { label: '每週安排三次運動＋簡單備餐' },
+          { label: '只靠少吃，不運動' },
+          { label: '恢復原本生活節奏' },
+          { label: '回診詢問如何調整後續計畫' }
+        ], 'injection-maintain')}
+      `, this.injectionStats(), s.lastMessage);
+    }
+    const [title, text] = this.injectionEnding();
+    return this.phoneFrame(title, '結局', `
+      <p class="body-sim-copy">${text}</p>
+      <div class="body-sim-result-list">
+        <p>維持能力：${s.maintenance}</p><p>復胖風險：${s.reboundRisk}</p><p>維持壓力：${s.routinePressure}</p>
+        <p>預算：${this.formatMoney(s.money)}</p><p>副作用：${s.sideEffect}</p><p>社交：${s.socialLife}</p>
+      </div>
+      <p class="body-sim-copy">這個遊戲不是在鼓勵或否定任何療程，而是在呈現：當減重被包裝成快速改變時，大學生可能同時承擔金錢壓力、身體反應、社交缺席、復胖焦慮與長期維持成本。</p>
+      <div class="body-sim-actions"><button type="button" data-body-injection-reset>重新體驗</button><button type="button" data-body-sim-scroll>回到瘦瘦針區塊開頭</button></div>
+    `, this.injectionStats(), s.lastMessage);
+  }
+
+  handleInjectionAction(action, choiceIndex = 0) {
+    const s = this.injectionGame;
+    if (action === 'start') {
+      s.money -= choiceIndex === 0 ? 500 : 0;
+      s.anxiety += choiceIndex === 1 ? 10 : 3;
+      s.lastMessage = choiceIndex === 0 ? '你先把問題帶回醫療評估，而不是只靠網路經驗。' : '你開始比較效果，但也更在意自己是不是該快點改變。';
+      s.phase = 'week4';
+    }
+    if (action === 'week4') {
+      const changes = [
+        { money: -6500, bodyExpectation: 15, anxiety: 15, satisfaction: 3, reboundRisk: -10, routinePressure: 10, msg: '你暫時降低了復胖焦慮，但下個月的預算更緊。你發現維持變瘦，也是一筆持續支出。' },
+        { maintenance: 20, reboundRisk: -5, routinePressure: 20, energy: -10, satisfaction: 5, anxiety: 8, msg: '你沒有繼續花療程費，但開始發現維持體重需要備餐、運動、規律作息。省下錢，不代表省下時間。' },
+        { satisfaction: 10, routinePressure: -10, reboundRisk: 25, bodyExpectation: -10, anxiety: 15, msg: '你拿回一點生活自由，但也開始擔心體重慢慢回來。原本以為結束療程就結束，結果焦慮沒有真的消失。' },
+        { money: -2500, socialLife: 10, satisfaction: 15, bodyExpectation: -10, reboundRisk: 15, anxiety: 8, msg: '你拿回一點大學生的生活感，但也發現自己已經很難不去注意體態變化。' }
+      ][choiceIndex];
+      Object.entries(changes).forEach(([key, value]) => { if (key !== 'msg') s[key] += value; });
+      s.lastMessage = changes.msg;
+      s.phase = 'maintain';
+    }
+    if (action === 'maintain') {
+      const changes = [
+        { maintenance: 25, reboundRisk: -15, routinePressure: 20, energy: -10, socialLife: -5, satisfaction: 5, msg: '你比較有機會維持成果，但時間被壓縮。維持體態變成另一份固定功課。' },
+        { maintenance: -5, reboundRisk: 10, energy: -15, sideEffect: 5, anxiety: 10, msg: '短期看起來比較省事，但精神變差，也更容易陷入反覆控制飲食的壓力。' },
+        { socialLife: 15, satisfaction: 10, maintenance: -15, reboundRisk: 25, anxiety: 15, msg: '你生活比較自由，但體重變化讓你開始懷疑：是不是之前花的錢都白費了。' },
+        { money: -500, maintenance: 10, reboundRisk: -10, anxiety: -5, satisfaction: 5, msg: '你沒有只靠網路經驗判斷，而是把問題帶回專業討論。這花錢也花時間，但比較不容易只被焦慮推著走。' }
+      ][choiceIndex];
+      Object.entries(changes).forEach(([key, value]) => { if (key !== 'msg') s[key] += value; });
+      s.lastMessage = changes.msg;
+      s.phase = 'result';
+    }
+    ['bodyExpectation', 'anxiety', 'satisfaction', 'sideEffect', 'energy', 'socialLife', 'maintenance', 'reboundRisk', 'routinePressure'].forEach((key) => { s[key] = this.clampStat(s[key]); });
+    this.isUpdatingSim = true;
+    this.render();
+  }
+
   modal() {
     const method = this.methods.find((item) => item.id === this.activeMethod);
     if (!method) return '';
     const isMealGame = method.id === 'meal';
+    const isSimGame = ['gym', 'influencer', 'injection'].includes(method.id);
+    const gameContent = {
+      meal: this.mealGameContent(),
+      gym: this.gymGameContent(),
+      influencer: this.influencerGameContent(),
+      injection: this.injectionGameContent()
+    }[method.id];
     const finished = this.selectedChoice !== null;
     return `
       <div class="body-experience-modal" data-body-experience-modal>
         <button class="body-experience-backdrop" type="button" data-close-body-experience aria-label="關閉體驗"></button>
-        <section class="body-experience-dialog ${isMealGame ? 'is-meal-dialog' : ''}" role="dialog" aria-modal="true" aria-labelledby="bodyExperienceTitle">
+        <section class="body-experience-dialog ${isMealGame || isSimGame ? 'is-meal-dialog' : ''} ${isSimGame ? 'is-sim-dialog' : ''}" role="dialog" aria-modal="true" aria-labelledby="bodyExperienceTitle">
           <button class="body-experience-close" type="button" data-close-body-experience aria-label="關閉體驗">×</button>
-          ${isMealGame ? '' : `
+          ${isMealGame || isSimGame ? '' : `
             <div class="body-experience-dialog-media">
               <img src="${method.image}" alt="" />
             </div>
@@ -1712,7 +2205,7 @@ class BodyManagementExperienceHub {
           <div class="body-experience-dialog-content">
             <p>體態管理方式體驗</p>
             <h2 id="bodyExperienceTitle">${method.title}</h2>
-            ${isMealGame ? this.mealGameContent() : finished ? `
+            ${gameContent || (finished ? `
               <div class="body-experience-result" aria-live="polite">
                 <span>你的選擇</span>
                 <h3>${method.choices[this.selectedChoice]}</h3>
@@ -1733,7 +2226,7 @@ class BodyManagementExperienceHub {
                 `).join('')}
               </div>
               <small>這一版先建立互動骨架，後續可在此擴充完整小遊戲。</small>
-            `}
+            `)}
           </div>
         </section>
       </div>
@@ -1754,18 +2247,22 @@ class BodyManagementExperienceHub {
       ${this.modal()}
     `;
     document.body.classList.toggle('has-body-experience-modal', Boolean(this.activeMethod));
-    if (this.activeMethod && !this.isUpdatingMeal) {
+    if (this.activeMethod && !this.isUpdatingMeal && !this.isUpdatingSim) {
       window.requestAnimationFrame(() => {
         this.root.querySelector('.body-experience-close')?.focus();
       });
     }
     this.isUpdatingMeal = false;
+    this.isUpdatingSim = false;
   }
 
   open(methodId, trigger) {
     this.activeMethod = methodId;
     this.selectedChoice = null;
     if (methodId === 'meal') this.resetMealGame();
+    if (methodId === 'gym') this.resetGymGame();
+    if (methodId === 'influencer') this.resetInfluencerGame();
+    if (methodId === 'injection') this.resetInjectionGame();
     this.lastFocusedElement = trigger;
     this.render();
   }
@@ -1868,6 +2365,42 @@ class BodyManagementExperienceHub {
     }
     if (event.target.closest('[data-body-meal-finish]')) {
       this.finishMealGame();
+      return;
+    }
+    if (event.target.closest('[data-body-gym-feed]')) {
+      this.handleGymAction('feed');
+      return;
+    }
+    if (event.target.closest('[data-body-gym-sales]')) {
+      this.handleGymAction('sales');
+      return;
+    }
+    if (event.target.closest('[data-body-gym-reset]')) {
+      this.resetGymGame();
+      this.render();
+      return;
+    }
+    if (event.target.closest('[data-body-influencer-reset]')) {
+      this.resetInfluencerGame();
+      this.render();
+      return;
+    }
+    if (event.target.closest('[data-body-injection-reset]')) {
+      this.resetInjectionGame();
+      this.render();
+      return;
+    }
+    if (event.target.closest('[data-body-sim-scroll]')) {
+      this.root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    const simChoice = event.target.closest('[data-body-sim-action]');
+    if (simChoice) {
+      const choiceIndex = Number(simChoice.dataset.bodySimChoice || 0);
+      const action = simChoice.dataset.bodySimAction;
+      if (action.startsWith('gym-')) this.handleGymAction(action.replace('gym-', ''), choiceIndex);
+      if (action.startsWith('influencer-')) this.handleInfluencerAction(action.replace('influencer-', ''), choiceIndex);
+      if (action.startsWith('injection-')) this.handleInjectionAction(action.replace('injection-', ''), choiceIndex);
       return;
     }
     if (event.target.closest('[data-continue-report]')) this.continueReading();
