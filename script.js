@@ -27,6 +27,13 @@ const siteAssetManifest = [
   './pic/product-experience/gym.png',
   './pic/product-experience/silmshot.png',
   './pic/product-experience/influencerchallenge.png',
+  './pic/opening-comic/1.jpg',
+  './pic/opening-comic/2.jpg',
+  './pic/opening-comic/3.jpg',
+  './pic/opening-comic/4.jpg',
+  './pic/opening-comic/5.jpg',
+  './pic/opening-comic/6.jpg',
+  './pic/opening-comic/7.jpg',
   './pic/body-game/card-healthy-meal.png',
   './pic/body-game/card-gym.png',
   './pic/body-game/card-injection.png',
@@ -133,25 +140,36 @@ function scrollToSection(id) {
 }
 
 function initScrollVideoIntro() {
-  const intro = document.querySelector('[data-video-intro]');
+  const intro = document.querySelector('[data-comic-intro]');
   if (!intro) return;
 
-  const progressBar = intro.querySelector('[data-video-progress]');
-  const frameLabel = document.getElementById('videoFrameLabel');
-  const cues = [...intro.querySelectorAll('[data-video-cue]')];
+  const hero = intro.querySelector('.opening-comic-hero');
+  const stage = intro.querySelector('.opening-comic-stage');
+  const progressBar = intro.querySelector('[data-comic-progress]');
+  const panels = [...intro.querySelectorAll('[data-comic-panel]')];
 
   function updateIntroProgress() {
     const rect = intro.getBoundingClientRect();
     const scrollable = Math.max(1, intro.offsetHeight - window.innerHeight);
     const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
     const percent = Math.round(progress * 100);
-    const frameNumber = String(Math.min(3, Math.floor(progress * 3) + 1)).padStart(2, '0');
-    const activeIndex = Math.min(cues.length - 1, Math.floor(progress * cues.length));
+    const titleExitProgress = Math.min(1, progress / 0.18);
+    const panelProgress = Math.min(1, Math.max(0, (progress - 0.16) / 0.84));
+    const activeIndex = Math.min(panels.length - 1, Math.floor(panelProgress * panels.length));
 
-    intro.style.setProperty('--intro-progress', `${percent}%`);
+    intro.style.setProperty('--comic-progress', `${percent}%`);
+    if (hero) {
+      hero.style.opacity = String(1 - titleExitProgress);
+      hero.style.filter = `blur(${titleExitProgress * 18}px)`;
+      hero.style.transform = `scale(${1 + titleExitProgress * 0.025})`;
+      hero.style.pointerEvents = titleExitProgress > 0.95 ? 'none' : '';
+    }
+    if (stage) {
+      stage.style.opacity = String(Math.min(1, panelProgress * 1.6));
+      stage.style.transform = `translateY(${Math.max(0, 28 - panelProgress * 28)}px)`;
+    }
     if (progressBar) progressBar.style.width = `${percent}%`;
-    if (frameLabel) frameLabel.textContent = `frame ${frameNumber}`;
-    cues.forEach((cue, index) => cue.classList.toggle('is-active', index === activeIndex));
+    panels.forEach((panel, index) => panel.classList.toggle('is-active', index === activeIndex));
   }
 
   updateIntroProgress();

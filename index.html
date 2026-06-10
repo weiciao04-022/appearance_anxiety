@@ -14,7 +14,7 @@
   <link rel="preload" as="image" href="./pic/B/B_male15-18%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male20-25%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male%3E30%25.png" />
-  <link rel="stylesheet" href="style.css?v=20260610-7" />
+  <link rel="stylesheet" href="style.css?v=20260610-8" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
@@ -35,30 +35,30 @@
       <p class="site-preloader-status" data-preload-status>載入素材 0%</p>
     </div>
   </div>
-  <section id="opening-video-section" class="section reveal scroll-video-intro" data-video-intro>
-    <div class="frame-wrap video-intro-wrap">
-      <div class="video-intro-sticky">
-        <div class="video-copy-block">
+  <section id="opening-video-section" class="section reveal scroll-video-intro opening-comic-intro" data-comic-intro>
+    <div class="opening-comic-sticky">
+      <div class="opening-comic-hero" aria-label="專題開場">
+        <img src="./pic/opening-comic/1.jpg" alt="" aria-hidden="true" />
+        <div>
           <p class="section-kicker">互動新聞專題</p>
-          <h1>滑動觀看體態焦慮如何被日常內容推進</h1>
-          <p>這裡預留滾動式影片敘事素材位置。使用者往下滑時，placeholder 畫面會依序推進，後續可替換成正式影片或連續影格。</p>
+          <h1>體態、社群與健康焦慮</h1>
+          <span>向下滑動</span>
         </div>
+      </div>
 
-        <div class="video-placeholder-block" aria-label="滾動式影片 placeholder">
-          <div class="video-frame-placeholder" data-video-frame>
-            <span>scroll video placeholder</span>
-            <strong id="videoFrameLabel">frame 01</strong>
-          </div>
-          <div class="video-progress-track" aria-hidden="true">
-            <span data-video-progress></span>
-          </div>
+      <div class="opening-comic-stage" aria-label="開場漫畫">
+        <div class="opening-comic-strip">
+          <img class="is-active" src="./pic/opening-comic/1.jpg" alt="開場漫畫 1" data-comic-panel />
+          <img src="./pic/opening-comic/2.jpg" alt="開場漫畫 2" data-comic-panel />
+          <img src="./pic/opening-comic/3.jpg" alt="開場漫畫 3" data-comic-panel />
+          <img src="./pic/opening-comic/4.jpg" alt="開場漫畫 4" data-comic-panel />
+          <img src="./pic/opening-comic/5.jpg" alt="開場漫畫 5" data-comic-panel />
+          <img src="./pic/opening-comic/6.jpg" alt="開場漫畫 6" data-comic-panel />
+          <img src="./pic/opening-comic/7.jpg" alt="開場漫畫 7" data-comic-panel />
         </div>
-
-        <ol class="video-cue-list" aria-label="影片敘事段落">
-          <li class="is-active" data-video-cue>看見社群中的體態訊息</li>
-          <li data-video-cue>注意開始被外貌標準牽動</li>
-          <li data-video-cue>進入後續互動內容</li>
-        </ol>
+        <div class="opening-comic-progress" aria-hidden="true">
+          <span data-comic-progress></span>
+        </div>
       </div>
     </div>
   </section>
@@ -3458,6 +3458,6 @@
 
   </section>
 
-  <script src="script.js?v=20260610-7"></script>
+  <script src="script.js?v=20260610-8"></script>
 </body>
 </html>
