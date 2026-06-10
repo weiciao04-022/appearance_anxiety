@@ -339,6 +339,68 @@ button:active,
   background: #000;
 }
 
+.model-post-orbit-section {
+  min-height: 100vh;
+  padding-block: clamp(72px, 8vw, 120px);
+}
+
+.model-post-orbit-wrap {
+  position: relative;
+  min-height: min(760px, 86vh);
+  display: grid;
+  place-items: center;
+}
+
+.model-post-center {
+  position: relative;
+  z-index: 2;
+  width: min(720px, 88vw);
+  display: grid;
+  gap: 18px;
+  text-align: center;
+}
+
+.model-post-center h2 {
+  margin: 0;
+  font-size: clamp(2.2rem, 6vw, 6.6rem);
+  line-height: 1.08;
+}
+
+.model-post-orbit {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.model-post-slot {
+  position: absolute;
+  width: clamp(92px, 13vw, 168px);
+  aspect-ratio: 9 / 16;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.42);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(245, 245, 245, 0.82)),
+    repeating-linear-gradient(45deg, transparent 0 10px, rgba(0, 0, 0, 0.04) 10px 11px);
+  color: #555;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+  transform: rotate(var(--slot-rotate, 0deg));
+}
+
+.model-post-slot span {
+  padding: 8px;
+}
+
+.model-post-slot.slot-1 { top: 3%; left: 9%; --slot-rotate: -8deg; }
+.model-post-slot.slot-2 { top: 10%; right: 13%; --slot-rotate: 7deg; }
+.model-post-slot.slot-3 { top: 42%; left: 0; --slot-rotate: 5deg; }
+.model-post-slot.slot-4 { top: 47%; right: 2%; --slot-rotate: -6deg; }
+.model-post-slot.slot-5 { bottom: 2%; left: 18%; --slot-rotate: 9deg; }
+.model-post-slot.slot-6 { right: 20%; bottom: 0; --slot-rotate: -4deg; }
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -574,6 +636,16 @@ button:active,
   padding: 14px;
   border: 1px solid #000;
   box-sizing: border-box;
+}
+
+.case-section-intro {
+  width: min(620px, 92vw);
+  margin: 0 0 10px;
+  color: #222;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.9;
+  text-align: center;
 }
 
 .case-card {
@@ -1391,13 +1463,21 @@ button:active,
   width: min(520px, 100%);
   display: flex;
   justify-content: center;
-  gap: 28px;
+  gap: 12px;
   flex-wrap: wrap;
-  margin-top: 4px;
+  margin-top: 8px;
 }
 
 .case-link-row a {
+  min-height: 42px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0 18px;
+  border: 1px solid #000;
   color: #000;
+  background: #fff;
+  font-size: 0.95rem;
+  font-weight: 800;
   text-decoration: none;
 }
 
@@ -1437,6 +1517,26 @@ button:active,
   .opening-comic-strip {
     height: min(78vh, 680px);
   }
+
+  .model-post-orbit-wrap {
+    min-height: 760px;
+    align-content: center;
+  }
+
+  .model-post-center {
+    width: min(86vw, 430px);
+  }
+
+  .model-post-slot {
+    width: clamp(74px, 21vw, 108px);
+  }
+
+  .model-post-slot.slot-1 { top: 2%; left: 4%; }
+  .model-post-slot.slot-2 { top: 5%; right: 6%; }
+  .model-post-slot.slot-3 { top: 34%; left: 0; }
+  .model-post-slot.slot-4 { top: 36%; right: 0; }
+  .model-post-slot.slot-5 { bottom: 3%; left: 12%; }
+  .model-post-slot.slot-6 { right: 12%; bottom: 2%; }
 
   .body-gender-toggle {
     width: 100%;

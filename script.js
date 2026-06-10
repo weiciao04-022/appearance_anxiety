@@ -167,7 +167,7 @@ function createBodyImagePath(fileName) {
 const bodyFatImages = [
   {
     id: 'female-under-8',
-    label: '女生身材 1',
+    label: '理想身材選項',
     src: createBodyImagePath('B_female<8%.png'),
     gender: 'female',
     bodyFatRange: '<8%',
@@ -177,7 +177,7 @@ const bodyFatImages = [
   },
   {
     id: 'female-10-14',
-    label: '女生身材 2',
+    label: '理想身材選項',
     src: createBodyImagePath('B_female10-14%.png'),
     gender: 'female',
     bodyFatRange: '10–14%',
@@ -187,7 +187,7 @@ const bodyFatImages = [
   },
   {
     id: 'female-15-18',
-    label: '女生身材 3',
+    label: '理想身材選項',
     src: createBodyImagePath('B_female15-18%.png'),
     gender: 'female',
     bodyFatRange: '15–18%',
@@ -197,7 +197,7 @@ const bodyFatImages = [
   },
   {
     id: 'female-20-25',
-    label: '女生身材 4',
+    label: '理想身材選項',
     src: createBodyImagePath('B_female20-25%.png'),
     gender: 'female',
     bodyFatRange: '20–25%',
@@ -207,7 +207,7 @@ const bodyFatImages = [
   },
   {
     id: 'female-over-30',
-    label: '女生身材 5',
+    label: '理想身材選項',
     src: createBodyImagePath('B_female>30%.png'),
     gender: 'female',
     bodyFatRange: '>30%',
@@ -217,7 +217,7 @@ const bodyFatImages = [
   },
   {
     id: 'male-under-8',
-    label: '男生身材 1',
+    label: '理想身材選項',
     src: createBodyImagePath('B_male<8%.png'),
     gender: 'male',
     bodyFatRange: '<8%',
@@ -227,7 +227,7 @@ const bodyFatImages = [
   },
   {
     id: 'male-10-14',
-    label: '男生身材 2',
+    label: '理想身材選項',
     src: createBodyImagePath('B_male10-14%.png'),
     gender: 'male',
     bodyFatRange: '10–14%',
@@ -237,7 +237,7 @@ const bodyFatImages = [
   },
   {
     id: 'male-15-18',
-    label: '男生身材 3',
+    label: '理想身材選項',
     src: createBodyImagePath('B_male15-18%.png'),
     gender: 'male',
     bodyFatRange: '15–18%',
@@ -247,7 +247,7 @@ const bodyFatImages = [
   },
   {
     id: 'male-20-25',
-    label: '男生身材 4',
+    label: '理想身材選項',
     src: createBodyImagePath('B_male20-25%.png'),
     gender: 'male',
     bodyFatRange: '20–25%',
@@ -257,7 +257,7 @@ const bodyFatImages = [
   },
   {
     id: 'male-over-30',
-    label: '男生身材 5',
+    label: '理想身材選項',
     src: createBodyImagePath('B_male>30%.png'),
     gender: 'male',
     bodyFatRange: '>30%',
@@ -368,7 +368,7 @@ function updateBodyChoiceResult() {
       : 'Firebase 尚未連線，目前只有本機暫存選擇，因此暫不顯示百分比。';
     choiceResult.innerHTML = `
       <article class="body-choice-stat-card">
-        <p class="body-choice-selected">你的選擇：${IdealBodySelector.selectedBodyImage.label}</p>
+        <p class="body-choice-selected">你選擇了這個體態</p>
         <p>${IdealBodySelector.selectedBodyImage.selectionNote}</p>
         <p>你選擇的體態大約落在 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間。</p>
         <div class="body-choice-stat-main">
@@ -384,7 +384,7 @@ function updateBodyChoiceResult() {
 
   choiceResult.innerHTML = `
     <article class="body-choice-stat-card">
-      <p class="body-choice-selected">你的選擇：${IdealBodySelector.selectedBodyImage.label}</p>
+      <p class="body-choice-selected">你選擇了這個體態</p>
       <p>${IdealBodySelector.selectedBodyImage.selectionNote}</p>
       <p>你選擇的體態大約落在 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間。</p>
       <div class="body-choice-stat-main">
@@ -420,7 +420,6 @@ function renderBodyOptions() {
       <span class="body-option-image">
         <img src="${option.src}" alt="${option.label}" loading="lazy" />
       </span>
-      <span class="body-option-label">${option.label}</span>
     `;
     optionGrid.appendChild(button);
   });
