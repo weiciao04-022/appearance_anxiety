@@ -196,7 +196,7 @@ button:active,
 .ig-post.story { min-height: 100%; }
 
 #opening-video-section {
-  min-height: 820vh;
+  min-height: 1500vh;
   align-items: flex-start;
   padding-top: 0;
   padding-bottom: 0;
@@ -206,6 +206,7 @@ button:active,
   position: sticky;
   top: 0;
   min-height: 100vh;
+  min-height: 100svh;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -223,6 +224,7 @@ button:active,
   z-index: 2;
   width: 100%;
   min-height: 100vh;
+  min-height: 100svh;
   display: grid;
   place-items: center;
   padding: 28px;
@@ -238,8 +240,8 @@ button:active,
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(14px);
+  background: rgba(255, 255, 255, 0.38);
+  backdrop-filter: blur(8px);
 }
 
 .opening-comic-hero img {
@@ -249,9 +251,9 @@ button:active,
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(18px);
-  transform: scale(1.08);
-  opacity: 0.65;
+  filter: blur(8px);
+  transform: scale(1.04);
+  opacity: 1;
 }
 
 .opening-comic-hero > div {
@@ -259,6 +261,7 @@ button:active,
   gap: 18px;
   max-width: 860px;
   text-align: center;
+  text-shadow: 0 1px 16px rgba(255, 255, 255, 0.86);
 }
 
 .section-kicker {
@@ -281,7 +284,7 @@ button:active,
   min-height: 42px;
   place-items: center;
   border: 1px solid #000;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.82);
   font-size: 0.95rem;
   font-weight: 700;
 }
@@ -1503,7 +1506,7 @@ button:active,
   }
 
   #opening-video-section {
-    min-height: 760vh;
+    min-height: 1320vh;
   }
 
   .opening-comic-hero {

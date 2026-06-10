@@ -132,8 +132,8 @@ function initScrollVideoIntro() {
     const scrollable = Math.max(1, intro.offsetHeight - window.innerHeight);
     const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
     const percent = Math.round(progress * 100);
-    const titleExitProgress = Math.min(1, progress / 0.18);
-    const panelProgress = Math.min(1, Math.max(0, (progress - 0.16) / 0.84));
+    const titleExitProgress = Math.min(1, progress / 0.12);
+    const panelProgress = Math.min(1, Math.max(0, (progress - 0.18) / 0.82));
     const activeIndex = Math.min(panels.length - 1, Math.floor(panelProgress * panels.length));
 
     intro.style.setProperty('--comic-progress', `${percent}%`);
