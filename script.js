@@ -148,6 +148,34 @@ function scrollToSection(id) {
   target.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+function initReadingProgress() {
+  const progressBar = document.querySelector('[data-reading-progress]');
+  if (!progressBar) return;
+
+  let ticking = false;
+
+  function updateReadingProgress() {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+    const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, scrollTop / scrollable));
+    progressBar.style.width = `${Math.round(progress * 1000) / 10}%`;
+    ticking = false;
+  }
+
+  function requestProgressUpdate() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(updateReadingProgress);
+  }
+
+  updateReadingProgress();
+  window.addEventListener('scroll', requestProgressUpdate, { passive: true });
+  window.addEventListener('resize', requestProgressUpdate);
+  window.addEventListener('load', requestProgressUpdate);
+}
+
+initReadingProgress();
+
 function initScrollVideoIntro() {
   const intro = document.querySelector('[data-comic-intro]');
   if (!intro) return;
