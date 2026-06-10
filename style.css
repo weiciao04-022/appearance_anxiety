@@ -550,11 +550,11 @@ button:active,
 }
 
 .case-row {
-  width: min(760px, 92vw);
+  width: min(680px, 92vw);
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  padding: 16px;
+  gap: 10px;
+  padding: 14px;
   border: 1px solid #000;
   box-sizing: border-box;
 }
@@ -563,7 +563,6 @@ button:active,
   position: relative;
   width: 100%;
   aspect-ratio: 9 / 16;
-  max-height: min(30vh, 230px);
   min-height: 0;
   padding: 0;
   cursor: pointer;
@@ -586,7 +585,7 @@ button:active,
   height: 100%;
   border: 0;
   background: #fff;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .case-card span {
@@ -1392,6 +1391,16 @@ button:active,
   text-decoration: none;
 }
 
+.case-closing-note {
+  width: min(520px, 100%);
+  margin: 12px 0 0;
+  color: #000;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.8;
+  text-align: center;
+}
+
 
 @media (max-width: 900px) {
   body {
@@ -1591,13 +1600,12 @@ button:active,
 
 /* Latest refinements */
 .case-row {
-  width: min(760px, 92vw);
-  gap: 12px;
-  padding: 16px;
+  width: min(680px, 92vw);
+  gap: 10px;
+  padding: 14px;
 }
 
 .case-card {
-  max-height: min(30vh, 230px);
   aspect-ratio: 9 / 16;
 }
 
@@ -1763,7 +1771,7 @@ button:active,
 @media (max-width: 900px) {
   .case-row {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: min(620px, 92vw);
+    width: min(520px, 92vw);
   }
 
   .case-card {
