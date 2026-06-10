@@ -40,6 +40,15 @@ const siteAssetManifest = [
   './pic/body-game/card-influencer-challenge.png'
 ];
 
+const siteVideoManifest = [
+  './video/model-posts/1.m4v',
+  './video/model-posts/2.m4v',
+  './video/model-posts/3.m4v',
+  './video/model-posts/4.m4v',
+  './video/model-posts/5.m4v',
+  './video/model-posts/6.m4v'
+];
+
 function preloadImage(src) {
   return new Promise((resolve) => {
     const image = new Image();
@@ -47,6 +56,25 @@ function preloadImage(src) {
     image.onerror = resolve;
     image.src = src;
     if (image.complete) resolve();
+  });
+}
+
+function preloadVideo(src) {
+  return new Promise((resolve) => {
+    const video = document.createElement('video');
+    const finish = () => {
+      video.removeAttribute('src');
+      video.load();
+      resolve();
+    };
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+    video.oncanplaythrough = finish;
+    video.onloadeddata = finish;
+    video.onerror = finish;
+    video.src = src;
+    video.load();
   });
 }
 
@@ -63,7 +91,8 @@ async function initSitePreloader() {
     .map((element) => element.currentSrc || element.getAttribute('src') || element.getAttribute('poster'))
     .filter(Boolean);
   const imageAssets = [...new Set([...siteAssetManifest, ...pageImages])];
-  const totalAssets = Math.max(1, imageAssets.length);
+  const videoAssets = [...new Set(siteVideoManifest)];
+  const totalAssets = Math.max(1, imageAssets.length + videoAssets.length);
   const startedAt = performance.now();
   let completed = 0;
   const updateProgress = () => {
@@ -74,7 +103,8 @@ async function initSitePreloader() {
 
   const preloadTask = Promise.all(
     [
-      ...imageAssets.map((src) => preloadImage(src))
+      ...imageAssets.map((src) => preloadImage(src)),
+      ...videoAssets.map((src) => preloadVideo(src))
     ].map((task) =>
       task.finally(() => {
         completed += 1;
