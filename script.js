@@ -184,6 +184,8 @@ function initScrollVideoIntro() {
   const stage = intro.querySelector('.opening-comic-stage');
   const progressBar = intro.querySelector('[data-comic-progress]');
   const panels = [...intro.querySelectorAll('[data-comic-panel]')];
+  // 調整開場漫畫停留時間：前三張比例較長，方便讀者看清楚畫面內容。
+  const panelStops = [0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 1.01];
 
   function updateIntroProgress() {
     const rect = intro.getBoundingClientRect();
@@ -192,7 +194,10 @@ function initScrollVideoIntro() {
     const percent = Math.round(progress * 100);
     const titleExitProgress = Math.min(1, progress / 0.12);
     const panelProgress = Math.min(1, Math.max(0, (progress - 0.18) / 0.82));
-    const activeIndex = Math.min(panels.length - 1, Math.floor(panelProgress * panels.length));
+    const activeIndex = Math.min(
+      panels.length - 1,
+      Math.max(0, panelStops.findIndex((stop, index) => panelProgress >= stop && panelProgress < panelStops[index + 1]))
+    );
 
     intro.style.setProperty('--comic-progress', `${percent}%`);
     if (hero) {
