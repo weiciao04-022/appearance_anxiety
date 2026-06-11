@@ -368,6 +368,15 @@ button:active,
   background: #000;
 }
 
+.opening-comic-hint {
+  margin: 0;
+  color: #000;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-align: center;
+}
+
 .model-post-orbit-section {
   min-height: 100vh;
   padding-block: clamp(72px, 8vw, 120px);
