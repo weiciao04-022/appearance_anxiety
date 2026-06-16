@@ -9,6 +9,10 @@ html.is-preloading {
   overflow: hidden;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .reading-progress {
   position: fixed;
   top: 0;
