@@ -2866,10 +2866,10 @@ function initXinmiIntroCards() {
     const stackTop = rect.top + window.scrollY;
     const scrollable = Math.max(1, stack.offsetHeight - window.innerHeight);
     const rawProgress = clamp((window.scrollY - stackTop) / scrollable, 0, 0.999);
-    const cardProgress = (rawProgress - 0.18) / 0.76;
+    const cardProgress = (rawProgress - 0.1) / 0.88;
     const activeIndex = clamp(Math.floor(clamp(cardProgress, 0, 0.999) * panels.length), 0, panels.length - 1);
     panels.forEach((panel, index) => {
-      const isActive = rawProgress >= 0.18 && rawProgress <= 0.96 && index === activeIndex;
+      const isActive = rawProgress >= 0.1 && rawProgress <= 0.985 && index === activeIndex;
       panel.classList.toggle('is-active', isActive);
       panel.style.zIndex = String(isActive ? 5 : 0);
     });
@@ -2903,6 +2903,28 @@ function initXinmiIntroCards() {
 }
 
 function initWeightStorySection() {
+  const comicScroll = document.querySelector('[data-haocheng-comic-scroll]');
+  if (comicScroll) {
+    const panels = Array.from(comicScroll.querySelectorAll('[data-haocheng-comic-panel]'));
+    const progressBar = comicScroll.querySelector('[data-haocheng-comic-progress]');
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+    function updateComicScroll() {
+      const rect = comicScroll.getBoundingClientRect();
+      const scrollable = Math.max(1, comicScroll.offsetHeight - window.innerHeight);
+      const progress = clamp(-rect.top / scrollable, 0, 0.999);
+      const activeIndex = clamp(Math.floor(progress * panels.length), 0, panels.length - 1);
+      panels.forEach((panel, index) => panel.classList.toggle('is-active', index === activeIndex));
+      const percent = Math.round(progress * 1000) / 10;
+      comicScroll.style.setProperty('--haocheng-comic-progress', `${percent}%`);
+      if (progressBar) progressBar.style.width = `${percent}%`;
+    }
+
+    updateComicScroll();
+    window.addEventListener('scroll', updateComicScroll, { passive: true });
+    window.addEventListener('resize', updateComicScroll);
+  }
+
   document.querySelectorAll('[data-haocheng-compare-range]').forEach((range) => {
     const comparison = range.closest('[data-haocheng-comparison]');
     if (!comparison) return;
@@ -2917,15 +2939,22 @@ function initWeightStorySection() {
   const mealItems = [
     { id: 'brown-rice', category: 'base', name: '糙米飯', calories: 220, protein: 5, carbs: 46, note: '穩定碳水' },
     { id: 'sweet-potato', category: 'base', name: '地瓜', calories: 165, protein: 2, carbs: 38, note: '低脂澱粉' },
+    { id: 'multigrain-rice', category: 'base', name: '五穀飯', calories: 240, protein: 6, carbs: 48, note: '纖維較高' },
+    { id: 'white-rice', category: 'base', name: '白飯', calories: 260, protein: 5, carbs: 58, note: '常見主食' },
     { id: 'noodles', category: 'base', name: '炒麵', calories: 360, protein: 9, carbs: 58, note: '油脂較高' },
     { id: 'chicken', category: 'protein', name: '雞胸肉', calories: 165, protein: 31, carbs: 0, note: '高蛋白' },
     { id: 'egg', category: 'protein', name: '水煮蛋', calories: 78, protein: 6, carbs: 1, note: '補蛋白' },
+    { id: 'salmon', category: 'protein', name: '鮭魚', calories: 230, protein: 25, carbs: 0, note: '脂肪較高' },
+    { id: 'lean-pork', category: 'protein', name: '瘦豬肉', calories: 210, protein: 28, carbs: 0, note: '蛋白質來源' },
     { id: 'fried-chicken', category: 'protein', name: '炸雞排', calories: 520, protein: 32, carbs: 35, note: '熱量偏高' },
     { id: 'broccoli', category: 'side', name: '花椰菜', calories: 35, protein: 3, carbs: 7, note: '纖維來源' },
     { id: 'cabbage', category: 'side', name: '高麗菜', calories: 45, protein: 2, carbs: 9, note: '蔬菜' },
+    { id: 'mushroom', category: 'side', name: '菇類', calories: 40, protein: 3, carbs: 6, note: '低熱量配菜' },
     { id: 'tofu', category: 'side', name: '豆腐', calories: 95, protein: 10, carbs: 3, note: '植物蛋白' },
+    { id: 'corn', category: 'side', name: '玉米', calories: 110, protein: 4, carbs: 24, note: '澱粉配菜' },
     { id: 'fries', category: 'side', name: '薯條', calories: 310, protein: 4, carbs: 41, note: '油炸澱粉' },
-    { id: 'milk-tea', category: 'side', name: '微糖奶茶', calories: 240, protein: 4, carbs: 38, note: '飲料熱量' }
+    { id: 'milk-tea', category: 'side', name: '微糖奶茶', calories: 240, protein: 4, carbs: 38, note: '飲料熱量' },
+    { id: 'sugar-free-tea', category: 'side', name: '無糖茶', calories: 0, protein: 0, carbs: 0, note: '低熱量飲品' }
   ];
 
   const selectedIds = new Set();
@@ -2942,6 +2971,40 @@ function initWeightStorySection() {
     protein: planner.querySelector('[data-meal-total="protein"]'),
     carbs: planner.querySelector('[data-meal-total="carbs"]')
   };
+  const targetLabels = {
+    calories: planner.querySelector('[data-meal-target="calories"]'),
+    protein: planner.querySelector('[data-meal-target="protein"]'),
+    carbs: planner.querySelector('[data-meal-target="carbs"]')
+  };
+
+  function savedMealTargets() {
+    let profile = null;
+    try {
+      profile = JSON.parse(localStorage.getItem('bodyHealthProfile'));
+    } catch {
+      profile = null;
+    }
+
+    if (!profile || !Number(profile.weight)) {
+      return {
+        isPersonalized: false,
+        calories: 600,
+        protein: 25,
+        carbs: 60
+      };
+    }
+
+    const calories = Number(profile.mealCalories)
+      || Math.round((Number(profile.estimatedCalories) || Number(profile.tdee) || 1800) / 3);
+    const protein = Math.round((Number(profile.proteinTarget) || Number(profile.weight) * 1.2) / 3);
+    const carbs = Math.round((Number(profile.carbTarget) || Number(profile.weight) * 3) / 3);
+    return {
+      isPersonalized: true,
+      calories: Math.max(320, calories),
+      protein: Math.max(12, protein),
+      carbs: Math.max(30, carbs)
+    };
+  }
 
   function selectedItems() {
     return mealItems.filter((item) => selectedIds.has(item.id));
@@ -2957,10 +3020,16 @@ function initWeightStorySection() {
       }),
       { calories: 0, protein: 0, carbs: 0 }
     );
+    const targets = savedMealTargets();
+    const carbLow = Math.round(targets.carbs * 0.75);
+    const carbHigh = Math.round(targets.carbs * 1.25);
 
     totalTargets.calories.textContent = `${totals.calories} kcal`;
     totalTargets.protein.textContent = `${totals.protein} g`;
     totalTargets.carbs.textContent = `${totals.carbs} g`;
+    targetLabels.calories.textContent = targets.isPersonalized ? `你的每餐建議約 ${targets.calories} kcal` : '未填資料時暫用 600 kcal';
+    targetLabels.protein.textContent = `建議 ${targets.protein} g 以上`;
+    targetLabels.carbs.textContent = `建議 ${carbLow}-${carbHigh} g`;
     selectedList.textContent = items.length ? items.map((item) => item.name).join('、') : '尚未選擇食材';
 
     const hasBase = items.some((item) => item.category === 'base');
@@ -2968,10 +3037,12 @@ function initWeightStorySection() {
     const hasSide = items.some((item) => item.category === 'side');
     const messages = [];
     if (!hasBase) messages.push('缺少主食，可能比較不耐餓。');
-    if (!hasProtein || totals.protein < 25) messages.push('蛋白質不足，可以增加雞胸肉、蛋或豆腐。');
+    if (!hasProtein || totals.protein < targets.protein) messages.push('蛋白質不足，可以增加雞胸肉、蛋、豆腐或瘦肉。');
     if (!hasSide) messages.push('缺少蔬菜或配菜，纖維量偏少。');
-    if (totals.calories > 600) messages.push('熱量超過一餐建議，若想減重可以減少油炸或含糖飲料。');
-    if (totals.calories > 0 && totals.calories < 380) messages.push('熱量偏低，長期可能難以維持。');
+    if (totals.carbs > carbHigh) messages.push('碳水高於建議，可以減少澱粉或含糖飲料。');
+    if (totals.carbs > 0 && totals.carbs < carbLow) messages.push('碳水偏低，若下午容易餓可補一點主食。');
+    if (totals.calories > targets.calories) messages.push('熱量超過你的一餐建議，若想減重可以減少油炸或含糖飲料。');
+    if (totals.calories > 0 && totals.calories < targets.calories * 0.65) messages.push('熱量偏低，長期可能難以維持。');
     if (!messages.length) messages.push('這份餐盒大致兼顧熱量赤字、蛋白質和碳水比例。');
     feedback.textContent = messages.join(' ');
 

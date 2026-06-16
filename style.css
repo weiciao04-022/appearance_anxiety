@@ -1550,7 +1550,7 @@ button:active,
 
 .xinmi-card-scroll {
   position: relative;
-  min-height: 430vh;
+  min-height: 560vh;
   background: #fff;
 }
 
@@ -1586,11 +1586,12 @@ button:active,
 }
 
 .xinmi-text-panel {
-  right: max(8vw, calc(50vw - 560px));
+  left: 50%;
   top: 50%;
   width: min(360px, 30vw);
   min-height: 0;
-  transform: translate3d(0, calc(-50% + 54px), 0) scale(0.96);
+  text-align: center;
+  transform: translate3d(-50%, calc(-50% + 54px), 0) scale(0.96);
 }
 
 .xinmi-media-panel {
@@ -1617,6 +1618,10 @@ button:active,
   pointer-events: auto;
   transform: translate3d(0, -50%, 0) scale(1);
   box-shadow: 0 28px 76px rgba(38, 41, 43, 0.22);
+}
+
+.xinmi-text-panel.is-active {
+  transform: translate3d(-50%, -50%, 0) scale(1);
 }
 
 .xinmi-media-panel.is-active {
@@ -1658,6 +1663,12 @@ button:active,
   font-weight: 700;
 }
 
+.xinmi-month-compare p {
+  color: #555f66;
+  font-size: 0.76rem;
+  line-height: 1.55;
+}
+
 .xinmi-comparison {
   position: relative;
   aspect-ratio: 3 / 4.8;
@@ -1688,6 +1699,11 @@ button:active,
   height: 100%;
   object-fit: contain;
   background: #f4f0ea;
+}
+
+.xinmi-month-compare:nth-child(3) .xinmi-comparison-after {
+  transform: scale(1.18);
+  transform-origin: 50% 44%;
 }
 
 .xinmi-comparison-before {
@@ -1806,12 +1822,13 @@ button:active,
 }
 
 .weight-story-section {
+  width: 100%;
   display: grid;
   gap: clamp(56px, 7vw, 96px);
 }
 
 .weight-story-copy {
-  width: min(760px, 88vw);
+  width: min(680px, 86vw);
   margin: 0 auto;
   color: #303234;
   font-size: clamp(1.05rem, 1.5vw, 1.28rem);
@@ -1832,38 +1849,73 @@ button:active,
 }
 
 .haocheng-comic-flow {
+  position: relative;
+  min-height: 430vh;
+}
+
+.haocheng-comic-sticky {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
   display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 18px;
+  align-items: center;
+  padding: clamp(40px, 6vw, 74px) 0;
+  box-sizing: border-box;
 }
 
-.haocheng-comic-grid {
+.haocheng-comic-heading {
+  width: min(680px, 86vw);
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  gap: 8px;
 }
 
-.haocheng-comic-grid article {
-  min-height: 260px;
+.haocheng-comic-heading small {
+  color: #687079;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.haocheng-comic-stage {
+  position: relative;
+  width: min(680px, 86vw);
+  min-height: min(560px, 64vh);
+  margin: 0 auto;
+}
+
+.haocheng-comic-stage article {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 18px;
+  padding: clamp(24px, 4vw, 42px);
   border: 1px solid rgba(47, 47, 47, 0.18);
   border-radius: 8px;
   background:
     linear-gradient(135deg, rgba(47, 47, 47, 0.05), transparent 42%),
     #fbfaf7;
   box-shadow: 0 16px 36px rgba(47, 47, 47, 0.08);
+  opacity: 0;
+  transform: translateY(24px) scale(0.98);
+  transition: opacity 420ms ease, transform 520ms ease;
 }
 
-.haocheng-comic-grid span {
+.haocheng-comic-stage article.is-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.haocheng-comic-stage span {
   color: #8b6a56;
   font-size: 0.78rem;
   font-weight: 800;
 }
 
-.haocheng-comic-grid h3,
-.haocheng-comic-grid p,
+.haocheng-comic-stage h3,
+.haocheng-comic-stage p,
 .meal-planner-intro h2,
 .meal-planner-intro p,
 .meal-planner-intro .section-kicker,
@@ -1871,15 +1923,32 @@ button:active,
   margin: 0;
 }
 
-.haocheng-comic-grid h3 {
-  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+.haocheng-comic-stage h3 {
+  font-size: clamp(1.6rem, 3.2vw, 2.8rem);
   line-height: 1.35;
 }
 
-.haocheng-comic-grid p {
+.haocheng-comic-stage p {
   color: #5c6266;
-  font-size: 0.96rem;
-  line-height: 1.65;
+  font-size: clamp(1rem, 1.5vw, 1.25rem);
+  line-height: 1.7;
+}
+
+.haocheng-comic-progress {
+  width: min(680px, 86vw);
+  height: 6px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(47, 47, 47, 0.12);
+}
+
+.haocheng-comic-progress span {
+  display: block;
+  width: var(--haocheng-comic-progress, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: #303234;
 }
 
 .haocheng-progress-block {
@@ -2149,7 +2218,6 @@ button:active,
 }
 
 @media (max-width: 900px) {
-  .haocheng-comic-grid,
   .peixuan-social-block {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2161,7 +2229,6 @@ button:active,
 }
 
 @media (max-width: 620px) {
-  .haocheng-comic-grid,
   .peixuan-social-block {
     grid-template-columns: 1fr;
   }
