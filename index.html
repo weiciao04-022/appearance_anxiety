@@ -14,7 +14,7 @@
   <link rel="preload" as="image" href="./pic/B/B_male15-18%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male20-25%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male%3E30%25.png" />
-  <link rel="stylesheet" href="style.css?v=20260616-05" />
+  <link rel="stylesheet" href="style.css?v=20260616-06" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
@@ -198,8 +198,108 @@
   </section>
 
   <section id="after-body-text" class="section reveal text-page">
-    <div class="frame-wrap center-col">
-      <p>這裡放第二段文字，說明「理想」如何從單純偏好，逐漸變成可被量化與比較的目標。</p>
+    <div class="frame-wrap weight-story-section">
+      <article class="weight-story-copy">
+        <p>「我一直都意識到自己需要減肥，但始終沒有去執行，直到健康亮了紅燈，我才真的下定決心。」國立政治大學傳播學院大一大二不分系學生張皓承吐露自己減肥的原因，皓承在國小四年級時，就常常拿到過胖通知單，也因此萌生了減肥的念頭，有嘗試以節食的方式減肥，但是因為太難堅持導致計畫失敗。然而，因為大二期間動了椎間盤手術，為降低身體負擔，醫生建議他減重，他才再次重視體重問題。</p>
+        <p>張皓承最高體重曾來到115公斤，由於手術後無法進行任何激烈運動，目前他主要以飲食控制來管理體重。</p>
+      </article>
+
+      <section class="haocheng-comic-flow" aria-label="皓承的飲食控制計劃">
+        <p class="section-kicker">皓承的飲食控制計劃</p>
+        <div class="haocheng-comic-grid">
+          <article>
+            <span>01</span>
+            <h3>一天只吃兩餐</h3>
+            <p>先從餐次下手，減少不必要的進食機會。</p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>查詢減重食物資訊</h3>
+            <p>上網確認減重期間適合攝取的食物與份量。</p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>健康餐盒</h3>
+            <p>#熱量低 #優質纖維 #口味清淡</p>
+          </article>
+          <article>
+            <span>04</span>
+            <h3>少喝含糖飲料</h3>
+            <p>飲料一個月不超過兩次，以無糖、微糖飲品為主。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="haocheng-progress-block">
+        <div class="haocheng-progress-copy">
+          <p>「透過飲食的改善，我覺得還蠻有效的，我從1月到現在已經瘦了15公斤，我期望自己可以瘦到85公斤。」皓承說道。</p>
+          <small>滑動看看皓承的減肥效果</small>
+        </div>
+        <figure class="haocheng-compare" data-haocheng-comparison style="--reveal: 50%">
+          <img class="haocheng-after" src="./pic/haocheng/after.jpg" alt="皓承減重後照片" />
+          <img class="haocheng-before" src="./pic/haocheng/before.jpg" alt="皓承減重前照片" />
+          <span class="is-before">Before</span>
+          <span class="is-after">After</span>
+          <input type="range" min="0" max="100" value="50" aria-label="滑動比較皓承減重前後照片" data-haocheng-compare-range />
+        </figure>
+      </section>
+
+      <section class="meal-planner-block" data-haocheng-meal-planner>
+        <div class="meal-planner-intro">
+          <p class="section-kicker">健康餐盒遊戲</p>
+          <h2>搭配今天的午餐</h2>
+          <p>攝取足夠營養，並且達到熱量赤字，基本上就可以穩定地瘦下來。先用文字版食材測試熱量、碳水與蛋白質，之後可替換成正式圖片。</p>
+        </div>
+        <div class="meal-planner-layout">
+          <div class="meal-planner-options" aria-label="餐盒食材區">
+            <section>
+              <h3>主食</h3>
+              <div data-meal-options="base"></div>
+            </section>
+            <section>
+              <h3>蛋白質</h3>
+              <div data-meal-options="protein"></div>
+            </section>
+            <section>
+              <h3>配菜與其他</h3>
+              <div data-meal-options="side"></div>
+            </section>
+          </div>
+          <aside class="meal-planner-tray">
+            <h3>今天的餐盒</h3>
+            <div class="meal-selected-list" data-meal-selected-list>尚未選擇食材</div>
+            <div class="meal-macro-grid">
+              <div><span>熱量</span><b data-meal-total="calories">0 kcal</b><small>建議 600 kcal 以內</small></div>
+              <div><span>蛋白質</span><b data-meal-total="protein">0 g</b><small>建議 25 g 以上</small></div>
+              <div><span>碳水</span><b data-meal-total="carbs">0 g</b><small>建議 45-75 g</small></div>
+            </div>
+            <p class="meal-feedback" data-meal-feedback>選擇主食、蛋白質和配菜後，會出現營養建議。</p>
+            <button type="button" data-meal-reset>重新搭配</button>
+          </aside>
+        </div>
+      </section>
+
+      <article class="weight-story-copy">
+        <p>同樣擁有減重經驗的政大國貿系學生吳佩璇，肥胖問題從國小時期便一直困擾著他。佩璇曾在高中嘗試過168斷食法和蛋白質減肥法，但是這兩種斷食法導致的長時間餓肚子和疲累，減肥效果並不好，常常會面臨復胖又在減肥的狀況。為了的到穩定且健康的減肥成效，他決定展開減重行動，透過自媒體公開記錄他的減肥歷程，藉以督促自己執行減肥計劃。</p>
+      </article>
+
+      <section class="peixuan-social-block" aria-label="佩璇社群紀錄區">
+        <article class="social-placeholder-card">
+          <span>體重數字變化</span>
+          <div class="social-placeholder-visual">待補內容</div>
+          <p>佩璇有時會以留言抽現金的方式來懲罰自己體重沒有控制好。</p>
+        </article>
+        <article class="social-placeholder-card">
+          <span>阿寶的減肥外食吃什麼計畫</span>
+          <div class="social-placeholder-visual">待補圖片</div>
+          <p>佩璇擔憂，忙碌的生活容易面臨不知道該怎麼吃的困境，尤其大學生入住宿舍，自己煮飯也變的更加困難，因此他在社群媒體上有製作外食減肥吃什麼計畫，也會提供食物的詳細資訊，包含碳水、蛋白質、熱量等，提供給有需求的人參考。</p>
+        </article>
+        <article class="social-placeholder-card">
+          <span>阿寶的飲食控制核心重點</span>
+          <div class="social-placeholder-visual">待補圖片</div>
+          <p>佩璇也會整理自己減肥的經驗，像是飲食控制的核心重點、健身的組合等。</p>
+        </article>
+      </section>
     </div>
   </section>
 
@@ -3629,6 +3729,6 @@
     </div>
   </nav>
 
-  <script src="script.js?v=20260616-06"></script>
+  <script src="script.js?v=20260616-07"></script>
 </body>
 </html>

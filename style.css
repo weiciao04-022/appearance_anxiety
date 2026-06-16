@@ -1797,6 +1797,380 @@ button:active,
   }
 }
 
+#after-body-text {
+  min-height: auto;
+  align-items: flex-start;
+  justify-content: center;
+  padding: clamp(72px, 8vw, 112px) 6vw;
+  background: #fff;
+}
+
+.weight-story-section {
+  display: grid;
+  gap: clamp(56px, 7vw, 96px);
+}
+
+.weight-story-copy {
+  width: min(760px, 88vw);
+  margin: 0 auto;
+  color: #303234;
+  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+  line-height: 2;
+  letter-spacing: 0;
+}
+
+.weight-story-copy p {
+  margin: 0 0 1.35em;
+}
+
+.haocheng-comic-flow,
+.haocheng-progress-block,
+.meal-planner-block,
+.peixuan-social-block {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+}
+
+.haocheng-comic-flow {
+  display: grid;
+  gap: 18px;
+}
+
+.haocheng-comic-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.haocheng-comic-grid article {
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 18px;
+  border: 1px solid rgba(47, 47, 47, 0.18);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(47, 47, 47, 0.05), transparent 42%),
+    #fbfaf7;
+  box-shadow: 0 16px 36px rgba(47, 47, 47, 0.08);
+}
+
+.haocheng-comic-grid span {
+  color: #8b6a56;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.haocheng-comic-grid h3,
+.haocheng-comic-grid p,
+.meal-planner-intro h2,
+.meal-planner-intro p,
+.meal-planner-intro .section-kicker,
+.social-placeholder-card p {
+  margin: 0;
+}
+
+.haocheng-comic-grid h3 {
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  line-height: 1.35;
+}
+
+.haocheng-comic-grid p {
+  color: #5c6266;
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+
+.haocheng-progress-block {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.7fr) minmax(320px, 1fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+}
+
+.haocheng-progress-copy {
+  display: grid;
+  gap: 12px;
+  color: #303234;
+  font-size: clamp(1rem, 1.35vw, 1.18rem);
+  line-height: 1.8;
+}
+
+.haocheng-progress-copy p,
+.haocheng-progress-copy small {
+  margin: 0;
+}
+
+.haocheng-progress-copy small {
+  color: #6a7177;
+  font-size: 0.86rem;
+}
+
+.haocheng-compare {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  border: 1px solid rgba(47, 47, 47, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f5f1eb;
+  box-shadow: 0 18px 42px rgba(47, 47, 47, 0.12);
+}
+
+.haocheng-compare::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--reveal);
+  z-index: 3;
+  width: 3px;
+  background: #fff;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.25);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.haocheng-compare img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #f5f1eb;
+}
+
+.haocheng-before {
+  clip-path: inset(0 calc(100% - var(--reveal)) 0 0);
+}
+
+.haocheng-compare span {
+  position: absolute;
+  top: 12px;
+  z-index: 4;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #333;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.haocheng-compare .is-before {
+  left: 12px;
+}
+
+.haocheng-compare .is-after {
+  right: 12px;
+}
+
+.haocheng-compare input {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 5;
+  width: 100%;
+  margin: 0;
+  accent-color: #2f3133;
+  cursor: ew-resize;
+}
+
+.meal-planner-block {
+  display: grid;
+  gap: 22px;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(47, 47, 47, 0.18);
+  border-radius: 8px;
+  background: #fbfaf7;
+}
+
+.meal-planner-intro {
+  width: min(720px, 100%);
+  display: grid;
+  gap: 8px;
+}
+
+.meal-planner-intro h2 {
+  font-size: clamp(1.45rem, 2.4vw, 2.2rem);
+}
+
+.meal-planner-intro p {
+  color: #5b6268;
+  line-height: 1.75;
+}
+
+.meal-planner-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 22px;
+}
+
+.meal-planner-options {
+  display: grid;
+  gap: 16px;
+}
+
+.meal-planner-options section {
+  display: grid;
+  gap: 10px;
+}
+
+.meal-planner-options h3,
+.meal-planner-tray h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.meal-planner-options [data-meal-options] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.meal-choice-button {
+  display: grid;
+  gap: 4px;
+  width: 150px;
+  min-height: 88px;
+  padding: 10px;
+  border: 1px solid rgba(47, 47, 47, 0.18);
+  border-radius: 8px;
+  background: #fff;
+  color: #303234;
+  text-align: left;
+  cursor: pointer;
+}
+
+.meal-choice-button.is-selected {
+  border-color: #303234;
+  background: #eef2ef;
+}
+
+.meal-choice-button b {
+  font-size: 0.92rem;
+}
+
+.meal-choice-button small {
+  color: #697076;
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.meal-planner-tray {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid rgba(47, 47, 47, 0.16);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.meal-selected-list {
+  min-height: 78px;
+  color: #5d6266;
+  line-height: 1.65;
+}
+
+.meal-macro-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.meal-macro-grid div {
+  display: grid;
+  gap: 2px;
+  padding: 10px;
+  border: 1px solid rgba(47, 47, 47, 0.12);
+  border-radius: 8px;
+  background: #fbfaf7;
+}
+
+.meal-macro-grid span,
+.meal-macro-grid small {
+  color: #6c7378;
+  font-size: 0.76rem;
+}
+
+.meal-macro-grid b {
+  font-size: 1.1rem;
+}
+
+.meal-feedback {
+  margin: 0;
+  color: #3c4449;
+  line-height: 1.65;
+}
+
+.meal-planner-tray button {
+  width: fit-content;
+  border: 1px solid #303234;
+  border-radius: 999px;
+  padding: 8px 13px;
+  background: #fff;
+  color: #303234;
+  cursor: pointer;
+}
+
+.peixuan-social-block {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.social-placeholder-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid rgba(47, 47, 47, 0.18);
+  border-radius: 8px;
+  background: #fbfaf7;
+  box-shadow: 0 16px 36px rgba(47, 47, 47, 0.08);
+}
+
+.social-placeholder-card span {
+  font-weight: 800;
+}
+
+.social-placeholder-visual {
+  aspect-ratio: 4 / 5;
+  display: grid;
+  place-items: center;
+  border: 1px dashed rgba(47, 47, 47, 0.28);
+  border-radius: 8px;
+  color: #747a7f;
+  background: #fff;
+}
+
+.social-placeholder-card p {
+  color: #51575c;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .haocheng-comic-grid,
+  .peixuan-social-block {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .haocheng-progress-block,
+  .meal-planner-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .haocheng-comic-grid,
+  .peixuan-social-block {
+    grid-template-columns: 1fr;
+  }
+
+  .meal-choice-button {
+    width: 100%;
+  }
+}
+
 .case-page {
   min-height: 100vh;
   background: #fff;

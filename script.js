@@ -40,7 +40,9 @@ const siteAssetManifest = [
   './pic/xinmi/month3after.jpeg',
   './pic/xinmi/food1.jpg',
   './pic/xinmi/food2.jpg',
-  './pic/xinmi/food3.jpg'
+  './pic/xinmi/food3.jpg',
+  './pic/haocheng/before.jpg',
+  './pic/haocheng/after.jpg'
 ];
 
 const siteVideoManifest = [
@@ -2900,9 +2902,120 @@ function initXinmiIntroCards() {
   window.requestAnimationFrame(tickActivePanel);
 }
 
+function initWeightStorySection() {
+  document.querySelectorAll('[data-haocheng-compare-range]').forEach((range) => {
+    const comparison = range.closest('[data-haocheng-comparison]');
+    if (!comparison) return;
+    const updateReveal = () => comparison.style.setProperty('--reveal', `${range.value}%`);
+    range.addEventListener('input', updateReveal);
+    updateReveal();
+  });
+
+  const planner = document.querySelector('[data-haocheng-meal-planner]');
+  if (!planner) return;
+
+  const mealItems = [
+    { id: 'brown-rice', category: 'base', name: '糙米飯', calories: 220, protein: 5, carbs: 46, note: '穩定碳水' },
+    { id: 'sweet-potato', category: 'base', name: '地瓜', calories: 165, protein: 2, carbs: 38, note: '低脂澱粉' },
+    { id: 'noodles', category: 'base', name: '炒麵', calories: 360, protein: 9, carbs: 58, note: '油脂較高' },
+    { id: 'chicken', category: 'protein', name: '雞胸肉', calories: 165, protein: 31, carbs: 0, note: '高蛋白' },
+    { id: 'egg', category: 'protein', name: '水煮蛋', calories: 78, protein: 6, carbs: 1, note: '補蛋白' },
+    { id: 'fried-chicken', category: 'protein', name: '炸雞排', calories: 520, protein: 32, carbs: 35, note: '熱量偏高' },
+    { id: 'broccoli', category: 'side', name: '花椰菜', calories: 35, protein: 3, carbs: 7, note: '纖維來源' },
+    { id: 'cabbage', category: 'side', name: '高麗菜', calories: 45, protein: 2, carbs: 9, note: '蔬菜' },
+    { id: 'tofu', category: 'side', name: '豆腐', calories: 95, protein: 10, carbs: 3, note: '植物蛋白' },
+    { id: 'fries', category: 'side', name: '薯條', calories: 310, protein: 4, carbs: 41, note: '油炸澱粉' },
+    { id: 'milk-tea', category: 'side', name: '微糖奶茶', calories: 240, protein: 4, carbs: 38, note: '飲料熱量' }
+  ];
+
+  const selectedIds = new Set();
+  const optionTargets = {
+    base: planner.querySelector('[data-meal-options="base"]'),
+    protein: planner.querySelector('[data-meal-options="protein"]'),
+    side: planner.querySelector('[data-meal-options="side"]')
+  };
+  const selectedList = planner.querySelector('[data-meal-selected-list]');
+  const feedback = planner.querySelector('[data-meal-feedback]');
+  const resetButton = planner.querySelector('[data-meal-reset]');
+  const totalTargets = {
+    calories: planner.querySelector('[data-meal-total="calories"]'),
+    protein: planner.querySelector('[data-meal-total="protein"]'),
+    carbs: planner.querySelector('[data-meal-total="carbs"]')
+  };
+
+  function selectedItems() {
+    return mealItems.filter((item) => selectedIds.has(item.id));
+  }
+
+  function renderMealPlanner() {
+    const items = selectedItems();
+    const totals = items.reduce(
+      (sum, item) => ({
+        calories: sum.calories + item.calories,
+        protein: sum.protein + item.protein,
+        carbs: sum.carbs + item.carbs
+      }),
+      { calories: 0, protein: 0, carbs: 0 }
+    );
+
+    totalTargets.calories.textContent = `${totals.calories} kcal`;
+    totalTargets.protein.textContent = `${totals.protein} g`;
+    totalTargets.carbs.textContent = `${totals.carbs} g`;
+    selectedList.textContent = items.length ? items.map((item) => item.name).join('、') : '尚未選擇食材';
+
+    const hasBase = items.some((item) => item.category === 'base');
+    const hasProtein = items.some((item) => item.category === 'protein');
+    const hasSide = items.some((item) => item.category === 'side');
+    const messages = [];
+    if (!hasBase) messages.push('缺少主食，可能比較不耐餓。');
+    if (!hasProtein || totals.protein < 25) messages.push('蛋白質不足，可以增加雞胸肉、蛋或豆腐。');
+    if (!hasSide) messages.push('缺少蔬菜或配菜，纖維量偏少。');
+    if (totals.calories > 600) messages.push('熱量超過一餐建議，若想減重可以減少油炸或含糖飲料。');
+    if (totals.calories > 0 && totals.calories < 380) messages.push('熱量偏低，長期可能難以維持。');
+    if (!messages.length) messages.push('這份餐盒大致兼顧熱量赤字、蛋白質和碳水比例。');
+    feedback.textContent = messages.join(' ');
+
+    planner.querySelectorAll('[data-meal-choice]').forEach((button) => {
+      button.classList.toggle('is-selected', selectedIds.has(button.dataset.mealChoice));
+    });
+  }
+
+  mealItems.forEach((item) => {
+    const button = document.createElement('button');
+    button.className = 'meal-choice-button';
+    button.type = 'button';
+    button.dataset.mealChoice = item.id;
+    button.innerHTML = `
+      <b>${item.name}</b>
+      <small>${item.calories} kcal / 蛋白質 ${item.protein}g / 碳水 ${item.carbs}g</small>
+      <small>${item.note}</small>
+    `;
+    button.addEventListener('click', () => {
+      if (selectedIds.has(item.id)) {
+        selectedIds.delete(item.id);
+      } else {
+        if (item.category === 'base') {
+          mealItems.filter((mealItem) => mealItem.category === 'base').forEach((mealItem) => selectedIds.delete(mealItem.id));
+        }
+        selectedIds.add(item.id);
+      }
+      renderMealPlanner();
+    });
+    optionTargets[item.category]?.appendChild(button);
+  });
+
+  resetButton?.addEventListener('click', () => {
+    selectedIds.clear();
+    renderMealPlanner();
+  });
+
+  renderMealPlanner();
+}
+
 initDynamicContentTransitions();
 initBodyManagementExperienceHub();
 initBodyMangaScroll();
 initModelPostVideos();
 initXinmiIntroCards();
+initWeightStorySection();
 initSitePreloader();
