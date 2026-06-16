@@ -100,12 +100,11 @@ function preloadVideo(src) {
       video.load();
       resolve();
     };
-    const timeout = window.setTimeout(finish, 6500);
+    const timeout = window.setTimeout(finish, 20000);
     video.muted = true;
     video.playsInline = true;
     video.preload = 'auto';
     video.oncanplaythrough = finish;
-    video.onloadeddata = finish;
     video.onerror = finish;
     video.src = src;
     video.load();
@@ -116,14 +115,8 @@ async function initSitePreloader() {
   const preloader = document.querySelector('[data-site-preloader]');
   const progressBar = document.querySelector('[data-preload-progress]');
   const status = document.querySelector('[data-preload-status]');
-  const preloadCompleteKey = 'appearanceAnxietyAssetsReady';
   if (!preloader) {
     document.documentElement.classList.remove('is-preloading');
-    return;
-  }
-  if (sessionStorage.getItem(preloadCompleteKey) === 'true') {
-    document.documentElement.classList.remove('is-preloading');
-    preloader.remove();
     return;
   }
 
@@ -162,7 +155,6 @@ async function initSitePreloader() {
 
   if (progressBar) progressBar.style.width = '100%';
   if (status) status.textContent = '準備完成';
-  sessionStorage.setItem(preloadCompleteKey, 'true');
   document.documentElement.classList.remove('is-preloading');
   preloader.classList.add('is-complete');
   window.setTimeout(() => preloader.remove(), 500);
