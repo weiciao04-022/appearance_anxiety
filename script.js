@@ -3075,6 +3075,7 @@ const bodyCostItems = [
   {
     id: 'gym',
     name: '健身房月費',
+    icon: 'dumbbell',
     monthlyCost: 1200,
     calculation: '以一般連鎖健身房月費估算',
     description: '健身房月費會依地點、合約長度、設備與品牌不同而變動。'
@@ -3082,6 +3083,7 @@ const bodyCostItems = [
   {
     id: 'personalTrainer',
     name: '私人健身教練課',
+    icon: 'clipboard-check',
     monthlyCost: 14400,
     calculation: '以每堂 NT$1,800、一週 2 堂、每月 8 堂估算',
     description: '若以規律訓練頻率計算，教練課通常會成為體態管理中最高的固定支出之一。'
@@ -3089,6 +3091,7 @@ const bodyCostItems = [
   {
     id: 'glp1Injection',
     name: '瘦瘦針／GLP-1 類自費療程',
+    icon: 'syringe',
     monthlyCost: 12000,
     calculation: '以每月 NT$6,000–18,000 的常見區間取中間偏保守值估算',
     description: '不同藥品、劑量、診所方案與是否包含檢查費，皆會影響實際支出。此項目僅作自費療程支出估算，不構成醫療建議。'
@@ -3096,6 +3099,7 @@ const bodyCostItems = [
   {
     id: 'dietMedication',
     name: '口服減重藥物／減重門診藥物',
+    icon: 'pill',
     monthlyCost: 7000,
     calculation: '以每月約 NT$5,000–10,000 的自費藥物區間估算',
     description: '實際費用會依醫師評估、藥物種類、劑量與是否包含檢查費而不同。'
@@ -3103,6 +3107,7 @@ const bodyCostItems = [
   {
     id: 'enzyme',
     name: '減肥酵素／代謝保健品',
+    icon: 'leaf',
     monthlyCost: 1000,
     calculation: '以每月購買一盒保健品估算',
     description: '此類產品價格差異較大，且效果不宜視為醫療或減重保證。'
@@ -3110,6 +3115,7 @@ const bodyCostItems = [
   {
     id: 'pilates',
     name: '皮拉提斯課程',
+    icon: 'stretch-horizontal',
     monthlyCost: 4800,
     calculation: '以每堂 NT$600、一週 2 堂、每月 8 堂估算',
     description: '此處以團體或小班課程作保守估算；若為一對一器械皮拉提斯，費用可能大幅提高。'
@@ -3117,6 +3123,7 @@ const bodyCostItems = [
   {
     id: 'yoga',
     name: '瑜伽課程',
+    icon: 'flower-2',
     monthlyCost: 3200,
     calculation: '以每堂 NT$400、一週 2 堂、每月 8 堂估算',
     description: '瑜伽費用會依課程型態、地點與購課方案不同而變動。'
@@ -3124,6 +3131,7 @@ const bodyCostItems = [
   {
     id: 'whey',
     name: '乳清蛋白',
+    icon: 'package',
     monthlyCost: 1650,
     calculation: '以每份 NT$55、每月 30 份估算',
     description: '若每天補充一次乳清蛋白，每月花費約為 NT$1,500–1,800；實際支出依品牌、包裝與蛋白質含量而不同。'
@@ -3131,6 +3139,7 @@ const bodyCostItems = [
   {
     id: 'healthyMeal',
     name: '健康餐／健身餐',
+    icon: 'salad',
     monthlyCost: 4500,
     calculation: '以每餐 NT$150、每月 30 餐估算',
     description: '此處不是以三餐皆吃健康餐計算，而是以每天一餐估算，較接近學生或年輕族群的部分替代飲食情境。'
@@ -3138,6 +3147,7 @@ const bodyCostItems = [
   {
     id: 'nutritionist',
     name: '營養師諮詢',
+    icon: 'messages-square',
     monthlyCost: 2000,
     calculation: '以每月一次諮詢估算',
     description: '營養諮詢費用會依機構、諮詢時間與是否搭配方案而不同。'
@@ -3145,6 +3155,7 @@ const bodyCostItems = [
   {
     id: 'inbody',
     name: 'InBody 體組成測量',
+    icon: 'scan-line',
     monthlyCost: 200,
     calculation: '以每月測量一次估算',
     description: '體組成測量通常不是主要支出，但常被納入體態管理追蹤流程。'
@@ -3152,6 +3163,7 @@ const bodyCostItems = [
   {
     id: 'workoutClothes',
     name: '運動服飾與裝備',
+    icon: 'shirt',
     monthlyCost: 1000,
     calculation: '以鞋子、運動服、瑜伽墊等消耗與添購平均攤提估算',
     description: '此項目反映體態管理周邊消費，實際金額差異較大。'
@@ -3217,7 +3229,11 @@ function initBodyCostCalculator() {
   list.innerHTML = bodyCostItems.map((item) => `
     <label class="body-cost-item">
       <input type="checkbox" value="${item.id}" data-body-cost-item />
+      <span class="body-cost-item-check" aria-hidden="true"></span>
       <span class="body-cost-item-copy">
+        <span class="body-cost-item-icon" aria-hidden="true">
+          <i data-lucide="${item.icon}"></i>
+        </span>
         <span class="body-cost-item-title">
           <b>${item.name}</b>
           <span>${formatCurrency(item.monthlyCost)} / 月</span>
@@ -3227,6 +3243,7 @@ function initBodyCostCalculator() {
       </span>
     </label>
   `).join('');
+  refreshLucideIcons();
 
   budgetInput.addEventListener('input', () => {
     budgetInput.value = budgetInput.value.replace(/[^\d]/g, '');
