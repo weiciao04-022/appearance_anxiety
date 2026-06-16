@@ -14,7 +14,7 @@
   <link rel="preload" as="image" href="./pic/B/B_male15-18%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male20-25%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male%3E30%25.png" />
-  <link rel="stylesheet" href="style.css?v=20260616-14" />
+  <link rel="stylesheet" href="style.css?v=20260616-15" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
@@ -26,10 +26,7 @@
         'ideal-body-check',
         'after-body-text',
         'model-post-orbit',
-        'body-manga-scroll',
-        'manga-panel-four',
-        'body-cost-calculator',
-        'manga-panel-after-experience'
+        'body-cost-calculator'
       ];
       if (window.location.hash) {
         var target = null;
@@ -85,6 +82,45 @@
           <img src="./pic/opening-comic/5.jpg" alt="開場漫畫 5" data-comic-panel />
           <img src="./pic/opening-comic/6.jpg" alt="開場漫畫 6" data-comic-panel />
           <img src="./pic/opening-comic/7.jpg" alt="開場漫畫 7" data-comic-panel />
+          <article class="opening-comic-video-page" data-comic-panel data-model-post-videos aria-label="開場漫畫結尾">
+            <div class="opening-comic-video-rail opening-comic-video-rail-left" aria-label="結尾影片左側">
+              <div class="model-post-slot slot-1">
+                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 1">
+                  <source src="./video/model-posts/1.m4v" type="video/mp4" />
+                </video>
+              </div>
+              <div class="model-post-slot slot-3">
+                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 3">
+                  <source src="./video/model-posts/3.m4v" type="video/mp4" />
+                </video>
+              </div>
+              <div class="model-post-slot slot-5">
+                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 5">
+                  <source src="./video/model-posts/5.m4v" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+            <div class="opening-comic-empty-page">
+              <h2>結尾</h2>
+            </div>
+            <div class="opening-comic-video-rail opening-comic-video-rail-right" aria-label="結尾影片右側">
+              <div class="model-post-slot slot-2">
+                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 2">
+                  <source src="./video/model-posts/2.m4v" type="video/mp4" />
+                </video>
+              </div>
+              <div class="model-post-slot slot-4">
+                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 4">
+                  <source src="./video/model-posts/4.m4v" type="video/mp4" />
+                </video>
+              </div>
+              <div class="model-post-slot slot-6">
+                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 6">
+                  <source src="./video/model-posts/6.m4v" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </article>
         </div>
         <div class="opening-comic-progress" aria-hidden="true">
           <span data-comic-progress></span>
@@ -332,6 +368,85 @@
         <div class="social-video-orbit" data-video-orbit aria-label="推薦短影音"></div>
         <p>在這個自媒體盛行的時代，透過公開記錄飲食、運動與身材變化的過程，確實有可能讓一個人重新找到自信。若這份自信的底氣完全依賴「被看見」與「被讚賞」，那麼當螢幕熄滅時，一切又會歸零，馬藹萱語重心長地說道：「這樣的自信其實是脆弱的，因為是這份自信是建立在外部的評價上，這種追求外部評價而產生對自我體態管理上的努力，甚至會轉化為集體監控下的自我身體治理與勞動。」</p>
         <p>隨著手機逐漸黏附在日常生活的每一秒，不僅讓孩子網路成癮的現象日益嚴重，更衍生出許多因為心理問題而拒絕上學的社會現實。面對這樣的現象，張鳳琴期待政府能借鑒歐洲禁止16歲以下孩子使用社群的作法，啟動相關網路管理的政策來限制網路成癮的問題。</p>
+        <p>然而，社群不只影響認為自己不夠瘦、需要減肥的族群，過瘦的人也會想要增加肌肉，來讓自己的體態更好看。身高178公分，體重最輕曾到55公斤的Sam，就有類似的困擾。</p>
+        <p>「穿衣服不好看、拍照顯得自己很單薄，就開始覺得過瘦是一種困擾。」Sam說起對於身材焦慮的原因，當別人以「太瘦」形容自己時，常讓他感到無奈。長期面對提醒過瘦的Sam，理想身材並沒有要求特別壯碩，能夠支撐起衣服的版型，展現出好看的體態，對他來說就夠了。Sam表示，他的食量並不小，也有努力地在健身，但效果卻沒有預想中的明顯。他也坦言，增肌的過程並不比減重簡單，除了在抖音或是小紅書吸取增肌相關的知識，他也意識到並非增加進食量就能達到增加體重的目的，蛋白質對於肌肉增長的重要性更是不容忽視，為此調整飲食結構比例。</p>
+        <p>隨著增肌逐漸成為生活的一部分，Sam每個月生活支出也隨之增加，其中包括每個月的健身房會費與乳清蛋白粉。不僅如此，「增肌不僅需要吃得多，對於飲食質量的要求也高。」他表明，在飲食質與量的雙重要求下，日常生活開銷的提高是無可避免的。</p>
+        <p>然而，對許多年輕人而言，維持理想體態往往不只是時間成本，更是一筆不小的經濟負擔。從乳清蛋白、健身房會籍，到私人教練課程、減肥酵素、瘦瘦針等相關產品與服務，累積下來的花費相當可觀。對於每月生活費僅約一萬多元的大學生或社會新鮮人來說，這些支出往往占據相當高的生活預算，甚至超出可負擔範圍，使追求理想身材逐漸成為一種帶有經濟門檻的選擇。</p>
+      </article>
+
+      <section
+        id="body-cost-calculator"
+        class="body-cost-calculator"
+        data-body-cost-calculator
+        aria-labelledby="bodyCostTitle"
+      >
+        <div class="body-cost-inner">
+          <header class="body-cost-heading">
+            <h2 id="bodyCostTitle">體態管理支出試算</h2>
+            <span>輸入每月可支配生活費，並選擇你正在使用或曾被推薦的體態管理產品與服務。本試算將估算相關支出每月佔生活費的比例，作為理解體態管理經濟門檻的參考。</span>
+          </header>
+
+          <div class="body-cost-layout">
+            <div class="body-cost-control-panel">
+              <label class="body-cost-budget-field" for="bodyCostBudget">
+                <span>每月生活費</span>
+                <div>
+                  <b>NT$</b>
+                  <input
+                    id="bodyCostBudget"
+                    type="text"
+                    inputmode="numeric"
+                    pattern="[0-9]*"
+                    placeholder="例如 12000"
+                    value="12000"
+                    data-body-cost-budget
+                  />
+                </div>
+              </label>
+
+              <div class="body-cost-actions" aria-label="支出試算操作">
+                <button type="button" data-body-cost-clear>清除選項</button>
+                <button type="button" data-body-cost-student>套用學生生活費 NT$12,000</button>
+              </div>
+
+              <div class="body-cost-list" data-body-cost-list aria-label="體態管理產品與服務清單"></div>
+            </div>
+
+            <aside class="body-cost-result-panel" aria-live="polite">
+              <p class="body-cost-result-label">估算結果</p>
+              <div class="body-cost-result-grid">
+                <div>
+                  <span>每月估算支出</span>
+                  <b data-body-cost-total>NT$0</b>
+                </div>
+                <div>
+                  <span>佔生活費比例</span>
+                  <b data-body-cost-percentage>0%</b>
+                </div>
+                <div>
+                  <span>扣除後剩餘生活費</span>
+                  <b data-body-cost-remaining>NT$12,000</b>
+                </div>
+              </div>
+              <div class="body-cost-progress" aria-hidden="true">
+                <span data-body-cost-progress></span>
+              </div>
+              <p class="body-cost-progress-note" data-body-cost-progress-note>0%</p>
+              <p class="body-cost-result-message" data-body-cost-message>尚未選擇任何支出項目。</p>
+            </aside>
+          </div>
+
+          <p class="body-cost-note">本試算採用台灣市場常見價格區間進行估算，實際金額會因品牌、地區、購買方案、課程頻率、醫療院所與個人需求而有所差異。本互動內容僅用於呈現體態管理相關消費壓力，不構成醫療、營養、運動或消費建議。</p>
+        </div>
+      </section>
+
+      <article class="weight-story-copy post-cost-copy">
+        <p>長期保持健身習慣的恐龍，會因為拍照、穿搭效果及社群媒體上的內容，而對自己的身材感到不滿意。他直言，自身雖然會產生「身材還不夠好」的想法，但他並不將這樣的想法視為焦慮，而是將其理解為推動自己持續進步的動力。與部分因看見他人健身成果而感到壓力的人不同，恐龍認為網路上所看見的健身成果分享內容，反而是促進自己更加努力精進體態的參考與目標。</p>
+        <p>日常生活中，恐龍透過規律運動、飲食控制與作息管理來維持身材。他分享，自己平時著重於高蛋白質的攝取，再搭配適量的碳水化合物與低脂肪的補充，並維持固定的健身習慣和充足的睡眠，以達到理想的體態管理效果。此外，他也會透過攝入肌酸、魚油、酵素及維生素等營養補充品，以加速身體恢復、提升運動表現，並降低運動傷害風險。</p>
+        <p>「我想成為一個自律的人。」徐同學（化名）表示，高中畢業後，他將健身視為自我改變的起點。在他剛開始接觸健身的時候，從肌肉線條與力量的變化中獲得成就感。然而，當健身從興趣轉向健美比賽選手後，他對體態的要求也逐漸提高。「真正開始感受到焦慮，是在準備比賽之後。」徐同學透露，由於社群媒體上追踪的多數同為參賽選手，當他看見年齡相近、實力相仿的人展現訓練成果時，他會不自覺比較彼此之間的差距，甚至會隱隱擔憂未來在賽場上會輸給對方。</p>
+        <p>為了維持比賽狀態，徐同學每週都會固定進行重訓，並依照胸、背、腿、肩等不同肌群安排訓練。每當接近比賽時，他也會更嚴格控制營養的攝取，精準安排蛋白質、碳水化合物和脂肪的攝入。尤其賽前2個月的時段，他會更精準地進行計算每個營養成分的攝取，並且停止外食，全權由自己進行烹煮。徐同學坦言，即使外界認為他的體態，與同齡層的選手相比已相當出色，但他仍然經常覺得自己還不夠好。他直言，「只要有在比賽的人，永遠不會覺得自己夠好。」因此，對徐同學來說，體態管理不只是追求好看，更是一場持續與自己競爭的過程。</p>
+        <p>對於舞台表演者于小姐（化名）而言，體態管理與未來職涯發展有著密切關聯。她表示，大學之後因經常接觸舞台表演與鏡頭演出，逐漸意識到外貌與體態在表演領域的重要性。「我發現在鏡頭前面胖胖的會不好看。」她坦言，正是因為上鏡需求，讓她開始認真思考體態管理的必要性。為了讓自己在演出前呈現更理想的狀態，于小姐曾嘗試透過極端節食快速減重。她回憶，過去只要遇到演出，就會在前一週刻意不吃澱粉，甚至只喝水不進食，一週內最多能瘦下三至五公斤。然而，在表演結束後往往又因長期壓抑食慾而出現暴食情況，不僅體重迅速回升，也對身體造成負擔。</p>
+        <p>除了體重本身，于小姐更在意的是體態帶來的自信心與他人的評價。他表示，當自己感覺變胖時，經常會覺得穿什麼衣服都不好看，甚至影響一整天的心情。社群媒體、拍照與上鏡需求，也進一步加深了他對身材的在意程度。他坦言，由於認為自己尚未達到理想體態，因此經常不敢主動爭取試鏡機會，總覺得應該等到變得更瘦、更好看之後再去嘗試。談及理想身材，于小姐認為自己最初並沒有特別明確的標準，但在長期接觸影像作品後，逐漸發現「瘦比較好看」似乎已成為表演產業中的普遍期待。除此之外，他也透露，曾考慮透過打瘦瘦針的方式輔助減重。他表示，有時自己難以控制旺盛的食慾，因此會希望尋找其他方法協助體重管理。然而，在了解相關副作用與復胖風險後，他抱持審慎態度，依舊希望優先透過運動與飲食控制等較健康的方法改善體態。</p>
       </article>
     </div>
   </section>
@@ -3596,177 +3711,6 @@
     </script>
   </section>
 
-  <section id="body-manga-scroll" class="manga-scroll-section" aria-label="體態焦慮滾動漫畫">
-    <header class="manga-scroll-intro">
-      <p>從數據走進日常</p>
-    </header>
-
-    <article class="manga-panel" data-manga-panel>
-      <div class="manga-pair">
-        <figure class="manga-frame manga-frame-female">
-          <img class="manga-image" src="./pic/E/female_1.png" alt="女性閱讀身體數據報告" />
-        </figure>
-        <figure class="manga-frame manga-frame-male">
-          <img class="manga-image" src="./pic/E/male_1.png" alt="男性閱讀身體數據報告" />
-        </figure>
-      </div>
-      <div class="manga-center">
-        <div class="manga-dialogue">
-        <span>01</span>
-          <p>在一次次看見身體數據與理想標準後，我們開始用新的方式審視自己。</p>
-        </div>
-      </div>
-    </article>
-
-    <article class="manga-panel manga-video-panel" data-manga-panel>
-      <div class="manga-pair">
-        <figure class="manga-frame manga-frame-female">
-          <img class="manga-image" src="./pic/E/female_2.png" alt="女性瀏覽健身與飲食內容" />
-        </figure>
-        <figure class="manga-frame manga-frame-male">
-          <img class="manga-image" src="./pic/E/male_2.png" alt="男性瀏覽健身與飲食內容" />
-        </figure>
-      </div>
-      <div class="manga-center">
-        <div class="manga-dialogue">
-          <span>02</span>
-          <p>演算法沒有明說標準，卻持續推送減脂、增肌、飲食控制與身材改造。</p>
-        </div>
-      </div>
-    </article>
-
-    <article class="manga-panel manga-search-panel" data-manga-panel>
-      <div class="manga-pair">
-        <figure class="manga-frame manga-frame-female">
-          <img class="manga-image" src="./pic/E/female_3.png" alt="女性被大量社群體態內容包圍" />
-        </figure>
-        <figure class="manga-frame manga-frame-male">
-          <img class="manga-image" src="./pic/E/male_3.png" alt="男性被大量社群體態內容包圍" />
-        </figure>
-      </div>
-      <div class="manga-center">
-        <div class="manga-dialogue">
-          <span>03</span>
-          <p>當我們想找到答案，搜尋欄也開始把焦慮整理成一個又一個看似可執行的問題。</p>
-        </div>
-        <div class="search-streams" aria-label="持續出現的體態相關搜尋">
-          <div class="search-field search-field-typing">
-            <span class="search-icon" aria-hidden="true"></span>
-            <span class="search-query" data-typing-search="0"></span>
-          </div>
-          <div class="search-field search-field-typing">
-            <span class="search-icon" aria-hidden="true"></span>
-            <span class="search-query" data-typing-search="1"></span>
-          </div>
-          <div class="search-field search-field-typing">
-            <span class="search-icon" aria-hidden="true"></span>
-            <span class="search-query" data-typing-search="2"></span>
-          </div>
-          <div class="search-field search-field-typing">
-            <span class="search-icon" aria-hidden="true"></span>
-            <span class="search-query" data-typing-search="3"></span>
-          </div>
-          <div class="search-field search-field-typing">
-            <span class="search-icon" aria-hidden="true"></span>
-            <span class="search-query" data-typing-search="4"></span>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <section
-      id="manga-panel-four"
-      class="body-management-experience"
-      data-body-management-experience
-      aria-label="體態管理方式互動體驗"
-    ></section>
-
-    <section
-      id="body-cost-calculator"
-      class="body-cost-calculator"
-      data-body-cost-calculator
-      aria-labelledby="bodyCostTitle"
-    >
-      <div class="body-cost-inner">
-        <header class="body-cost-heading">
-          <p>資料互動</p>
-          <h2 id="bodyCostTitle">體態管理支出試算</h2>
-          <span>輸入每月可支配生活費，並選擇你正在使用或曾被推薦的體態管理產品與服務。本試算將估算相關支出每月佔生活費的比例，作為理解體態管理經濟門檻的參考。</span>
-        </header>
-
-        <div class="body-cost-layout">
-          <div class="body-cost-control-panel">
-            <label class="body-cost-budget-field" for="bodyCostBudget">
-              <span>每月生活費</span>
-              <div>
-                <b>NT$</b>
-                <input
-                  id="bodyCostBudget"
-                  type="text"
-                  inputmode="numeric"
-                  pattern="[0-9]*"
-                  placeholder="例如 12000"
-                  value="12000"
-                  data-body-cost-budget
-                />
-              </div>
-            </label>
-
-            <div class="body-cost-actions" aria-label="支出試算操作">
-              <button type="button" data-body-cost-clear>清除選項</button>
-              <button type="button" data-body-cost-student>套用學生生活費 NT$12,000</button>
-            </div>
-
-            <div class="body-cost-list" data-body-cost-list aria-label="體態管理產品與服務清單"></div>
-          </div>
-
-          <aside class="body-cost-result-panel" aria-live="polite">
-            <p class="body-cost-result-label">估算結果</p>
-            <div class="body-cost-result-grid">
-              <div>
-                <span>每月估算支出</span>
-                <b data-body-cost-total>NT$0</b>
-              </div>
-              <div>
-                <span>佔生活費比例</span>
-                <b data-body-cost-percentage>0%</b>
-              </div>
-              <div>
-                <span>扣除後剩餘生活費</span>
-                <b data-body-cost-remaining>NT$12,000</b>
-              </div>
-            </div>
-            <div class="body-cost-progress" aria-hidden="true">
-              <span data-body-cost-progress></span>
-            </div>
-            <p class="body-cost-progress-note" data-body-cost-progress-note>0%</p>
-            <p class="body-cost-result-message" data-body-cost-message>尚未選擇任何支出項目。</p>
-          </aside>
-        </div>
-
-        <p class="body-cost-note">本試算採用台灣市場常見價格區間進行估算，實際金額會因品牌、地區、購買方案、課程頻率、醫療院所與個人需求而有所差異。本互動內容僅用於呈現體態管理相關消費壓力，不構成醫療、營養、運動或消費建議。</p>
-      </div>
-    </section>
-
-    <article id="manga-panel-after-experience" class="manga-panel" data-manga-panel>
-      <div class="manga-pair">
-        <figure class="manga-frame manga-frame-female">
-          <img class="manga-image" src="./pic/E/female_4.png" alt="女性在鏡中重新審視自己的身體" />
-        </figure>
-        <figure class="manga-frame manga-frame-male">
-          <img class="manga-image" src="./pic/E/male_4.png" alt="男性在鏡中重新審視自己的身體" />
-        </figure>
-      </div>
-      <div class="manga-center">
-        <div class="manga-dialogue">
-          <span>04</span>
-          <p>當外界標準進入鏡子，問題不只是我們看見了什麼，而是開始如何看待自己。</p>
-        </div>
-      </div>
-    </article>
-
-  </section>
-
   <nav class="case-float-menu" data-case-menu>
     <button class="case-menu-toggle" type="button" aria-expanded="false" aria-controls="caseMenuPanel" aria-label="開啟案例選單">
       <i data-lucide="menu" aria-hidden="true"></i>
@@ -3827,6 +3771,6 @@
     </div>
   </nav>
 
-  <script src="script.js?v=20260616-10"></script>
+  <script src="script.js?v=20260616-11"></script>
 </body>
 </html>

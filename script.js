@@ -220,8 +220,7 @@ function initScrollVideoIntro() {
   const stage = intro.querySelector('.opening-comic-stage');
   const progressBar = intro.querySelector('[data-comic-progress]');
   const panels = [...intro.querySelectorAll('[data-comic-panel]')];
-  // 調整開場漫畫停留時間：前三張比例較長，方便讀者看清楚畫面內容。
-  const panelStops = [0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.9, 1.01];
+  const panelStops = panels.map((_, index) => index / panels.length).concat(1.01);
 
   function updateIntroProgress() {
     const rect = intro.getBoundingClientRect();
@@ -2819,9 +2818,9 @@ function initBodyManagementExperienceHub() {
 }
 
 function initModelPostVideos() {
-  const section = document.querySelector('#model-post-orbit');
-  if (!section) return;
-  const videos = Array.from(section.querySelectorAll('video'));
+  const sections = Array.from(document.querySelectorAll('#model-post-orbit, [data-model-post-videos]'));
+  if (!sections.length) return;
+  const videos = sections.flatMap((section) => Array.from(section.querySelectorAll('video')));
   videos.forEach((video) => {
     video.muted = true;
     video.loop = true;
@@ -2845,7 +2844,7 @@ function initModelPostVideos() {
     { threshold: 0.18 }
   );
 
-  observer.observe(section);
+  sections.forEach((section) => observer.observe(section));
 }
 
 function initXinmiIntroCards() {
