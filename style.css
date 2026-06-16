@@ -1915,6 +1915,70 @@ button:active,
   margin: 0 0 1.35em;
 }
 
+.expert-dialogue {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  width: min(820px, 100%);
+  margin: 0 auto 1.6em;
+  box-sizing: border-box;
+}
+
+.expert-avatar {
+  width: 72px;
+  aspect-ratio: 1;
+  border: 2px solid #303234;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(48, 50, 52, 0.16) 0 18%, transparent 19%),
+    radial-gradient(circle at 50% 82%, rgba(48, 50, 52, 0.12) 0 33%, transparent 34%),
+    #fff;
+  box-sizing: border-box;
+  box-shadow: 0 10px 24px rgba(47, 47, 47, 0.08);
+}
+
+.expert-bubble {
+  position: relative;
+  padding: clamp(18px, 2.2vw, 24px);
+  border: 1px solid rgba(47, 47, 47, 0.18);
+  border-radius: 8px;
+  background: #fbfaf7;
+  box-sizing: border-box;
+  box-shadow: 0 16px 34px rgba(47, 47, 47, 0.08);
+}
+
+.expert-bubble::before {
+  content: "";
+  position: absolute;
+  top: 22px;
+  left: -9px;
+  width: 16px;
+  height: 16px;
+  border-left: 1px solid rgba(47, 47, 47, 0.18);
+  border-bottom: 1px solid rgba(47, 47, 47, 0.18);
+  background: #fbfaf7;
+  transform: rotate(45deg);
+}
+
+.expert-bubble p {
+  margin: 0;
+}
+
+.expert-bubble .expert-name {
+  margin-bottom: 10px;
+  color: #111;
+  font-size: 0.92rem;
+  font-weight: 900;
+  line-height: 1.45;
+}
+
+.expert-bubble p:not(.expert-name) {
+  color: #303234;
+  font-size: clamp(1rem, 1.25vw, 1.12rem);
+  line-height: 1.85;
+}
+
 .haocheng-comic-flow,
 .haocheng-progress-block,
 .meal-planner-block,
@@ -5342,6 +5406,20 @@ body,
   .body-cost-item-title {
     display: grid;
     justify-content: start;
+  }
+
+  .expert-dialogue {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 10px;
+    width: calc(100% - 12px);
+  }
+
+  .expert-avatar {
+    width: 48px;
+  }
+
+  .expert-bubble {
+    padding: 16px;
   }
 
   .manga-panel {
