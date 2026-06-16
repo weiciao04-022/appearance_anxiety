@@ -42,7 +42,9 @@ const siteAssetManifest = [
   './pic/xinmi/food2.jpg',
   './pic/xinmi/food3.jpg',
   './pic/haocheng/before.jpg',
-  './pic/haocheng/after.jpg'
+  './pic/haocheng/after.jpg',
+  './pic/dinosaur/before.png',
+  './pic/dinosaur/after.png'
 ];
 
 const siteVideoManifest = [
