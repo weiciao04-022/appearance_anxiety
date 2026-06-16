@@ -1843,7 +1843,8 @@ button:active,
 .haocheng-comic-flow,
 .haocheng-progress-block,
 .meal-planner-block,
-.peixuan-social-block {
+.peixuan-social-block,
+.social-analysis-copy {
   width: min(1120px, 100%);
   margin: 0 auto;
 }
@@ -2185,6 +2186,10 @@ button:active,
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
+  padding: clamp(14px, 2vw, 20px);
+  border: 1px dashed rgba(47, 47, 47, 0.28);
+  border-radius: 8px;
+  background: #fff;
 }
 
 .social-placeholder-card {
@@ -2215,6 +2220,10 @@ button:active,
   color: #51575c;
   font-size: 0.95rem;
   line-height: 1.7;
+}
+
+.social-analysis-copy {
+  width: min(760px, 86vw);
 }
 
 @media (max-width: 900px) {
