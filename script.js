@@ -44,7 +44,10 @@ const siteAssetManifest = [
   './pic/haocheng/before.jpg',
   './pic/haocheng/after.jpg',
   './pic/dinosaur/before.png',
-  './pic/dinosaur/after.png'
+  './pic/dinosaur/after.png',
+  './pic/sam/before.png',
+  './pic/sam/after.jpg',
+  './pic/sam/after-2.jpg'
 ];
 
 const siteVideoManifest = [
