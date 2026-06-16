@@ -571,6 +571,11 @@ button:active,
   line-height: 1.7;
 }
 
+.body-check-section {
+  min-height: auto;
+  align-items: flex-start;
+}
+
 .body-check-form {
   width: min(860px, 100%);
   display: grid;
