@@ -3077,10 +3077,199 @@ function initWeightStorySection() {
   renderMealPlanner();
 }
 
+const bodyCostItems = [
+  {
+    id: 'gym',
+    name: '健身房月費',
+    monthlyCost: 1200,
+    calculation: '以一般連鎖健身房月費估算',
+    description: '健身房月費會依地點、合約長度、設備與品牌不同而變動。'
+  },
+  {
+    id: 'personalTrainer',
+    name: '私人健身教練課',
+    monthlyCost: 14400,
+    calculation: '以每堂 NT$1,800、一週 2 堂、每月 8 堂估算',
+    description: '若以規律訓練頻率計算，教練課通常會成為體態管理中最高的固定支出之一。'
+  },
+  {
+    id: 'glp1Injection',
+    name: '瘦瘦針／GLP-1 類自費療程',
+    monthlyCost: 12000,
+    calculation: '以每月 NT$6,000–18,000 的常見區間取中間偏保守值估算',
+    description: '不同藥品、劑量、診所方案與是否包含檢查費，皆會影響實際支出。此項目僅作自費療程支出估算，不構成醫療建議。'
+  },
+  {
+    id: 'dietMedication',
+    name: '口服減重藥物／減重門診藥物',
+    monthlyCost: 7000,
+    calculation: '以每月約 NT$5,000–10,000 的自費藥物區間估算',
+    description: '實際費用會依醫師評估、藥物種類、劑量與是否包含檢查費而不同。'
+  },
+  {
+    id: 'enzyme',
+    name: '減肥酵素／代謝保健品',
+    monthlyCost: 1000,
+    calculation: '以每月購買一盒保健品估算',
+    description: '此類產品價格差異較大，且效果不宜視為醫療或減重保證。'
+  },
+  {
+    id: 'pilates',
+    name: '皮拉提斯課程',
+    monthlyCost: 4800,
+    calculation: '以每堂 NT$600、一週 2 堂、每月 8 堂估算',
+    description: '此處以團體或小班課程作保守估算；若為一對一器械皮拉提斯，費用可能大幅提高。'
+  },
+  {
+    id: 'yoga',
+    name: '瑜伽課程',
+    monthlyCost: 3200,
+    calculation: '以每堂 NT$400、一週 2 堂、每月 8 堂估算',
+    description: '瑜伽費用會依課程型態、地點與購課方案不同而變動。'
+  },
+  {
+    id: 'whey',
+    name: '乳清蛋白',
+    monthlyCost: 1650,
+    calculation: '以每份 NT$55、每月 30 份估算',
+    description: '若每天補充一次乳清蛋白，每月花費約為 NT$1,500–1,800；實際支出依品牌、包裝與蛋白質含量而不同。'
+  },
+  {
+    id: 'healthyMeal',
+    name: '健康餐／健身餐',
+    monthlyCost: 4500,
+    calculation: '以每餐 NT$150、每月 30 餐估算',
+    description: '此處不是以三餐皆吃健康餐計算，而是以每天一餐估算，較接近學生或年輕族群的部分替代飲食情境。'
+  },
+  {
+    id: 'nutritionist',
+    name: '營養師諮詢',
+    monthlyCost: 2000,
+    calculation: '以每月一次諮詢估算',
+    description: '營養諮詢費用會依機構、諮詢時間與是否搭配方案而不同。'
+  },
+  {
+    id: 'inbody',
+    name: 'InBody 體組成測量',
+    monthlyCost: 200,
+    calculation: '以每月測量一次估算',
+    description: '體組成測量通常不是主要支出，但常被納入體態管理追蹤流程。'
+  },
+  {
+    id: 'workoutClothes',
+    name: '運動服飾與裝備',
+    monthlyCost: 1000,
+    calculation: '以鞋子、運動服、瑜伽墊等消耗與添購平均攤提估算',
+    description: '此項目反映體態管理周邊消費，實際金額差異較大。'
+  }
+];
+
+function initBodyCostCalculator() {
+  const root = document.querySelector('[data-body-cost-calculator]');
+  if (!root) return;
+
+  const numberFormatter = new Intl.NumberFormat('zh-TW');
+  const percentFormatter = new Intl.NumberFormat('zh-TW', {
+    maximumFractionDigits: 1
+  });
+  const budgetInput = root.querySelector('[data-body-cost-budget]');
+  const list = root.querySelector('[data-body-cost-list]');
+  const clearButton = root.querySelector('[data-body-cost-clear]');
+  const studentButton = root.querySelector('[data-body-cost-student]');
+  const totalTarget = root.querySelector('[data-body-cost-total]');
+  const percentageTarget = root.querySelector('[data-body-cost-percentage]');
+  const remainingTarget = root.querySelector('[data-body-cost-remaining]');
+  const progressTarget = root.querySelector('[data-body-cost-progress]');
+  const progressNote = root.querySelector('[data-body-cost-progress-note]');
+  const messageTarget = root.querySelector('[data-body-cost-message]');
+
+  const formatCurrency = (value) => `NT$${numberFormatter.format(Math.round(value))}`;
+  const formatPercentage = (value) => `${percentFormatter.format(value)}%`;
+
+  function currentBudget() {
+    const parsed = Number.parseInt(budgetInput.value, 10);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : 12000;
+  }
+
+  function resultMessage(percentage, selectedTotal) {
+    if (selectedTotal === 0) return '尚未選擇任何支出項目。';
+    if (percentage <= 20) return '此支出已佔生活費的一部分，但仍屬相對可控範圍。';
+    if (percentage <= 50) return '此支出已佔生活費相當比例，可能開始壓縮日常飲食、交通與社交等基本開銷。';
+    if (percentage <= 100) return '此支出已接近或超過生活費的一半，對多數學生或初入職場者而言，可能形成明顯經濟壓力。';
+    return '此支出已超過輸入的每月生活費。這表示體態管理相關消費不只是個人選擇，也可能涉及所得、階級與消費能力差異。';
+  }
+
+  function selectedItems() {
+    return Array.from(root.querySelectorAll('[data-body-cost-item]:checked'))
+      .map((checkbox) => bodyCostItems.find((item) => item.id === checkbox.value))
+      .filter(Boolean);
+  }
+
+  function renderResults() {
+    const budget = currentBudget();
+    const selectedTotal = selectedItems().reduce((sum, item) => sum + item.monthlyCost, 0);
+    const percentage = selectedTotal / budget * 100;
+    const remainingBudget = budget - selectedTotal;
+    const cappedProgress = Math.min(100, percentage);
+
+    totalTarget.textContent = formatCurrency(selectedTotal);
+    percentageTarget.textContent = formatPercentage(percentage);
+    remainingTarget.textContent = formatCurrency(remainingBudget);
+    progressTarget.style.width = `${cappedProgress}%`;
+    progressNote.textContent = percentage > 100 ? `超過生活費（${formatPercentage(percentage)}）` : formatPercentage(percentage);
+    messageTarget.textContent = resultMessage(percentage, selectedTotal);
+  }
+
+  list.innerHTML = bodyCostItems.map((item) => `
+    <label class="body-cost-item">
+      <input type="checkbox" value="${item.id}" data-body-cost-item />
+      <span class="body-cost-item-copy">
+        <span class="body-cost-item-title">
+          <b>${item.name}</b>
+          <span>${formatCurrency(item.monthlyCost)} / 月</span>
+        </span>
+        <small>${item.calculation}</small>
+        <p>${item.description}</p>
+      </span>
+    </label>
+  `).join('');
+
+  budgetInput.addEventListener('input', () => {
+    budgetInput.value = budgetInput.value.replace(/[^\d]/g, '');
+    renderResults();
+  });
+
+  budgetInput.addEventListener('blur', () => {
+    if (!budgetInput.value || Number.parseInt(budgetInput.value, 10) <= 0) {
+      budgetInput.value = '12000';
+    }
+    renderResults();
+  });
+
+  list.addEventListener('change', (event) => {
+    if (event.target.matches('[data-body-cost-item]')) renderResults();
+  });
+
+  clearButton?.addEventListener('click', () => {
+    root.querySelectorAll('[data-body-cost-item]').forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+    renderResults();
+  });
+
+  studentButton?.addEventListener('click', () => {
+    budgetInput.value = '12000';
+    renderResults();
+  });
+
+  renderResults();
+}
+
 initDynamicContentTransitions();
 initBodyManagementExperienceHub();
 initBodyMangaScroll();
 initModelPostVideos();
 initXinmiIntroCards();
 initWeightStorySection();
+initBodyCostCalculator();
 initSitePreloader();
