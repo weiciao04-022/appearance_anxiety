@@ -179,6 +179,11 @@ button:active,
   transform: none;
 }
 
+#after-body-text.reveal {
+  opacity: 1;
+  transform: none;
+}
+
 .iphone {
   width: 390px;
   height: 760px;
