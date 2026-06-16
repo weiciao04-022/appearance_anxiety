@@ -2371,8 +2371,8 @@ body,
   position: absolute;
   display: grid;
   align-content: end;
-  width: clamp(112px, 11vw, 158px);
-  aspect-ratio: 9 / 14;
+  width: clamp(128px, 13vw, 190px);
+  aspect-ratio: 4 / 5;
   padding: 12px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.76);
@@ -4009,7 +4009,7 @@ body,
   }
 
   .video-card {
-    width: clamp(72px, 20vw, 104px);
+    width: clamp(86px, 24vw, 128px);
     padding: 8px;
     border-radius: 10px;
   }
