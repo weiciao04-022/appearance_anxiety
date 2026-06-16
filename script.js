@@ -46,8 +46,32 @@ const siteVideoManifest = [
   './video/model-posts/3.m4v',
   './video/model-posts/4.m4v',
   './video/model-posts/5.m4v',
-  './video/model-posts/6.m4v'
+  './video/model-posts/6.m4v',
+  './video/cases/case1.mov',
+  './video/cases/case2.mp4',
+  './video/cases/case3.mov',
+  './video/cases/case4.mov',
+  './video/cases/case5.mov',
+  './video/cases/case6.mov',
+  './video/body-feed/weightloss.m4v',
+  './video/body-feed/butttraining.m4v',
+  './video/body-feed/healthyfood.m4v',
+  './video/body-feed/chesttraining.m4v',
+  './video/body-feed/moremusle.m4v'
 ];
+
+function refreshLucideIcons() {
+  if (window.lucide?.createIcons) {
+    window.lucide.createIcons({
+      attrs: {
+        'aria-hidden': 'true',
+        'stroke-width': 2
+      }
+    });
+  }
+}
+
+window.addEventListener('load', refreshLucideIcons);
 
 function preloadImage(src) {
   return new Promise((resolve) => {
@@ -62,11 +86,16 @@ function preloadImage(src) {
 function preloadVideo(src) {
   return new Promise((resolve) => {
     const video = document.createElement('video');
+    let isFinished = false;
     const finish = () => {
+      if (isFinished) return;
+      isFinished = true;
+      window.clearTimeout(timeout);
       video.removeAttribute('src');
       video.load();
       resolve();
     };
+    const timeout = window.setTimeout(finish, 6500);
     video.muted = true;
     video.playsInline = true;
     video.preload = 'auto';
@@ -82,16 +111,25 @@ async function initSitePreloader() {
   const preloader = document.querySelector('[data-site-preloader]');
   const progressBar = document.querySelector('[data-preload-progress]');
   const status = document.querySelector('[data-preload-status]');
+  const preloadCompleteKey = 'appearanceAnxietyAssetsReady';
   if (!preloader) {
     document.documentElement.classList.remove('is-preloading');
+    return;
+  }
+  if (sessionStorage.getItem(preloadCompleteKey) === 'true') {
+    document.documentElement.classList.remove('is-preloading');
+    preloader.remove();
     return;
   }
 
   const pageImages = Array.from(document.querySelectorAll('img[src], video[poster]'))
     .map((element) => element.currentSrc || element.getAttribute('src') || element.getAttribute('poster'))
     .filter(Boolean);
+  const pageVideos = Array.from(document.querySelectorAll('video source[src], video[src]'))
+    .map((element) => element.currentSrc || element.getAttribute('src'))
+    .filter(Boolean);
   const imageAssets = [...new Set([...siteAssetManifest, ...pageImages])];
-  const videoAssets = [...new Set(siteVideoManifest)];
+  const videoAssets = [...new Set([...siteVideoManifest, ...pageVideos])];
   const totalAssets = Math.max(1, imageAssets.length + videoAssets.length);
   const startedAt = performance.now();
   let completed = 0;
@@ -119,6 +157,7 @@ async function initSitePreloader() {
 
   if (progressBar) progressBar.style.width = '100%';
   if (status) status.textContent = '準備完成';
+  sessionStorage.setItem(preloadCompleteKey, 'true');
   document.documentElement.classList.remove('is-preloading');
   preloader.classList.add('is-complete');
   window.setTimeout(() => preloader.remove(), 500);
@@ -468,35 +507,127 @@ function formatBodyFatDifference(value) {
   return Number.isInteger(value) ? String(value) : value.toFixed(1);
 }
 
+function formatBodyNumber(value, digits = 0) {
+  if (!Number.isFinite(value)) return '--';
+  return Number(value.toFixed(digits)).toString();
+}
+
+function calculateBodyActionPlan(selected, profile) {
+  const currentBodyFat = profile.bodyFat;
+  const proteinTarget = Math.round(profile.weight * 1.6);
+  const carbTarget = Math.round(profile.weight * 3);
+  const fatTarget = Math.round((profile.tdee * 0.25) / 9);
+  const waterTarget = Math.round(profile.weight * 35);
+  const withinRange = currentBodyFat >= selected.bodyFatMin && currentBodyFat <= selected.bodyFatMax;
+  const aboveRange = currentBodyFat > selected.bodyFatMax;
+  const belowRange = currentBodyFat < selected.bodyFatMin;
+  const gap = aboveRange
+    ? currentBodyFat - selected.bodyFatMax
+    : belowRange
+      ? selected.bodyFatMin - currentBodyFat
+      : 0;
+  const estimatedWeeks = withinRange ? 4 : Math.max(4, Math.ceil(gap / 0.5));
+  const strengthDays = aboveRange ? Math.min(5, Math.max(3, Math.ceil(gap / 2) + 2)) : 3;
+  const cardioDays = aboveRange ? 5 : 2;
+  const calorieAdjustment = aboveRange ? -250 : belowRange ? 180 : 0;
+  const calorieTarget = Math.max(1200, Math.round(profile.tdee + calorieAdjustment));
+  const direction = aboveRange
+    ? `先安排 ${estimatedWeeks} 週，每週 ${strengthDays} 天重量訓練，加上 ${cardioDays} 天 30 分鐘快走或腳踏車。`
+    : belowRange
+      ? `先安排 ${estimatedWeeks} 週，每週 ${strengthDays} 天重量訓練，餐點略增加主食與蛋白質，不需要再降低體脂。`
+      : `先維持 4 週，每週 ${strengthDays} 天重量訓練，加上 2 天輕有氧，觀察力量與精神狀態。`;
+
+  return {
+    gap,
+    withinRange,
+    estimatedWeeks,
+    strengthDays,
+    cardioDays,
+    calorieTarget,
+    proteinTarget,
+    carbTarget,
+    fatTarget,
+    waterTarget,
+    direction
+  };
+}
+
 function updateBodyCheckResult() {
   const result = document.getElementById('bodyCheckResult');
-  const input = document.getElementById('bodyFatInput');
-  if (!result || !input) return;
+  const heightInput = document.getElementById('bodyHeightInput');
+  const weightInput = document.getElementById('bodyWeightInput');
+  const bodyFatInput = document.getElementById('bodyFatInput');
+  if (!result || !heightInput || !weightInput || !bodyFatInput) return;
 
   const selected = IdealBodySelector.selectedBodyImage;
-  const currentBodyFat = Number(input.value);
-  if (!selected && !currentBodyFat) {
-    result.textContent = '選擇理想身材並輸入目前體脂率後，就可以開始比較。';
+  const height = Number(heightInput.value);
+  const weight = Number(weightInput.value);
+  const currentBodyFat = Number(bodyFatInput.value);
+  if (!selected && !height && !weight && !currentBodyFat) {
+    result.textContent = '選擇理想身材並輸入身高、體重、體脂率後，就可以開始整理行動建議。';
     return;
   }
   if (!selected) {
     result.textContent = '請先點選一張理想身材圖片。';
     return;
   }
-  if (!currentBodyFat || currentBodyFat <= 0) {
-    result.textContent = `你選擇的理想身材約落在體脂 ${selected.bodyFatRange}，請輸入目前體脂率來比較。`;
+  if (!height || height < 80 || !weight || weight <= 0 || !currentBodyFat || currentBodyFat <= 0) {
+    result.textContent = `你選擇的理想身材約落在體脂 ${selected.bodyFatRange}，請完整輸入身高、體重、體脂率來計算。`;
     return;
   }
 
-  if (currentBodyFat < selected.bodyFatMin) {
-    result.textContent = `你目前比理想身材區間低 ${formatBodyFatDifference(selected.bodyFatMin - currentBodyFat)} 個百分點；目標區間約為 ${selected.bodyFatRange}。`;
-    return;
-  }
-  if (currentBodyFat > selected.bodyFatMax) {
-    result.textContent = `你目前比理想身材區間高 ${formatBodyFatDifference(currentBodyFat - selected.bodyFatMax)} 個百分點；目標區間約為 ${selected.bodyFatRange}。`;
-    return;
-  }
-  result.textContent = `你目前已落在選擇的理想身材區間，約為體脂 ${selected.bodyFatRange}。`;
+  const gender = IdealBodySelector.selectedGender === 'male' ? 'male' : 'female';
+  const heightMeter = height / 100;
+  const bmi = weight / (heightMeter * heightMeter);
+  const age = 20;
+  const bmr = (10 * weight) + (6.25 * height) - (5 * age) + (gender === 'male' ? 5 : -161);
+  const tdee = bmr * 1.375;
+  const profile = {
+    height,
+    weight,
+    bodyFat: currentBodyFat,
+    gender,
+    age,
+    activityLevel: 'medium',
+    bmi,
+    bmr,
+    tdee
+  };
+  const plan = calculateBodyActionPlan(selected, profile);
+  const savedProfile = {
+    ...profile,
+    selectedIdealBodyId: selected.id,
+    selectedIdealBodyRange: selected.bodyFatRange,
+    estimatedCalories: plan.calorieTarget,
+    mealCalories: Math.round(plan.calorieTarget / 3),
+    proteinTarget: plan.proteinTarget,
+    carbTarget: plan.carbTarget,
+    fatTarget: plan.fatTarget,
+    waterTarget: plan.waterTarget,
+    bodyActionPlan: plan
+  };
+  localStorage.setItem('bodyHealthProfile', JSON.stringify(savedProfile));
+
+  const rangeMessage = plan.withinRange
+    ? `你目前已落在 ${selected.bodyFatRange}。`
+    : `你和 ${selected.bodyFatRange} 之間大約還有 ${formatBodyFatDifference(plan.gap)} 個體脂百分點的調整空間。`;
+
+  result.innerHTML = `
+    <article class="body-check-summary">
+      <p><strong>${rangeMessage}</strong></p>
+      <p>${plan.direction}</p>
+      <div class="body-check-metrics">
+        <span>BMI：${formatBodyNumber(bmi, 1)}</span>
+        <span>每日熱量：${plan.calorieTarget} kcal</span>
+        <span>每餐約：${Math.round(plan.calorieTarget / 3)} kcal</span>
+        <span>蛋白質：${plan.proteinTarget} g / 日</span>
+        <span>碳水：${plan.carbTarget} g / 日</span>
+        <span>脂肪：約 ${plan.fatTarget} g / 日</span>
+        <span>喝水：約 ${plan.waterTarget} ml / 日</span>
+      </div>
+      <p class="body-check-note">已儲存這份資料，後面的健康餐與互動遊戲會優先使用這組身體數值。</p>
+    </article>
+  `;
 }
 
 function renderBodyOptions() {
@@ -633,14 +764,16 @@ initIdealBodySelector();
 
 function initBodyCheckForm() {
   const form = document.getElementById('bodyCheckForm');
-  const input = document.getElementById('bodyFatInput');
-  if (!form || !input) return;
+  const inputs = ['bodyHeightInput', 'bodyWeightInput', 'bodyFatInput']
+    .map((id) => document.getElementById(id))
+    .filter(Boolean);
+  if (!form || !inputs.length) return;
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     updateBodyCheckResult();
   });
-  input.addEventListener('input', updateBodyCheckResult);
+  inputs.forEach((input) => input.addEventListener('input', updateBodyCheckResult));
 }
 
 initBodyCheckForm();
@@ -651,6 +784,11 @@ function initCaseFloatMenu() {
 
   const toggle = menu.querySelector('.case-menu-toggle');
   const panel = menu.querySelector('.case-menu-panel');
+  const storiesToggle = menu.querySelector('[data-case-stories-toggle]');
+  const storiesPanel = menu.querySelector('[data-case-stories]');
+  const searchInput = menu.querySelector('#caseSearchInput');
+  const hashtagButtons = menu.querySelectorAll('[data-case-tag]');
+  const caseCards = menu.querySelectorAll('[data-case-card]');
   if (!toggle || !panel) return;
 
   function setOpen(isOpen) {
@@ -658,12 +796,45 @@ function initCaseFloatMenu() {
     toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
   }
 
+  function filterCases(query) {
+    const normalizedQuery = query.trim().replace(/^#/, '').toLowerCase();
+    caseCards.forEach((card) => {
+      const haystack = `${card.textContent} ${card.dataset.tags || ''}`.toLowerCase();
+      card.hidden = Boolean(normalizedQuery) && !haystack.includes(normalizedQuery);
+    });
+  }
+
   toggle.addEventListener('click', () => {
     setOpen(panel.hidden);
   });
 
+  storiesToggle?.addEventListener('click', () => {
+    if (!storiesPanel) return;
+    const isOpen = storiesPanel.hidden;
+    storiesPanel.hidden = !isOpen;
+    storiesToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    if (isOpen) searchInput?.focus({ preventScroll: true });
+  });
+
+  searchInput?.addEventListener('input', () => {
+    filterCases(searchInput.value);
+  });
+
+  hashtagButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const tag = button.dataset.caseTag || '';
+      if (searchInput) searchInput.value = tag ? `#${tag}` : '';
+      filterCases(tag);
+      hashtagButtons.forEach((item) => item.classList.toggle('active', item === button));
+    });
+  });
+
   panel.addEventListener('click', (event) => {
-    if (event.target.closest('a')) setOpen(false);
+    if (event.target.closest('a')) {
+      setOpen(false);
+      if (storiesPanel) storiesPanel.hidden = true;
+      storiesToggle?.setAttribute('aria-expanded', 'false');
+    }
   });
 
   document.addEventListener('click', (event) => {

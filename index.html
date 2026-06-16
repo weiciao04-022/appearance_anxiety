@@ -14,12 +14,24 @@
   <link rel="preload" as="image" href="./pic/B/B_male15-18%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male20-25%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male%3E30%25.png" />
-  <link rel="stylesheet" href="style.css?v=20260611-02" />
+  <link rel="stylesheet" href="style.css?v=20260616-01" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.addEventListener('load', function () {
+      var allowedHashTargets = [
+        'comic-opening',
+        'intro-text',
+        'ideal-body-check',
+        'after-body-text',
+        'model-post-orbit',
+        'frame-9',
+        'body-manga-scroll',
+        'manga-panel-four',
+        'manga-panel-after-experience',
+        'health-magnifier-challenge'
+      ];
       if (window.location.hash) {
         var target = null;
         try {
@@ -27,12 +39,13 @@
         } catch (error) {
           target = null;
         }
-        if (target) {
+        if (target && allowedHashTargets.indexOf(target.id) !== -1) {
           window.requestAnimationFrame(function () {
             target.scrollIntoView({ block: 'start' });
           });
           return;
         }
+        history.replaceState(null, '', window.location.pathname + window.location.search);
       }
       window.scrollTo(0, 0);
     });
@@ -64,6 +77,7 @@
       </div>
 
       <div class="opening-comic-stage" aria-label="開場漫畫">
+        <p class="opening-comic-hint">下滑看故事</p>
         <div class="opening-comic-strip">
           <img class="is-active" src="./pic/opening-comic/1.jpg" alt="開場漫畫 1" data-comic-panel />
           <img src="./pic/opening-comic/2.jpg" alt="開場漫畫 2" data-comic-panel />
@@ -76,7 +90,6 @@
         <div class="opening-comic-progress" aria-hidden="true">
           <span data-comic-progress></span>
         </div>
-        <p class="opening-comic-hint">下滑看故事</p>
       </div>
     </div>
   </section>
@@ -89,8 +102,7 @@
 
   <section id="ideal-body-check" class="section reveal body-check-section">
     <div class="frame-wrap center-col">
-      <p class="title">理想身材和體態檢測表</p>
-      <p class="subtitle">先點選你的理想身材，再輸入目前體脂率，看看距離差多少。</p>
+      <p class="subtitle">先點選你的理想身材，再輸入目前身體數值，系統會整理成可執行的行動建議。</p>
       <div class="body-gender-toggle" aria-label="選擇性別">
         <button class="body-gender-button active" data-gender="female" type="button">女生</button>
         <button class="body-gender-button" data-gender="male" type="button">男生</button>
@@ -101,15 +113,29 @@
       </div>
       <form class="body-check-form" id="bodyCheckForm">
         <label>
+          身高
+          <span>
+            <input id="bodyHeightInput" type="number" min="80" max="230" step="1" inputmode="decimal" placeholder="例：165" />
+            <b>cm</b>
+          </span>
+        </label>
+        <label>
+          體重
+          <span>
+            <input id="bodyWeightInput" type="number" min="20" max="250" step="0.1" inputmode="decimal" placeholder="例：58" />
+            <b>kg</b>
+          </span>
+        </label>
+        <label>
           目前體脂率
           <span>
             <input id="bodyFatInput" type="number" min="1" max="70" step="0.1" inputmode="decimal" placeholder="例：26" />
             <b>%</b>
           </span>
         </label>
-        <button class="button" type="submit">計算差距</button>
+        <button class="button" type="submit">計算行動</button>
       </form>
-      <p id="bodyCheckResult" class="body-check-result">選擇理想身材並輸入目前體脂率後，就可以開始比較。</p>
+      <div id="bodyCheckResult" class="body-check-result">選擇理想身材並輸入身高、體重、體脂率後，就可以開始整理行動建議。</div>
     </div>
   </section>
 
@@ -121,10 +147,6 @@
 
   <section id="model-post-orbit" class="section reveal model-post-orbit-section">
     <div class="frame-wrap model-post-orbit-wrap">
-      <div class="model-post-center">
-        <p class="section-kicker">社群裡反覆出現的身材</p>
-        <h2>到底怎麼樣才能像他們一樣啊</h2>
-      </div>
       <div class="model-post-orbit" aria-label="model 貼文影片預留區">
         <div class="model-post-slot slot-1">
           <video autoplay muted loop playsinline preload="auto" aria-label="model 貼文影片 1">
@@ -3497,20 +3519,65 @@
   </section>
 
   <nav class="case-float-menu" data-case-menu>
-    <button class="case-menu-toggle" type="button" aria-expanded="false" aria-controls="caseMenuPanel">案例故事</button>
+    <button class="case-menu-toggle" type="button" aria-expanded="false" aria-controls="caseMenuPanel" aria-label="開啟案例選單">
+      <i data-lucide="menu" aria-hidden="true"></i>
+      <span class="sr-only">案例選單</span>
+    </button>
     <div class="case-menu-panel" id="caseMenuPanel" hidden>
       <p class="case-menu-title">案例故事</p>
-      <a href="#comic-opening">故事主頁</a>
-      <a href="pages/case1.html">案例一</a>
-      <a href="pages/case2.html">案例二</a>
-      <a href="pages/case3.html">案例三</a>
-      <a href="pages/case4.html">案例四</a>
-      <a href="pages/case5.html">案例五</a>
-      <a href="pages/case6.html">案例六</a>
-      <a href="pages/case1.html">完整文章</a>
+      <a class="case-menu-option" href="#comic-opening">主頁</a>
+      <button class="case-menu-option" type="button" data-case-stories-toggle aria-expanded="false">案例故事</button>
+      <a class="case-menu-option" href="pages/case1.html">完整文章</a>
+      <div class="case-menu-stories" data-case-stories hidden>
+        <label class="case-search-field">
+          <span>搜尋案例</span>
+          <input id="caseSearchInput" type="search" placeholder="搜尋 hashtag 或名字" autocomplete="off" />
+        </label>
+        <div class="case-hashtag-row" aria-label="案例 hashtag">
+          <button type="button" data-case-tag="">全部</button>
+          <button type="button" data-case-tag="節食停滯">#節食停滯</button>
+          <button type="button" data-case-tag="復胖壓力">#復胖壓力</button>
+          <button type="button" data-case-tag="社群比較">#社群比較</button>
+          <button type="button" data-case-tag="健身房">#健身房</button>
+          <button type="button" data-case-tag="健康餐">#健康餐</button>
+          <button type="button" data-case-tag="瘦瘦針">#瘦瘦針</button>
+        </div>
+        <div class="case-video-grid" data-case-video-grid>
+          <a class="case-video-card" href="pages/case1.html" data-case-card data-tags="皓承 一天一餐 術後減重 節食停滯">
+            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case1.mov" type="video/quicktime" /></video>
+            <span>看看皓承的故事</span>
+            <small>#一天一餐 #節食停滯</small>
+          </a>
+          <a class="case-video-card" href="pages/case2.html" data-case-card data-tags="佩璇 重訓飲控 復胖壓力 蛋白質">
+            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case2.mp4" type="video/mp4" /></video>
+            <span>看看佩璇的故事</span>
+            <small>#重訓飲控 #復胖壓力</small>
+          </a>
+          <a class="case-video-card" href="pages/case3.html" data-case-card data-tags="第三位 社群比較 日常焦慮 文字案例">
+            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case3.mov" type="video/quicktime" /></video>
+            <span>看看第三位的故事</span>
+            <small>#社群比較 #日常焦慮</small>
+          </a>
+          <a class="case-video-card" href="pages/case4.html" data-case-card data-tags="第四位 健身房 時間成本 持續壓力">
+            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case4.mov" type="video/quicktime" /></video>
+            <span>看看第四位的故事</span>
+            <small>#健身房 #時間成本</small>
+          </a>
+          <a class="case-video-card" href="pages/case5.html" data-case-card data-tags="第五位 健康餐 外食選擇 營養焦慮">
+            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case5.mov" type="video/quicktime" /></video>
+            <span>看看第五位的故事</span>
+            <small>#健康餐 #外食選擇</small>
+          </a>
+          <a class="case-video-card" href="pages/case6.html" data-case-card data-tags="第六位 瘦瘦針 醫療風險 快速見效">
+            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case6.mov" type="video/quicktime" /></video>
+            <span>看看第六位的故事</span>
+            <small>#瘦瘦針 #醫療風險</small>
+          </a>
+        </div>
+      </div>
     </div>
   </nav>
 
-  <script src="script.js?v=20260611-01"></script>
+  <script src="script.js?v=20260616-01"></script>
 </body>
 </html>
