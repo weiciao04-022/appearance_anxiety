@@ -2863,11 +2863,13 @@ function initXinmiIntroCards() {
     const rect = stack.getBoundingClientRect();
     const stackTop = rect.top + window.scrollY;
     const scrollable = Math.max(1, stack.offsetHeight - window.innerHeight);
-    const progress = clamp((window.scrollY - stackTop) / scrollable, 0, 0.999);
-    const activeIndex = clamp(Math.floor(progress * panels.length), 0, panels.length - 1);
+    const rawProgress = clamp((window.scrollY - stackTop) / scrollable, 0, 0.999);
+    const cardProgress = (rawProgress - 0.18) / 0.76;
+    const activeIndex = clamp(Math.floor(clamp(cardProgress, 0, 0.999) * panels.length), 0, panels.length - 1);
     panels.forEach((panel, index) => {
-      panel.classList.toggle('is-active', index === activeIndex);
-      panel.style.zIndex = String(index === activeIndex ? 5 : 0);
+      const isActive = rawProgress >= 0.18 && rawProgress <= 0.96 && index === activeIndex;
+      panel.classList.toggle('is-active', isActive);
+      panel.style.zIndex = String(isActive ? 5 : 0);
     });
   }
 

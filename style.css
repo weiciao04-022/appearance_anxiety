@@ -1532,58 +1532,46 @@ button:active,
   min-height: auto;
   flex-direction: column;
   align-items: stretch;
+  justify-content: flex-start;
+  padding-block: 0;
   padding-inline: 0;
-  background: #f7f3ed;
+  background: #fff;
 }
 
 #intro-text .xinmi-intro-copy {
   width: min(680px, 86vw);
   min-width: 0;
-  margin: 0 auto;
-  padding: 8vh 0 12vh;
+  margin: 0;
   color: #2f3133;
   letter-spacing: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .xinmi-card-scroll {
   position: relative;
-  min-height: 440vh;
-  background:
-    radial-gradient(circle at 24% 38%, rgba(209, 102, 82, 0.11), transparent 28%),
-    linear-gradient(180deg, rgba(247, 243, 237, 0), #e9ecee 13%, #dce1e3 100%);
+  min-height: 430vh;
+  background: #fff;
 }
 
 .xinmi-card-sticky {
   position: sticky;
   top: 0;
   min-height: 100vh;
-  display: flex;
+  display: grid;
+  place-items: center;
   align-items: center;
-  justify-content: flex-end;
   padding: 64px 6vw;
   box-sizing: border-box;
   overflow: hidden;
-}
-
-.xinmi-card-sticky::before {
-  content: "";
-  position: absolute;
-  left: 8vw;
-  top: 50%;
-  width: min(42vw, 620px);
-  aspect-ratio: 1;
-  border: 1px solid rgba(52, 54, 56, 0.14);
-  border-radius: 50%;
-  transform: translateY(-50%);
-  opacity: 0.5;
 }
 
 .xinmi-story-card {
   position: absolute;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: clamp(20px, 2.4vw, 34px);
+  gap: 12px;
+  padding: clamp(16px, 2vw, 26px);
   border: 1.5px solid rgba(92, 119, 170, 0.52);
   border-radius: 8px;
   background: rgba(255, 253, 248, 0.94);
@@ -1592,30 +1580,47 @@ button:active,
   color: #343638;
   opacity: 0;
   pointer-events: none;
-  transform: translate3d(34px, 36px, 0);
+  transform: translate3d(0, 54px, 0) scale(0.96);
   transition: opacity 0.45s ease, transform 0.55s ease, box-shadow 0.3s ease;
   letter-spacing: 0;
 }
 
 .xinmi-text-panel {
-  right: 8vw;
-  width: min(430px, 34vw);
+  right: max(8vw, calc(50vw - 560px));
+  top: 50%;
+  width: min(360px, 30vw);
   min-height: 0;
+  transform: translate3d(0, calc(-50% + 54px), 0) scale(0.96);
 }
 
 .xinmi-media-panel {
-  right: 5vw;
-  width: min(920px, 76vw);
-  max-height: 84vh;
+  left: 50%;
+  top: 50%;
+  width: min(820px, 76vw);
+  max-height: 78vh;
   overflow: auto;
+  transform: translate3d(-50%, calc(-50% + 54px), 0) scale(0.96);
+}
+
+.xinmi-progress-card {
+  width: min(860px, 78vw);
+  max-height: 84vh;
+}
+
+.xinmi-food-card {
+  width: min(760px, 72vw);
 }
 
 .xinmi-story-card.is-active {
   z-index: 5;
   opacity: 1;
   pointer-events: auto;
-  transform: translate3d(0, 0, 0);
+  transform: translate3d(0, -50%, 0) scale(1);
   box-shadow: 0 28px 76px rgba(38, 41, 43, 0.22);
+}
+
+.xinmi-media-panel.is-active {
+  transform: translate3d(-50%, -50%, 0) scale(1);
 }
 
 .xinmi-story-card p,
@@ -1626,20 +1631,20 @@ button:active,
 }
 
 .xinmi-story-card p {
-  font-size: clamp(1rem, 1.38vw, 1.24rem);
-  line-height: 1.78;
+  font-size: clamp(0.92rem, 1.12vw, 1.04rem);
+  line-height: 1.68;
 }
 
 .xinmi-story-card small {
   color: #687079;
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   line-height: 1.5;
 }
 
 .xinmi-month-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 12px;
 }
 
 .xinmi-month-compare {
@@ -1649,7 +1654,7 @@ button:active,
 
 .xinmi-month-compare figcaption {
   color: #59616a;
-  font-size: 0.84rem;
+  font-size: 0.76rem;
   font-weight: 700;
 }
 
@@ -1691,21 +1696,21 @@ button:active,
 
 .xinmi-comparison-label {
   position: absolute;
-  top: 10px;
+  top: 8px;
   z-index: 4;
-  padding: 5px 8px;
+  padding: 4px 7px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.88);
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   font-weight: 700;
 }
 
 .xinmi-comparison-label.is-before {
-  left: 10px;
+  left: 8px;
 }
 
 .xinmi-comparison-label.is-after {
-  right: 10px;
+  right: 8px;
 }
 
 .xinmi-comparison input {
@@ -1722,13 +1727,14 @@ button:active,
 .xinmi-food-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
+  gap: 12px;
 }
 
 .xinmi-food-grid img {
   width: 100%;
-  height: min(48vh, 440px);
-  object-fit: contain;
+  aspect-ratio: 3 / 4;
+  height: auto;
+  object-fit: cover;
   display: block;
   border: 1px solid rgba(52, 54, 56, 0.16);
   border-radius: 8px;
@@ -1752,22 +1758,24 @@ button:active,
   }
 
   .xinmi-card-sticky {
-    align-items: center;
-    justify-content: center;
     padding: 44px 18px;
-  }
-
-  .xinmi-card-sticky::before {
-    display: none;
   }
 
   .xinmi-story-card {
     right: auto;
+    left: 50%;
+    top: 50%;
     width: min(100%, 420px);
     max-height: 86vh;
     gap: 12px;
     padding: 22px;
     overflow: auto;
+    transform: translate3d(-50%, calc(-50% + 42px), 0) scale(0.96);
+  }
+
+  .xinmi-story-card.is-active,
+  .xinmi-media-panel.is-active {
+    transform: translate3d(-50%, -50%, 0) scale(1);
   }
 
   .xinmi-story-card p {
@@ -1785,7 +1793,7 @@ button:active,
   }
 
   .xinmi-food-grid img {
-    height: min(360px, 52vh);
+    height: auto;
   }
 }
 
