@@ -419,27 +419,6 @@ button:active,
   border-radius: 14px;
 }
 
-.opening-comic-video-page .slot-1,
-.opening-comic-video-page .slot-2 {
-  top: 3%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.opening-comic-video-page .slot-3,
-.opening-comic-video-page .slot-4 {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.opening-comic-video-page .slot-5,
-.opening-comic-video-page .slot-6 {
-  bottom: 3%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
 .opening-comic-progress {
   width: 100%;
   height: 8px;
@@ -508,6 +487,10 @@ button:active,
   object-fit: cover;
 }
 
+.opening-comic-video-page .model-post-slot video {
+  object-position: 50% 56%;
+}
+
 .model-post-slot.slot-1 { top: 2%; left: 5%; }
 .model-post-slot.slot-2 { top: 4%; right: 5%; }
 .model-post-slot.slot-3 { top: 35%; left: 5%; }
@@ -522,6 +505,27 @@ button:active,
 .opening-comic-video-page .model-post-slot.slot-5,
 .opening-comic-video-page .model-post-slot.slot-6 {
   inset: auto;
+}
+
+.opening-comic-video-page .model-post-slot.slot-1,
+.opening-comic-video-page .model-post-slot.slot-2 {
+  top: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.opening-comic-video-page .model-post-slot.slot-3,
+.opening-comic-video-page .model-post-slot.slot-4 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.opening-comic-video-page .model-post-slot.slot-5,
+.opening-comic-video-page .model-post-slot.slot-6 {
+  bottom: 3%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .button {
@@ -2858,16 +2862,24 @@ button:active,
   }
 
   .opening-comic-video-page .model-post-slot {
+    position: relative;
+    inset: auto;
+    transform: none;
     width: min(100%, 88px);
   }
 
-  .opening-comic-video-page .slot-1,
-  .opening-comic-video-page .slot-3,
-  .opening-comic-video-page .slot-5,
-  .opening-comic-video-page .slot-2,
-  .opening-comic-video-page .slot-4,
-  .opening-comic-video-page .slot-6 {
+  .opening-comic-video-page .model-post-slot.slot-1,
+  .opening-comic-video-page .model-post-slot.slot-2,
+  .opening-comic-video-page .model-post-slot.slot-3,
+  .opening-comic-video-page .model-post-slot.slot-4,
+  .opening-comic-video-page .model-post-slot.slot-5,
+  .opening-comic-video-page .model-post-slot.slot-6 {
     grid-row: auto;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    transform: none;
   }
 
   .body-check-form {
