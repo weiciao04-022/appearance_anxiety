@@ -14,7 +14,7 @@
   <link rel="preload" as="image" href="./pic/B/B_male15-18%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male20-25%25.png" />
   <link rel="preload" as="image" href="./pic/B/B_male%3E30%25.png" />
-  <link rel="stylesheet" href="style.css?v=20260616-12" />
+  <link rel="stylesheet" href="style.css?v=20260616-13" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
@@ -28,6 +28,7 @@
         'model-post-orbit',
         'body-manga-scroll',
         'manga-panel-four',
+        'body-cost-calculator',
         'manga-panel-after-experience'
       ];
       if (window.location.hash) {
@@ -3679,6 +3680,73 @@
       data-body-management-experience
       aria-label="體態管理方式互動體驗"
     ></section>
+
+    <section
+      id="body-cost-calculator"
+      class="body-cost-calculator"
+      data-body-cost-calculator
+      aria-labelledby="bodyCostTitle"
+    >
+      <div class="body-cost-inner">
+        <header class="body-cost-heading">
+          <p>資料互動</p>
+          <h2 id="bodyCostTitle">體態管理支出試算</h2>
+          <span>輸入每月可支配生活費，並選擇你正在使用或曾被推薦的體態管理產品與服務。本試算將估算相關支出每月佔生活費的比例，作為理解體態管理經濟門檻的參考。</span>
+        </header>
+
+        <div class="body-cost-layout">
+          <div class="body-cost-control-panel">
+            <label class="body-cost-budget-field" for="bodyCostBudget">
+              <span>每月生活費</span>
+              <div>
+                <b>NT$</b>
+                <input
+                  id="bodyCostBudget"
+                  type="text"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
+                  placeholder="例如 12000"
+                  value="12000"
+                  data-body-cost-budget
+                />
+              </div>
+            </label>
+
+            <div class="body-cost-actions" aria-label="支出試算操作">
+              <button type="button" data-body-cost-clear>清除選項</button>
+              <button type="button" data-body-cost-student>套用學生生活費 NT$12,000</button>
+            </div>
+
+            <div class="body-cost-list" data-body-cost-list aria-label="體態管理產品與服務清單"></div>
+          </div>
+
+          <aside class="body-cost-result-panel" aria-live="polite">
+            <p class="body-cost-result-label">估算結果</p>
+            <div class="body-cost-result-grid">
+              <div>
+                <span>每月估算支出</span>
+                <b data-body-cost-total>NT$0</b>
+              </div>
+              <div>
+                <span>佔生活費比例</span>
+                <b data-body-cost-percentage>0%</b>
+              </div>
+              <div>
+                <span>扣除後剩餘生活費</span>
+                <b data-body-cost-remaining>NT$12,000</b>
+              </div>
+            </div>
+            <div class="body-cost-progress" aria-hidden="true">
+              <span data-body-cost-progress></span>
+            </div>
+            <p class="body-cost-progress-note" data-body-cost-progress-note>0%</p>
+            <p class="body-cost-result-message" data-body-cost-message>尚未選擇任何支出項目。</p>
+          </aside>
+        </div>
+
+        <p class="body-cost-note">本試算採用台灣市場常見價格區間進行估算，實際金額會因品牌、地區、購買方案、課程頻率、醫療院所與個人需求而有所差異。本互動內容僅用於呈現體態管理相關消費壓力，不構成醫療、營養、運動或消費建議。</p>
+      </div>
+    </section>
 
     <article id="manga-panel-after-experience" class="manga-panel" data-manga-panel>
       <div class="manga-pair">

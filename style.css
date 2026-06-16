@@ -2354,7 +2354,17 @@ button:active,
 }
 
 .social-analysis-copy {
+  position: relative;
+  width: min(1120px, 94vw);
+  padding-block: clamp(48px, 7vw, 96px);
+}
+
+.social-analysis-copy > p {
+  position: relative;
+  z-index: 2;
   width: min(680px, 86vw);
+  margin-right: auto;
+  margin-left: auto;
 }
 
 @media (max-width: 900px) {
@@ -3317,28 +3327,52 @@ body,
 }
 
 .social-video-orbit {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(110px, 1fr));
-  gap: clamp(14px, 2vw, 22px);
-  width: min(980px, 100%);
-  margin: clamp(48px, 7vw, 84px) auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  width: min(1120px, 94vw);
+  height: min(760px, 76vh);
+  margin: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
 }
 
 .social-video-orbit .video-card {
-  position: relative;
-  width: 100%;
-  min-width: 0;
+  position: absolute;
+  width: clamp(118px, 12vw, 176px);
   opacity: 1;
-  transform: none;
+  transform: rotate(var(--social-tilt));
 }
 
-.social-video-orbit .video-card:nth-child(odd) {
-  margin-top: 28px;
+.social-video-orbit .video-card:nth-child(1) {
+  top: 4%;
+  left: 1%;
+  --social-tilt: -4deg;
 }
 
-.social-video-orbit .video-card:nth-child(even) {
-  margin-bottom: 28px;
+.social-video-orbit .video-card:nth-child(2) {
+  top: 36%;
+  left: 7%;
+  --social-tilt: 5deg;
+}
+
+.social-video-orbit .video-card:nth-child(3) {
+  bottom: 2%;
+  left: 0;
+  --social-tilt: -2deg;
+}
+
+.social-video-orbit .video-card:nth-child(4) {
+  top: 12%;
+  right: 6%;
+  --social-tilt: 4deg;
+}
+
+.social-video-orbit .video-card:nth-child(5) {
+  right: 0;
+  bottom: 12%;
+  --social-tilt: -3deg;
 }
 
 .video-card::before {
@@ -4988,7 +5022,10 @@ body,
   }
 
   .social-video-orbit {
+    position: relative;
+    inset: auto;
     display: flex;
+    height: auto;
     width: 100vw;
     margin: 36px 0 36px calc((100vw - min(100%, 92vw)) / -2);
     padding: 0 6vw 12px;
@@ -4996,6 +5033,8 @@ body,
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
+    pointer-events: auto;
+    transform: none;
   }
 
   .social-video-orbit::-webkit-scrollbar {
@@ -5003,11 +5042,14 @@ body,
   }
 
   .social-video-orbit .video-card {
+    position: relative;
+    inset: auto;
     flex: 0 0 min(44vw, 170px);
     width: auto;
     padding: 10px;
     border-radius: 12px;
     scroll-snap-align: center;
+    transform: none;
   }
 
   .social-video-orbit .video-card:nth-child(odd),
