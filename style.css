@@ -221,7 +221,7 @@ button:active,
 .ig-post { min-height: 230px; }
 .ig-post.story { min-height: 100%; }
 
-#opening-video-section {
+#comic-opening {
   min-height: 1500vh;
   align-items: flex-start;
   padding-top: 0;
@@ -350,7 +350,7 @@ button:active,
 }
 
 .opening-comic-strip img.is-active {
-  opacity: 1;
+  opacity: 1 !important;
   transform: translateY(0) scale(1);
 }
 
@@ -574,6 +574,58 @@ button:active,
 .body-choice-result {
   min-height: 28px;
   margin: 0;
+  font-weight: 700;
+}
+
+.body-check-section .subtitle {
+  max-width: 42em;
+  text-align: center;
+  line-height: 1.7;
+}
+
+.body-check-form {
+  width: min(620px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: end;
+  margin-top: 8px;
+}
+
+.body-check-form label {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.body-check-form label span {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  border: 1px solid #000;
+  background: #fff;
+}
+
+.body-check-form input {
+  min-height: 48px;
+  min-width: 0;
+  padding: 0 14px;
+  border: 0;
+  background: transparent;
+  color: #000;
+  font: inherit;
+}
+
+.body-check-form b {
+  padding-right: 14px;
+}
+
+.body-check-result {
+  width: min(620px, 100%);
+  min-height: 30px;
+  margin: 0;
+  line-height: 1.7;
+  text-align: center;
   font-weight: 700;
 }
 
@@ -1522,6 +1574,57 @@ button:active,
   text-decoration: none;
 }
 
+.case-float-menu {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 80;
+  display: grid;
+  justify-items: end;
+  gap: 10px;
+}
+
+.case-menu-toggle {
+  min-width: 118px;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid #000;
+  border-radius: 999px;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+}
+
+.case-menu-panel {
+  width: min(260px, calc(100vw - 44px));
+  padding: 14px;
+  border: 1px solid #000;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.14);
+  box-sizing: border-box;
+}
+
+.case-menu-title {
+  margin: 0 0 8px;
+  font-weight: 800;
+}
+
+.case-menu-panel a {
+  display: block;
+  padding: 10px 8px;
+  border-top: 1px solid #eee;
+  color: #000;
+  text-decoration: none;
+}
+
+.case-menu-panel a:hover,
+.case-menu-panel a:focus {
+  background: #f3f3f3;
+}
+
 .case-closing-note {
   width: min(520px, 100%);
   margin: 12px 0 0;
@@ -1543,7 +1646,7 @@ button:active,
     padding: 72px 22px;
   }
 
-  #opening-video-section {
+  #comic-opening {
     min-height: 1320vh;
   }
 
@@ -1557,6 +1660,10 @@ button:active,
 
   .opening-comic-strip {
     height: min(78vh, 680px);
+  }
+
+  .body-check-form {
+    grid-template-columns: 1fr;
   }
 
   .model-post-orbit-wrap {

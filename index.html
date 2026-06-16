@@ -52,12 +52,12 @@
       <p class="site-preloader-status" data-preload-status>載入素材 0%</p>
     </div>
   </div>
-  <section id="opening-video-section" class="section reveal scroll-video-intro opening-comic-intro" data-comic-intro>
+  <section id="comic-opening" class="section reveal scroll-video-intro opening-comic-intro comic-section" data-comic-intro>
     <div class="opening-comic-sticky">
       <div class="opening-comic-hero" aria-label="專題開場">
         <img src="./pic/opening-comic/1.jpg" alt="" aria-hidden="true" />
         <div>
-          <p class="section-kicker">互動新聞專題</p>
+          <p class="section-kicker">漫畫</p>
           <h1>體態、社群與健康焦慮</h1>
           <span>向下滑動</span>
         </div>
@@ -78,6 +78,44 @@
         </div>
         <p class="opening-comic-hint">下滑看故事</p>
       </div>
+    </div>
+  </section>
+
+  <section id="intro-text" class="section reveal text-page">
+    <div class="text-column">
+      <p>這裡放第一段文字，銜接漫畫中出現的體態焦慮、觀看經驗與社群日常。</p>
+    </div>
+  </section>
+
+  <section id="ideal-body-check" class="section reveal body-check-section">
+    <div class="frame-wrap center-col">
+      <p class="title">理想身材和體態檢測表</p>
+      <p class="subtitle">先點選你的理想身材，再輸入目前體脂率，看看距離差多少。</p>
+      <div class="body-gender-toggle" aria-label="選擇性別">
+        <button class="body-gender-button active" data-gender="female" type="button">女生</button>
+        <button class="body-gender-button" data-gender="male" type="button">男生</button>
+      </div>
+      <div class="body-choice-workspace" data-body-choice-workspace>
+        <div class="body-option-grid" id="bodyOptionGrid" aria-live="polite"></div>
+        <div id="choiceResult" class="body-choice-result">請先選擇一張圖片</div>
+      </div>
+      <form class="body-check-form" id="bodyCheckForm">
+        <label>
+          目前體脂率
+          <span>
+            <input id="bodyFatInput" type="number" min="1" max="70" step="0.1" inputmode="decimal" placeholder="例：26" />
+            <b>%</b>
+          </span>
+        </label>
+        <button class="button" type="submit">計算差距</button>
+      </form>
+      <p id="bodyCheckResult" class="body-check-result">選擇理想身材並輸入目前體脂率後，就可以開始比較。</p>
+    </div>
+  </section>
+
+  <section id="after-body-text" class="section reveal text-page">
+    <div class="frame-wrap center-col">
+      <p>這裡放第二段文字，說明「理想」如何從單純偏好，逐漸變成可被量化與比較的目標。</p>
     </div>
   </section>
 
@@ -118,65 +156,6 @@
             <source src="./video/model-posts/6.m4v" type="video/mp4" />
           </video>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="frame-4" class="section reveal">
-    <div class="frame-wrap center-col">
-      <p class="title">你最希望擁有哪種身材呢</p>
-      <div class="body-gender-toggle" aria-label="選擇性別">
-        <button class="body-gender-button active" data-gender="female" type="button">女生</button>
-        <button class="body-gender-button" data-gender="male" type="button">男生</button>
-      </div>
-      <div class="body-choice-workspace" data-body-choice-workspace>
-        <div class="body-option-grid" id="bodyOptionGrid" aria-live="polite"></div>
-        <div id="choiceResult" class="body-choice-result">請先選擇一張圖片</div>
-      </div>
-    </div>
-  </section>
-
-  <section id="story-1-page" class="section reveal">
-    <div class="frame-wrap center-col">
-      <p class="title">看看大家的故事</p>
-      <p class="case-section-intro">其實，很多人的現實體態都和心中的理想身材有距離。有人為了變瘦調整飲食，有人為了增肌增加開銷，也有人在運動、社群比較與日常生活之間反覆拉扯；這些努力不一定只關於外貌，也常常牽動時間、金錢與心理壓力。</p>
-      <div class="case-row">
-        <a class="case-card" href="pages/case1.html" aria-label="閱讀皓承的故事">
-          <video class="case-card-media" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-            <source src="./video/cases/case1.mov" type="video/quicktime" />
-          </video>
-          <span>案例一</span>
-        </a>
-        <a class="case-card" href="pages/case2.html" aria-label="閱讀佩璇的故事">
-          <video class="case-card-media" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-            <source src="./video/cases/case2.mp4" type="video/mp4" />
-          </video>
-          <span>案例二</span>
-        </a>
-        <a class="case-card" href="pages/case3.html" aria-label="閱讀案例三">
-          <video class="case-card-media" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-            <source src="./video/cases/case3.mov" type="video/quicktime" />
-          </video>
-          <span>案例三</span>
-        </a>
-        <a class="case-card" href="pages/case4.html" aria-label="閱讀案例四">
-          <video class="case-card-media" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-            <source src="./video/cases/case4.mov" type="video/quicktime" />
-          </video>
-          <span>案例四</span>
-        </a>
-        <a class="case-card" href="pages/case5.html" aria-label="閱讀案例五">
-          <video class="case-card-media" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-            <source src="./video/cases/case5.mov" type="video/quicktime" />
-          </video>
-          <span>案例五</span>
-        </a>
-        <a class="case-card" href="pages/case6.html" aria-label="閱讀案例六">
-          <video class="case-card-media" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
-            <source src="./video/cases/case6.mov" type="video/quicktime" />
-          </video>
-          <span>案例六</span>
-        </a>
       </div>
     </div>
   </section>
@@ -3516,6 +3495,21 @@
     ></section>
 
   </section>
+
+  <nav class="case-float-menu" data-case-menu>
+    <button class="case-menu-toggle" type="button" aria-expanded="false" aria-controls="caseMenuPanel">案例故事</button>
+    <div class="case-menu-panel" id="caseMenuPanel" hidden>
+      <p class="case-menu-title">案例故事</p>
+      <a href="#comic-opening">故事主頁</a>
+      <a href="pages/case1.html">案例一</a>
+      <a href="pages/case2.html">案例二</a>
+      <a href="pages/case3.html">案例三</a>
+      <a href="pages/case4.html">案例四</a>
+      <a href="pages/case5.html">案例五</a>
+      <a href="pages/case6.html">案例六</a>
+      <a href="pages/case1.html">完整文章</a>
+    </div>
+  </nav>
 
   <script src="script.js?v=20260611-01"></script>
 </body>

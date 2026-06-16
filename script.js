@@ -207,7 +207,7 @@ function initScrollVideoIntro() {
       hero.style.pointerEvents = titleExitProgress > 0.95 ? 'none' : '';
     }
     if (stage) {
-      stage.style.opacity = String(Math.min(1, panelProgress * 1.6));
+      stage.style.opacity = String(Math.min(1, panelProgress * 10));
       stage.style.transform = `translateY(${Math.max(0, 28 - panelProgress * 28)}px)`;
     }
     if (progressBar) progressBar.style.width = `${percent}%`;
@@ -464,6 +464,41 @@ function updateBodyChoiceResult() {
   `;
 }
 
+function formatBodyFatDifference(value) {
+  return Number.isInteger(value) ? String(value) : value.toFixed(1);
+}
+
+function updateBodyCheckResult() {
+  const result = document.getElementById('bodyCheckResult');
+  const input = document.getElementById('bodyFatInput');
+  if (!result || !input) return;
+
+  const selected = IdealBodySelector.selectedBodyImage;
+  const currentBodyFat = Number(input.value);
+  if (!selected && !currentBodyFat) {
+    result.textContent = '選擇理想身材並輸入目前體脂率後，就可以開始比較。';
+    return;
+  }
+  if (!selected) {
+    result.textContent = '請先點選一張理想身材圖片。';
+    return;
+  }
+  if (!currentBodyFat || currentBodyFat <= 0) {
+    result.textContent = `你選擇的理想身材約落在體脂 ${selected.bodyFatRange}，請輸入目前體脂率來比較。`;
+    return;
+  }
+
+  if (currentBodyFat < selected.bodyFatMin) {
+    result.textContent = `你目前比理想身材區間低 ${formatBodyFatDifference(selected.bodyFatMin - currentBodyFat)} 個百分點；目標區間約為 ${selected.bodyFatRange}。`;
+    return;
+  }
+  if (currentBodyFat > selected.bodyFatMax) {
+    result.textContent = `你目前比理想身材區間高 ${formatBodyFatDifference(currentBodyFat - selected.bodyFatMax)} 個百分點；目標區間約為 ${selected.bodyFatRange}。`;
+    return;
+  }
+  result.textContent = `你目前已落在選擇的理想身材區間，約為體脂 ${selected.bodyFatRange}。`;
+}
+
 function renderBodyOptions() {
   const optionGrid = document.getElementById('bodyOptionGrid');
   if (!optionGrid) return;
@@ -529,6 +564,7 @@ async function initIdealBodySelector() {
     });
     renderBodyOptions();
     updateBodyChoiceResult();
+    updateBodyCheckResult();
   }
 
   genderButtons.forEach((button) => {
@@ -547,6 +583,7 @@ async function initIdealBodySelector() {
     IdealBodySelector.selectedBodyImage = bodyFatImages.find((image) => image.id === IdealBodySelector.selectedOptionId) || null;
     renderBodyOptions();
     updateBodyChoiceResult();
+    updateBodyCheckResult();
 
     if (!IdealBodySelector.selectedBodyImage) return;
 
@@ -593,6 +630,48 @@ async function initIdealBodySelector() {
 }
 
 initIdealBodySelector();
+
+function initBodyCheckForm() {
+  const form = document.getElementById('bodyCheckForm');
+  const input = document.getElementById('bodyFatInput');
+  if (!form || !input) return;
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    updateBodyCheckResult();
+  });
+  input.addEventListener('input', updateBodyCheckResult);
+}
+
+initBodyCheckForm();
+
+function initCaseFloatMenu() {
+  const menu = document.querySelector('[data-case-menu]');
+  if (!menu) return;
+
+  const toggle = menu.querySelector('.case-menu-toggle');
+  const panel = menu.querySelector('.case-menu-panel');
+  if (!toggle || !panel) return;
+
+  function setOpen(isOpen) {
+    panel.hidden = !isOpen;
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  }
+
+  toggle.addEventListener('click', () => {
+    setOpen(panel.hidden);
+  });
+
+  panel.addEventListener('click', (event) => {
+    if (event.target.closest('a')) setOpen(false);
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!menu.contains(event.target)) setOpen(false);
+  });
+}
+
+initCaseFloatMenu();
 
 function initHealthyMealSection() {
   const section = document.querySelector('[data-meal-section]');
