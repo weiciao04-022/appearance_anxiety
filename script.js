@@ -17,12 +17,6 @@ const siteAssetManifest = [
   './pic/E/male_2.png',
   './pic/E/male_3.png',
   './pic/E/male_4.png',
-  './pic/health-magnifier/A.png',
-  './pic/health-magnifier/B.png',
-  './pic/health-magnifier/C.png',
-  './pic/health-magnifier/behindA.png',
-  './pic/health-magnifier/behindB.png',
-  './pic/health-magnifier/behindC.png',
   './pic/product-experience/healthmeal.png',
   './pic/product-experience/gym.png',
   './pic/product-experience/silmshot.png',
@@ -50,12 +44,12 @@ const siteAssetManifest = [
 ];
 
 const siteVideoManifest = [
-  './video/model-posts/1.m4v',
-  './video/model-posts/2.m4v',
-  './video/model-posts/3.m4v',
-  './video/model-posts/4.m4v',
-  './video/model-posts/5.m4v',
-  './video/model-posts/6.m4v',
+  './video/model-posts/j1.mp4',
+  './video/model-posts/j2.mp4',
+  './video/model-posts/j3.mp4',
+  './video/model-posts/j4.mp4',
+  './video/model-posts/j5.mp4',
+  './video/model-posts/j6.mp4',
   './video/cases/case1.mov',
   './video/cases/case2.mp4',
   './video/cases/case3.mov',
@@ -2828,121 +2822,85 @@ function initBodyManagementExperienceHub() {
   window.bodyManagementExperienceHub.mount();
 }
 
+function initModelPostVideos() {
+  const section = document.querySelector('#model-post-orbit');
+  if (!section) return;
+  const videos = Array.from(section.querySelectorAll('video'));
+  videos.forEach((video) => {
+    video.muted = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.preload = 'auto';
+    video.load();
+  });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        videos.forEach((video) => {
+          if (entry.isIntersecting) {
+            video.play().catch(() => {});
+          } else {
+            video.pause();
+          }
+        });
+      });
+    },
+    { threshold: 0.18 }
+  );
+
+  observer.observe(section);
+}
+
 function initXinmiIntroCards() {
   const stack = document.querySelector('[data-xinmi-card-stack]');
   if (!stack) return;
 
-  const cards = Array.from(stack.querySelectorAll('[data-xinmi-card]'));
-  const comparison = stack.querySelector('[data-xinmi-comparison]');
-  const compareRange = stack.querySelector('[data-xinmi-compare-range]');
-  const beforeImage = stack.querySelector('[data-xinmi-before]');
-  const afterImage = stack.querySelector('[data-xinmi-after]');
-  const monthButtons = Array.from(stack.querySelectorAll('[data-xinmi-month]'));
-  const foodCarousel = stack.querySelector('[data-xinmi-food-carousel]');
-  const foodImage = stack.querySelector('[data-xinmi-food-image]');
-  const foodDots = Array.from(stack.querySelectorAll('[data-xinmi-food-dot]'));
-
-  const months = [
-    {
-      before: './pic/xinmi/month1before.jpeg',
-      after: './pic/xinmi/month1after.jpeg',
-      label: '第一個月'
-    },
-    {
-      before: './pic/xinmi/month2before.jpeg',
-      after: './pic/xinmi/month2after.jpeg',
-      label: '第二個月'
-    },
-    {
-      before: './pic/xinmi/month3before.jpeg',
-      after: './pic/xinmi/month3after.jpeg',
-      label: '第三個月'
-    }
-  ];
-  const foodImages = [
-    { src: './pic/xinmi/food1.jpg', alt: '心咪自煮飲食照片 1' },
-    { src: './pic/xinmi/food2.jpg', alt: '心咪自煮飲食照片 2' },
-    { src: './pic/xinmi/food3.jpg', alt: '心咪自煮飲食照片 3' }
-  ];
-
-  let activeFoodIndex = 0;
-
+  const panels = Array.from(stack.querySelectorAll('[data-xinmi-panel]'));
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
-  function setActiveCard() {
+  function setActivePanel() {
     const rect = stack.getBoundingClientRect();
-    const scrollable = Math.max(1, rect.height - window.innerHeight);
-    const progress = clamp(-rect.top / scrollable, 0, 0.999);
-    const activeIndex = clamp(Math.floor(progress * cards.length), 0, cards.length - 1);
-    cards.forEach((card, index) => {
-      card.classList.toggle('is-visible', index <= activeIndex);
-      card.classList.toggle('is-active', index === activeIndex);
-      card.style.zIndex = String(index <= activeIndex ? index + 1 : 0);
+    const stackTop = rect.top + window.scrollY;
+    const scrollable = Math.max(1, stack.offsetHeight - window.innerHeight);
+    const progress = clamp((window.scrollY - stackTop) / scrollable, 0, 0.999);
+    const activeIndex = clamp(Math.floor(progress * panels.length), 0, panels.length - 1);
+    panels.forEach((panel, index) => {
+      panel.classList.toggle('is-active', index === activeIndex);
+      panel.style.zIndex = String(index === activeIndex ? 5 : 0);
     });
   }
 
-  function setComparisonReveal(value) {
+  function setComparisonReveal(comparison, value) {
     if (!comparison) return;
     comparison.style.setProperty('--reveal', `${value}%`);
   }
 
-  function setMonth(index) {
-    const month = months[index];
-    if (!month || !beforeImage || !afterImage || !comparison) return;
-    beforeImage.src = month.before;
-    afterImage.src = month.after;
-    beforeImage.alt = `心咪${month.label} before 體態紀錄`;
-    afterImage.alt = `心咪${month.label} after 體態紀錄`;
-    comparison.dataset.month = String(index);
-    monthButtons.forEach((button, buttonIndex) => {
-      button.classList.toggle('active', buttonIndex === index);
+  stack.querySelectorAll('[data-xinmi-compare-range]').forEach((range) => {
+    const comparison = range.closest('[data-xinmi-comparison]');
+    setComparisonReveal(comparison, range.value);
+    range.addEventListener('input', (event) => {
+      setComparisonReveal(comparison, event.target.value);
     });
+  });
+
+  function tickActivePanel() {
+    const rect = stack.getBoundingClientRect();
+    if (rect.top < window.innerHeight * 1.2 && rect.bottom > -window.innerHeight * 0.2) {
+      setActivePanel();
+    }
+    window.requestAnimationFrame(tickActivePanel);
   }
 
-  function setFoodImage(index) {
-    const image = foodImages[index];
-    if (!image || !foodImage) return;
-    activeFoodIndex = index;
-    foodImage.src = image.src;
-    foodImage.alt = image.alt;
-    foodDots.forEach((dot, dotIndex) => {
-      dot.classList.toggle('active', dotIndex === activeFoodIndex);
-    });
-  }
-
-  window.addEventListener('scroll', setActiveCard, { passive: true });
-  window.addEventListener('resize', setActiveCard);
-
-  compareRange?.addEventListener('input', (event) => {
-    setComparisonReveal(event.target.value);
-  });
-
-  monthButtons.forEach((button) => {
-    button.addEventListener('click', () => setMonth(Number(button.dataset.xinmiMonth || 0)));
-  });
-
-  foodCarousel?.addEventListener('click', (event) => {
-    if (event.target.closest('[data-xinmi-food-prev]')) {
-      setFoodImage((activeFoodIndex + foodImages.length - 1) % foodImages.length);
-      return;
-    }
-    if (event.target.closest('[data-xinmi-food-next]')) {
-      setFoodImage((activeFoodIndex + 1) % foodImages.length);
-      return;
-    }
-    const dot = event.target.closest('[data-xinmi-food-dot]');
-    if (dot) setFoodImage(Number(dot.dataset.xinmiFoodDot || 0));
-  });
-
-  setComparisonReveal(compareRange?.value || 50);
-  setMonth(0);
-  setFoodImage(0);
-  setActiveCard();
+  window.addEventListener('scroll', setActivePanel, { passive: true });
+  window.addEventListener('resize', setActivePanel);
+  setActivePanel();
+  window.requestAnimationFrame(tickActivePanel);
 }
 
 initDynamicContentTransitions();
-initHealthMagnifierChallenge();
 initBodyManagementExperienceHub();
 initBodyMangaScroll();
+initModelPostVideos();
 initXinmiIntroCards();
 initSitePreloader();
