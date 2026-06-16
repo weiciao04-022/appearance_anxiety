@@ -1393,7 +1393,7 @@ function initBodyMangaScroll() {
   if (!section) return;
 
   const panels = Array.from(section.querySelectorAll('[data-manga-panel]'));
-  const videoOrbit = section.querySelector('[data-video-orbit]');
+  const videoOrbits = Array.from(document.querySelectorAll('[data-video-orbit]'));
   const typingSearchFields = Array.from(section.querySelectorAll('[data-typing-search]'));
 
   const videoCards = [
@@ -1437,7 +1437,7 @@ function initBodyMangaScroll() {
     '怎麼停止和別人比較身材'
   ];
 
-  if (videoOrbit) {
+  videoOrbits.forEach((videoOrbit) => {
     videoOrbit.innerHTML = videoCards.map((card) => `
       <article class="video-card" data-video-src="${card.src}">
         <video
@@ -1453,7 +1453,7 @@ function initBodyMangaScroll() {
         <span class="video-card-title">${card.title}</span>
       </article>
     `).join('');
-  }
+  });
 
   if ('IntersectionObserver' in window) {
     const mangaObserver = new IntersectionObserver((entries) => {
@@ -1470,8 +1470,10 @@ function initBodyMangaScroll() {
     }, { threshold: 0.22 });
 
     panels.forEach((panel) => mangaObserver.observe(panel));
+    videoOrbits.forEach((orbit) => mangaObserver.observe(orbit));
   } else {
     panels.forEach((panel) => panel.classList.add('is-visible'));
+    videoOrbits.forEach((orbit) => orbit.classList.add('is-visible'));
   }
 
   if (typingSearchFields.length) {
