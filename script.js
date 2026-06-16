@@ -37,7 +37,16 @@ const siteAssetManifest = [
   './pic/body-game/card-healthy-meal.png',
   './pic/body-game/card-gym.png',
   './pic/body-game/card-injection.png',
-  './pic/body-game/card-influencer-challenge.png'
+  './pic/body-game/card-influencer-challenge.png',
+  './pic/xinmi/month1before.jpeg',
+  './pic/xinmi/month1after.jpeg',
+  './pic/xinmi/month2before.jpeg',
+  './pic/xinmi/month2after.jpeg',
+  './pic/xinmi/month3before.jpeg',
+  './pic/xinmi/month3after.jpeg',
+  './pic/xinmi/food1.jpg',
+  './pic/xinmi/food2.jpg',
+  './pic/xinmi/food3.jpg'
 ];
 
 const siteVideoManifest = [
@@ -2819,8 +2828,121 @@ function initBodyManagementExperienceHub() {
   window.bodyManagementExperienceHub.mount();
 }
 
+function initXinmiIntroCards() {
+  const stack = document.querySelector('[data-xinmi-card-stack]');
+  if (!stack) return;
+
+  const cards = Array.from(stack.querySelectorAll('[data-xinmi-card]'));
+  const comparison = stack.querySelector('[data-xinmi-comparison]');
+  const compareRange = stack.querySelector('[data-xinmi-compare-range]');
+  const beforeImage = stack.querySelector('[data-xinmi-before]');
+  const afterImage = stack.querySelector('[data-xinmi-after]');
+  const monthButtons = Array.from(stack.querySelectorAll('[data-xinmi-month]'));
+  const foodCarousel = stack.querySelector('[data-xinmi-food-carousel]');
+  const foodImage = stack.querySelector('[data-xinmi-food-image]');
+  const foodDots = Array.from(stack.querySelectorAll('[data-xinmi-food-dot]'));
+
+  const months = [
+    {
+      before: './pic/xinmi/month1before.jpeg',
+      after: './pic/xinmi/month1after.jpeg',
+      label: '第一個月'
+    },
+    {
+      before: './pic/xinmi/month2before.jpeg',
+      after: './pic/xinmi/month2after.jpeg',
+      label: '第二個月'
+    },
+    {
+      before: './pic/xinmi/month3before.jpeg',
+      after: './pic/xinmi/month3after.jpeg',
+      label: '第三個月'
+    }
+  ];
+  const foodImages = [
+    { src: './pic/xinmi/food1.jpg', alt: '心咪自煮飲食照片 1' },
+    { src: './pic/xinmi/food2.jpg', alt: '心咪自煮飲食照片 2' },
+    { src: './pic/xinmi/food3.jpg', alt: '心咪自煮飲食照片 3' }
+  ];
+
+  let activeFoodIndex = 0;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+  function setActiveCard() {
+    const rect = stack.getBoundingClientRect();
+    const scrollable = Math.max(1, rect.height - window.innerHeight);
+    const progress = clamp(-rect.top / scrollable, 0, 0.999);
+    const activeIndex = clamp(Math.floor(progress * cards.length), 0, cards.length - 1);
+    cards.forEach((card, index) => {
+      card.classList.toggle('is-visible', index <= activeIndex);
+      card.classList.toggle('is-active', index === activeIndex);
+      card.style.zIndex = String(index <= activeIndex ? index + 1 : 0);
+    });
+  }
+
+  function setComparisonReveal(value) {
+    if (!comparison) return;
+    comparison.style.setProperty('--reveal', `${value}%`);
+  }
+
+  function setMonth(index) {
+    const month = months[index];
+    if (!month || !beforeImage || !afterImage || !comparison) return;
+    beforeImage.src = month.before;
+    afterImage.src = month.after;
+    beforeImage.alt = `心咪${month.label} before 體態紀錄`;
+    afterImage.alt = `心咪${month.label} after 體態紀錄`;
+    comparison.dataset.month = String(index);
+    monthButtons.forEach((button, buttonIndex) => {
+      button.classList.toggle('active', buttonIndex === index);
+    });
+  }
+
+  function setFoodImage(index) {
+    const image = foodImages[index];
+    if (!image || !foodImage) return;
+    activeFoodIndex = index;
+    foodImage.src = image.src;
+    foodImage.alt = image.alt;
+    foodDots.forEach((dot, dotIndex) => {
+      dot.classList.toggle('active', dotIndex === activeFoodIndex);
+    });
+  }
+
+  window.addEventListener('scroll', setActiveCard, { passive: true });
+  window.addEventListener('resize', setActiveCard);
+
+  compareRange?.addEventListener('input', (event) => {
+    setComparisonReveal(event.target.value);
+  });
+
+  monthButtons.forEach((button) => {
+    button.addEventListener('click', () => setMonth(Number(button.dataset.xinmiMonth || 0)));
+  });
+
+  foodCarousel?.addEventListener('click', (event) => {
+    if (event.target.closest('[data-xinmi-food-prev]')) {
+      setFoodImage((activeFoodIndex + foodImages.length - 1) % foodImages.length);
+      return;
+    }
+    if (event.target.closest('[data-xinmi-food-next]')) {
+      setFoodImage((activeFoodIndex + 1) % foodImages.length);
+      return;
+    }
+    const dot = event.target.closest('[data-xinmi-food-dot]');
+    if (dot) setFoodImage(Number(dot.dataset.xinmiFoodDot || 0));
+  });
+
+  setComparisonReveal(compareRange?.value || 50);
+  setMonth(0);
+  setFoodImage(0);
+  setActiveCard();
+}
+
 initDynamicContentTransitions();
 initHealthMagnifierChallenge();
 initBodyManagementExperienceHub();
 initBodyMangaScroll();
+initXinmiIntroCards();
 initSitePreloader();
