@@ -370,9 +370,14 @@ button:active,
 }
 
 .opening-comic-video-page {
+  --opening-video-frame-width: min(48vw, 540px);
+  --opening-video-frame-height: calc(var(--opening-video-frame-width) * 1.25);
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(128px, 172px) minmax(320px, 540px) minmax(128px, 172px);
+  grid-template-columns:
+    minmax(118px, calc((var(--opening-video-frame-height) - clamp(10px, 1.5vw, 16px) * 2) / 3 * 0.8))
+    var(--opening-video-frame-width)
+    minmax(118px, calc((var(--opening-video-frame-height) - clamp(10px, 1.5vw, 16px) * 2) / 3 * 0.8));
   align-items: center;
   justify-content: center;
   gap: clamp(18px, 3vw, 32px);
@@ -380,8 +385,8 @@ button:active,
 }
 
 .opening-comic-empty-page {
-  width: min(100%, 540px);
-  height: 100%;
+  width: var(--opening-video-frame-width);
+  aspect-ratio: 4 / 5;
   display: grid;
   place-items: center;
   border: 1px solid #000;
@@ -400,13 +405,17 @@ button:active,
   display: grid;
   grid-template-rows: repeat(3, minmax(0, 1fr));
   gap: clamp(10px, 1.5vw, 16px);
-  height: 100%;
+  height: var(--opening-video-frame-height);
   align-items: center;
 }
 
 .opening-comic-video-page .model-post-slot {
   position: relative;
-  width: min(100%, 164px);
+  inset: auto;
+  width: min(
+    100%,
+    calc((var(--opening-video-frame-height) - clamp(10px, 1.5vw, 16px) * 2) / 3 * 0.8)
+  );
   margin: 0 auto;
   aspect-ratio: 4 / 5;
   border-radius: 14px;
@@ -486,6 +495,15 @@ button:active,
 .model-post-slot.slot-4 { top: 35%; right: 5%; }
 .model-post-slot.slot-5 { bottom: 2%; left: 5%; }
 .model-post-slot.slot-6 { right: 5%; bottom: 2%; }
+
+.opening-comic-video-page .model-post-slot.slot-1,
+.opening-comic-video-page .model-post-slot.slot-2,
+.opening-comic-video-page .model-post-slot.slot-3,
+.opening-comic-video-page .model-post-slot.slot-4,
+.opening-comic-video-page .model-post-slot.slot-5,
+.opening-comic-video-page .model-post-slot.slot-6 {
+  inset: auto;
+}
 
 .button {
   display: inline-flex;
@@ -2726,19 +2744,24 @@ button:active,
   }
 
   .opening-comic-video-page {
+    --opening-video-frame-width: min(76vw, 340px);
+    --opening-video-frame-height: calc(var(--opening-video-frame-width) * 1.25);
     width: min(100%, 430px);
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: minmax(0, 1fr) auto auto auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto 110px 110px;
     gap: 10px;
     height: auto;
     min-height: 100%;
+    align-content: center;
   }
 
   .opening-comic-empty-page {
     grid-column: 1 / -1;
-    width: 100%;
-    aspect-ratio: 3 / 5;
+    grid-row: 1;
+    width: var(--opening-video-frame-width);
+    aspect-ratio: 4 / 5;
     height: auto;
+    justify-self: center;
   }
 
   .opening-comic-video-rail {
@@ -2746,7 +2769,16 @@ button:active,
   }
 
   .opening-comic-video-page .model-post-slot {
-    width: min(100%, 128px);
+    width: min(100%, 88px);
+  }
+
+  .opening-comic-video-page .slot-1,
+  .opening-comic-video-page .slot-3,
+  .opening-comic-video-page .slot-5,
+  .opening-comic-video-page .slot-2,
+  .opening-comic-video-page .slot-4,
+  .opening-comic-video-page .slot-6 {
+    grid-row: auto;
   }
 
   .body-check-form {

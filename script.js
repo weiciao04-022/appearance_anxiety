@@ -46,12 +46,6 @@ const siteAssetManifest = [
 ];
 
 const siteVideoManifest = [
-  './video/model-posts/j1.mp4',
-  './video/model-posts/j2.mp4',
-  './video/model-posts/j3.mp4',
-  './video/model-posts/j4.mp4',
-  './video/model-posts/j5.mp4',
-  './video/model-posts/j6.mp4',
   './video/cases/case1.mov',
   './video/cases/case2.mp4',
   './video/cases/case3.mov',
@@ -2818,7 +2812,7 @@ function initBodyManagementExperienceHub() {
 }
 
 function initModelPostVideos() {
-  const sections = Array.from(document.querySelectorAll('#model-post-orbit, [data-model-post-videos]'));
+  const sections = Array.from(document.querySelectorAll('[data-model-post-videos]'));
   if (!sections.length) return;
   const videos = sections.flatMap((section) => Array.from(section.querySelectorAll('video')));
   videos.forEach((video) => {
@@ -2832,7 +2826,8 @@ function initModelPostVideos() {
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
-        videos.forEach((video) => {
+        const sectionVideos = Array.from(entry.target.querySelectorAll('video'));
+        sectionVideos.forEach((video) => {
           if (entry.isIntersecting) {
             video.play().catch(() => {});
           } else {
