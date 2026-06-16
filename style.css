@@ -2228,7 +2228,7 @@ button:active,
 }
 
 .social-analysis-copy {
-  width: min(760px, 86vw);
+  width: min(680px, 86vw);
 }
 
 @media (max-width: 900px) {
