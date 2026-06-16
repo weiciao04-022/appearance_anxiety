@@ -330,7 +330,7 @@ button:active,
 }
 
 .opening-comic-stage {
-  width: min(760px, 92vw);
+  width: min(1120px, 92vw);
   display: grid;
   gap: 10px;
   opacity: var(--comic-stage-opacity, 0);
@@ -342,25 +342,63 @@ button:active,
   position: relative;
   width: 100%;
   height: min(82vh, 760px);
-  border: 1px solid #000;
-  overflow: hidden;
+  overflow: visible;
   background: #fff;
 }
 
-.opening-comic-strip img {
+.opening-comic-strip > [data-comic-panel] {
   position: absolute;
-  inset: 0;
-  width: 100%;
+  top: 0;
+  left: 50%;
+  width: min(760px, 100%);
   height: 100%;
-  object-fit: contain;
   opacity: 0;
-  transform: translateY(18px) scale(0.985);
+  transform: translate(-50%, 18px) scale(0.985);
   transition: opacity 0.28s ease, transform 0.28s ease;
 }
 
-.opening-comic-strip img.is-active {
+.opening-comic-strip img {
+  border: 1px solid #000;
+  object-fit: contain;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.opening-comic-strip > [data-comic-panel].is-active {
   opacity: 1 !important;
-  transform: translateY(0) scale(1);
+  transform: translate(-50%, 0) scale(1);
+}
+
+.opening-comic-video-page {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(128px, 172px) minmax(320px, 540px) minmax(128px, 172px);
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 3vw, 32px);
+  pointer-events: none;
+}
+
+.opening-comic-empty-page {
+  width: min(100%, 540px);
+  height: 100%;
+  border: 1px solid #000;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.opening-comic-video-rail {
+  display: grid;
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 1.5vw, 16px);
+  height: 100%;
+  align-items: center;
+}
+
+.opening-comic-video-page .model-post-slot {
+  position: relative;
+  width: min(100%, 164px);
+  margin: 0 auto;
 }
 
 .opening-comic-progress {
@@ -405,7 +443,6 @@ button:active,
 }
 
 .model-post-slot {
-  position: absolute;
   width: clamp(132px, 13vw, 210px);
   aspect-ratio: 4 / 5;
   display: grid;
@@ -419,6 +456,10 @@ button:active,
   font-weight: 800;
   text-align: center;
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+}
+
+.model-post-orbit .model-post-slot {
+  position: absolute;
 }
 
 .model-post-slot video {
@@ -2527,6 +2568,34 @@ button:active,
     height: auto;
     aspect-ratio: 3 / 5;
     box-sizing: border-box;
+  }
+
+  .opening-comic-strip > [data-comic-panel] {
+    width: min(100%, 430px);
+  }
+
+  .opening-comic-video-page {
+    width: min(100%, 430px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr) auto auto auto;
+    gap: 10px;
+    height: auto;
+    min-height: 100%;
+  }
+
+  .opening-comic-empty-page {
+    grid-column: 1 / -1;
+    width: 100%;
+    aspect-ratio: 3 / 5;
+    height: auto;
+  }
+
+  .opening-comic-video-rail {
+    display: contents;
+  }
+
+  .opening-comic-video-page .model-post-slot {
+    width: min(100%, 128px);
   }
 
   .body-check-form {
