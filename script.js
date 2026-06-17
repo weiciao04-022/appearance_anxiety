@@ -49,6 +49,13 @@ async function initSitePreloader() {
     if (progressBar) progressBar.style.width = `${percentage}%`;
     if (status) status.textContent = `載入素材 ${percentage}%`;
   };
+  const finishPreloader = () => {
+    if (progressBar) progressBar.style.width = '100%';
+    if (status) status.textContent = '準備完成';
+    document.documentElement.classList.remove('is-preloading');
+    preloader.classList.add('is-complete');
+    window.setTimeout(() => preloader.remove(), 500);
+  };
 
   const preloadTask = Promise.all(
     [
@@ -60,17 +67,21 @@ async function initSitePreloader() {
       })
     )
   );
-  await preloadTask;
-  await document.fonts?.ready;
-  const minimumDisplayTime = Math.max(0, 500 - (performance.now() - startedAt));
-  await new Promise((resolve) => window.setTimeout(resolve, minimumDisplayTime));
+  const timeoutTask = new Promise((resolve) => window.setTimeout(resolve, 1800));
 
-  if (progressBar) progressBar.style.width = '100%';
-  if (status) status.textContent = '準備完成';
-  document.documentElement.classList.remove('is-preloading');
-  preloader.classList.add('is-complete');
-  window.setTimeout(() => preloader.remove(), 500);
+  try {
+    await Promise.race([preloadTask, timeoutTask]);
+    await Promise.race([document.fonts?.ready || Promise.resolve(), timeoutTask]);
+  } catch {
+    // The article should stay readable even if one optional asset reports late.
+  }
+
+  const minimumDisplayTime = Math.max(0, 350 - (performance.now() - startedAt));
+  await new Promise((resolve) => window.setTimeout(resolve, minimumDisplayTime));
+  finishPreloader();
 }
+
+initSitePreloader();
 
 function initDynamicContentTransitions() {
   const observer = new MutationObserver((mutations) => {
@@ -1200,8 +1211,8 @@ function initHealthyMealSection() {
     progressTrack?.classList.remove('is-running');
     showScene('profile');
     syncBuild();
-    stageTitle.textContent = '先建立一餐建議量';
-    stageHint.textContent = '填寫身高、體重、性別、年齡與活動量，估算你這一餐的建議攝取範圍。';
+    if (stageTitle) stageTitle.textContent = '先建立一餐建議量';
+    if (stageHint) stageHint.textContent = '填寫身高、體重、性別、年齡與活動量，估算你這一餐的建議攝取範圍。';
   }
 
   renderOptions();
@@ -3222,4 +3233,3 @@ initWeightStorySection();
 document.addEventListener('DOMContentLoaded', initWeightStorySection);
 window.addEventListener('load', initWeightStorySection);
 initBodyCostCalculator();
-initSitePreloader();
