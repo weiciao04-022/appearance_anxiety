@@ -3019,6 +3019,51 @@ function initWeightStorySection() {
   planner.dataset.mealPlannerInitialized = 'true';
 }
 
+function initSocialPhoneScroll() {
+  const frame = document.querySelector('[data-social-phone-scroll]');
+  if (!frame || frame.dataset.socialPhoneInitialized === 'true') return;
+
+  const thread = frame.querySelector('[data-social-message-thread]');
+  const messages = Array.from(frame.querySelectorAll('.social-message-group'));
+  const questionButtons = Array.from(frame.querySelectorAll('[data-social-question-target]'));
+  if (!thread || !messages.length) return;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  let visibleCount = 0;
+  let requestedVisibleCount = 0;
+
+  function updateVisibleMessages() {
+    const rect = frame.getBoundingClientRect();
+    const scrollable = Math.max(1, frame.offsetHeight - window.innerHeight);
+    const progress = clamp(-rect.top / scrollable, 0, 1);
+    const scrollVisibleCount = Math.floor(progress * messages.length) + 1;
+    const nextVisibleCount = clamp(Math.max(scrollVisibleCount, requestedVisibleCount), 1, messages.length);
+
+    if (nextVisibleCount === visibleCount) return;
+    visibleCount = nextVisibleCount;
+    messages.forEach((message, index) => {
+      message.classList.toggle('is-visible', index < visibleCount);
+    });
+    window.requestAnimationFrame(() => {
+      thread.scrollTo({ top: thread.scrollHeight, behavior: 'smooth' });
+    });
+  }
+
+  updateVisibleMessages();
+  window.addEventListener('scroll', updateVisibleMessages, { passive: true });
+  window.addEventListener('resize', updateVisibleMessages);
+  questionButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const targetCount = Number.parseInt(button.dataset.socialQuestionTarget || '1', 10);
+      requestedVisibleCount = clamp(targetCount, 1, messages.length);
+      questionButtons.forEach((item) => item.classList.toggle('is-selected', item === button));
+      visibleCount = 0;
+      updateVisibleMessages();
+    });
+  });
+  frame.dataset.socialPhoneInitialized = 'true';
+}
+
 const bodyCostItems = [
   {
     id: 'gym',
@@ -3232,4 +3277,6 @@ initXinmiIntroCards();
 initWeightStorySection();
 document.addEventListener('DOMContentLoaded', initWeightStorySection);
 window.addEventListener('load', initWeightStorySection);
+initSocialPhoneScroll();
+document.addEventListener('DOMContentLoaded', initSocialPhoneScroll);
 initBodyCostCalculator();

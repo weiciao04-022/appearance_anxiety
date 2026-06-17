@@ -2499,18 +2499,23 @@ button:active,
 }
 
 .social-phone-frame {
-  width: min(430px, 100%);
+  width: min(402px, calc((100vh - 64px) * 0.46), 92vw);
+  min-height: 340vh;
   margin: 0 auto clamp(36px, 6vw, 72px);
 }
 
 .social-phone-shell {
   position: relative;
-  display: grid;
+  position: sticky;
+  top: 32px;
+  display: flex;
+  flex-direction: column;
   gap: 0;
-  min-height: 720px;
+  aspect-ratio: 402 / 874;
+  min-height: 0;
   padding: 14px 14px 20px;
   border: 3px solid #202326;
-  border-radius: 36px;
+  border-radius: 42px;
   background: #f4f6f3;
   box-shadow: 0 26px 60px rgba(31, 36, 38, 0.16);
   box-sizing: border-box;
@@ -2583,17 +2588,29 @@ button:active,
 .social-message-thread {
   display: grid;
   gap: 14px;
-  padding: 18px 4px 6px;
+  align-content: start;
+  flex: 1;
+  min-height: 0;
+  padding: 18px 4px 10px;
+  overflow: hidden;
+  scroll-behavior: smooth;
 }
 
 .social-message-group {
-  display: grid;
+  display: none;
   justify-items: start;
   gap: 7px;
+  opacity: 0;
+  transform: translateY(18px) scale(0.98);
+}
+
+.social-message-group.is-visible {
+  display: grid;
+  animation: socialMessagePop 460ms ease both;
 }
 
 .social-message-group.is-alt {
-  justify-items: end;
+  justify-items: start;
 }
 
 .social-message-group.is-reader {
@@ -2610,7 +2627,7 @@ button:active,
 }
 
 .social-message-group.is-alt .social-message-name {
-  text-align: right;
+  text-align: left;
 }
 
 .social-message-bubble {
@@ -2629,7 +2646,7 @@ button:active,
 }
 
 .social-message-group.is-alt .social-message-bubble {
-  border-radius: 14px 4px 14px 14px;
+  border-radius: 4px 14px 14px 14px;
   background: #dce8dc;
 }
 
@@ -2643,6 +2660,52 @@ button:active,
   border-color: rgba(32, 35, 38, 0.28);
   background: #fff;
   font-weight: 700;
+}
+
+.social-phone-prompts {
+  display: flex;
+  gap: 8px;
+  padding: 10px 2px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.social-phone-prompts::-webkit-scrollbar {
+  display: none;
+}
+
+.social-phone-prompts button {
+  flex: 0 0 auto;
+  min-height: 36px;
+  max-width: 168px;
+  padding: 8px 11px;
+  border: 1px solid rgba(32, 35, 38, 0.16);
+  border-radius: 999px;
+  background: #fff;
+  color: #303234;
+  font: inherit;
+  font-size: 0.74rem;
+  font-weight: 900;
+  line-height: 1.25;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.social-phone-prompts button.is-selected {
+  border-color: #202326;
+  background: #dce8dc;
+}
+
+@keyframes socialMessagePop {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @media (max-width: 900px) {

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>體態、社群與健康焦慮互動專題</title>
   <link rel="preload" as="image" href="./pic/opening-comic/1.jpg" />
-  <link rel="stylesheet" href="style.css?v=20260617-5" />
+  <link rel="stylesheet" href="style.css?v=20260617-13" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
@@ -332,7 +332,7 @@
       </section>
 
       <article class="weight-story-copy social-analysis-copy">
-        <div class="social-phone-frame" aria-label="社群與體態焦慮專家訊息">
+        <div class="social-phone-frame" data-social-phone-scroll aria-label="社群與體態焦慮專家訊息">
           <div class="social-phone-shell">
             <div class="social-phone-status" aria-hidden="true">
               <span>09:41</span>
@@ -345,7 +345,7 @@
                 <small>4 位專家正在輸入</small>
               </div>
             </header>
-            <div class="social-message-thread">
+            <div class="social-message-thread" data-social-message-thread>
               <section class="social-message-group is-reader">
                 <p class="social-message-name">日常滑手機</p>
                 <p class="social-message-bubble">點開手機、打開社群、查看好友與網紅的新貼文，已經成為年輕人每天重複好幾次的動作。也在這樣的日常裡，他們一邊建立自我認同，一邊被大量完美體態包圍。</p>
@@ -377,6 +377,12 @@
                 <p class="social-message-name">結語</p>
                 <p class="social-message-bubble">社群媒體讓身材比較變得即時、頻繁，也讓體態管理被包裝成一種可追求的生活方式。但真正需要被看見的，不只是螢幕上的身體，而是年輕人在比較、焦慮與期待之間，如何重新找回對自己身體的理解與界線。</p>
               </section>
+            </div>
+            <div class="social-phone-prompts" aria-label="可以點選的提問">
+              <button type="button" data-social-question-target="2">為什麼會一直比較？</button>
+              <button type="button" data-social-question-target="3">社群時間會怎樣？</button>
+              <button type="button" data-social-question-target="5">網紅瘦身能相信嗎？</button>
+              <button type="button" data-social-question-target="6">靠讚數建立自信會怎樣？</button>
             </div>
           </div>
         </div>
@@ -3773,6 +3779,6 @@
     </div>
   </nav>
 
-  <script src="script.js?v=20260617-11"></script>
+  <script src="script.js?v=20260617-13"></script>
 </body>
 </html>
