@@ -1,67 +1,11 @@
 const siteAssetManifest = [
-  './pic/B/B_female%3C8%25.png',
-  './pic/B/B_female10-14%25.png',
-  './pic/B/B_female15-18%25.png',
-  './pic/B/B_female20-25%25.png',
-  './pic/B/B_female%3E30%25.png',
-  './pic/B/B_male%3C8%25.png',
-  './pic/B/B_male10-14%25.png',
-  './pic/B/B_male15-18%25.png',
-  './pic/B/B_male20-25%25.png',
-  './pic/B/B_male%3E30%25.png',
-  './pic/E/female_1.png',
-  './pic/E/female_2.png',
-  './pic/E/female_3.png',
-  './pic/E/female_4.png',
-  './pic/E/male_1.png',
-  './pic/E/male_2.png',
-  './pic/E/male_3.png',
-  './pic/E/male_4.png',
-  './pic/product-experience/healthmeal.png',
-  './pic/product-experience/gym.png',
-  './pic/product-experience/silmshot.png',
-  './pic/product-experience/influencerchallenge.png',
   './pic/opening-comic/1.jpg',
   './pic/opening-comic/2.jpg',
   './pic/opening-comic/3.jpg',
   './pic/opening-comic/4.jpg',
   './pic/opening-comic/5.jpg',
   './pic/opening-comic/6.jpg',
-  './pic/opening-comic/7.jpg',
-  './pic/body-game/card-healthy-meal.png',
-  './pic/body-game/card-gym.png',
-  './pic/body-game/card-injection.png',
-  './pic/body-game/card-influencer-challenge.png',
-  './pic/xinmi/month1before.jpeg',
-  './pic/xinmi/month1after.jpeg',
-  './pic/xinmi/month2before.jpeg',
-  './pic/xinmi/month2after.jpeg',
-  './pic/xinmi/month3before.jpeg',
-  './pic/xinmi/month3after.jpeg',
-  './pic/xinmi/food1.jpg',
-  './pic/xinmi/food2.jpg',
-  './pic/xinmi/food3.jpg',
-  './pic/haocheng/before.jpg',
-  './pic/haocheng/after.jpg',
-  './pic/dinosaur/before.png',
-  './pic/dinosaur/after.png',
-  './pic/sam/before.png',
-  './pic/sam/after.jpg',
-  './pic/sam/after-2.jpg'
-];
-
-const siteVideoManifest = [
-  './video/cases/case1.mov',
-  './video/cases/case2.mp4',
-  './video/cases/case3.mov',
-  './video/cases/case4.mov',
-  './video/cases/case5.mov',
-  './video/cases/case6.mov',
-  './video/body-feed/weightloss.m4v',
-  './video/body-feed/butttraining.m4v',
-  './video/body-feed/healthyfood.m4v',
-  './video/body-feed/chesttraining.m4v',
-  './video/body-feed/moremusle.m4v'
+  './pic/opening-comic/7.jpg'
 ];
 
 function refreshLucideIcons() {
@@ -87,29 +31,6 @@ function preloadImage(src) {
   });
 }
 
-function preloadVideo(src) {
-  return new Promise((resolve) => {
-    const video = document.createElement('video');
-    let isFinished = false;
-    const finish = () => {
-      if (isFinished) return;
-      isFinished = true;
-      window.clearTimeout(timeout);
-      video.removeAttribute('src');
-      video.load();
-      resolve();
-    };
-    const timeout = window.setTimeout(finish, 20000);
-    video.muted = true;
-    video.playsInline = true;
-    video.preload = 'auto';
-    video.oncanplaythrough = finish;
-    video.onerror = finish;
-    video.src = src;
-    video.load();
-  });
-}
-
 async function initSitePreloader() {
   const preloader = document.querySelector('[data-site-preloader]');
   const progressBar = document.querySelector('[data-preload-progress]');
@@ -119,15 +40,8 @@ async function initSitePreloader() {
     return;
   }
 
-  const pageImages = Array.from(document.querySelectorAll('img[src], video[poster]'))
-    .map((element) => element.currentSrc || element.getAttribute('src') || element.getAttribute('poster'))
-    .filter(Boolean);
-  const pageVideos = Array.from(document.querySelectorAll('video source[src], video[src]'))
-    .map((element) => element.currentSrc || element.getAttribute('src'))
-    .filter(Boolean);
-  const imageAssets = [...new Set([...siteAssetManifest, ...pageImages])];
-  const videoAssets = [...new Set([...siteVideoManifest, ...pageVideos])];
-  const totalAssets = Math.max(1, imageAssets.length + videoAssets.length);
+  const imageAssets = [...new Set(siteAssetManifest)];
+  const totalAssets = Math.max(1, imageAssets.length);
   const startedAt = performance.now();
   let completed = 0;
   const updateProgress = () => {
@@ -138,8 +52,7 @@ async function initSitePreloader() {
 
   const preloadTask = Promise.all(
     [
-      ...imageAssets.map((src) => preloadImage(src)),
-      ...videoAssets.map((src) => preloadVideo(src))
+      ...imageAssets.map((src) => preloadImage(src))
     ].map((task) =>
       task.finally(() => {
         completed += 1;
@@ -265,102 +178,62 @@ const bodyFatImages = [
   {
     id: 'female-under-8',
     label: '理想身材選項',
-    src: createBodyImagePath('B_female<8%.png'),
+    src: createBodyImagePath('female8.JPG'),
     gender: 'female',
-    bodyFatRange: '<8%',
+    bodyFatRange: '8%',
     bodyFatMin: 0,
     bodyFatMax: 8,
     selectionNote: '你選擇的是線條較精瘦、肌肉輪廓較明顯的體態。'
   },
   {
-    id: 'female-10-14',
+    id: 'female-25',
     label: '理想身材選項',
-    src: createBodyImagePath('B_female10-14%.png'),
+    src: createBodyImagePath('female25.JPG'),
     gender: 'female',
-    bodyFatRange: '10–14%',
-    bodyFatMin: 10,
-    bodyFatMax: 14,
-    selectionNote: '你選擇的是整體偏精實、腰腹線條較明顯的體態。'
-  },
-  {
-    id: 'female-15-18',
-    label: '理想身材選項',
-    src: createBodyImagePath('B_female15-18%.png'),
-    gender: 'female',
-    bodyFatRange: '15–18%',
-    bodyFatMin: 15,
-    bodyFatMax: 18,
-    selectionNote: '你選擇的是保有部分線條、外觀較自然均衡的體態。'
-  },
-  {
-    id: 'female-20-25',
-    label: '理想身材選項',
-    src: createBodyImagePath('B_female20-25%.png'),
-    gender: 'female',
-    bodyFatRange: '20–25%',
+    bodyFatRange: '25%',
     bodyFatMin: 20,
     bodyFatMax: 25,
     selectionNote: '你選擇的是線條較柔和、身形曲線較明顯的體態。'
   },
   {
-    id: 'female-over-30',
+    id: 'female-15-18',
     label: '理想身材選項',
-    src: createBodyImagePath('B_female>30%.png'),
+    src: createBodyImagePath('female15.JPG'),
     gender: 'female',
-    bodyFatRange: '>30%',
-    bodyFatMin: 30,
-    bodyFatMax: 100,
-    selectionNote: '你選擇的是整體較圓潤、身形曲線較豐滿的體態。'
-  },
-  {
-    id: 'male-under-8',
-    label: '理想身材選項',
-    src: createBodyImagePath('B_male<8%.png'),
-    gender: 'male',
-    bodyFatRange: '<8%',
-    bodyFatMin: 0,
-    bodyFatMax: 8,
-    selectionNote: '你選擇的是線條較精瘦、肌肉輪廓較明顯的體態。'
-  },
-  {
-    id: 'male-10-14',
-    label: '理想身材選項',
-    src: createBodyImagePath('B_male10-14%.png'),
-    gender: 'male',
-    bodyFatRange: '10–14%',
-    bodyFatMin: 10,
-    bodyFatMax: 14,
-    selectionNote: '你選擇的是整體偏精實、軀幹線條較明顯的體態。'
-  },
-  {
-    id: 'male-15-18',
-    label: '理想身材選項',
-    src: createBodyImagePath('B_male15-18%.png'),
-    gender: 'male',
-    bodyFatRange: '15–18%',
+    bodyFatRange: '15%',
     bodyFatMin: 15,
     bodyFatMax: 18,
     selectionNote: '你選擇的是保有部分線條、外觀較自然均衡的體態。'
   },
   {
-    id: 'male-20-25',
+    id: 'male-under-8',
     label: '理想身材選項',
-    src: createBodyImagePath('B_male20-25%.png'),
+    src: createBodyImagePath('male8.JPG'),
     gender: 'male',
-    bodyFatRange: '20–25%',
+    bodyFatRange: '8%',
+    bodyFatMin: 0,
+    bodyFatMax: 8,
+    selectionNote: '你選擇的是線條較精瘦、肌肉輪廓較明顯的體態。'
+  },
+  {
+    id: 'male-20',
+    label: '理想身材選項',
+    src: createBodyImagePath('male20.JPG'),
+    gender: 'male',
+    bodyFatRange: '20%',
     bodyFatMin: 20,
     bodyFatMax: 25,
     selectionNote: '你選擇的是線條較柔和、整體輪廓較厚實的體態。'
   },
   {
-    id: 'male-over-30',
+    id: 'male-15-18',
     label: '理想身材選項',
-    src: createBodyImagePath('B_male>30%.png'),
+    src: createBodyImagePath('male15.JPG'),
     gender: 'male',
-    bodyFatRange: '>30%',
-    bodyFatMin: 30,
-    bodyFatMax: 100,
-    selectionNote: '你選擇的是整體較圓潤、身形輪廓較豐滿的體態。'
+    bodyFatRange: '15%',
+    bodyFatMin: 15,
+    bodyFatMax: 18,
+    selectionNote: '你選擇的是保有部分線條、外觀較自然均衡的體態。'
   }
 ];
 
@@ -630,9 +503,7 @@ function renderBodyOptions() {
   if (!optionGrid) return;
 
   optionGrid.innerHTML = '';
-  const visibleOptions = IdealBodySelector.selectedBodyImage
-    ? [IdealBodySelector.selectedBodyImage]
-    : bodyOptions[IdealBodySelector.selectedGender];
+  const visibleOptions = bodyOptions[IdealBodySelector.selectedGender];
 
   visibleOptions.forEach((option) => {
     const button = document.createElement('button');

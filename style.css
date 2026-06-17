@@ -371,16 +371,9 @@ button:active,
 
 .opening-comic-video-page {
   --opening-video-frame-width: min(48vw, 540px);
-  --opening-video-frame-height: calc(var(--opening-video-frame-width) * 1.25);
   width: 100%;
   display: grid;
-  grid-template-columns:
-    minmax(118px, calc((var(--opening-video-frame-height) - clamp(10px, 1.5vw, 16px) * 2) / 3 * 0.8))
-    var(--opening-video-frame-width)
-    minmax(118px, calc((var(--opening-video-frame-height) - clamp(10px, 1.5vw, 16px) * 2) / 3 * 0.8));
-  align-items: center;
-  justify-content: center;
-  gap: clamp(18px, 3vw, 32px);
+  place-items: center;
   pointer-events: none;
 }
 
@@ -399,24 +392,6 @@ button:active,
   color: #111;
   font-size: clamp(2rem, 5vw, 4.8rem);
   letter-spacing: 0;
-}
-
-.opening-comic-video-rail {
-  position: relative;
-  display: block;
-  height: var(--opening-video-frame-height);
-}
-
-.opening-comic-video-page .model-post-slot {
-  position: absolute;
-  inset: auto;
-  width: min(
-    100%,
-    calc((var(--opening-video-frame-height) - clamp(10px, 1.5vw, 16px) * 2) / 3 * 0.8)
-  );
-  margin: 0 auto;
-  aspect-ratio: 4 / 5;
-  border-radius: 14px;
 }
 
 .opening-comic-progress {
@@ -487,46 +462,12 @@ button:active,
   object-fit: cover;
 }
 
-.opening-comic-video-page .model-post-slot video {
-  object-position: 50% 56%;
-}
-
 .model-post-slot.slot-1 { top: 2%; left: 5%; }
 .model-post-slot.slot-2 { top: 4%; right: 5%; }
 .model-post-slot.slot-3 { top: 35%; left: 5%; }
 .model-post-slot.slot-4 { top: 35%; right: 5%; }
 .model-post-slot.slot-5 { bottom: 2%; left: 5%; }
 .model-post-slot.slot-6 { right: 5%; bottom: 2%; }
-
-.opening-comic-video-page .model-post-slot.slot-1,
-.opening-comic-video-page .model-post-slot.slot-2,
-.opening-comic-video-page .model-post-slot.slot-3,
-.opening-comic-video-page .model-post-slot.slot-4,
-.opening-comic-video-page .model-post-slot.slot-5,
-.opening-comic-video-page .model-post-slot.slot-6 {
-  inset: auto;
-}
-
-.opening-comic-video-page .model-post-slot.slot-1,
-.opening-comic-video-page .model-post-slot.slot-2 {
-  top: 3%;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.opening-comic-video-page .model-post-slot.slot-3,
-.opening-comic-video-page .model-post-slot.slot-4 {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.opening-comic-video-page .model-post-slot.slot-5,
-.opening-comic-video-page .model-post-slot.slot-6 {
-  bottom: 3%;
-  left: 50%;
-  transform: translateX(-50%);
-}
 
 .button {
   display: inline-flex;
@@ -569,11 +510,11 @@ button:active,
 
 .body-option-grid {
   width: 100%;
-  max-width: 1180px;
+  max-width: 760px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
   justify-content: center;
 }
 
@@ -585,28 +526,12 @@ button:active,
   gap: 18px;
 }
 
-.body-choice-workspace.has-selection {
-  max-width: 960px;
-  grid-template-columns: minmax(220px, 270px) minmax(0, 1fr);
-  gap: 14px;
-  align-items: stretch;
-}
-
-.body-choice-workspace.has-selection .body-option-grid {
-  grid-template-columns: 1fr;
-  max-width: 270px;
-  height: 100%;
-}
-
 .body-choice-workspace.has-selection .body-option-card {
-  cursor: default;
-  height: 100%;
-  gap: 7px;
-  padding: 7px;
+  cursor: pointer;
 }
 
 .body-choice-workspace.has-selection .body-choice-result {
-  height: 100%;
+  height: auto;
 }
 
 .body-choice-workspace.has-selection .body-choice-stat-card {
@@ -620,28 +545,33 @@ button:active,
   max-width: none;
   min-width: 0;
   display: grid;
-  gap: 10px;
-  padding: 10px;
-  border: 1px solid #000;
-  background: #fff;
+  gap: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: #000;
   cursor: pointer;
   font: inherit;
+  transition: opacity 160ms ease, transform 160ms ease;
 }
 
 .body-option-card.active {
-  border-width: 4px;
   font-weight: 700;
+  opacity: 1;
+  transform: translateY(-4px);
 }
 
-/* 此區塊使用統一人物顯示框架，避免因截圖尺寸不同造成身材比較失真。 */
+.body-option-grid:has(.body-option-card.active) .body-option-card:not(.active) {
+  opacity: 0.55;
+}
+
 .body-option-image {
   width: 100%;
   aspect-ratio: 3 / 5;
   display: grid;
   place-items: center;
-  border: 1px solid #000;
-  background: #fff;
+  border: 0;
+  background: transparent;
   overflow: hidden;
 }
 
@@ -807,29 +737,13 @@ button:active,
   .body-option-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-
-  .body-choice-workspace.has-selection {
-    max-width: 860px;
-    grid-template-columns: minmax(210px, 250px) minmax(0, 1fr);
-  }
-
-  .body-choice-workspace.has-selection .body-option-grid {
-    max-width: 250px;
-  }
 }
 
 @media (max-width: 640px) {
   .body-option-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px;
-  }
-
-  .body-choice-workspace.has-selection {
-    grid-template-columns: 1fr;
-  }
-
-  .body-choice-workspace.has-selection .body-option-grid {
-    width: min(240px, 100%);
+    max-width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2px;
   }
 }
 
@@ -2936,48 +2850,17 @@ button:active,
 
   .opening-comic-video-page {
     --opening-video-frame-width: min(76vw, 340px);
-    --opening-video-frame-height: calc(var(--opening-video-frame-width) * 1.25);
     width: min(100%, 430px);
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: auto 110px 110px;
-    gap: 10px;
     height: auto;
     min-height: 100%;
-    align-content: center;
+    place-items: center;
   }
 
   .opening-comic-empty-page {
-    grid-column: 1 / -1;
-    grid-row: 1;
     width: var(--opening-video-frame-width);
     aspect-ratio: 4 / 5;
     height: auto;
     justify-self: center;
-  }
-
-  .opening-comic-video-rail {
-    display: contents;
-  }
-
-  .opening-comic-video-page .model-post-slot {
-    position: relative;
-    inset: auto;
-    transform: none;
-    width: min(100%, 88px);
-  }
-
-  .opening-comic-video-page .model-post-slot.slot-1,
-  .opening-comic-video-page .model-post-slot.slot-2,
-  .opening-comic-video-page .model-post-slot.slot-3,
-  .opening-comic-video-page .model-post-slot.slot-4,
-  .opening-comic-video-page .model-post-slot.slot-5,
-  .opening-comic-video-page .model-post-slot.slot-6 {
-    grid-row: auto;
-    top: auto;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    transform: none;
   }
 
   .body-check-form {

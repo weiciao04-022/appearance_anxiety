@@ -4,17 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>體態、社群與健康焦慮互動專題</title>
-  <link rel="preload" as="image" href="./pic/B/B_female%3C8%25.png" />
-  <link rel="preload" as="image" href="./pic/B/B_female10-14%25.png" />
-  <link rel="preload" as="image" href="./pic/B/B_female15-18%25.png" />
-  <link rel="preload" as="image" href="./pic/B/B_female20-25%25.png" />
-  <link rel="preload" as="image" href="./pic/B/B_female%3E30%25.png" />
-  <link rel="preload" as="image" href="./pic/B/B_male%3C8%25.png" />
-  <link rel="preload" as="image" href="./pic/B/B_male10-14%25.png" />
-  <link rel="preload" as="image" href="./pic/B/B_male15-18%25.png" />
-  <link rel="preload" as="image" href="./pic/B/B_male20-25%25.png" />
-  <link rel="preload" as="image" href="./pic/B/B_male%3E30%25.png" />
-  <link rel="stylesheet" href="style.css?v=20260616-15" />
+  <link rel="preload" as="image" href="./pic/opening-comic/1.jpg" />
+  <link rel="stylesheet" href="style.css?v=20260617-1" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
@@ -81,43 +72,9 @@
           <img src="./pic/opening-comic/5.jpg" alt="開場漫畫 5" data-comic-panel />
           <img src="./pic/opening-comic/6.jpg" alt="開場漫畫 6" data-comic-panel />
           <img src="./pic/opening-comic/7.jpg" alt="開場漫畫 7" data-comic-panel />
-          <article class="opening-comic-video-page" data-comic-panel data-model-post-videos aria-label="開場漫畫結尾">
-            <div class="opening-comic-video-rail opening-comic-video-rail-left" aria-label="結尾影片左側">
-              <div class="model-post-slot slot-1">
-                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 1">
-                  <source src="./video/model-posts/1.m4v" type="video/mp4" />
-                </video>
-              </div>
-              <div class="model-post-slot slot-3">
-                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 3">
-                  <source src="./video/model-posts/3.m4v" type="video/mp4" />
-                </video>
-              </div>
-              <div class="model-post-slot slot-5">
-                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 5">
-                  <source src="./video/model-posts/5.m4v" type="video/mp4" />
-                </video>
-              </div>
-            </div>
+          <article class="opening-comic-video-page" data-comic-panel aria-label="開場漫畫結尾">
             <div class="opening-comic-empty-page">
               <h2>結尾</h2>
-            </div>
-            <div class="opening-comic-video-rail opening-comic-video-rail-right" aria-label="結尾影片右側">
-              <div class="model-post-slot slot-2">
-                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 2">
-                  <source src="./video/model-posts/2.m4v" type="video/mp4" />
-                </video>
-              </div>
-              <div class="model-post-slot slot-4">
-                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 4">
-                  <source src="./video/model-posts/4.m4v" type="video/mp4" />
-                </video>
-              </div>
-              <div class="model-post-slot slot-6">
-                <video autoplay muted loop playsinline preload="auto" aria-label="結尾影片 6">
-                  <source src="./video/model-posts/6.m4v" type="video/mp4" />
-                </video>
-              </div>
             </div>
           </article>
         </div>
@@ -206,7 +163,7 @@
 
   <section id="ideal-body-check" class="section reveal body-check-section">
     <div class="frame-wrap center-col">
-      <p class="subtitle">先點選你的理想身材，再輸入目前身體數值，系統會整理成可執行的行動建議。</p>
+      <p class="subtitle">點擊你想要的理想身材。可先切換女生或男生，再輸入目前身體數值，系統會整理成可執行的行動建議。</p>
       <div class="body-gender-toggle" aria-label="選擇性別">
         <button class="body-gender-button active" data-gender="female" type="button">女生</button>
         <button class="body-gender-button" data-gender="male" type="button">男生</button>
@@ -2566,8 +2523,8 @@
           }
 
           const fileName = userProfile.gender === 'male'
-            ? 'B_male15-18%.png'
-            : 'B_female15-18%.png';
+            ? 'male15.JPG'
+            : 'female15.JPG';
           return {
             src: encodeURI(`./pic/B/${fileName}`),
             label: '人物比例示意圖'
@@ -3759,32 +3716,32 @@
         </div>
         <div class="case-video-grid" data-case-video-grid>
           <a class="case-video-card" href="pages/case1.html" data-case-card data-tags="皓承 一天一餐 術後減重 節食停滯">
-            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case1.mov" type="video/quicktime" /></video>
+            <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case1.mov" type="video/quicktime" /></video>
             <span>看看皓承的故事</span>
             <small>#一天一餐 #節食停滯</small>
           </a>
           <a class="case-video-card" href="pages/case2.html" data-case-card data-tags="佩璇 重訓飲控 復胖壓力 蛋白質">
-            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case2.mp4" type="video/mp4" /></video>
+            <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case2.mp4" type="video/mp4" /></video>
             <span>看看佩璇的故事</span>
             <small>#重訓飲控 #復胖壓力</small>
           </a>
           <a class="case-video-card" href="pages/case3.html" data-case-card data-tags="第三位 社群比較 日常焦慮 文字案例">
-            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case3.mov" type="video/quicktime" /></video>
+            <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case3.mov" type="video/quicktime" /></video>
             <span>看看第三位的故事</span>
             <small>#社群比較 #日常焦慮</small>
           </a>
           <a class="case-video-card" href="pages/case4.html" data-case-card data-tags="第四位 健身房 時間成本 持續壓力">
-            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case4.mov" type="video/quicktime" /></video>
+            <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case4.mov" type="video/quicktime" /></video>
             <span>看看第四位的故事</span>
             <small>#健身房 #時間成本</small>
           </a>
           <a class="case-video-card" href="pages/case5.html" data-case-card data-tags="第五位 健康餐 外食選擇 營養焦慮">
-            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case5.mov" type="video/quicktime" /></video>
+            <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case5.mov" type="video/quicktime" /></video>
             <span>看看第五位的故事</span>
             <small>#健康餐 #外食選擇</small>
           </a>
           <a class="case-video-card" href="pages/case6.html" data-case-card data-tags="第六位 瘦瘦針 醫療風險 快速見效">
-            <video autoplay muted loop playsinline preload="auto"><source src="./video/cases/case6.mov" type="video/quicktime" /></video>
+            <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case6.mov" type="video/quicktime" /></video>
             <span>看看第六位的故事</span>
             <small>#瘦瘦針 #醫療風險</small>
           </a>
@@ -3793,6 +3750,6 @@
     </div>
   </nav>
 
-  <script src="script.js?v=20260616-11"></script>
+  <script src="script.js?v=20260617-1"></script>
 </body>
 </html>
