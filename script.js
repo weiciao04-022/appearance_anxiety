@@ -992,24 +992,23 @@ function initHealthyMealSection() {
     if (veggieCount) veggieCount.textContent = `${state.veggies.length} / 5`;
     if (checkoutButton) checkoutButton.disabled = !isComplete();
 
+    const setStageCopy = (title, hint) => {
+      if (stageTitle) stageTitle.textContent = title;
+      if (stageHint) stageHint.textContent = hint;
+    };
+
     if (!state.base) {
-      stageTitle.textContent = '先選基底／主食';
-      stageHint.textContent = '先選 1 種基底，再開始夾青菜。';
+      setStageCopy('先選基底／主食', '先選 1 種基底，再開始夾青菜。');
     } else if (state.veggies.length < 5) {
-      stageTitle.textContent = '自己夾一份健康餐';
-      stageHint.textContent = `已選 ${state.base.name}，接著選 5 樣青菜，還差 ${5 - state.veggies.length} 樣。`;
+      setStageCopy('自己夾一份健康餐', `已選 ${state.base.name}，接著選 5 樣青菜，還差 ${5 - state.veggies.length} 樣。`);
     } else if (!state.protein) {
-      stageTitle.textContent = '選一份主菜';
-      stageHint.textContent = '青菜夾好了，接著選一份主菜。';
+      setStageCopy('選一份主菜', '青菜夾好了，接著選一份主菜。');
     } else if (!state.sauce) {
-      stageTitle.textContent = '選一種醬料';
-      stageHint.textContent = '醬料也會增加熱量，選一種你今天想吃的。';
+      setStageCopy('選一種醬料', '醬料也會增加熱量，選一種你今天想吃的。');
     } else if (!state.topping) {
-      stageTitle.textContent = '最後選點綴';
-      stageHint.textContent = '撒上一種點綴，就可以前往結帳。';
+      setStageCopy('最後選點綴', '撒上一種點綴，就可以前往結帳。');
     } else {
-      stageTitle.textContent = '餐盒完成';
-      stageHint.textContent = `可以前往結帳，目前暫估 ${totals().calories} kcal，價格 $${totalPrice()}。`;
+      setStageCopy('餐盒完成', `可以前往結帳，目前暫估 ${totals().calories} kcal，價格 $${totalPrice()}。`);
     }
   }
 
@@ -2820,6 +2819,7 @@ function initWeightStorySection() {
 
   const planner = document.querySelector('[data-haocheng-meal-planner]');
   if (!planner) return;
+  if (planner.dataset.mealPlannerInitialized === 'true') return;
 
   const mealItems = [
     { id: 'brown-rice', category: 'base', name: '糙米飯', calories: 220, protein: 5, carbs: 46, note: '穩定碳水' },
@@ -3005,6 +3005,7 @@ function initWeightStorySection() {
   });
 
   renderMealPlanner();
+  planner.dataset.mealPlannerInitialized = 'true';
 }
 
 const bodyCostItems = [
@@ -3218,5 +3219,7 @@ initBodyMangaScroll();
 initModelPostVideos();
 initXinmiIntroCards();
 initWeightStorySection();
+document.addEventListener('DOMContentLoaded', initWeightStorySection);
+window.addEventListener('load', initWeightStorySection);
 initBodyCostCalculator();
 initSitePreloader();
