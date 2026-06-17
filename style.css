@@ -1714,8 +1714,8 @@ button:active,
 }
 
 .xinmi-month-compare:nth-child(3) .xinmi-comparison-after {
-  transform: scale(1.18);
-  transform-origin: 50% 44%;
+  transform: none;
+  transform-origin: center;
 }
 
 .xinmi-comparison-before {
