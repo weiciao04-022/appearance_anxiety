@@ -934,9 +934,9 @@ function initHealthyMealSection() {
       ]
     }[step];
     if (!copy) return;
-    dialogueTitle.textContent = copy[0];
-    dialogueText.textContent = copy[1];
-    tipText.textContent = copy[2];
+    if (dialogueTitle) dialogueTitle.textContent = copy[0];
+    if (dialogueText) dialogueText.textContent = copy[1];
+    if (tipText) tipText.textContent = copy[2];
   }
 
   function showScene(name) {
