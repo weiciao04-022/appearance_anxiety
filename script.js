@@ -181,7 +181,8 @@ const bodyFatImages = [
     src: createBodyImagePath('female8.JPG'),
     gender: 'female',
     bodyFatRange: '8%',
-    bodyFatMin: 0,
+    bodyFatTarget: 8,
+    bodyFatMin: 8,
     bodyFatMax: 8,
     selectionNote: '你選擇的是線條較精瘦、肌肉輪廓較明顯的體態。'
   },
@@ -191,7 +192,8 @@ const bodyFatImages = [
     src: createBodyImagePath('female25.JPG'),
     gender: 'female',
     bodyFatRange: '25%',
-    bodyFatMin: 20,
+    bodyFatTarget: 25,
+    bodyFatMin: 25,
     bodyFatMax: 25,
     selectionNote: '你選擇的是線條較柔和、身形曲線較明顯的體態。'
   },
@@ -201,8 +203,9 @@ const bodyFatImages = [
     src: createBodyImagePath('female15.JPG'),
     gender: 'female',
     bodyFatRange: '15%',
+    bodyFatTarget: 15,
     bodyFatMin: 15,
-    bodyFatMax: 18,
+    bodyFatMax: 15,
     selectionNote: '你選擇的是保有部分線條、外觀較自然均衡的體態。'
   },
   {
@@ -211,7 +214,8 @@ const bodyFatImages = [
     src: createBodyImagePath('male8.JPG'),
     gender: 'male',
     bodyFatRange: '8%',
-    bodyFatMin: 0,
+    bodyFatTarget: 8,
+    bodyFatMin: 8,
     bodyFatMax: 8,
     selectionNote: '你選擇的是線條較精瘦、肌肉輪廓較明顯的體態。'
   },
@@ -221,8 +225,9 @@ const bodyFatImages = [
     src: createBodyImagePath('male20.JPG'),
     gender: 'male',
     bodyFatRange: '20%',
+    bodyFatTarget: 20,
     bodyFatMin: 20,
-    bodyFatMax: 25,
+    bodyFatMax: 20,
     selectionNote: '你選擇的是線條較柔和、整體輪廓較厚實的體態。'
   },
   {
@@ -231,8 +236,9 @@ const bodyFatImages = [
     src: createBodyImagePath('male15.JPG'),
     gender: 'male',
     bodyFatRange: '15%',
+    bodyFatTarget: 15,
     bodyFatMin: 15,
-    bodyFatMax: 18,
+    bodyFatMax: 15,
     selectionNote: '你選擇的是保有部分線條、外觀較自然均衡的體態。'
   }
 ];
@@ -298,19 +304,22 @@ function writeLocalBodyChoiceStat(choice) {
 }
 
 function calculateBodyChoiceStats(stats, selectedBodyImage) {
-  if (!selectedBodyImage || stats.length === 0) {
+  const activeChoiceIds = new Set(bodyFatImages.map((image) => image.id));
+  const validStats = stats.filter((item) => activeChoiceIds.has(item.choiceId));
+
+  if (!selectedBodyImage || validStats.length === 0) {
     return {
-      totalCount: stats.length,
-      sameRangeCount: 0,
+      totalCount: validStats.length,
+      sameChoiceCount: 0,
       percentage: 0
     };
   }
 
-  const sameRangeCount = stats.filter((item) => item.bodyFatRange === selectedBodyImage.bodyFatRange).length;
+  const sameChoiceCount = validStats.filter((item) => item.choiceId === selectedBodyImage.id).length;
   return {
-    totalCount: stats.length,
-    sameRangeCount,
-    percentage: Math.round((sameRangeCount / stats.length) * 100)
+    totalCount: validStats.length,
+    sameChoiceCount,
+    percentage: Math.round((sameChoiceCount / validStats.length) * 100)
   };
 }
 
@@ -328,29 +337,8 @@ function updateBodyChoiceResult() {
   workspace?.classList.add('has-selection');
   const stats = calculateBodyChoiceStats(IdealBodySelector.voteCounts, IdealBodySelector.selectedBodyImage);
   IdealBodySelector.percentage = stats.percentage;
-  const minimumSharedSampleSize = 5;
   const hasSharedStats = IdealBodySelector.statsSource === 'firebase';
-  const hasEnoughSharedStats = hasSharedStats && stats.totalCount >= minimumSharedSampleSize;
-
-  if (!hasEnoughSharedStats) {
-    const statsMessage = hasSharedStats
-      ? `目前共有 ${stats.totalCount} 位使用者完成選擇，樣本尚未達 ${minimumSharedSampleSize} 筆，因此暫不顯示比例。`
-      : 'Firebase 尚未連線，目前只有本機暫存選擇，因此暫不顯示百分比。';
-    choiceResult.innerHTML = `
-      <article class="body-choice-stat-card">
-        <p class="body-choice-selected">你選擇了這個體態</p>
-        <p>${IdealBodySelector.selectedBodyImage.selectionNote}</p>
-        <p>你選擇的體態大約落在 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間。</p>
-        <div class="body-choice-stat-main">
-          <strong>資料不足</strong>
-          <span>連線共用統計後再進行比較</span>
-        </div>
-        <p>${statsMessage}</p>
-        ${hasSharedStats ? '' : '<p class="body-choice-local-note">目前僅顯示本機暫存資料。</p>'}
-      </article>
-    `;
-    return;
-  }
+  const statsSourceText = hasSharedStats ? '所有使用者即時選擇' : '本機即時選擇';
 
   choiceResult.innerHTML = `
     <article class="body-choice-stat-card">
@@ -359,14 +347,15 @@ function updateBodyChoiceResult() {
       <p>你選擇的體態大約落在 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間。</p>
       <div class="body-choice-stat-main">
         <strong>${stats.percentage}%</strong>
-        <span>選擇相同區間</span>
+        <span>${statsSourceText}</span>
       </div>
-      <div class="body-choice-progress" aria-label="選擇相同體脂區間比例">
+      <div class="body-choice-progress" aria-label="選擇相同理想身材比例">
         <span style="width: ${stats.percentage}%"></span>
       </div>
-      <p class="body-choice-stat-count">${stats.sameRangeCount} / ${stats.totalCount} 人選擇這個體脂區間</p>
-      <p>目前共有 ${stats.totalCount} 位使用者完成選擇。其中有 ${stats.sameRangeCount} 位使用者也選擇了 ${IdealBodySelector.selectedBodyImage.bodyFatRange} 體脂區間，約佔所有選擇的 ${stats.percentage}%。</p>
+      <p class="body-choice-stat-count">${stats.sameChoiceCount} / ${stats.totalCount} 人選擇這張理想身材</p>
+      <p>目前共有 ${stats.totalCount} 位使用者完成選擇。其中有 ${stats.sameChoiceCount} 位使用者也點選這張理想身材，約佔所有選擇的 ${stats.percentage}%。</p>
       <p>這個比例只代表目前收集到的選擇分布，不代表健康程度或最佳體態。</p>
+      ${hasSharedStats ? '' : '<p class="body-choice-local-note">目前僅顯示本機即時回饋；Firebase 連線後會更新為所有使用者資料。</p>'}
     </article>
   `;
 }
@@ -382,40 +371,67 @@ function formatBodyNumber(value, digits = 0) {
 
 function calculateBodyActionPlan(selected, profile) {
   const currentBodyFat = profile.bodyFat;
-  const proteinTarget = Math.round(profile.weight * 1.6);
-  const carbTarget = Math.round(profile.weight * 3);
-  const fatTarget = Math.round((profile.tdee * 0.25) / 9);
-  const waterTarget = Math.round(profile.weight * 35);
-  const withinRange = currentBodyFat >= selected.bodyFatMin && currentBodyFat <= selected.bodyFatMax;
-  const aboveRange = currentBodyFat > selected.bodyFatMax;
-  const belowRange = currentBodyFat < selected.bodyFatMin;
-  const gap = aboveRange
-    ? currentBodyFat - selected.bodyFatMax
+  const targetBodyFat = selected.bodyFatTarget ?? ((selected.bodyFatMin + selected.bodyFatMax) / 2);
+  const delta = currentBodyFat - targetBodyFat;
+  const gap = Math.abs(delta);
+  const withinRange = gap < 0.5;
+  const aboveRange = delta > 0;
+  const belowRange = delta < 0;
+  const calorieFloor = profile.gender === 'male' ? 1500 : 1200;
+  const calorieAdjustment = aboveRange
+    ? -Math.min(500, Math.max(250, Math.round(profile.tdee * 0.18)))
     : belowRange
-      ? selected.bodyFatMin - currentBodyFat
+      ? 200
       : 0;
-  const estimatedWeeks = withinRange ? 4 : Math.max(4, Math.ceil(gap / 0.5));
-  const strengthDays = aboveRange ? Math.min(5, Math.max(3, Math.ceil(gap / 2) + 2)) : 3;
-  const cardioDays = aboveRange ? 5 : 2;
-  const calorieAdjustment = aboveRange ? -250 : belowRange ? 180 : 0;
-  const calorieTarget = Math.max(1200, Math.round(profile.tdee + calorieAdjustment));
-  const direction = aboveRange
-    ? `先安排 ${estimatedWeeks} 週，每週 ${strengthDays} 天重量訓練，加上 ${cardioDays} 天 30 分鐘快走或腳踏車。`
+  const calorieTarget = Math.max(calorieFloor, Math.round(profile.tdee + calorieAdjustment));
+  const calorieRangeLow = Math.max(calorieFloor, calorieTarget - 100);
+  const calorieRangeHigh = calorieTarget + 100;
+  const mealCalories = Math.round(calorieTarget / 3);
+  const proteinMultiplier = belowRange ? 1.8 : 1.6;
+  const proteinTarget = Math.round(profile.weight * proteinMultiplier);
+  const fatTarget = Math.max(35, Math.round((calorieTarget * 0.25) / 9));
+  const carbTarget = Math.max(80, Math.round((calorieTarget - (proteinTarget * 4) - (fatTarget * 9)) / 4));
+  const waterTarget = Math.round(profile.weight * 35);
+  const estimatedWeeks = withinRange ? 4 : 12;
+  const strengthDays = aboveRange ? 3 : belowRange ? 4 : 3;
+  const cardioDays = aboveRange ? (gap >= 8 ? 3 : 2) : 2;
+  const dietAdvice = aboveRange
+    ? `每日熱量先控制在 ${calorieRangeLow}-${calorieRangeHigh} kcal，約比維持熱量少 ${Math.abs(calorieAdjustment)} kcal；每餐約 ${mealCalories} kcal，蛋白質抓 ${proteinTarget} g / 日，先不要低於 ${calorieFloor} kcal。`
     : belowRange
-      ? `先安排 ${estimatedWeeks} 週，每週 ${strengthDays} 天重量訓練，餐點略增加主食與蛋白質，不需要再降低體脂。`
+      ? `每日熱量先抓 ${calorieRangeLow}-${calorieRangeHigh} kcal，約比維持熱量多 ${calorieAdjustment} kcal；每餐約 ${mealCalories} kcal，蛋白質抓 ${proteinTarget} g / 日，搭配足量主食幫助增肌。`
+      : `每日熱量先維持在 ${calorieRangeLow}-${calorieRangeHigh} kcal；每餐約 ${mealCalories} kcal，蛋白質抓 ${proteinTarget} g / 日，觀察體重與精神狀態。`;
+  const exerciseAdvice = aboveRange
+    ? `先以 ${estimatedWeeks} 週為一期：每週 ${strengthDays} 天重量訓練，安排深蹲、硬舉、推、拉等全身動作；另外 ${cardioDays} 天做 30 分鐘快走、腳踏車或橢圓機，其餘天保留恢復。`
+    : belowRange
+      ? `先以 ${estimatedWeeks} 週為一期：每週 ${strengthDays} 天重量訓練，逐週增加重量或組數；有氧維持每週 1-2 天輕量即可，把恢復和進食放在優先。`
+      : `先維持 4 週：每週 ${strengthDays} 天重量訓練，加上 ${cardioDays} 天輕有氧，重點放在穩定作息和避免過度限制飲食。`;
+  const direction = aboveRange
+    ? `先以 ${estimatedWeeks} 週為一期，目標是穩定降低體脂，而不是快速節食。`
+    : belowRange
+      ? `先以 ${estimatedWeeks} 週為一期，目標是增加肌肉與能量攝取，不需要再降低體脂。`
       : `先維持 4 週，每週 ${strengthDays} 天重量訓練，加上 2 天輕有氧，觀察力量與精神狀態。`;
 
   return {
+    targetBodyFat,
+    delta,
     gap,
     withinRange,
+    aboveRange,
+    belowRange,
     estimatedWeeks,
     strengthDays,
     cardioDays,
+    calorieRangeLow,
+    calorieRangeHigh,
     calorieTarget,
+    calorieAdjustment,
+    mealCalories,
     proteinTarget,
     carbTarget,
     fatTarget,
     waterTarget,
+    dietAdvice,
+    exerciseAdvice,
     direction
   };
 }
@@ -467,7 +483,7 @@ function updateBodyCheckResult() {
     selectedIdealBodyId: selected.id,
     selectedIdealBodyRange: selected.bodyFatRange,
     estimatedCalories: plan.calorieTarget,
-    mealCalories: Math.round(plan.calorieTarget / 3),
+    mealCalories: plan.mealCalories,
     proteinTarget: plan.proteinTarget,
     carbTarget: plan.carbTarget,
     fatTarget: plan.fatTarget,
@@ -477,17 +493,22 @@ function updateBodyCheckResult() {
   localStorage.setItem('bodyHealthProfile', JSON.stringify(savedProfile));
 
   const rangeMessage = plan.withinRange
-    ? `你目前已落在 ${selected.bodyFatRange}。`
-    : `你和 ${selected.bodyFatRange} 之間大約還有 ${formatBodyFatDifference(plan.gap)} 個體脂百分點的調整空間。`;
+    ? `你目前已接近目標體脂 ${selected.bodyFatRange}。`
+    : plan.aboveRange
+      ? `你目前體脂 ${formatBodyNumber(currentBodyFat, 1)}%，和目標 ${selected.bodyFatRange} 約差 ${formatBodyFatDifference(plan.gap)} 個體脂百分點。`
+      : `你目前體脂 ${formatBodyNumber(currentBodyFat, 1)}%，比目標 ${selected.bodyFatRange} 低約 ${formatBodyFatDifference(plan.gap)} 個體脂百分點。`;
 
   result.innerHTML = `
     <article class="body-check-summary">
       <p><strong>${rangeMessage}</strong></p>
       <p>${plan.direction}</p>
+      <p><strong>飲食建議：</strong>${plan.dietAdvice}</p>
+      <p><strong>運動安排：</strong>${plan.exerciseAdvice}</p>
       <div class="body-check-metrics">
         <span>BMI：${formatBodyNumber(bmi, 1)}</span>
-        <span>每日熱量：${plan.calorieTarget} kcal</span>
-        <span>每餐約：${Math.round(plan.calorieTarget / 3)} kcal</span>
+        <span>維持熱量：約 ${Math.round(tdee)} kcal</span>
+        <span>建議熱量：${plan.calorieRangeLow}-${plan.calorieRangeHigh} kcal</span>
+        <span>每餐約：${plan.mealCalories} kcal</span>
         <span>蛋白質：${plan.proteinTarget} g / 日</span>
         <span>碳水：${plan.carbTarget} g / 日</span>
         <span>脂肪：約 ${plan.fatTarget} g / 日</span>
@@ -2805,12 +2826,10 @@ function initWeightStorySection() {
     { id: 'sweet-potato', category: 'base', name: '地瓜', calories: 165, protein: 2, carbs: 38, note: '低脂澱粉' },
     { id: 'multigrain-rice', category: 'base', name: '五穀飯', calories: 240, protein: 6, carbs: 48, note: '纖維較高' },
     { id: 'white-rice', category: 'base', name: '白飯', calories: 260, protein: 5, carbs: 58, note: '常見主食' },
-    { id: 'noodles', category: 'base', name: '炒麵', calories: 360, protein: 9, carbs: 58, note: '油脂較高' },
     { id: 'chicken', category: 'protein', name: '雞胸肉', calories: 165, protein: 31, carbs: 0, note: '高蛋白' },
     { id: 'egg', category: 'protein', name: '水煮蛋', calories: 78, protein: 6, carbs: 1, note: '補蛋白' },
     { id: 'salmon', category: 'protein', name: '鮭魚', calories: 230, protein: 25, carbs: 0, note: '脂肪較高' },
     { id: 'lean-pork', category: 'protein', name: '瘦豬肉', calories: 210, protein: 28, carbs: 0, note: '蛋白質來源' },
-    { id: 'fried-chicken', category: 'protein', name: '炸雞排', calories: 520, protein: 32, carbs: 35, note: '熱量偏高' },
     { id: 'broccoli', category: 'side', name: '花椰菜', calories: 35, protein: 3, carbs: 7, note: '纖維來源' },
     { id: 'cabbage', category: 'side', name: '高麗菜', calories: 45, protein: 2, carbs: 9, note: '蔬菜' },
     { id: 'mushroom', category: 'side', name: '菇類', calories: 40, protein: 3, carbs: 6, note: '低熱量配菜' },
@@ -2830,6 +2849,17 @@ function initWeightStorySection() {
   const selectedList = planner.querySelector('[data-meal-selected-list]');
   const feedback = planner.querySelector('[data-meal-feedback]');
   const resetButton = planner.querySelector('[data-meal-reset]');
+  const sectionElements = {
+    base: planner.querySelector('[data-meal-section="base"]'),
+    protein: planner.querySelector('[data-meal-section="protein"]'),
+    side: planner.querySelector('[data-meal-section="side"]')
+  };
+  const sectionSummaries = {
+    base: planner.querySelector('[data-meal-section-summary="base"]'),
+    protein: planner.querySelector('[data-meal-section-summary="protein"]'),
+    side: planner.querySelector('[data-meal-section-summary="side"]')
+  };
+  const collapsedSections = new Set();
   const totalTargets = {
     calories: planner.querySelector('[data-meal-total="calories"]'),
     protein: planner.querySelector('[data-meal-total="protein"]'),
@@ -2910,6 +2940,18 @@ function initWeightStorySection() {
     if (!messages.length) messages.push('這份餐盒大致兼顧熱量赤字、蛋白質和碳水比例。');
     feedback.textContent = messages.join(' ');
 
+    Object.entries(sectionElements).forEach(([category, section]) => {
+      if (!section) return;
+      const selectedInSection = items.filter((item) => item.category === category);
+      const summary = sectionSummaries[category];
+      if (summary) {
+        summary.textContent = selectedInSection.length
+          ? `已選：${selectedInSection.map((item) => item.name).join('、')}`
+          : '尚未選擇';
+      }
+      section.classList.toggle('is-collapsed', collapsedSections.has(category) && selectedInSection.length > 0);
+    });
+
     planner.querySelectorAll('[data-meal-choice]').forEach((button) => {
       button.classList.toggle('is-selected', selectedIds.has(button.dataset.mealChoice));
     });
@@ -2932,15 +2974,33 @@ function initWeightStorySection() {
         if (item.category === 'base') {
           mealItems.filter((mealItem) => mealItem.category === 'base').forEach((mealItem) => selectedIds.delete(mealItem.id));
         }
+        if (item.category === 'protein') {
+          mealItems.filter((mealItem) => mealItem.category === 'protein').forEach((mealItem) => selectedIds.delete(mealItem.id));
+        }
         selectedIds.add(item.id);
+        collapsedSections.add(item.category);
       }
       renderMealPlanner();
     });
     optionTargets[item.category]?.appendChild(button);
   });
 
+  planner.querySelectorAll('[data-meal-section-toggle]').forEach((toggle) => {
+    toggle.addEventListener('click', () => {
+      const category = toggle.dataset.mealSectionToggle;
+      if (!category) return;
+      if (collapsedSections.has(category)) {
+        collapsedSections.delete(category);
+      } else {
+        collapsedSections.add(category);
+      }
+      renderMealPlanner();
+    });
+  });
+
   resetButton?.addEventListener('click', () => {
     selectedIds.clear();
+    collapsedSections.clear();
     renderMealPlanner();
   });
 

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>體態、社群與健康焦慮互動專題</title>
   <link rel="preload" as="image" href="./pic/opening-comic/1.jpg" />
-  <link rel="stylesheet" href="style.css?v=20260617-3" />
+  <link rel="stylesheet" href="style.css?v=20260617-5" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
@@ -246,7 +246,7 @@
           <p>「透過飲食的改善，我覺得還蠻有效的，我從1月到現在已經瘦了15公斤，我期望自己可以瘦到85公斤。」皓承說道。</p>
           <small>滑動看看皓承的減肥效果</small>
         </div>
-        <figure class="haocheng-compare" data-haocheng-comparison style="--reveal: 50%">
+        <figure class="haocheng-compare haocheng-weight-compare" data-haocheng-comparison style="--reveal: 50%">
           <img class="haocheng-after" src="./pic/haocheng/after.jpg" alt="皓承減重後照片" />
           <img class="haocheng-before" src="./pic/haocheng/before.jpg" alt="皓承減重前照片" />
           <span class="is-before">Before</span>
@@ -263,16 +263,19 @@
         </div>
         <div class="meal-planner-layout">
           <div class="meal-planner-options" aria-label="餐盒食材區">
-            <section>
-              <h3>主食</h3>
+            <section data-meal-section="base">
+              <h3 data-meal-section-toggle="base">主食</h3>
+              <p class="meal-section-summary" data-meal-section-summary="base">尚未選擇</p>
               <div data-meal-options="base"></div>
             </section>
-            <section>
-              <h3>蛋白質</h3>
+            <section data-meal-section="protein">
+              <h3 data-meal-section-toggle="protein">蛋白質</h3>
+              <p class="meal-section-summary" data-meal-section-summary="protein">尚未選擇</p>
               <div data-meal-options="protein"></div>
             </section>
-            <section>
-              <h3>配菜與其他</h3>
+            <section data-meal-section="side">
+              <h3 data-meal-section-toggle="side">配菜與其他</h3>
+              <p class="meal-section-summary" data-meal-section-summary="side">尚未選擇</p>
               <div data-meal-options="side"></div>
             </section>
           </div>
@@ -3767,6 +3770,6 @@
     </div>
   </nav>
 
-  <script src="script.js?v=20260617-3"></script>
+  <script src="script.js?v=20260617-6"></script>
 </body>
 </html>

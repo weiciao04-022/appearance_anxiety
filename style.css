@@ -2107,6 +2107,12 @@ button:active,
   background: #f5f1eb;
 }
 
+.haocheng-weight-compare .haocheng-after {
+  object-position: center top;
+  transform: scaleX(0.96);
+  transform-origin: center center;
+}
+
 .haocheng-before {
   clip-path: inset(0 calc(100% - var(--reveal)) 0 0);
 }
@@ -2265,6 +2271,19 @@ button:active,
 .meal-planner-tray h3 {
   margin: 0;
   font-size: 0.9rem;
+}
+
+.meal-planner-options h3 {
+  cursor: pointer;
+}
+
+.meal-section-summary {
+  display: none;
+  margin: 0;
+  color: #5f686c;
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1.45;
 }
 
 .meal-planner-options [data-meal-options] {
@@ -2729,6 +2748,45 @@ button:active,
   .meal-choice-button {
     width: 100%;
     min-height: 70px;
+  }
+
+  .meal-planner-block {
+    padding: 16px;
+  }
+
+  .meal-planner-intro p {
+    display: none;
+  }
+
+  .meal-planner-options {
+    gap: 10px;
+  }
+
+  .meal-planner-options section {
+    gap: 6px;
+    padding: 10px;
+    border: 1px solid rgba(47, 47, 47, 0.12);
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .meal-planner-options section h3::after {
+    content: " 點擊展開/收起";
+    color: #8a9095;
+    font-size: 0.72rem;
+    font-weight: 700;
+  }
+
+  .meal-section-summary {
+    display: block;
+  }
+
+  .meal-planner-options section.is-collapsed [data-meal-options] {
+    display: none;
+  }
+
+  .meal-planner-tray {
+    padding: 12px;
   }
 }
 
