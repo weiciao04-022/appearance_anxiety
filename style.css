@@ -1714,8 +1714,8 @@ button:active,
 }
 
 .xinmi-month-compare:nth-child(3) .xinmi-comparison-after {
-  transform: none;
-  transform-origin: center;
+  transform: scale(1.72);
+  transform-origin: 54% 26%;
 }
 
 .xinmi-comparison-before {
@@ -2108,9 +2108,12 @@ button:active,
 }
 
 .haocheng-weight-compare .haocheng-after {
-  object-position: center top;
-  transform: scaleX(0.96);
-  transform-origin: center center;
+  object-position: 43% 18%;
+  transform: none;
+}
+
+.haocheng-weight-compare .haocheng-before {
+  object-position: 62% 18%;
 }
 
 .haocheng-before {
@@ -2294,9 +2297,9 @@ button:active,
 
 .meal-choice-button {
   display: grid;
-  gap: 4px;
+  gap: 5px;
   width: 128px;
-  min-height: 76px;
+  min-height: 148px;
   padding: 9px;
   border: 1px solid rgba(47, 47, 47, 0.18);
   border-radius: 8px;
@@ -2304,6 +2307,20 @@ button:active,
   color: #303234;
   text-align: left;
   cursor: pointer;
+}
+
+.meal-choice-art {
+  display: grid;
+  place-items: center;
+  min-height: 64px;
+}
+
+.meal-choice-art img {
+  width: 86px;
+  height: 68px;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 5px 7px rgba(47, 47, 47, 0.12));
 }
 
 .meal-choice-button.is-selected {
@@ -2329,6 +2346,86 @@ button:active,
   border: 1px solid rgba(47, 47, 47, 0.16);
   border-radius: 8px;
   background: #fff;
+}
+
+.meal-sticker-box {
+  position: relative;
+  min-height: 168px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px;
+  border: 1px dashed rgba(47, 47, 47, 0.24);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(239, 231, 214, 0.72) 0 44%, transparent 45%),
+    #fbfaf7;
+  box-sizing: border-box;
+}
+
+.meal-sticker-box > span {
+  color: #7b8186;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.meal-sticker {
+  width: 62px;
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  margin: 0;
+}
+
+.meal-sticker img {
+  width: 58px;
+  height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 6px rgba(47, 47, 47, 0.12));
+}
+
+.meal-sticker figcaption {
+  max-width: 100%;
+  color: #4c5358;
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meal-sticker-fly {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  width: 76px;
+  height: 62px;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 10px 12px rgba(47, 47, 47, 0.18));
+  animation: mealStickerFly 560ms cubic-bezier(0.2, 0.78, 0.25, 1) both;
+}
+
+@keyframes mealStickerFly {
+  from {
+    opacity: 0.2;
+    transform: translate(calc(var(--from-x) - 38px), calc(var(--from-y) - 31px)) scale(0.62) rotate(-8deg);
+  }
+
+  35% {
+    opacity: 1;
+    transform: translate(calc(var(--mid-x) - 38px), calc(var(--mid-y) - 31px)) scale(1.04) rotate(5deg);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(calc(var(--to-x) - 38px), calc(var(--to-y) - 31px)) scale(0.78) rotate(0deg);
+  }
 }
 
 .meal-selected-list {
