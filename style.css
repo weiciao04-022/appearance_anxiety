@@ -1958,7 +1958,7 @@ button:active,
 .haocheng-comic-stage {
   position: relative;
   width: min(680px, 86vw);
-  min-height: min(620px, 68vh);
+  min-height: min(660px, 76vh);
   margin: 0 auto;
 }
 
@@ -1983,7 +1983,10 @@ button:active,
 .haocheng-comic-image {
   content: "";
   display: block;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
+  align-self: center;
+  width: min(100%, 420px);
+  aspect-ratio: 1 / 1;
   min-height: 0;
   border: 2px solid rgba(20, 20, 20, 0.86);
   border-radius: 4px;
@@ -2002,11 +2005,9 @@ button:active,
 
 .haocheng-comic-image {
   position: relative;
-  width: 100%;
   margin: 0;
   overflow: hidden;
   background: #fff;
-  max-height: 100%;
 }
 
 .haocheng-comic-image img {
