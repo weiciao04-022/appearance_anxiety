@@ -7,6 +7,7 @@ const siteAssetManifest = [
   './pic/opening-comic/6.jpg',
   './pic/opening-comic/7.jpg'
 ];
+const gymSequenceManifestPath = './pic/gymanimation/render-webp/sequence-manifest.json';
 
 function refreshLucideIcons() {
   if (window.lucide?.createIcons) {
@@ -31,6 +32,24 @@ function preloadImage(src) {
   });
 }
 
+async function loadGymSequenceAssets() {
+  try {
+    const response = await fetch(gymSequenceManifestPath);
+    if (!response.ok) return [];
+    const manifest = await response.json();
+    if (Array.isArray(manifest.sequence)) return manifest.sequence;
+
+    const basePath = manifest.basePath || '';
+    const order = Array.isArray(manifest.order) ? manifest.order : [];
+    return order.flatMap((folder) => {
+      const files = manifest.folders?.[folder] || [];
+      return files.map((file) => `${basePath}/${folder}/${file}`);
+    });
+  } catch {
+    return [];
+  }
+}
+
 async function initSitePreloader() {
   const preloader = document.querySelector('[data-site-preloader]');
   const progressBar = document.querySelector('[data-preload-progress]');
@@ -40,7 +59,8 @@ async function initSitePreloader() {
     return;
   }
 
-  const imageAssets = [...new Set(siteAssetManifest)];
+  const gymSequenceAssets = await loadGymSequenceAssets();
+  const imageAssets = [...new Set([...siteAssetManifest, ...gymSequenceAssets])];
   const totalAssets = Math.max(1, imageAssets.length);
   const startedAt = performance.now();
   let completed = 0;
@@ -67,11 +87,9 @@ async function initSitePreloader() {
       })
     )
   );
-  const timeoutTask = new Promise((resolve) => window.setTimeout(resolve, 1800));
-
   try {
-    await Promise.race([preloadTask, timeoutTask]);
-    await Promise.race([document.fonts?.ready || Promise.resolve(), timeoutTask]);
+    await preloadTask;
+    await (document.fonts?.ready || Promise.resolve());
   } catch {
     // The article should stay readable even if one optional asset reports late.
   }
