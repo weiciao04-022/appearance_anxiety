@@ -3117,9 +3117,33 @@ button:active,
     aspect-ratio: 4 / 3;
   }
 
+  .meal-planner-options [data-meal-options] {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+    gap: 8px;
+  }
+
   .meal-choice-button {
-    width: 100%;
-    min-height: 70px;
+    width: auto;
+    min-height: 128px;
+    padding: 8px;
+  }
+
+  .meal-choice-art {
+    min-height: 54px;
+  }
+
+  .meal-choice-art img {
+    width: 72px;
+    height: 56px;
+  }
+
+  .meal-choice-button b {
+    font-size: 0.78rem;
+  }
+
+  .meal-choice-button small {
+    font-size: 0.62rem;
   }
 
   .meal-planner-block {
