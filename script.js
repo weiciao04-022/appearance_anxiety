@@ -7,7 +7,6 @@ const siteAssetManifest = [
   './pic/opening-comic/6.jpg',
   './pic/opening-comic/7.jpg'
 ];
-const gymSequenceManifestPath = './pic/gymanimation/render-webp/sequence-manifest.json';
 
 function refreshLucideIcons() {
   if (window.lucide?.createIcons) {
@@ -32,24 +31,6 @@ function preloadImage(src) {
   });
 }
 
-async function loadGymSequenceAssets() {
-  try {
-    const response = await fetch(gymSequenceManifestPath);
-    if (!response.ok) return [];
-    const manifest = await response.json();
-    if (Array.isArray(manifest.sequence)) return manifest.sequence;
-
-    const basePath = manifest.basePath || '';
-    const order = Array.isArray(manifest.order) ? manifest.order : [];
-    return order.flatMap((folder) => {
-      const files = manifest.folders?.[folder] || [];
-      return files.map((file) => `${basePath}/${folder}/${file}`);
-    });
-  } catch {
-    return [];
-  }
-}
-
 async function initSitePreloader() {
   const preloader = document.querySelector('[data-site-preloader]');
   const progressBar = document.querySelector('[data-preload-progress]');
@@ -59,8 +40,7 @@ async function initSitePreloader() {
     return;
   }
 
-  const gymSequenceAssets = await loadGymSequenceAssets();
-  const imageAssets = [...new Set([...siteAssetManifest, ...gymSequenceAssets])];
+  const imageAssets = [...new Set(siteAssetManifest)];
   const totalAssets = Math.max(1, imageAssets.length);
   const startedAt = performance.now();
   let completed = 0;
@@ -88,8 +68,9 @@ async function initSitePreloader() {
     )
   );
   try {
-    await preloadTask;
-    await (document.fonts?.ready || Promise.resolve());
+    const timeoutTask = new Promise((resolve) => window.setTimeout(resolve, 1800));
+    await Promise.race([preloadTask, timeoutTask]);
+    await Promise.race([document.fonts?.ready || Promise.resolve(), timeoutTask]);
   } catch {
     // The article should stay readable even if one optional asset reports late.
   }
@@ -2909,15 +2890,25 @@ function initGymScrollSequence() {
   function updateDialogueCue(index) {
     if (!dialogueCues.length || !state.frames.length) return;
     const progress = state.frames.length <= 1 ? 0 : index / (state.frames.length - 1);
-    const cueBreakpoints = [0, 0.18, 0.38, 0.62, 0.82];
-    const activeIndex = cueBreakpoints.reduce((current, breakpoint, cueIndex) => {
-      return progress >= breakpoint ? cueIndex : current;
-    }, 0);
+    const segmentLength = state.frames.length / 7;
+    const cueSchedule = [
+      { cueIndex: -1, startFrame: 0 },
+      { cueIndex: 0, startFrame: segmentLength },
+      { cueIndex: 1, startFrame: segmentLength * 3 },
+      { cueIndex: 2, startFrame: segmentLength * 4 },
+      { cueIndex: 3, startFrame: segmentLength * 5 },
+      { cueIndex: 4, startFrame: segmentLength * 6 }
+    ];
+    const activeIndex = cueSchedule.reduce((current, cue) => {
+      return index >= cue.startFrame ? cue.cueIndex : current;
+    }, -1);
     dialogueCues.forEach((cue, cueIndex) => {
       cue.classList.toggle('is-active', cueIndex === activeIndex);
     });
     if (dialogueCompare) {
-      const revealProgress = clamp((progress - 0.18) / 0.2, 0, 1);
+      const dinosaurRevealStart = segmentLength * 3;
+      const dinosaurRevealEnd = segmentLength * 4;
+      const revealProgress = clamp((index - dinosaurRevealStart) / (dinosaurRevealEnd - dinosaurRevealStart), 0, 1);
       dialogueCompare.style.setProperty('--reveal', `${Math.round(revealProgress * 100)}%`);
     }
     section.dataset.sequenceCue = String(activeIndex);
