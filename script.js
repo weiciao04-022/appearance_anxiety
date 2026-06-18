@@ -696,11 +696,27 @@ function initBodyCheckForm() {
   const inputs = ['bodyHeightInput', 'bodyWeightInput', 'bodyFatInput']
     .map((id) => document.getElementById(id))
     .filter(Boolean);
+  const submitButton = form?.querySelector('button[type="submit"]');
   if (!form || !inputs.length) return;
+
+  const isMobileBodyCheck = () => window.matchMedia('(max-width: 900px), (pointer: coarse)').matches;
+  const runBodyCheckCalculation = (shouldFocusResult = false) => {
+    updateBodyCheckResult();
+    if (!shouldFocusResult) return;
+
+    const result = document.getElementById('bodyCheckResult');
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    result?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    updateBodyCheckResult();
+    runBodyCheckCalculation(isMobileBodyCheck());
+  });
+  submitButton?.addEventListener('click', (event) => {
+    if (!isMobileBodyCheck()) return;
+    event.preventDefault();
+    runBodyCheckCalculation(true);
   });
   inputs.forEach((input) => input.addEventListener('input', updateBodyCheckResult));
 }

@@ -3549,6 +3549,10 @@ button:active,
     width: min(100%, 430px);
   }
 
+  .opening-comic-strip img {
+    border: 0;
+  }
+
   .opening-comic-video-page {
     --opening-video-frame-width: min(76vw, 340px);
     width: min(100%, 430px);
@@ -3566,6 +3570,11 @@ button:active,
 
   .body-check-form {
     grid-template-columns: 1fr;
+  }
+
+  .body-check-form .button {
+    width: 100%;
+    min-height: 52px;
   }
 
   .body-check-metrics {
