@@ -2230,7 +2230,8 @@ button:active,
 .gym-scroll-sequence {
   position: relative;
   height: var(--gym-sequence-height, 320vh);
-  margin: 64px 0;
+  width: 100vw;
+  margin: 64px calc(50% - 50vw);
   background: #fff;
 }
 
@@ -2239,7 +2240,7 @@ button:active,
   top: 0;
   display: grid;
   place-items: center;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   min-height: 100svh;
   overflow: hidden;
@@ -2248,9 +2249,197 @@ button:active,
 
 .gym-sequence-canvas {
   display: block;
-  width: min(100%, 1200px);
-  height: min(100vh, 900px);
+  width: 100vw;
+  height: 100vh;
+  min-height: 100svh;
   background: #fff;
+}
+
+.gym-sequence-dialogues {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.gym-dialogue-cue {
+  position: absolute;
+  display: none;
+  width: min(300px, 28vw);
+  color: #303234;
+}
+
+.gym-dialogue-cue.is-active {
+  display: grid;
+  gap: 10px;
+}
+
+.gym-dialogue-cue p {
+  margin: 0;
+  padding: 13px 15px;
+  border: 1px solid rgba(47, 47, 47, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.96);
+  font-size: clamp(0.9rem, 1.25vw, 1rem);
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+.gym-dialogue-cue b {
+  font-weight: 900;
+}
+
+.gym-dialogue-cue.is-sam {
+  left: clamp(18px, 5vw, 78px);
+  top: 34%;
+  justify-items: start;
+}
+
+.gym-dialogue-cue.is-dinosaur {
+  right: clamp(18px, 5vw, 78px);
+  top: 30%;
+  justify-items: end;
+}
+
+.gym-dialogue-cue[data-gym-dialogue-cue="2"] {
+  top: 25%;
+}
+
+.gym-dialogue-cue[data-gym-dialogue-cue="3"] {
+  top: 42%;
+}
+
+.gym-dialogue-cue[data-gym-dialogue-cue="4"] {
+  top: 46%;
+}
+
+.gym-dialogue-card {
+  display: grid;
+  gap: 6px;
+  width: min(280px, 27vw);
+  margin: 0;
+  padding: 8px;
+  border: 1px solid rgba(47, 47, 47, 0.18);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.gym-dialogue-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  object-fit: contain;
+  background: #fff;
+}
+
+.gym-dialogue-compare {
+  position: relative;
+  aspect-ratio: 0.72;
+  width: min(230px, 22vw);
+  min-height: 0;
+  overflow: hidden;
+  gap: 0;
+}
+
+.gym-dialogue-compare::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--reveal);
+  z-index: 3;
+  width: 2px;
+  background: #fff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.18);
+  transform: translateX(-50%);
+}
+
+.gym-dialogue-card.gym-dialogue-compare img {
+  position: absolute;
+  inset: 8px;
+  width: calc(100% - 16px);
+  height: calc(100% - 16px);
+  object-fit: cover;
+  object-position: center;
+}
+
+.gym-dialogue-before {
+  z-index: 1;
+}
+
+.gym-dialogue-after {
+  z-index: 2;
+  clip-path: inset(0 calc(100% - var(--reveal)) 0 0);
+}
+
+.gym-dialogue-label {
+  position: absolute;
+  top: 14px;
+  z-index: 4;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.88);
+  color: #303234;
+  font-size: 0.68rem;
+  font-weight: 900;
+}
+
+.gym-dialogue-label.is-before {
+  left: 14px;
+}
+
+.gym-dialogue-label.is-after {
+  right: 14px;
+}
+
+.sam-before-card {
+  width: min(210px, 20vw);
+}
+
+@media (max-width: 760px) {
+  .gym-sequence-canvas {
+    width: 100%;
+    height: 100svh;
+  }
+
+  .gym-dialogue-cue {
+    width: min(255px, 56vw);
+  }
+
+  .gym-dialogue-cue p {
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .gym-dialogue-cue.is-sam {
+    left: 12px;
+    top: 58%;
+  }
+
+  .gym-dialogue-cue.is-dinosaur {
+    right: 12px;
+    top: 16%;
+  }
+
+  .gym-dialogue-cue[data-gym-dialogue-cue="2"] {
+    top: 50%;
+  }
+
+  .gym-dialogue-cue[data-gym-dialogue-cue="3"],
+  .gym-dialogue-cue[data-gym-dialogue-cue="4"] {
+    top: 62%;
+  }
+
+  .gym-dialogue-card {
+    width: min(220px, 52vw);
+    padding: 6px;
+  }
+
+  .sam-before-card {
+    width: min(160px, 38vw);
+  }
 }
 
 .meal-planner-block {

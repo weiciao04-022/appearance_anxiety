@@ -2799,6 +2799,8 @@ function initGymScrollSequence() {
   section.dataset.sequenceInitialized = 'true';
 
   const canvas = section.querySelector('[data-gym-sequence-canvas]');
+  const dialogueCues = Array.from(section.querySelectorAll('[data-gym-dialogue-cue]'));
+  const dialogueCompare = section.querySelector('[data-gym-dialogue-compare]');
   const manifestPath = section.dataset.sequenceManifest;
   if (!canvas || !manifestPath) return;
 
@@ -2880,9 +2882,27 @@ function initGymScrollSequence() {
       if (index !== state.frameIndex) {
         state.frameIndex = index;
         section.dataset.sequenceFrame = String(index);
+        updateDialogueCue(index);
         drawFrame(index);
       }
     });
+  }
+
+  function updateDialogueCue(index) {
+    if (!dialogueCues.length || !state.frames.length) return;
+    const progress = state.frames.length <= 1 ? 0 : index / (state.frames.length - 1);
+    const cueBreakpoints = [0, 0.18, 0.38, 0.62, 0.82];
+    const activeIndex = cueBreakpoints.reduce((current, breakpoint, cueIndex) => {
+      return progress >= breakpoint ? cueIndex : current;
+    }, 0);
+    dialogueCues.forEach((cue, cueIndex) => {
+      cue.classList.toggle('is-active', cueIndex === activeIndex);
+    });
+    if (dialogueCompare) {
+      const revealProgress = clamp((progress - 0.18) / 0.2, 0, 1);
+      dialogueCompare.style.setProperty('--reveal', `${Math.round(revealProgress * 100)}%`);
+    }
+    section.dataset.sequenceCue = String(activeIndex);
   }
 
   function buildSequence(manifest) {
