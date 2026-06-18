@@ -2583,36 +2583,27 @@ function initSocialPhoneScroll() {
   if (!thread || !messages.length) return;
 
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-  let visibleCount = 0;
-  let requestedVisibleCount = 0;
+  let activeIndex = 0;
 
-  function updateVisibleMessages() {
-    const rect = frame.getBoundingClientRect();
-    const scrollable = Math.max(1, frame.offsetHeight - window.innerHeight);
-    const progress = clamp(-rect.top / scrollable, 0, 1);
-    const scrollVisibleCount = Math.floor(progress * messages.length) + 1;
-    const nextVisibleCount = clamp(Math.max(scrollVisibleCount, requestedVisibleCount), 1, messages.length);
-
-    if (nextVisibleCount === visibleCount) return;
-    visibleCount = nextVisibleCount;
+  function showMessage(index) {
+    activeIndex = clamp(index, 0, messages.length - 1);
     messages.forEach((message, index) => {
-      message.classList.toggle('is-visible', index < visibleCount);
+      message.classList.toggle('is-visible', index === activeIndex);
+    });
+    questionButtons.forEach((button) => {
+      const targetIndex = Number.parseInt(button.dataset.socialQuestionTarget || '1', 10) - 1;
+      button.classList.toggle('is-selected', targetIndex === activeIndex);
     });
     window.requestAnimationFrame(() => {
-      thread.scrollTo({ top: thread.scrollHeight, behavior: 'smooth' });
+      thread.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 
-  updateVisibleMessages();
-  window.addEventListener('scroll', updateVisibleMessages, { passive: true });
-  window.addEventListener('resize', updateVisibleMessages);
+  showMessage(activeIndex);
   questionButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      const targetCount = Number.parseInt(button.dataset.socialQuestionTarget || '1', 10);
-      requestedVisibleCount = clamp(targetCount, 1, messages.length);
-      questionButtons.forEach((item) => item.classList.toggle('is-selected', item === button));
-      visibleCount = 0;
-      updateVisibleMessages();
+      const targetIndex = Number.parseInt(button.dataset.socialQuestionTarget || '1', 10) - 1;
+      showMessage(targetIndex);
     });
   });
   frame.dataset.socialPhoneInitialized = 'true';
