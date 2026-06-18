@@ -31,6 +31,39 @@ function preloadImage(src) {
   });
 }
 
+function pageImageAssets() {
+  const imageSources = Array.from(document.querySelectorAll('img'))
+    .map((image) => image.currentSrc || image.getAttribute('src'))
+    .filter(Boolean);
+  return [...siteAssetManifest, ...imageSources];
+}
+
+async function sequenceImageAssets() {
+  const sequenceSections = Array.from(document.querySelectorAll('[data-sequence-manifest]'));
+  const sequenceSources = [];
+  await Promise.all(sequenceSections.map(async (section) => {
+    try {
+      const response = await fetch(section.dataset.sequenceManifest);
+      if (!response.ok) return;
+      const manifest = await response.json();
+      if (Array.isArray(manifest.sequence)) {
+        sequenceSources.push(...manifest.sequence);
+        return;
+      }
+
+      const basePath = manifest.basePath || '';
+      const order = Array.isArray(manifest.order) ? manifest.order : [];
+      order.forEach((folder) => {
+        const files = manifest.folders?.[folder] || [];
+        files.forEach((file) => sequenceSources.push(`${basePath}/${folder}/${file}`));
+      });
+    } catch {
+      // Missing optional manifest assets should not permanently block the story.
+    }
+  }));
+  return sequenceSources;
+}
+
 async function initSitePreloader() {
   const preloader = document.querySelector('[data-site-preloader]');
   const progressBar = document.querySelector('[data-preload-progress]');
@@ -40,7 +73,7 @@ async function initSitePreloader() {
     return;
   }
 
-  const imageAssets = [...new Set(siteAssetManifest)];
+  const imageAssets = [...new Set([...pageImageAssets(), ...await sequenceImageAssets()])];
   const totalAssets = Math.max(1, imageAssets.length);
   const startedAt = performance.now();
   let completed = 0;
@@ -68,9 +101,8 @@ async function initSitePreloader() {
     )
   );
   try {
-    const timeoutTask = new Promise((resolve) => window.setTimeout(resolve, 1800));
-    await Promise.race([preloadTask, timeoutTask]);
-    await Promise.race([document.fonts?.ready || Promise.resolve(), timeoutTask]);
+    await preloadTask;
+    await (document.fonts?.ready || Promise.resolve());
   } catch {
     // The article should stay readable even if one optional asset reports late.
   }
