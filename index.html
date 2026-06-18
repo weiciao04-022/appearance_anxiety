@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>體態、社群與健康焦慮互動專題</title>
   <link rel="preload" as="image" href="./pic/opening-comic/1.jpg" />
-  <link rel="stylesheet" href="style.css?v=20260617-14" />
+  <link rel="stylesheet" href="style.css?v=20260618-1" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
@@ -16,6 +16,7 @@
         'intro-text',
         'ideal-body-check',
         'after-body-text',
+        'gym-scroll-sequence',
         'body-cost-calculator'
       ];
       if (window.location.hash) {
@@ -410,6 +411,18 @@
         <p>隨著增肌逐漸成為生活的一部分，Sam每個月生活支出也隨之增加，其中包括每個月的健身房會費與乳清蛋白粉。不僅如此，「增肌不僅需要吃得多，對於飲食質量的要求也高。」他表明，在飲食質與量的雙重要求下，日常生活開銷的提高是無可避免的。</p>
         <p>然而，對許多年輕人而言，維持理想體態往往不只是時間成本，更是一筆不小的經濟負擔。從乳清蛋白、健身房會籍，到私人教練課程、減肥酵素、瘦瘦針等相關產品與服務，累積下來的花費相當可觀。對於每月生活費僅約一萬多元的大學生或社會新鮮人來說，這些支出往往占據相當高的生活預算，甚至超出可負擔範圍，使追求理想身材逐漸成為一種帶有經濟門檻的選擇。</p>
       </article>
+
+      <section
+        id="gym-scroll-sequence"
+        class="gym-scroll-sequence"
+        data-gym-scroll-sequence
+        data-sequence-manifest="./pic/gymanimation/render/sequence-manifest.json"
+        aria-label="健身房情境捲動動畫"
+      >
+        <div class="gym-sequence-sticky">
+          <canvas class="gym-sequence-canvas" data-gym-sequence-canvas></canvas>
+        </div>
+      </section>
 
       <section
         id="body-cost-calculator"
@@ -3782,6 +3795,6 @@
     </div>
   </nav>
 
-  <script src="script.js?v=20260617-14"></script>
+  <script src="script.js?v=20260618-1"></script>
 </body>
 </html>

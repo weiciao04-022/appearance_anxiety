@@ -2227,6 +2227,32 @@ button:active,
   grid-row: 1 / -1;
 }
 
+.gym-scroll-sequence {
+  position: relative;
+  height: var(--gym-sequence-height, 320vh);
+  margin: 64px 0;
+  background: #fff;
+}
+
+.gym-sequence-sticky {
+  position: sticky;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100vh;
+  min-height: 100svh;
+  overflow: hidden;
+  background: #fff;
+}
+
+.gym-sequence-canvas {
+  display: block;
+  width: min(100%, 1200px);
+  height: min(100vh, 900px);
+  background: #fff;
+}
+
 .meal-planner-block {
   display: grid;
   justify-self: center;

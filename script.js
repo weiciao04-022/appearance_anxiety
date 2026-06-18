@@ -2792,6 +2792,150 @@ function initBodyCostCalculator() {
   renderResults();
 }
 
+function initGymScrollSequence() {
+  const section = document.querySelector('[data-gym-scroll-sequence]');
+  if (!section) return;
+  if (section.dataset.sequenceInitialized === 'true') return;
+  section.dataset.sequenceInitialized = 'true';
+
+  const canvas = section.querySelector('[data-gym-sequence-canvas]');
+  const manifestPath = section.dataset.sequenceManifest;
+  if (!canvas || !manifestPath) return;
+
+  const context = canvas.getContext('2d', { alpha: false });
+  if (!context) return;
+
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  const state = {
+    frames: [],
+    frameIndex: -1,
+    isReady: false,
+    rafId: 0,
+    dpr: 1,
+    canvasWidth: 0,
+    canvasHeight: 0
+  };
+
+  function setScrollHeight(frameCount) {
+    const pixelsPerFrame = window.matchMedia('(max-width: 720px)').matches ? 8 : 10;
+    const scrollDistance = Math.max(window.innerHeight * 2.5, Math.max(1, frameCount - 1) * pixelsPerFrame);
+    section.style.setProperty('--gym-sequence-height', `${Math.round(window.innerHeight + scrollDistance)}px`);
+  }
+
+  function resizeCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const width = Math.max(1, Math.round(rect.width * dpr));
+    const height = Math.max(1, Math.round(rect.height * dpr));
+    if (width === state.canvasWidth && height === state.canvasHeight && dpr === state.dpr) return;
+
+    state.dpr = dpr;
+    state.canvasWidth = width;
+    state.canvasHeight = height;
+    canvas.width = width;
+    canvas.height = height;
+    context.setTransform(dpr, 0, 0, dpr, 0, 0);
+    state.frameIndex = -1;
+  }
+
+  function drawFrame(index) {
+    if (!state.isReady || !state.frames.length) return;
+    resizeCanvas();
+
+    const image = state.frames[clamp(index, 0, state.frames.length - 1)];
+    const rect = canvas.getBoundingClientRect();
+    const canvasWidth = rect.width;
+    const canvasHeight = rect.height;
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const canvasRatio = canvasWidth / canvasHeight;
+    let drawWidth = canvasWidth;
+    let drawHeight = canvasHeight;
+
+    if (imageRatio > canvasRatio) {
+      drawHeight = drawWidth / imageRatio;
+    } else {
+      drawWidth = drawHeight * imageRatio;
+    }
+
+    const x = (canvasWidth - drawWidth) / 2;
+    const y = (canvasHeight - drawHeight) / 2;
+    context.fillStyle = '#fff';
+    context.fillRect(0, 0, canvasWidth, canvasHeight);
+    context.drawImage(image, x, y, drawWidth, drawHeight);
+  }
+
+  function currentFrameIndex() {
+    if (!state.frames.length) return 0;
+    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+    const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
+    const progress = clamp((window.scrollY - sectionTop) / scrollable, 0, 1);
+    return Math.round(progress * (state.frames.length - 1));
+  }
+
+  function requestDraw() {
+    if (state.rafId) return;
+    state.rafId = window.requestAnimationFrame(() => {
+      state.rafId = 0;
+      const index = currentFrameIndex();
+      if (index !== state.frameIndex) {
+        state.frameIndex = index;
+        section.dataset.sequenceFrame = String(index);
+        drawFrame(index);
+      }
+    });
+  }
+
+  function buildSequence(manifest) {
+    if (Array.isArray(manifest.sequence) && manifest.sequence.length) return manifest.sequence;
+    const basePath = manifest.basePath || '';
+    const order = Array.isArray(manifest.order) ? manifest.order : [];
+    return order.flatMap((folder) => {
+      const files = manifest.folders?.[folder] || [];
+      return files.map((file) => `${basePath}/${folder}/${file}`);
+    });
+  }
+
+  function preloadImage(src) {
+    return new Promise((resolve, reject) => {
+      const image = new Image();
+      image.onload = () => resolve(image);
+      image.onerror = reject;
+      image.src = src;
+    });
+  }
+
+  fetch(manifestPath)
+    .then((response) => {
+      if (!response.ok) throw new Error(`Unable to load sequence manifest: ${response.status}`);
+      return response.json();
+    })
+    .then((manifest) => {
+      const sequence = buildSequence(manifest);
+      setScrollHeight(sequence.length);
+      resizeCanvas();
+      const uniqueSources = Array.from(new Set(sequence));
+      return Promise.all(uniqueSources.map((src) => preloadImage(src).then((image) => [src, image])))
+        .then((entries) => {
+          const imageMap = new Map(entries);
+          state.frames = sequence.map((src) => imageMap.get(src)).filter(Boolean);
+          section.dataset.sequenceTotalFrames = String(state.frames.length);
+          state.isReady = state.frames.length > 0;
+          requestDraw();
+        });
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+
+  window.addEventListener('scroll', requestDraw, { passive: true });
+  window.addEventListener('resize', () => {
+    setScrollHeight(state.frames.length);
+    resizeCanvas();
+    state.frameIndex = -1;
+    requestDraw();
+  });
+}
+
 initDynamicContentTransitions();
 initBodyManagementExperienceHub();
 initBodyMangaScroll();
@@ -2803,3 +2947,5 @@ window.addEventListener('load', initWeightStorySection);
 initSocialPhoneScroll();
 document.addEventListener('DOMContentLoaded', initSocialPhoneScroll);
 initBodyCostCalculator();
+initGymScrollSequence();
+document.addEventListener('DOMContentLoaded', initGymScrollSequence);
