@@ -1584,16 +1584,16 @@ button:active,
   flex-direction: column;
   gap: 12px;
   padding: clamp(16px, 2vw, 26px);
-  border: 1.5px solid rgba(92, 119, 170, 0.52);
+  border: 0;
   border-radius: 8px;
-  background: rgba(255, 253, 248, 0.94);
+  background: #D8F4A6;
   box-shadow: 0 24px 60px rgba(38, 41, 43, 0.16);
   box-sizing: border-box;
   color: #343638;
-  opacity: 0;
+  opacity: 1;
   pointer-events: none;
-  transform: translate3d(0, 54px, 0) scale(0.96);
-  transition: opacity 0.45s ease, transform 0.55s ease, box-shadow 0.3s ease;
+  transform: translate3d(0, var(--xinmi-card-y, 86vh), 0) scale(var(--xinmi-card-scale, 0.96));
+  transition: transform 0.18s linear, box-shadow 0.3s ease, visibility 0s linear 0.18s;
   letter-spacing: 0;
 }
 
@@ -1603,7 +1603,7 @@ button:active,
   width: min(360px, 30vw);
   min-height: 0;
   text-align: center;
-  transform: translate3d(-50%, calc(-50% + 54px), 0) scale(0.96);
+  transform: translate3d(-50%, calc(-50% + var(--xinmi-card-y, 86vh)), 0) scale(var(--xinmi-card-scale, 0.96));
 }
 
 .xinmi-media-panel {
@@ -1612,7 +1612,7 @@ button:active,
   width: min(820px, 76vw);
   max-height: 78vh;
   overflow: auto;
-  transform: translate3d(-50%, calc(-50% + 54px), 0) scale(0.96);
+  transform: translate3d(-50%, calc(-50% + var(--xinmi-card-y, 86vh)), 0) scale(var(--xinmi-card-scale, 0.96));
 }
 
 .xinmi-progress-card {
@@ -1626,18 +1626,17 @@ button:active,
 
 .xinmi-story-card.is-active {
   z-index: 5;
-  opacity: 1;
   pointer-events: auto;
-  transform: translate3d(0, -50%, 0) scale(1);
+  transition-delay: 0s;
   box-shadow: 0 28px 76px rgba(38, 41, 43, 0.22);
 }
 
 .xinmi-text-panel.is-active {
-  transform: translate3d(-50%, -50%, 0) scale(1);
+  transform: translate3d(-50%, calc(-50% + var(--xinmi-card-y, 0vh)), 0) scale(var(--xinmi-card-scale, 1));
 }
 
 .xinmi-media-panel.is-active {
-  transform: translate3d(-50%, -50%, 0) scale(1);
+  transform: translate3d(-50%, calc(-50% + var(--xinmi-card-y, 0vh)), 0) scale(var(--xinmi-card-scale, 1));
 }
 
 .xinmi-story-card p,
@@ -1798,12 +1797,12 @@ button:active,
     gap: 12px;
     padding: 22px;
     overflow: auto;
-    transform: translate3d(-50%, calc(-50% + 42px), 0) scale(0.96);
+    transform: translate3d(-50%, calc(-50% + var(--xinmi-card-y, 86vh)), 0) scale(var(--xinmi-card-scale, 0.96));
   }
 
   .xinmi-story-card.is-active,
   .xinmi-media-panel.is-active {
-    transform: translate3d(-50%, -50%, 0) scale(1);
+    transform: translate3d(-50%, calc(-50% + var(--xinmi-card-y, 0vh)), 0) scale(var(--xinmi-card-scale, 1));
   }
 
   .xinmi-story-card p {

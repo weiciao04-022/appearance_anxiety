@@ -2289,12 +2289,20 @@ function initXinmiIntroCards() {
     const stackTop = rect.top + window.scrollY;
     const scrollable = Math.max(1, stack.offsetHeight - window.innerHeight);
     const rawProgress = clamp((window.scrollY - stackTop) / scrollable, 0, 0.999);
-    const cardProgress = (rawProgress - 0.1) / 0.88;
-    const activeIndex = clamp(Math.floor(clamp(cardProgress, 0, 0.999) * panels.length), 0, panels.length - 1);
+    const isInCardRange = rawProgress >= 0.1 && rawProgress <= 0.985;
+    const cardProgress = clamp((rawProgress - 0.1) / 0.88, 0, 1);
+    const cardPosition = cardProgress * Math.max(1, panels.length - 1);
+    const activeIndex = clamp(Math.round(cardPosition), 0, panels.length - 1);
     panels.forEach((panel, index) => {
-      const isActive = rawProgress >= 0.1 && rawProgress <= 0.985 && index === activeIndex;
+      const distance = index - cardPosition;
+      const isActive = isInCardRange && index === activeIndex;
+      const yOffset = clamp(distance, -1.2, 1.2) * 72;
+      const scale = 1 - Math.min(0.06, Math.abs(distance) * 0.035);
       panel.classList.toggle('is-active', isActive);
-      panel.style.zIndex = String(isActive ? 5 : 0);
+      panel.style.setProperty('--xinmi-card-y', `${yOffset}vh`);
+      panel.style.setProperty('--xinmi-card-scale', String(scale));
+      panel.style.zIndex = String(10 - Math.round(Math.abs(distance) * 3));
+      panel.style.visibility = isInCardRange && Math.abs(distance) <= 1.15 ? 'visible' : 'hidden';
     });
   }
 
