@@ -90,14 +90,11 @@
     <div class="xinmi-card-scroll" data-xinmi-card-stack aria-label="鍾心咪體態管理互動">
       <div class="xinmi-card-sticky">
         <div class="text-column xinmi-intro-copy">
-          <aside class="expert-dialogue" aria-label="受訪者觀點">
-            <div class="expert-avatar" aria-hidden="true"></div>
-            <div class="expert-bubble">
-              <p class="expert-name">鍾心咪</p>
-              <p>我每天起床後，都會量我自己的腿圍，確認他有沒有變細一點。</p>
-            </div>
-          </aside>
-          <p>「我每天起床後，都會量我自己的腿圍，確認他有沒有變細一點。」國立政治大學廣告系學生鍾心咪說道，因為從小屬於梨形身材，對於自己的腿部線條非常在意，尤其是大腿的部分。
+          <figure class="xinmi-speaker">
+            <img class="xinmi-speaker-portrait" src="./pic/xinmi/speaker.png" alt="鍾心咪人物插圖" />
+            <figcaption>國立政治大學廣電系學生鍾心咪</figcaption>
+          </figure>
+          <p>「我每天起床後，都會量我自己的腿圍，確認他有沒有變細一點。」國立政治大學廣電系學生鍾心咪說道，因為從小屬於梨形身材，對於自己的腿部線條非常在意，尤其是大腿的部分。
 </p>
           <p>心咪的目前身高160公分，體重49公斤。今年三月起他關注到自己的體重變化和近期頻繁生病的狀況有關係，當時53公斤的他，開始了他的增肌減脂計畫。「比起體重計上面的數字，我更在意肉眼可見的變化。」心咪分享說道，過去臉部、腿部、腹部浮腫的情況，因為健身訓練和飲食控制得到改善。
 </p>
@@ -105,11 +102,7 @@
 </p>
         </div>
 
-        <article class="xinmi-story-card xinmi-text-panel" data-xinmi-panel style="--panel-index: 0">
-          <p>鍾心咪表示：「我運動基本上一個禮拜三到四天，然後主要是肩跟手一天，背一天，然後腿一天，然後還有一天是有氧，每次會在健身房待大約40分鐘到一個小時。」</p>
-        </article>
-
-        <article class="xinmi-story-card xinmi-progress-card xinmi-media-panel" data-xinmi-panel style="--panel-index: 1">
+        <article class="xinmi-story-card xinmi-progress-card xinmi-media-panel" data-xinmi-panel style="--panel-index: 0">
           <p>心咪從今年開始的增肌減脂計畫中，每個月都有紀錄和之前體態的差異。</p>
           <small>滑動滑軌看看心咪的減肥成效</small>
           <div class="xinmi-month-grid">
@@ -149,7 +142,7 @@
           </div>
         </article>
 
-        <article class="xinmi-story-card xinmi-food-card xinmi-media-panel" data-xinmi-panel style="--panel-index: 2">
+        <article class="xinmi-story-card xinmi-food-card xinmi-media-panel" data-xinmi-panel style="--panel-index: 1">
           <div class="xinmi-food-grid" aria-label="心咪飲食照片">
             <img src="./pic/xinmi/food1.jpg" alt="心咪自煮飲食照片 1" />
             <img src="./pic/xinmi/food2.jpg" alt="心咪自煮飲食照片 2" />
@@ -158,9 +151,6 @@
           <p>心咪也分享他的減肥食譜：「吃的話我之前自己煮是蕃薯，然後有一個水煮肉跟蛋白質就是一手掌大小的雞胸肉，堅守一個碳水、一個菜、一個肉的原則。」</p>
         </article>
 
-        <article class="xinmi-story-card xinmi-text-panel" data-xinmi-panel style="--panel-index: 3">
-          <p>鍾心咪坦言：「我去健身房看到他們就是肌肉很美，然後我就一直盯著人家看，然後就會一直在想自己什麼時候就可以變成那樣子。我期望自己可以瘦到47公斤，身上有點肌肉，腿是直的、勻稱的。」</p>
-        </article>
       </div>
     </div>
   </section>
@@ -192,15 +182,15 @@
           </span>
         </label>
         <label>
-          目前體脂率
+          目前體脂率（選填）
           <span>
-            <input id="bodyFatInput" type="number" min="1" max="70" step="0.1" inputmode="decimal" placeholder="例：26" />
+            <input id="bodyFatInput" type="number" min="1" max="70" step="0.1" inputmode="decimal" placeholder="例：26（可不填）" />
             <b>%</b>
           </span>
         </label>
         <button class="button" type="submit">計算行動</button>
       </form>
-      <div id="bodyCheckResult" class="body-check-result">選擇理想身材並輸入身高、體重、體脂率後，就可以開始整理行動建議。</div>
+      <div id="bodyCheckResult" class="body-check-result">選擇理想身材並輸入身高、體重後，就可以開始整理行動建議；體脂率不知道也可以先不填。</div>
     </div>
   </section>
 
@@ -242,8 +232,11 @@
               <h3>健康餐盒</h3>
               <p>#熱量低 #優質纖維 #口味清淡</p>
             </article>
-            <article data-haocheng-comic-panel>
+            <article class="has-image" data-haocheng-comic-panel>
               <span>04</span>
+              <figure class="haocheng-comic-image">
+                <img src="./pic/haocheng/diet-plan/04-low-sugar.png" alt="少喝含糖飲料漫畫" />
+              </figure>
               <h3>少喝含糖飲料</h3>
               <p>飲料一個月不超過兩次，以無糖、微糖飲品為主。</p>
             </article>
@@ -269,6 +262,9 @@
       </section>
 
       <section class="meal-planner-block" data-haocheng-meal-planner>
+        <div class="meal-reflection-card" data-meal-success-card aria-hidden="true">
+          <p>你願意每天三餐都這樣吃嗎？</p>
+        </div>
         <div class="meal-planner-intro">
           <p class="section-kicker">健康餐盒遊戲</p>
           <h2>搭配今天的午餐</h2>
@@ -369,28 +365,28 @@
               <button type="button" data-social-question-target="4">健身網紅的自信源自於哪裡？</button>
               <button type="button" data-social-question-target="5">有什麼方法可以讓孩子減少社群的干擾嗎？</button>
             </div>
-            <div class="social-message-thread" data-social-message-thread>
-              <section class="social-message-group is-visible">
+            <div class="social-message-thread" data-social-message-thread aria-live="polite">
+              <section class="social-message-group" data-social-message-template>
                 <p class="social-message-question">為什麼年輕人對體態的想法會被社群媒體影響？</p>
                 <p class="social-message-name">政大心理學研究所臨床組 高晟洋</p>
                 <p class="social-message-bubble">年輕人正處在特別在意他人眼光的階段，容易透過同儕與網路意見領袖，理解自己應該長成什麼樣子。當完美體態每天被推播到眼前，「我的身體是不是跟別人不一樣」的孤立感也會被放大。</p>
               </section>
-              <section class="social-message-group">
+              <section class="social-message-group" data-social-message-template>
                 <p class="social-message-question">年輕人在看網路上的資訊，通常會怎麼想？</p>
                 <p class="social-message-name">國立臺灣師範大學健康促進與衛生教育學系教授 張鳳琴</p>
                 <p class="social-message-bubble">以社會理論來說，孩子們會產生「為什麼別人可以這樣，而我卻不行」的心理壓力。當使用社群的時間越多，容貌和體態焦慮的現象也會隨之提高。</p>
               </section>
-              <section class="social-message-group">
+              <section class="social-message-group" data-social-message-template>
                 <p class="social-message-question">那些減肥帳號提供的資訊，都是真的嗎？</p>
                 <p class="social-message-name">臺師大衛教系博士後研究員 黃資富</p>
                 <p class="social-message-bubble">即便社群裡網紅總是提供多元的減肥方式，能作為參考的輔助，但是否有成效，仍需要經過仔細查證。</p>
               </section>
-              <section class="social-message-group">
+              <section class="social-message-group" data-social-message-template>
                 <p class="social-message-question">健身網紅的自信源自於哪裡？</p>
                 <p class="social-message-name">政大社會學系教授 馬藹萱</p>
                 <p class="social-message-bubble">這份自信是建立在外部的評價上，這種追求外部評價而產生對自我體態管理上的努力，可能會轉化為集體監控下的自我身體治理與勞動。</p>
               </section>
-              <section class="social-message-group">
+              <section class="social-message-group" data-social-message-template>
                 <p class="social-message-question">有什麼方法可以讓孩子減少社群的干擾嗎？</p>
                 <p class="social-message-name">國立臺灣師範大學健康促進與衛生教育學系教授 張鳳琴</p>
                 <p class="social-message-bubble">期待政府能借鑑歐洲禁止16歲以下孩子使用社群的作法，啟動相關網路管理的政策來限制網路成癮的問題。</p>

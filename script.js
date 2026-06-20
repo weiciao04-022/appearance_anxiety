@@ -478,6 +478,62 @@ function calculateBodyActionPlan(selected, profile) {
   };
 }
 
+function calculateBmiActionPlan(profile) {
+  const bmi = profile.bmi;
+  const isBelowRange = bmi < 18.5;
+  const isAboveRange = bmi >= 24;
+  const calorieFloor = profile.gender === 'male' ? 1500 : 1200;
+  const calorieAdjustment = isAboveRange
+    ? -Math.min(500, Math.max(250, Math.round(profile.tdee * 0.16)))
+    : isBelowRange
+      ? 250
+      : 0;
+  const calorieTarget = Math.max(calorieFloor, Math.round(profile.tdee + calorieAdjustment));
+  const calorieRangeLow = Math.max(calorieFloor, calorieTarget - 100);
+  const calorieRangeHigh = calorieTarget + 100;
+  const mealCalories = Math.round(calorieTarget / 3);
+  const proteinMultiplier = isBelowRange ? 1.8 : 1.6;
+  const proteinTarget = Math.round(profile.weight * proteinMultiplier);
+  const fatTarget = Math.max(35, Math.round((calorieTarget * 0.25) / 9));
+  const carbTarget = Math.max(80, Math.round((calorieTarget - (proteinTarget * 4) - (fatTarget * 9)) / 4));
+  const waterTarget = Math.round(profile.weight * 35);
+  const strengthDays = isBelowRange ? 4 : 3;
+  const cardioDays = isAboveRange ? 2 : 1;
+  const bmiStatus = isBelowRange ? '偏低' : isAboveRange ? '偏高' : '落在一般範圍';
+  const direction = isAboveRange
+    ? '因為沒有填體脂率，先以 BMI 作為粗略參考：目前 BMI 偏高，建議先用溫和熱量赤字與規律訓練調整。'
+    : isBelowRange
+      ? '因為沒有填體脂率，先以 BMI 作為粗略參考：目前 BMI 偏低，重點會放在增加能量攝取、肌力訓練與恢復。'
+      : '因為沒有填體脂率，先以 BMI 作為粗略參考：目前 BMI 落在一般範圍，建議以維持健康習慣和身體感受為主。';
+  const dietAdvice = isAboveRange
+    ? `每日熱量先控制在 ${calorieRangeLow}-${calorieRangeHigh} kcal，約比維持熱量少 ${Math.abs(calorieAdjustment)} kcal；每餐約 ${mealCalories} kcal，蛋白質抓 ${proteinTarget} g / 日，避免快速節食。`
+    : isBelowRange
+      ? `每日熱量先抓 ${calorieRangeLow}-${calorieRangeHigh} kcal，約比維持熱量多 ${calorieAdjustment} kcal；每餐約 ${mealCalories} kcal，蛋白質抓 ${proteinTarget} g / 日，搭配足量主食幫助增肌。`
+      : `每日熱量先維持在 ${calorieRangeLow}-${calorieRangeHigh} kcal；每餐約 ${mealCalories} kcal，蛋白質抓 ${proteinTarget} g / 日，觀察精神、睡眠與訓練狀態。`;
+  const exerciseAdvice = isAboveRange
+    ? `先以 12 週為一期：每週 ${strengthDays} 天重量訓練，另外 ${cardioDays} 天做 30 分鐘快走、腳踏車或橢圓機，保留恢復日。`
+    : isBelowRange
+      ? `先以 12 週為一期：每週 ${strengthDays} 天重量訓練，逐週增加重量或組數；有氧維持輕量即可，把恢復和進食放在優先。`
+      : `先維持 4 週：每週 ${strengthDays} 天重量訓練，加上 1-2 天輕有氧，重點放在穩定作息和避免過度限制飲食。`;
+
+  return {
+    mode: 'bmi',
+    bmiStatus,
+    calorieRangeLow,
+    calorieRangeHigh,
+    calorieTarget,
+    calorieAdjustment,
+    mealCalories,
+    proteinTarget,
+    carbTarget,
+    fatTarget,
+    waterTarget,
+    dietAdvice,
+    exerciseAdvice,
+    direction
+  };
+}
+
 function updateBodyCheckResult() {
   const result = document.getElementById('bodyCheckResult');
   const heightInput = document.getElementById('bodyHeightInput');
@@ -488,17 +544,22 @@ function updateBodyCheckResult() {
   const selected = IdealBodySelector.selectedBodyImage;
   const height = Number(heightInput.value);
   const weight = Number(weightInput.value);
-  const currentBodyFat = Number(bodyFatInput.value);
-  if (!selected && !height && !weight && !currentBodyFat) {
-    result.textContent = '選擇理想身材並輸入身高、體重、體脂率後，就可以開始整理行動建議。';
+  const bodyFatRaw = bodyFatInput.value.trim();
+  const currentBodyFat = bodyFatRaw === '' ? null : Number(bodyFatRaw);
+  if (!selected && !height && !weight && currentBodyFat == null) {
+    result.textContent = '選擇理想身材並輸入身高、體重後，就可以開始整理行動建議；體脂率不知道也可以先不填。';
     return;
   }
   if (!selected) {
     result.textContent = '請先點選一張理想身材圖片。';
     return;
   }
-  if (!height || height < 80 || !weight || weight <= 0 || !currentBodyFat || currentBodyFat <= 0) {
-    result.textContent = `你選擇的理想身材約落在體脂 ${selected.bodyFatRange}，請完整輸入身高、體重、體脂率來計算。`;
+  if (!height || height < 80 || !weight || weight <= 0) {
+    result.textContent = `你選擇的理想身材約落在體脂 ${selected.bodyFatRange}，請至少輸入身高、體重來計算；體脂率可選填。`;
+    return;
+  }
+  if (currentBodyFat != null && (!Number.isFinite(currentBodyFat) || currentBodyFat <= 0 || currentBodyFat > 70)) {
+    result.textContent = '體脂率如要填寫，請輸入 1 至 70 之間的數值；不知道體脂率可以留空。';
     return;
   }
 
@@ -519,7 +580,10 @@ function updateBodyCheckResult() {
     bmr,
     tdee
   };
-  const plan = calculateBodyActionPlan(selected, profile);
+  const hasBodyFat = currentBodyFat != null;
+  const plan = hasBodyFat
+    ? calculateBodyActionPlan(selected, profile)
+    : calculateBmiActionPlan(profile);
   const savedProfile = {
     ...profile,
     selectedIdealBodyId: selected.id,
@@ -534,11 +598,13 @@ function updateBodyCheckResult() {
   };
   localStorage.setItem('bodyHealthProfile', JSON.stringify(savedProfile));
 
-  const rangeMessage = plan.withinRange
-    ? `你目前已接近目標體脂 ${selected.bodyFatRange}。`
-    : plan.aboveRange
-      ? `你目前體脂 ${formatBodyNumber(currentBodyFat, 1)}%，和目標 ${selected.bodyFatRange} 約差 ${formatBodyFatDifference(plan.gap)} 個體脂百分點。`
-      : `你目前體脂 ${formatBodyNumber(currentBodyFat, 1)}%，比目標 ${selected.bodyFatRange} 低約 ${formatBodyFatDifference(plan.gap)} 個體脂百分點。`;
+  const rangeMessage = hasBodyFat
+    ? (plan.withinRange
+      ? `你目前已接近目標體脂 ${selected.bodyFatRange}。`
+      : plan.aboveRange
+        ? `你目前體脂 ${formatBodyNumber(currentBodyFat, 1)}%，和目標 ${selected.bodyFatRange} 約差 ${formatBodyFatDifference(plan.gap)} 個體脂百分點。`
+        : `你目前體脂 ${formatBodyNumber(currentBodyFat, 1)}%，比目標 ${selected.bodyFatRange} 低約 ${formatBodyFatDifference(plan.gap)} 個體脂百分點。`)
+    : `你沒有填體脂率，因此先用身高體重計算 BMI：${formatBodyNumber(bmi, 1)}，目前 BMI ${plan.bmiStatus}。`;
 
   result.innerHTML = `
     <article class="body-check-summary">
@@ -548,6 +614,7 @@ function updateBodyCheckResult() {
       <p><strong>運動安排：</strong>${plan.exerciseAdvice}</p>
       <div class="body-check-metrics">
         <span>BMI：${formatBodyNumber(bmi, 1)}</span>
+        <span>體脂率：${hasBodyFat ? `${formatBodyNumber(currentBodyFat, 1)}%` : '未填，改用 BMI 估算'}</span>
         <span>維持熱量：約 ${Math.round(tdee)} kcal</span>
         <span>建議熱量：${plan.calorieRangeLow}-${plan.calorieRangeHigh} kcal</span>
         <span>每餐約：${plan.mealCalories} kcal</span>
@@ -2283,6 +2350,7 @@ function initXinmiIntroCards() {
 
   const panels = Array.from(stack.querySelectorAll('[data-xinmi-panel]'));
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  let xinmiFrame = 0;
 
   function setActivePanel() {
     const rect = stack.getBoundingClientRect();
@@ -2290,13 +2358,14 @@ function initXinmiIntroCards() {
     const scrollable = Math.max(1, stack.offsetHeight - window.innerHeight);
     const rawProgress = clamp((window.scrollY - stackTop) / scrollable, 0, 0.999);
     const isInCardRange = rawProgress >= 0.1 && rawProgress <= 0.985;
+    stack.classList.toggle('has-active-card', isInCardRange);
     const cardProgress = clamp((rawProgress - 0.1) / 0.88, 0, 1);
-    const cardPosition = cardProgress * Math.max(1, panels.length - 1);
+    const cardPosition = (cardProgress * (panels.length + 1)) - 1;
     const activeIndex = clamp(Math.round(cardPosition), 0, panels.length - 1);
     panels.forEach((panel, index) => {
       const distance = index - cardPosition;
       const isActive = isInCardRange && index === activeIndex;
-      const yOffset = clamp(distance, -1.2, 1.2) * 72;
+      const yOffset = clamp(distance, -1.2, 1.2) * 78;
       const scale = 1 - Math.min(0.06, Math.abs(distance) * 0.035);
       panel.classList.toggle('is-active', isActive);
       panel.style.setProperty('--xinmi-card-y', `${yOffset}vh`);
@@ -2304,6 +2373,12 @@ function initXinmiIntroCards() {
       panel.style.zIndex = String(10 - Math.round(Math.abs(distance) * 3));
       panel.style.visibility = isInCardRange && Math.abs(distance) <= 1.15 ? 'visible' : 'hidden';
     });
+    xinmiFrame = 0;
+  }
+
+  function requestActivePanelUpdate() {
+    if (xinmiFrame) return;
+    xinmiFrame = window.requestAnimationFrame(setActivePanel);
   }
 
   function setComparisonReveal(comparison, value) {
@@ -2319,18 +2394,9 @@ function initXinmiIntroCards() {
     });
   });
 
-  function tickActivePanel() {
-    const rect = stack.getBoundingClientRect();
-    if (rect.top < window.innerHeight * 1.2 && rect.bottom > -window.innerHeight * 0.2) {
-      setActivePanel();
-    }
-    window.requestAnimationFrame(tickActivePanel);
-  }
-
-  window.addEventListener('scroll', setActivePanel, { passive: true });
-  window.addEventListener('resize', setActivePanel);
+  window.addEventListener('scroll', requestActivePanelUpdate, { passive: true });
+  window.addEventListener('resize', requestActivePanelUpdate);
   setActivePanel();
-  window.requestAnimationFrame(tickActivePanel);
 }
 
 function initWeightStorySection() {
@@ -2396,6 +2462,7 @@ function initWeightStorySection() {
   const selectedList = planner.querySelector('[data-meal-selected-list]');
   const stickerBox = planner.querySelector('[data-meal-sticker-box]');
   const feedback = planner.querySelector('[data-meal-feedback]');
+  const successCard = planner.querySelector('[data-meal-success-card]');
   const resetButton = planner.querySelector('[data-meal-reset]');
   const sectionElements = {
     base: planner.querySelector('[data-meal-section="base"]'),
@@ -2515,6 +2582,7 @@ function initWeightStorySection() {
     const hasBase = items.some((item) => item.category === 'base');
     const hasProtein = items.some((item) => item.category === 'protein');
     const hasSide = items.some((item) => item.category === 'side');
+    const isCompleteMeal = hasBase && hasProtein && hasSide;
     const messages = [];
     if (!hasBase) messages.push('缺少主食，可能比較不耐餓。');
     if (!hasProtein || totals.protein < targets.protein) messages.push('蛋白質不足，可以增加雞胸肉、蛋、豆腐或瘦肉。');
@@ -2525,6 +2593,9 @@ function initWeightStorySection() {
     if (totals.calories > 0 && totals.calories < targets.calories * 0.65) messages.push('熱量偏低，長期可能難以維持。');
     if (!messages.length) messages.push('這份餐盒大致兼顧熱量赤字、蛋白質和碳水比例。');
     feedback.textContent = messages.join(' ');
+    const isSuccessfulMatch = isCompleteMeal && messages.length === 1 && messages[0] === '這份餐盒大致兼顧熱量赤字、蛋白質和碳水比例。';
+    successCard?.classList.toggle('is-visible', isSuccessfulMatch);
+    successCard?.setAttribute('aria-hidden', isSuccessfulMatch ? 'false' : 'true');
 
     Object.entries(sectionElements).forEach(([category, section]) => {
       if (!section) return;
@@ -2552,7 +2623,6 @@ function initWeightStorySection() {
       <span class="meal-choice-art" aria-hidden="true"><img src="${item.image}" alt="" /></span>
       <b>${item.name}</b>
       <small>${item.calories} kcal / 蛋白質 ${item.protein}g / 碳水 ${item.carbs}g</small>
-      <small>${item.note}</small>
     `;
     button.addEventListener('click', () => {
       const wasSelected = selectedIds.has(item.id);
@@ -2602,32 +2672,55 @@ function initSocialPhoneScroll() {
   if (!frame || frame.dataset.socialPhoneInitialized === 'true') return;
 
   const thread = frame.querySelector('[data-social-message-thread]');
-  const messages = Array.from(frame.querySelectorAll('.social-message-group'));
+  const templates = Array.from(frame.querySelectorAll('[data-social-message-template]'));
   const questionButtons = Array.from(frame.querySelectorAll('[data-social-question-target]'));
-  if (!thread || !messages.length) return;
+  if (!thread || !templates.length) return;
 
-  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-  let activeIndex = 0;
+  const messageData = templates.map((template) => ({
+    question: template.querySelector('.social-message-question')?.textContent.trim() || '',
+    name: template.querySelector('.social-message-name')?.textContent.trim() || '',
+    answer: template.querySelector('.social-message-bubble')?.textContent.trim() || ''
+  }));
+  const askedQuestions = new Set();
 
-  function showMessage(index) {
-    activeIndex = clamp(index, 0, messages.length - 1);
-    messages.forEach((message, index) => {
-      message.classList.toggle('is-visible', index === activeIndex);
-    });
-    questionButtons.forEach((button) => {
-      const targetIndex = Number.parseInt(button.dataset.socialQuestionTarget || '1', 10) - 1;
-      button.classList.toggle('is-selected', targetIndex === activeIndex);
-    });
+  function createTextElement(className, text) {
+    const element = document.createElement('p');
+    element.className = className;
+    element.textContent = text;
+    return element;
+  }
+
+  function appendMessage(index) {
+    if (!messageData[index] || askedQuestions.has(index)) return;
+
+    const data = messageData[index];
+    const group = document.createElement('section');
+    group.className = 'social-message-group';
+    group.append(
+      createTextElement('social-message-question', data.question),
+      createTextElement('social-message-name', data.name),
+      createTextElement('social-message-bubble', data.answer)
+    );
+    thread.append(group);
+    askedQuestions.add(index);
+
     window.requestAnimationFrame(() => {
-      thread.scrollTo({ top: 0, behavior: 'smooth' });
+      group.classList.add('is-visible');
+      thread.scrollTo({ top: thread.scrollHeight, behavior: 'smooth' });
     });
   }
 
-  showMessage(activeIndex);
+  thread.replaceChildren();
+  questionButtons.forEach((button) => {
+    button.classList.remove('is-selected');
+  });
   questionButtons.forEach((button) => {
     button.addEventListener('click', () => {
       const targetIndex = Number.parseInt(button.dataset.socialQuestionTarget || '1', 10) - 1;
-      showMessage(targetIndex);
+      appendMessage(targetIndex);
+      if (askedQuestions.has(targetIndex)) {
+        button.classList.add('is-selected');
+      }
     });
   });
   frame.dataset.socialPhoneInitialized = 'true';
