@@ -2673,7 +2673,6 @@ function initSocialPhoneScroll() {
 
   const thread = frame.querySelector('[data-social-message-thread]');
   const templates = Array.from(frame.querySelectorAll('[data-social-message-template]'));
-  const questionButtons = Array.from(frame.querySelectorAll('[data-social-question-target]'));
   if (!thread || !templates.length) return;
 
   const messageData = templates.map((template) => ({
@@ -2682,6 +2681,7 @@ function initSocialPhoneScroll() {
     answer: template.querySelector('.social-message-bubble')?.textContent.trim() || ''
   }));
   const askedQuestions = new Set();
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
   function createTextElement(className, text) {
     const element = document.createElement('p');
@@ -2710,19 +2710,20 @@ function initSocialPhoneScroll() {
     });
   }
 
+  function updateMessagesByScroll() {
+    const rect = frame.getBoundingClientRect();
+    const scrollable = Math.max(1, frame.offsetHeight - window.innerHeight);
+    const progress = clamp(-rect.top / scrollable, 0, 0.999);
+    const visibleCount = clamp(Math.floor(progress * messageData.length) + 1, 1, messageData.length);
+    for (let index = 0; index < visibleCount; index += 1) {
+      appendMessage(index);
+    }
+  }
+
   thread.replaceChildren();
-  questionButtons.forEach((button) => {
-    button.classList.remove('is-selected');
-  });
-  questionButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      const targetIndex = Number.parseInt(button.dataset.socialQuestionTarget || '1', 10) - 1;
-      appendMessage(targetIndex);
-      if (askedQuestions.has(targetIndex)) {
-        button.classList.add('is-selected');
-      }
-    });
-  });
+  updateMessagesByScroll();
+  window.addEventListener('scroll', updateMessagesByScroll, { passive: true });
+  window.addEventListener('resize', updateMessagesByScroll);
   frame.dataset.socialPhoneInitialized = 'true';
 }
 
