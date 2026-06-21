@@ -2403,15 +2403,31 @@ function initWeightStorySection() {
   const comicScroll = document.querySelector('[data-haocheng-comic-scroll]');
   if (comicScroll) {
     const panels = Array.from(comicScroll.querySelectorAll('[data-haocheng-comic-panel]'));
+    const track = comicScroll.querySelector('[data-haocheng-comic-track]');
     const progressBar = comicScroll.querySelector('[data-haocheng-comic-progress]');
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
     function updateComicScroll() {
+      if (window.matchMedia('(max-width: 760px)').matches) {
+        comicScroll.style.setProperty('--haocheng-track-x', '0%');
+        comicScroll.style.setProperty('--haocheng-comic-progress', '0%');
+        if (progressBar) progressBar.style.width = '0%';
+        return;
+      }
       const rect = comicScroll.getBoundingClientRect();
       const scrollable = Math.max(1, comicScroll.offsetHeight - window.innerHeight);
-      const progress = clamp(-rect.top / scrollable, 0, 0.999);
+      const progress = clamp(-rect.top / scrollable, 0, 1);
       const activeIndex = clamp(Math.floor(progress * panels.length), 0, panels.length - 1);
       panels.forEach((panel, index) => panel.classList.toggle('is-active', index === activeIndex));
+      if (track && panels.length) {
+        const firstPanel = panels[0];
+        const styles = window.getComputedStyle(track);
+        const gap = Number.parseFloat(styles.columnGap || styles.gap || '0') || 0;
+        const cardWidth = firstPanel.getBoundingClientRect().width;
+        const startX = (window.innerWidth - cardWidth) / 2;
+        const travel = (cardWidth + gap) * (panels.length - 1);
+        comicScroll.style.setProperty('--haocheng-track-x', `${startX - progress * travel}px`);
+      }
       const percent = Math.round(progress * 1000) / 10;
       comicScroll.style.setProperty('--haocheng-comic-progress', `${percent}%`);
       if (progressBar) progressBar.style.width = `${percent}%`;
