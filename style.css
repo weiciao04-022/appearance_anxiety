@@ -2086,8 +2086,8 @@ button:active,
 }
 
 .haocheng-comic-flow {
-  --haocheng-card-width: min(920px, 76vw);
-  --haocheng-card-height: min(76vh, 700px);
+  --haocheng-card-width: min(620px, 58vw, 58vh);
+  --haocheng-card-height: min(72vh, 650px);
   --haocheng-card-gap: clamp(18px, 3vw, 42px);
   position: relative;
   width: 100vw;
@@ -2102,9 +2102,9 @@ button:active,
   min-height: 100vh;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
-  gap: clamp(12px, 1.8vw, 20px);
+  gap: clamp(8px, 1.2vw, 14px);
   align-items: stretch;
-  padding: clamp(24px, 4vw, 48px) 0 clamp(18px, 2.8vw, 32px);
+  padding: clamp(16px, 2.6vw, 28px) 0 clamp(14px, 2vw, 24px);
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -2112,11 +2112,11 @@ button:active,
 .haocheng-comic-heading {
   position: relative;
   z-index: 6;
-  width: min(760px, 88vw);
+  width: min(620px, 88vw);
   margin: 0 auto;
   display: grid;
   gap: 6px;
-  padding: clamp(14px, 1.8vw, 22px);
+  padding: clamp(10px, 1.3vw, 16px);
   background: rgba(255, 255, 255, 0.9);
   box-sizing: border-box;
 }
@@ -2160,13 +2160,14 @@ button:active,
   position: relative;
   flex: 0 0 var(--haocheng-card-width);
   width: var(--haocheng-card-width);
-  min-height: var(--haocheng-card-height);
+  height: var(--haocheng-card-height);
+  min-height: 0;
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto auto;
   align-items: center;
   justify-items: start;
-  gap: clamp(10px, 1.4vw, 18px);
-  padding: clamp(16px, 2vw, 26px) clamp(24px, 3vw, 42px) clamp(28px, 4vw, 54px);
+  gap: clamp(8px, 1vw, 12px);
+  padding: 0 0 clamp(10px, 1.6vw, 18px);
   border: 0;
   border-radius: 0;
   background: #fff;
@@ -2210,7 +2211,8 @@ button:active,
   position: relative;
   z-index: 1;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 1;
+  height: auto;
   margin: 0;
   overflow: hidden;
   background: #fff;
@@ -2257,7 +2259,7 @@ button:active,
   align-self: start;
   max-width: min(780px, 86vw);
   color: #000;
-  font-size: clamp(2rem, 3.8vw, 4rem);
+  font-size: clamp(1.55rem, 2.5vw, 2.6rem);
   font-weight: 900;
   line-height: 1.12;
   text-align: left;
@@ -2268,7 +2270,7 @@ button:active,
   z-index: 2;
   max-width: min(680px, 84vw);
   color: #000;
-  font-size: clamp(1.1rem, 1.8vw, 1.55rem);
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
   font-weight: 800;
   line-height: 1.55;
   text-align: left;
@@ -2309,7 +2311,7 @@ button:active,
   position: relative;
   display: block;
   width: 100vw;
-  min-height: min(86vh, 820px);
+  min-height: min(72vh, 680px);
   margin-left: calc(50% - 50vw);
   padding: 0;
   border: 1px solid rgba(47, 47, 47, 0.18);
@@ -2420,9 +2422,11 @@ button:active,
 
 .haocheng-compare input {
   position: absolute;
-  inset: auto 0 0;
+  left: clamp(18px, 3vw, 44px);
+  right: clamp(18px, 3vw, 44px);
+  bottom: clamp(12px, 2vw, 24px);
   z-index: 5;
-  width: 100%;
+  width: auto;
   margin: 0;
   accent-color: #2f3133;
   cursor: ew-resize;
@@ -3373,7 +3377,7 @@ button:active,
 
   .haocheng-progress-block {
     width: 100vw;
-    min-height: min(78vh, 680px);
+    min-height: min(68vh, 600px);
     margin-left: calc(50% - 50vw);
     padding: 0;
   }
@@ -3536,8 +3540,8 @@ button:active,
 
 @media (max-width: 760px) {
   .haocheng-comic-flow {
-    --haocheng-card-width: 86vw;
-    --haocheng-card-height: min(70vh, 560px);
+    --haocheng-card-width: min(82vw, 420px);
+    --haocheng-card-height: min(66vh, 520px);
     --haocheng-card-gap: 14px;
     min-height: 0;
   }
@@ -3564,7 +3568,7 @@ button:active,
   .haocheng-comic-stage {
     width: 100vw;
     min-height: 0;
-    height: min(72vh, 620px);
+    height: min(68vh, 540px);
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
@@ -3587,13 +3591,14 @@ button:active,
   .haocheng-comic-stage article {
     flex: 0 0 var(--haocheng-card-width);
     width: var(--haocheng-card-width);
-    min-height: var(--haocheng-card-height);
-    padding: 14px 16px 26px;
+    height: var(--haocheng-card-height);
+    min-height: 0;
+    padding: 0 0 18px;
   }
 
   .haocheng-comic-stage h3 {
     max-width: 100%;
-    font-size: clamp(1.8rem, 8vw, 2.8rem);
+    font-size: clamp(1.45rem, 7vw, 2.2rem);
   }
 
   .haocheng-comic-stage p {
