@@ -2086,8 +2086,8 @@ button:active,
 }
 
 .haocheng-comic-flow {
-  --haocheng-card-width: min(620px, 58vw, 58vh);
-  --haocheng-card-height: min(72vh, 650px);
+  --haocheng-card-width: min(600px, 56vw, 56vh);
+  --haocheng-card-height: min(68vh, 610px);
   --haocheng-card-gap: clamp(18px, 3vw, 42px);
   position: relative;
   width: 100vw;
@@ -2163,11 +2163,11 @@ button:active,
   height: var(--haocheng-card-height);
   min-height: 0;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto auto;
+  grid-template-rows: minmax(0, 1fr) minmax(2.8em, auto) auto;
   align-items: center;
   justify-items: start;
-  gap: clamp(8px, 1vw, 12px);
-  padding: 0 0 clamp(10px, 1.6vw, 18px);
+  gap: clamp(6px, 0.9vw, 10px);
+  padding: 0 0 clamp(12px, 1.8vw, 20px);
   border: 0;
   border-radius: 0;
   background: #fff;
@@ -2210,7 +2210,8 @@ button:active,
 .haocheng-comic-image {
   position: relative;
   z-index: 1;
-  width: 100%;
+  justify-self: center;
+  width: min(100%, calc(var(--haocheng-card-height) - 150px));
   aspect-ratio: 1 / 1;
   height: auto;
   margin: 0;
@@ -2258,8 +2259,9 @@ button:active,
   z-index: 2;
   align-self: start;
   max-width: min(780px, 86vw);
+  min-height: 2.25em;
   color: #000;
-  font-size: clamp(1.55rem, 2.5vw, 2.6rem);
+  font-size: clamp(1.35rem, 2.1vw, 2.2rem);
   font-weight: 900;
   line-height: 1.12;
   text-align: left;
@@ -2311,7 +2313,7 @@ button:active,
   position: relative;
   display: block;
   width: 100vw;
-  min-height: min(72vh, 680px);
+  min-height: min(48vh, 430px);
   margin-left: calc(50% - 50vw);
   padding: 0;
   border: 1px solid rgba(47, 47, 47, 0.18);
@@ -2355,7 +2357,7 @@ button:active,
   position: relative;
   width: 100%;
   height: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 21 / 8;
   margin: 0;
   border: 0;
   border-radius: 0;
@@ -2383,17 +2385,17 @@ button:active,
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   background: #050505;
 }
 
 .haocheng-weight-compare .haocheng-after {
-  object-position: center top;
+  object-position: 50% 35%;
   transform: none;
 }
 
 .haocheng-weight-compare .haocheng-before {
-  object-position: center top;
+  object-position: 54% 32%;
 }
 
 .haocheng-before {
@@ -3377,7 +3379,7 @@ button:active,
 
   .haocheng-progress-block {
     width: 100vw;
-    min-height: min(68vh, 600px);
+    min-height: min(46vh, 420px);
     margin-left: calc(50% - 50vw);
     padding: 0;
   }
@@ -3470,7 +3472,7 @@ button:active,
   }
 
   .haocheng-compare {
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 16 / 10;
   }
 
   .meal-planner-options [data-meal-options] {
@@ -3653,6 +3655,12 @@ button:active,
   line-height: 1.4;
 }
 
+.case-title-frame p {
+  margin: 10px 0 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
 .case-article-copy {
   width: min(520px, 100%);
   display: grid;
@@ -3663,6 +3671,37 @@ button:active,
 
 .case-article-copy p {
   margin: 0;
+}
+
+.full-article-page {
+  width: min(920px, 100%);
+}
+
+.full-article-page .case-title-frame {
+  width: min(760px, 100%);
+}
+
+.full-article-page .case-title-frame h1 {
+  font-size: clamp(1.65rem, 3vw, 2.35rem);
+  font-weight: 800;
+}
+
+.full-article-copy {
+  width: min(760px, 100%);
+}
+
+.full-article-copy h2,
+.full-article-copy h3 {
+  margin: 1.4em 0 0;
+  line-height: 1.55;
+}
+
+.full-article-copy h2 {
+  font-size: 1.24rem;
+}
+
+.full-article-copy h3 {
+  font-size: 1.12rem;
 }
 
 .case-link-row {

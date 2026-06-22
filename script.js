@@ -166,6 +166,38 @@ function initReadingProgress() {
 
 initReadingProgress();
 
+function initMainPageScrollRestore() {
+  const scrollKey = 'appearanceAnxietyMainScrollY';
+  const isMainPage = Boolean(document.querySelector('[data-case-menu]'));
+
+  if (isMainPage) {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('restoreScroll') === '1') {
+      const savedScroll = Number(sessionStorage.getItem(scrollKey));
+      if (Number.isFinite(savedScroll)) {
+        window.requestAnimationFrame(() => window.scrollTo({ top: savedScroll, behavior: 'auto' }));
+      }
+      params.delete('restoreScroll');
+      const nextQuery = params.toString();
+      const nextUrl = `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ''}${window.location.hash}`;
+      window.history.replaceState(null, '', nextUrl);
+    }
+
+    const saveMainScroll = () => sessionStorage.setItem(scrollKey, String(Math.round(window.scrollY || document.documentElement.scrollTop || 0)));
+    saveMainScroll();
+    window.addEventListener('scroll', saveMainScroll, { passive: true });
+    window.addEventListener('beforeunload', saveMainScroll);
+  }
+
+  document.querySelectorAll('a[href^="pages/case"], a[href$="full-article.html"]').forEach((link) => {
+    link.addEventListener('click', () => {
+      sessionStorage.setItem(scrollKey, String(Math.round(window.scrollY || document.documentElement.scrollTop || 0)));
+    });
+  });
+}
+
+initMainPageScrollRestore();
+
 function initScrollVideoIntro() {
   const intro = document.querySelector('[data-comic-intro]');
   if (!intro) return;
@@ -810,9 +842,10 @@ function initCaseFloatMenu() {
 
   function filterCases(query) {
     const normalizedQuery = query.trim().replace(/^#/, '').toLowerCase();
+    const tokens = normalizedQuery.split(/\s+/).filter(Boolean);
     caseCards.forEach((card) => {
-      const haystack = `${card.textContent} ${card.dataset.tags || ''}`.toLowerCase();
-      card.hidden = Boolean(normalizedQuery) && !haystack.includes(normalizedQuery);
+      const haystack = (card.dataset.search || card.dataset.tags || '').toLowerCase();
+      card.hidden = tokens.length > 0 && !tokens.every((token) => haystack.includes(token));
     });
   }
 
