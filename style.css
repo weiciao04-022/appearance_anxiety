@@ -1563,9 +1563,13 @@ button:active,
 }
 
 #intro-text .xinmi-intro-copy {
-  width: min(680px, calc(100vw - clamp(420px, 42vw, 560px)));
+  width: min(1060px, 92vw);
   min-width: 0;
   margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 680px) minmax(240px, 340px);
+  gap: clamp(34px, 5vw, 72px);
+  align-items: center;
   color: #2f3133;
   letter-spacing: 0;
   position: relative;
@@ -1573,14 +1577,18 @@ button:active,
 }
 
 #intro-text .xinmi-intro-copy p {
+  grid-column: 1;
+}
+
+#intro-text .xinmi-intro-copy p {
   transition: filter 0.28s ease, opacity 0.28s ease;
 }
 
 .xinmi-speaker {
-  position: absolute;
-  left: clamp(-390px, -31vw, -250px);
-  top: clamp(-120px, -9vw, -62px);
-  width: clamp(260px, 32vw, 440px);
+  position: relative;
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  width: min(340px, 74vw);
   margin: 0;
   display: grid;
   justify-items: center;
@@ -1790,12 +1798,18 @@ button:active,
 .xinmi-comparison-label {
   position: absolute;
   top: 8px;
-  z-index: 4;
-  padding: 4px 7px;
+  z-index: 6;
+  padding: 4px 8px;
+  border: 1px solid rgba(0, 0, 0, 0.72);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.96);
+  color: #111;
   font-size: 0.66rem;
-  font-weight: 700;
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  pointer-events: none;
 }
 
 .xinmi-comparison-label.is-before {
@@ -1836,13 +1850,13 @@ button:active,
 
 @media (max-width: 1180px) {
   #intro-text .xinmi-intro-copy {
-    width: min(640px, calc(100vw - clamp(320px, 35vw, 420px)));
-    margin-left: clamp(150px, 18vw, 220px);
+    width: min(960px, 92vw);
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+    margin-left: 0;
   }
 
   .xinmi-speaker {
-    left: clamp(-260px, -24vw, -190px);
-    width: clamp(210px, 25vw, 320px);
+    width: min(300px, 74vw);
   }
 
   .xinmi-speaker figcaption {
@@ -1855,12 +1869,15 @@ button:active,
 @media (max-width: 900px) {
   #intro-text .xinmi-intro-copy {
     width: min(620px, calc(100vw - 56px));
+    grid-template-columns: 1fr;
     margin-left: 0;
   }
 
   .xinmi-speaker {
-    left: clamp(-230px, -28vw, -170px);
-    width: clamp(190px, 25vw, 260px);
+    grid-column: 1;
+    grid-row: auto;
+    width: min(320px, 74vw);
+    margin: 0 auto 12px;
   }
 }
 
@@ -2513,8 +2530,8 @@ button:active,
 }
 
 .haocheng-weight-compare .haocheng-after {
-  object-position: center center;
-  transform: none;
+  object-position: center bottom;
+  transform: scale(1.16);
 }
 
 .haocheng-weight-compare .haocheng-before {
@@ -2559,10 +2576,10 @@ button:active,
 
 .dinosaur-story-card {
   display: grid;
-  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
-  gap: clamp(22px, 4vw, 42px);
+  grid-template-columns: minmax(240px, 340px) minmax(0, 680px);
+  gap: clamp(34px, 5vw, 72px);
   align-items: center;
-  width: min(980px, 100%);
+  width: min(1060px, 92vw);
   margin: 0 auto 1.8em;
 }
 
@@ -2575,6 +2592,7 @@ button:active,
 }
 
 .dinosaur-profile-card {
+  width: min(340px, 74vw);
   display: grid;
   justify-items: center;
   gap: 10px;
@@ -2582,26 +2600,21 @@ button:active,
 }
 
 .dinosaur-profile-card img {
-  width: min(100%, 280px);
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  object-position: center;
+  width: 100%;
+  height: auto;
   display: block;
-  border: 2px solid #000;
-  background: #050505;
-  box-sizing: border-box;
 }
 
 .dinosaur-profile-card figcaption {
   width: fit-content;
-  max-width: 16em;
-  padding: 8px 12px;
+  max-width: min(100%, 24em);
+  padding: 9px 14px;
   border: 2px solid #000;
   background: #fff;
   color: #000;
-  font-size: clamp(0.72rem, 1vw, 0.95rem);
+  font-size: clamp(0.82rem, 1.08vw, 1rem);
   font-weight: 900;
-  line-height: 1.55;
+  line-height: 1.38;
   text-align: center;
   box-sizing: border-box;
 }
@@ -2618,10 +2631,10 @@ button:active,
 
 .sam-story-card {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
-  gap: clamp(22px, 4vw, 42px);
+  grid-template-columns: minmax(240px, 340px) minmax(0, 680px);
+  gap: clamp(34px, 5vw, 72px);
   align-items: center;
-  width: min(980px, 100%);
+  width: min(1060px, 92vw);
   margin: 0 auto 1.8em;
 }
 
@@ -2638,6 +2651,7 @@ button:active,
 }
 
 .sam-profile-card {
+  width: min(340px, 74vw);
   display: grid;
   justify-items: center;
   gap: 10px;
@@ -2645,26 +2659,21 @@ button:active,
 }
 
 .sam-profile-card img {
-  width: min(100%, 280px);
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  object-position: center;
+  width: 100%;
+  height: auto;
   display: block;
-  border: 2px solid #000;
-  background: #f8f6f1;
-  box-sizing: border-box;
 }
 
 .sam-profile-card figcaption {
   width: fit-content;
-  max-width: 16em;
-  padding: 8px 12px;
+  max-width: min(100%, 24em);
+  padding: 9px 14px;
   border: 2px solid #000;
   background: #fff;
   color: #000;
-  font-size: clamp(0.72rem, 1vw, 0.95rem);
+  font-size: clamp(0.82rem, 1.08vw, 1rem);
   font-weight: 900;
-  line-height: 1.55;
+  line-height: 1.38;
   text-align: center;
   box-sizing: border-box;
 }
@@ -2700,10 +2709,10 @@ button:active,
 
 .yu-product-story-card {
   display: grid;
-  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
-  gap: clamp(22px, 4vw, 42px);
+  grid-template-columns: minmax(240px, 340px) minmax(0, 680px);
+  gap: clamp(34px, 5vw, 72px);
   align-items: center;
-  width: min(980px, 100%);
+  width: min(1060px, 92vw);
   margin: 0 auto 1.8em;
 }
 
@@ -2716,6 +2725,7 @@ button:active,
 }
 
 .yu-product-profile-card {
+  width: min(340px, 74vw);
   display: grid;
   justify-items: center;
   gap: 10px;
@@ -2723,26 +2733,21 @@ button:active,
 }
 
 .yu-product-profile-card img {
-  width: min(100%, 280px);
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  object-position: center;
+  width: 100%;
+  height: auto;
   display: block;
-  border: 2px solid #000;
-  background: #f8f6f1;
-  box-sizing: border-box;
 }
 
 .yu-product-profile-card figcaption {
   width: fit-content;
-  max-width: 16em;
-  padding: 8px 12px;
+  max-width: min(100%, 24em);
+  padding: 9px 14px;
   border: 2px solid #000;
   background: #fff;
   color: #000;
-  font-size: clamp(0.72rem, 1vw, 0.95rem);
+  font-size: clamp(0.82rem, 1.08vw, 1rem);
   font-weight: 900;
-  line-height: 1.55;
+  line-height: 1.38;
   text-align: center;
   box-sizing: border-box;
 }
