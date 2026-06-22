@@ -2789,58 +2789,42 @@ function initSocialPhoneScroll() {
 }
 
 function initSocialExpertCards() {
-  const section = document.querySelector('[data-social-expert-scroll]');
-  if (!section || section.dataset.socialExpertInitialized === 'true') return;
+  document.querySelectorAll('[data-social-expert-stage]').forEach((stage) => {
+    if (stage.dataset.socialExpertInitialized === 'true') return;
 
-  const panels = Array.from(section.querySelectorAll('[data-social-expert-panel]'));
-  const track = section.querySelector('[data-social-expert-track]');
-  const progressBar = section.querySelector('[data-social-expert-progress]');
-  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
-  let frameId = 0;
+    const container = stage.closest('.social-expert-sticky') || stage;
+    const panels = Array.from(stage.querySelectorAll('[data-social-expert-panel]'));
+    const prevButton = container.querySelector('[data-social-expert-prev]');
+    const nextButton = container.querySelector('[data-social-expert-next]');
+    if (!panels.length || !prevButton || !nextButton) return;
 
-  function updateExpertScroll() {
-    if (window.matchMedia('(max-width: 620px)').matches) {
-      section.style.setProperty('--social-expert-track-x', '0px');
-      section.style.setProperty('--social-expert-progress', '0%');
-      panels.forEach((panel, index) => panel.classList.toggle('is-active', index === 0));
-      if (progressBar) progressBar.style.width = '0%';
-      return;
+    function activePanelIndex() {
+      const stageLeft = stage.getBoundingClientRect().left;
+      const stageCenter = stageLeft + stage.clientWidth / 2;
+      return panels.reduce((closestIndex, panel, index) => {
+        const rect = panel.getBoundingClientRect();
+        const distance = Math.abs(rect.left + rect.width / 2 - stageCenter);
+        const closestRect = panels[closestIndex].getBoundingClientRect();
+        const closestDistance = Math.abs(closestRect.left + closestRect.width / 2 - stageCenter);
+        return distance < closestDistance ? index : closestIndex;
+      }, 0);
     }
 
-    const rect = section.getBoundingClientRect();
-    const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
-    const progress = clamp(-rect.top / scrollable, 0, 1);
-    const activeIndex = clamp(Math.floor(progress * panels.length), 0, panels.length - 1);
-
-    panels.forEach((panel, index) => panel.classList.toggle('is-active', index === activeIndex));
-
-    if (track && panels.length) {
-      const firstPanel = panels[0];
-      const styles = window.getComputedStyle(track);
-      const gap = Number.parseFloat(styles.columnGap || styles.gap || '0') || 0;
-      const cardWidth = firstPanel.getBoundingClientRect().width;
-      const startX = (window.innerWidth - cardWidth) / 2;
-      const travel = (cardWidth + gap) * (panels.length - 1);
-      section.style.setProperty('--social-expert-track-x', `${startX - progress * travel}px`);
+    function scrollToPanel(index) {
+      const target = panels[Math.min(Math.max(index, 0), panels.length - 1)];
+      target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 
-    const percent = Math.round(progress * 1000) / 10;
-    section.style.setProperty('--social-expert-progress', `${percent}%`);
-    if (progressBar) progressBar.style.width = `${percent}%`;
-  }
-
-  function requestExpertScrollUpdate() {
-    if (frameId) return;
-    frameId = window.requestAnimationFrame(() => {
-      frameId = 0;
-      updateExpertScroll();
+    prevButton.addEventListener('click', () => {
+      scrollToPanel(activePanelIndex() - 1);
     });
-  }
 
-  updateExpertScroll();
-  window.addEventListener('scroll', requestExpertScrollUpdate, { passive: true });
-  window.addEventListener('resize', requestExpertScrollUpdate);
-  section.dataset.socialExpertInitialized = 'true';
+    nextButton.addEventListener('click', () => {
+      scrollToPanel(activePanelIndex() + 1);
+    });
+
+    stage.dataset.socialExpertInitialized = 'true';
+  });
 }
 
 const bodyCostItems = [

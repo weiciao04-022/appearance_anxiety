@@ -3448,6 +3448,39 @@ button:active,
   display: none;
 }
 
+.social-expert-arrow {
+  position: absolute;
+  top: 56%;
+  z-index: 8;
+  width: 48px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 2px solid #111;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.94);
+  color: #111;
+  font-size: 2.4rem;
+  font-weight: 900;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-50%);
+}
+
+.social-expert-arrow:hover {
+  background: #111;
+  color: #fff;
+}
+
+.social-expert-arrow.is-prev {
+  left: clamp(18px, 3vw, 44px);
+}
+
+.social-expert-arrow.is-next {
+  right: clamp(18px, 3vw, 44px);
+}
+
 .social-expert-carousel {
   display: flex;
   gap: var(--social-expert-card-gap);
