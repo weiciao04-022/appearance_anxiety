@@ -207,8 +207,11 @@ function initScrollVideoIntro() {
   const progressBar = intro.querySelector('[data-comic-progress]');
   const panels = [...intro.querySelectorAll('[data-comic-panel]')];
   const panelStops = panels.map((_, index) => index / panels.length).concat(1.01);
+  let activePanelIndex = -1;
+  let introFrameRequested = false;
 
   function updateIntroProgress() {
+    introFrameRequested = false;
     const rect = intro.getBoundingClientRect();
     const scrollable = Math.max(1, intro.offsetHeight - window.innerHeight);
     const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
@@ -232,12 +235,21 @@ function initScrollVideoIntro() {
       stage.style.transform = `translateY(${Math.max(0, 28 - panelProgress * 28)}px)`;
     }
     if (progressBar) progressBar.style.width = `${percent}%`;
-    panels.forEach((panel, index) => panel.classList.toggle('is-active', index === activeIndex));
+    if (activeIndex !== activePanelIndex) {
+      activePanelIndex = activeIndex;
+      panels.forEach((panel, index) => panel.classList.toggle('is-active', index === activeIndex));
+    }
+  }
+
+  function requestIntroProgressUpdate() {
+    if (introFrameRequested) return;
+    introFrameRequested = true;
+    window.requestAnimationFrame(updateIntroProgress);
   }
 
   updateIntroProgress();
-  window.addEventListener('scroll', updateIntroProgress, { passive: true });
-  window.addEventListener('resize', updateIntroProgress);
+  window.addEventListener('scroll', requestIntroProgressUpdate, { passive: true });
+  window.addEventListener('resize', requestIntroProgressUpdate);
 }
 
 initScrollVideoIntro();
