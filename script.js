@@ -2788,6 +2788,61 @@ function initSocialPhoneScroll() {
   frame.dataset.socialPhoneInitialized = 'true';
 }
 
+function initSocialExpertCards() {
+  const section = document.querySelector('[data-social-expert-scroll]');
+  if (!section || section.dataset.socialExpertInitialized === 'true') return;
+
+  const panels = Array.from(section.querySelectorAll('[data-social-expert-panel]'));
+  const track = section.querySelector('[data-social-expert-track]');
+  const progressBar = section.querySelector('[data-social-expert-progress]');
+  const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+  let frameId = 0;
+
+  function updateExpertScroll() {
+    if (window.matchMedia('(max-width: 620px)').matches) {
+      section.style.setProperty('--social-expert-track-x', '0px');
+      section.style.setProperty('--social-expert-progress', '0%');
+      panels.forEach((panel, index) => panel.classList.toggle('is-active', index === 0));
+      if (progressBar) progressBar.style.width = '0%';
+      return;
+    }
+
+    const rect = section.getBoundingClientRect();
+    const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
+    const progress = clamp(-rect.top / scrollable, 0, 1);
+    const activeIndex = clamp(Math.floor(progress * panels.length), 0, panels.length - 1);
+
+    panels.forEach((panel, index) => panel.classList.toggle('is-active', index === activeIndex));
+
+    if (track && panels.length) {
+      const firstPanel = panels[0];
+      const styles = window.getComputedStyle(track);
+      const gap = Number.parseFloat(styles.columnGap || styles.gap || '0') || 0;
+      const cardWidth = firstPanel.getBoundingClientRect().width;
+      const startX = (window.innerWidth - cardWidth) / 2;
+      const travel = (cardWidth + gap) * (panels.length - 1);
+      section.style.setProperty('--social-expert-track-x', `${startX - progress * travel}px`);
+    }
+
+    const percent = Math.round(progress * 1000) / 10;
+    section.style.setProperty('--social-expert-progress', `${percent}%`);
+    if (progressBar) progressBar.style.width = `${percent}%`;
+  }
+
+  function requestExpertScrollUpdate() {
+    if (frameId) return;
+    frameId = window.requestAnimationFrame(() => {
+      frameId = 0;
+      updateExpertScroll();
+    });
+  }
+
+  updateExpertScroll();
+  window.addEventListener('scroll', requestExpertScrollUpdate, { passive: true });
+  window.addEventListener('resize', requestExpertScrollUpdate);
+  section.dataset.socialExpertInitialized = 'true';
+}
+
 const bodyCostItems = [
   {
     id: 'gym',
@@ -3126,6 +3181,26 @@ function initGymScrollSequence() {
     });
   }
 
+  function fallbackGymSequence() {
+    const basePath = './pic/gymanimation/render-webp';
+    const folders = [
+      ['1_zoomin', 1, 48],
+      ['2_panman', 49, 96],
+      ['3_manpandinosaur', 97, 144],
+      ['4_dinaosaurpanman', 145, 192],
+      ['3_manpandinosaur', 97, 144],
+      ['4_dinaosaurpanman', 145, 192],
+      ['5_zoomout', 193, 240]
+    ];
+    return folders.flatMap(([folder, start, end]) => {
+      const sources = [];
+      for (let frame = start; frame <= end; frame += 1) {
+        sources.push(`${basePath}/${folder}/${String(frame).padStart(4, '0')}.webp`);
+      }
+      return sources;
+    });
+  }
+
   function preloadImage(src) {
     return new Promise((resolve, reject) => {
       const image = new Image();
@@ -3135,27 +3210,33 @@ function initGymScrollSequence() {
     });
   }
 
+  function loadSequence(sequence) {
+    setScrollHeight(sequence.length);
+    resizeCanvas();
+    const uniqueSources = Array.from(new Set(sequence));
+    return Promise.all(uniqueSources.map((src) => preloadImage(src).then((image) => [src, image])))
+      .then((entries) => {
+        const imageMap = new Map(entries);
+        state.frames = sequence.map((src) => imageMap.get(src)).filter(Boolean);
+        section.dataset.sequenceTotalFrames = String(state.frames.length);
+        state.isReady = state.frames.length > 0;
+        requestDraw();
+      });
+  }
+
   fetch(manifestPath)
     .then((response) => {
       if (!response.ok) throw new Error(`Unable to load sequence manifest: ${response.status}`);
       return response.json();
     })
     .then((manifest) => {
-      const sequence = buildSequence(manifest);
-      setScrollHeight(sequence.length);
-      resizeCanvas();
-      const uniqueSources = Array.from(new Set(sequence));
-      return Promise.all(uniqueSources.map((src) => preloadImage(src).then((image) => [src, image])))
-        .then((entries) => {
-          const imageMap = new Map(entries);
-          state.frames = sequence.map((src) => imageMap.get(src)).filter(Boolean);
-          section.dataset.sequenceTotalFrames = String(state.frames.length);
-          state.isReady = state.frames.length > 0;
-          requestDraw();
-        });
+      return loadSequence(buildSequence(manifest));
     })
     .catch((error) => {
       console.warn(error);
+      loadSequence(fallbackGymSequence()).catch((fallbackError) => {
+        console.warn(fallbackError);
+      });
     });
 
   window.addEventListener('scroll', requestDraw, { passive: true });
@@ -3177,6 +3258,9 @@ document.addEventListener('DOMContentLoaded', initWeightStorySection);
 window.addEventListener('load', initWeightStorySection);
 initSocialPhoneScroll();
 document.addEventListener('DOMContentLoaded', initSocialPhoneScroll);
+initSocialExpertCards();
+document.addEventListener('DOMContentLoaded', initSocialExpertCards);
+window.addEventListener('load', initSocialExpertCards);
 initBodyCostCalculator();
 initGymScrollSequence();
 document.addEventListener('DOMContentLoaded', initGymScrollSequence);
