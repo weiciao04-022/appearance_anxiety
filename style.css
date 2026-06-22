@@ -1968,21 +1968,50 @@ button:active,
   margin-left: auto;
 }
 
-.story-character {
+.story-character,
+.story-character-group {
   position: absolute;
   z-index: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+.story-character {
   display: block;
   width: clamp(150px, 21vw, 280px);
   height: auto;
   opacity: 0.72;
-  pointer-events: none;
-  user-select: none;
 }
 
 .story-character-yu {
   top: clamp(0px, 2vw, 24px);
   left: clamp(-28px, -2vw, 6px);
   transform: rotate(-5deg);
+}
+
+.story-character-group {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.story-character-group .story-character {
+  position: static;
+}
+
+.story-character-group figcaption {
+  width: fit-content;
+  max-width: 15em;
+  padding: 8px 12px;
+  border: 2px solid #000;
+  background: #fff;
+  color: #000;
+  font-size: clamp(0.68rem, 0.9vw, 0.86rem);
+  font-weight: 900;
+  line-height: 1.55;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 .story-character-xinmi {
@@ -3529,6 +3558,12 @@ button:active,
   .story-character {
     width: clamp(118px, 38vw, 190px);
     opacity: 0.5;
+  }
+
+  .story-character-group figcaption {
+    font-size: 0.68rem;
+    line-height: 1.45;
+    padding: 6px 9px;
   }
 
   .story-character-yu {
