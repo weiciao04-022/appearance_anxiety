@@ -2410,7 +2410,8 @@ function initXinmiIntroCards() {
     panels.forEach((panel, index) => {
       const distance = index - cardPosition;
       const isActive = isInCardRange && index === activeIndex;
-      const yOffset = clamp(distance, -1.2, 1.2) * 78;
+      const cardSpacing = window.matchMedia('(max-width: 760px)').matches ? 104 : 78;
+      const yOffset = clamp(distance, -1.2, 1.2) * cardSpacing;
       const scale = 1 - Math.min(0.06, Math.abs(distance) * 0.035);
       panel.classList.toggle('is-active', isActive);
       panel.style.setProperty('--xinmi-card-y', `${yOffset}vh`);
@@ -2453,12 +2454,6 @@ function initWeightStorySection() {
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
     function updateComicScroll() {
-      if (window.matchMedia('(max-width: 760px)').matches) {
-        comicScroll.style.setProperty('--haocheng-track-x', '0%');
-        comicScroll.style.setProperty('--haocheng-comic-progress', '0%');
-        if (progressBar) progressBar.style.width = '0%';
-        return;
-      }
       const rect = comicScroll.getBoundingClientRect();
       const scrollable = Math.max(1, comicScroll.offsetHeight - window.innerHeight);
       const progress = clamp(-rect.top / scrollable, 0, 1);
@@ -2792,11 +2787,15 @@ function initSocialExpertCards() {
   document.querySelectorAll('[data-social-expert-stage]').forEach((stage) => {
     if (stage.dataset.socialExpertInitialized === 'true') return;
 
+    const frame = stage.closest('.social-phone-frame');
     const container = stage.closest('.social-expert-sticky') || stage;
+    const track = stage.querySelector('.social-expert-carousel');
     const panels = Array.from(stage.querySelectorAll('[data-social-expert-panel]'));
     const prevButton = container.querySelector('[data-social-expert-prev]');
     const nextButton = container.querySelector('[data-social-expert-next]');
+    const progressBar = container.querySelector('[data-social-expert-progress]');
     if (!panels.length || !prevButton || !nextButton) return;
+    const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
     function activePanelIndex() {
       const stageLeft = stage.getBoundingClientRect().left;
@@ -2810,19 +2809,67 @@ function initSocialExpertCards() {
       }, 0);
     }
 
+    function setActivePanel(index) {
+      panels.forEach((panel, panelIndex) => panel.classList.toggle('is-active', panelIndex === index));
+    }
+
     function scrollToPanel(index) {
       const target = panels[Math.min(Math.max(index, 0), panels.length - 1)];
       target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 
+    function updateScrollDrivenCards() {
+      if (!frame || !track) {
+        stage.style.setProperty('--social-expert-track-x', '0px');
+        if (progressBar) progressBar.style.width = '0%';
+        setActivePanel(activePanelIndex());
+        return;
+      }
+
+      const rect = frame.getBoundingClientRect();
+      const scrollable = Math.max(1, frame.offsetHeight - window.innerHeight);
+      const progress = clamp(-rect.top / scrollable, 0, 1);
+      const firstPanel = panels[0];
+      const lastPanel = panels[panels.length - 1];
+      const firstCenter = firstPanel.offsetLeft + firstPanel.offsetWidth / 2;
+      const lastCenter = lastPanel.offsetLeft + lastPanel.offsetWidth / 2;
+      const startX = stage.clientWidth / 2 - firstCenter;
+      const travel = Math.max(0, lastCenter - firstCenter);
+      stage.style.setProperty('--social-expert-track-x', `${startX - progress * travel}px`);
+
+      const activeIndex = clamp(Math.round(progress * (panels.length - 1)), 0, panels.length - 1);
+      setActivePanel(activeIndex);
+      const percent = Math.round(progress * 1000) / 10;
+      if (progressBar) progressBar.style.width = `${percent}%`;
+    }
+
+    function scrollWindowToPanel(index) {
+      if (!frame) {
+        scrollToPanel(index);
+        return;
+      }
+      const targetIndex = clamp(index, 0, panels.length - 1);
+      const progress = panels.length > 1 ? targetIndex / (panels.length - 1) : 0;
+      const frameTop = frame.getBoundingClientRect().top + window.scrollY;
+      const scrollable = Math.max(1, frame.offsetHeight - window.innerHeight);
+      window.scrollTo({
+        top: frameTop + progress * scrollable,
+        behavior: 'smooth'
+      });
+    }
+
     prevButton.addEventListener('click', () => {
-      scrollToPanel(activePanelIndex() - 1);
+      scrollWindowToPanel(activePanelIndex() - 1);
     });
 
     nextButton.addEventListener('click', () => {
-      scrollToPanel(activePanelIndex() + 1);
+      scrollWindowToPanel(activePanelIndex() + 1);
     });
 
+    stage.addEventListener('scroll', updateScrollDrivenCards, { passive: true });
+    window.addEventListener('scroll', updateScrollDrivenCards, { passive: true });
+    window.addEventListener('resize', updateScrollDrivenCards);
+    updateScrollDrivenCards();
     stage.dataset.socialExpertInitialized = 'true';
   });
 }

@@ -233,8 +233,7 @@ button:active,
 #comic-opening {
   min-height: 1500vh;
   align-items: flex-start;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0;
 }
 
 .opening-comic-sticky {
@@ -294,8 +293,8 @@ button:active,
 
 .opening-comic-hero > div {
   display: grid;
-  gap: 18px;
-  max-width: 860px;
+  gap: 0;
+  max-width: min(1180px, 92vw);
   text-align: center;
   text-shadow: 0 1px 16px rgba(255, 255, 255, 0.86);
 }
@@ -309,28 +308,45 @@ button:active,
 
 .opening-comic-hero h1 {
   margin: 0;
-  font-size: clamp(2.7rem, 7vw, 7.4rem);
-  line-height: 1.05;
+  font-size: clamp(2.25rem, 5.8vw, 6.6rem);
+  line-height: 1.32;
+  letter-spacing: 0.04em;
 }
 
 .opening-comic-hero span {
   justify-self: center;
-  display: inline-grid;
-  min-width: 120px;
-  min-height: 42px;
-  place-items: center;
-  border: 1px solid #000;
-  background: rgba(255, 255, 255, 0.82);
-  font-size: 0.95rem;
-  font-weight: 700;
+  position: fixed;
+  left: 50%;
+  bottom: clamp(38px, 8vh, 86px);
+  display: block;
+  width: clamp(34px, 5vw, 58px);
+  height: clamp(34px, 5vw, 58px);
+  animation: scrollCuePulse 2.8s ease-in-out infinite;
+  transform: translateX(-50%) rotate(45deg);
 }
 
-.opening-comic-hero span::after {
-  content: "↓";
-  margin-left: 8px;
+.opening-comic-hero span::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-right: 3px solid #000;
+  border-bottom: 3px solid #000;
+}
+
+@keyframes scrollCuePulse {
+  0%,
+  100% {
+    opacity: 0.42;
+    transform: translateX(-50%) rotate(45deg) translate(0, 0);
+  }
+  45% {
+    opacity: 1;
+    transform: translateX(-50%) rotate(45deg) translate(6px, 6px);
+  }
 }
 
 .opening-comic-stage {
+  --comic-panel-size: min(760px, calc(100svh - 108px), 92vw);
   width: min(1120px, 92vw);
   display: grid;
   gap: 10px;
@@ -343,7 +359,7 @@ button:active,
 .opening-comic-strip {
   position: relative;
   width: 100%;
-  height: min(82vh, 760px);
+  height: var(--comic-panel-size);
   overflow: visible;
   background: #fff;
   transform: translateZ(0);
@@ -353,7 +369,7 @@ button:active,
   position: absolute;
   top: 0;
   left: 50%;
-  width: min(760px, 100%);
+  width: var(--comic-panel-size);
   height: 100%;
   opacity: 0;
   transform: translate3d(-50%, 0, 0);
@@ -375,7 +391,7 @@ button:active,
 }
 
 .opening-comic-video-page {
-  --opening-video-frame-width: min(760px, 100%);
+  --opening-video-frame-width: var(--comic-panel-size);
   width: 100%;
   display: grid;
   place-items: center;
@@ -407,7 +423,8 @@ button:active,
 }
 
 .opening-comic-progress {
-  width: 100%;
+  width: var(--comic-panel-size);
+  justify-self: center;
   height: 8px;
   border: 1px solid #000;
   overflow: hidden;
@@ -1935,8 +1952,8 @@ button:active,
     top: 50%;
     width: min(100%, 420px);
     max-height: 86vh;
-    gap: 12px;
-    padding: 22px;
+    gap: 18px;
+    padding: 22px 22px 46px;
     overflow: auto;
     transform: translate3d(-50%, calc(-50% + var(--xinmi-card-y, 86vh)), 0) scale(var(--xinmi-card-scale, 0.96));
   }
@@ -1976,6 +1993,8 @@ button:active,
 .weight-story-section {
   width: 100%;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
   gap: clamp(56px, 7vw, 96px);
 }
 
@@ -2455,19 +2474,21 @@ button:active,
 .haocheng-progress-block {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(320px, 520px) minmax(300px, 460px);
+  grid-template-columns: minmax(300px, 520px) minmax(260px, 430px);
   align-items: center;
-  justify-content: space-between;
-  gap: clamp(42px, 7vw, 112px);
-  width: min(1360px, 100%);
-  min-height: min(100vh, 900px);
+  justify-content: center;
+  gap: clamp(36px, 5vw, 76px);
+  width: min(1080px, 92vw);
+  min-height: min(100svh, 900px);
   margin: 0 auto;
-  padding: clamp(64px, 8vw, 120px) clamp(48px, 9vw, 168px);
+  justify-self: center;
+  padding: clamp(56px, 7vw, 96px) 0;
   border: 0;
   border-radius: 0;
   background: #fff;
   box-shadow: none;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .haocheng-progress-copy {
@@ -2504,8 +2525,10 @@ button:active,
 .haocheng-compare {
   position: relative;
   order: 2;
-  width: min(100%, 430px);
-  height: clamp(580px, 78vh, 780px);
+  width: min(100%, 430px, calc((100svh - 140px) * 0.456));
+  aspect-ratio: 1530 / 3354;
+  min-height: 0;
+  height: auto;
   justify-self: center;
   margin: 0;
   border: 0;
@@ -2540,12 +2563,18 @@ button:active,
 }
 
 .haocheng-weight-compare .haocheng-after {
-  object-position: center bottom;
-  transform: scale(1.16);
+  object-fit: cover;
+  object-position: 48% bottom;
+  transform: none;
 }
 
 .haocheng-weight-compare .haocheng-before {
-  object-position: center center;
+  width: 110%;
+  height: 110%;
+  left: -20%;
+  top: -2%;
+  object-fit: cover;
+  object-position: center bottom;
 }
 
 .haocheng-before {
@@ -2641,13 +2670,17 @@ button:active,
 
 .sam-story-card {
   display: grid;
-  grid-template-columns: minmax(240px, 320px) minmax(0, 620px);
-  gap: clamp(30px, 4vw, 56px);
+  grid-template-columns: minmax(240px, 320px) minmax(0, 660px);
+  gap: clamp(34px, 5vw, 72px);
   align-items: center;
   justify-content: center;
-  width: min(1000px, 86vw);
+  width: min(1060px, 100%);
   margin: 0 auto 1.8em;
-  transform: translateX(clamp(-96px, -5vw, -48px));
+  transform: none;
+}
+
+.gym-after-copy {
+  width: min(1100px, 92vw);
 }
 
 .sam-story-card > div {
@@ -3385,15 +3418,17 @@ button:active,
   --social-expert-card-gap: clamp(26px, 4vw, 58px);
   position: relative;
   width: 100vw;
-  min-height: 0;
+  min-height: 420vh;
   margin: 0 calc(50% - 50vw) clamp(36px, 6vw, 72px);
   background: #fff;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .social-expert-sticky {
-  position: relative;
-  min-height: 0;
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  min-height: 100svh;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: clamp(12px, 2vw, 24px);
@@ -3436,10 +3471,10 @@ button:active,
   width: 100vw;
   min-height: 0;
   margin: 0;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: none;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
@@ -3488,6 +3523,9 @@ button:active,
   width: max-content;
   min-height: 0;
   padding: 0 max(7vw, calc((100vw - 1120px) / 2 + 24px)) 16px;
+  transform: translate3d(var(--social-expert-track-x, 0px), 0, 0);
+  transition: transform 0.08s linear;
+  will-change: transform;
 }
 
 .social-expert-card {
@@ -3578,7 +3616,7 @@ button:active,
 }
 
 .social-expert-progress {
-  display: none;
+  display: block;
   width: min(1120px, 86vw);
   height: 5px;
   margin: 0 auto;
@@ -3610,7 +3648,7 @@ button:active,
   }
 
   .haocheng-progress-block {
-    width: 100%;
+    width: min(560px, 100%);
     min-height: 0;
     margin: 0 auto;
     padding: clamp(48px, 8vw, 72px) clamp(22px, 6vw, 40px);
@@ -3624,8 +3662,8 @@ button:active,
 
   .haocheng-compare {
     order: 2;
-    width: min(100%, 360px);
-    height: clamp(500px, 72vh, 680px);
+    width: min(100%, 360px, calc((100svh - 180px) * 0.456));
+    height: auto;
   }
 
   .dinosaur-story-card {
@@ -3659,12 +3697,16 @@ button:active,
 @media (max-width: 620px) {
   .social-phone-frame {
     width: 100vw;
-    min-height: 0;
+    min-height: 420vh;
+    margin: 0 calc(50% - 50vw) clamp(36px, 6vw, 72px);
+    overflow: visible;
   }
 
   .social-expert-sticky {
-    position: relative;
-    min-height: 0;
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    min-height: 100svh;
     display: grid;
     padding: 18px 0 24px;
   }
@@ -3674,9 +3716,10 @@ button:active,
   }
 
   .social-expert-stage {
-    overflow-x: auto;
+    width: 100vw;
+    overflow-x: hidden;
     overflow-y: hidden;
-    scroll-snap-type: x mandatory;
+    scroll-snap-type: none;
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
   }
@@ -3690,7 +3733,8 @@ button:active,
     min-height: 0;
     padding: 20px 18px 28px;
     scroll-padding-inline: 18px;
-    transform: none;
+    transform: translate3d(var(--social-expert-track-x, 0px), 0, 0);
+    transition: transform 0.08s linear;
   }
 
   .social-expert-card {
@@ -3728,10 +3772,14 @@ button:active,
   }
 
   .social-expert-mobile-hint {
-    display: block;
+    display: none;
   }
 
   .social-expert-progress {
+    display: block;
+  }
+
+  .social-expert-arrow {
     display: none;
   }
 
@@ -3818,8 +3866,8 @@ button:active,
   }
 
   .haocheng-compare {
-    width: min(100%, 330px);
-    height: clamp(460px, 68vh, 620px);
+    width: min(100%, 330px, calc((100svh - 170px) * 0.456));
+    height: auto;
   }
 
   .meal-planner-options [data-meal-options] {
@@ -3892,36 +3940,34 @@ button:active,
     --haocheng-card-width: min(82vw, 420px);
     --haocheng-card-height: min(66vh, 520px);
     --haocheng-card-gap: 14px;
-    min-height: 0;
+    min-height: 430vh;
   }
 
   .haocheng-comic-sticky {
-    position: relative;
-    min-height: 0;
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    min-height: 100svh;
     display: grid;
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
     padding: 28px 0 34px;
-    overflow: visible;
+    overflow: hidden;
   }
 
   .haocheng-comic-heading {
-    position: static;
+    position: relative;
     width: min(88vw, 520px);
     margin: 0 auto 14px;
-  }
-
-  .haocheng-comic-heading small {
-    display: none;
   }
 
   .haocheng-comic-stage {
     width: 100vw;
     min-height: 0;
-    height: min(68vh, 540px);
-    overflow-x: auto;
+    height: auto;
+    overflow-x: hidden;
     overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 7vw;
+    scroll-snap-type: none;
+    scroll-padding-inline: 0;
     scrollbar-width: none;
   }
 
@@ -3933,8 +3979,8 @@ button:active,
     height: 100%;
     min-height: 0;
     gap: var(--haocheng-card-gap);
-    padding-inline: 7vw;
-    transform: none !important;
+    padding-inline: 0;
+    transform: translate3d(var(--haocheng-track-x, 0px), 0, 0);
   }
 
   .haocheng-comic-stage article {
@@ -3956,17 +4002,16 @@ button:active,
   }
 
   .haocheng-comic-mobile-hint {
-    display: block;
-    margin-top: 12px;
+    display: none;
   }
 
   .haocheng-comic-mobile-hint::after {
-    content: "  ← →";
+    content: none;
     letter-spacing: 0.08em;
   }
 
   .haocheng-comic-progress {
-    display: none;
+    display: block;
   }
 }
 
@@ -4272,6 +4317,7 @@ button:active,
   }
 
   .opening-comic-stage {
+    --comic-panel-size: min(430px, calc(100svw - 44px), calc(100svh - 108px));
     width: 100%;
     max-width: 520px;
     padding: 0 12px;
@@ -4279,13 +4325,13 @@ button:active,
   }
 
   .opening-comic-strip {
-    height: auto;
-    aspect-ratio: 3 / 5;
+    height: var(--comic-panel-size);
+    aspect-ratio: auto;
     box-sizing: border-box;
   }
 
   .opening-comic-strip > [data-comic-panel] {
-    width: min(100%, 430px);
+    width: var(--comic-panel-size);
   }
 
   .opening-comic-strip img {
@@ -4293,7 +4339,7 @@ button:active,
   }
 
   .opening-comic-video-page {
-    width: min(100%, 430px);
+    width: var(--comic-panel-size);
     height: 100%;
     place-items: center;
   }
