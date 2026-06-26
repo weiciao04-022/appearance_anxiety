@@ -1579,6 +1579,16 @@ button:active,
   background: #fff;
 }
 
+#intro-text.reveal {
+  opacity: 1;
+  transform: none;
+}
+
+#intro-text .xinmi-card-scroll.is-inline-media {
+  opacity: 1;
+  visibility: visible;
+}
+
 #intro-text .xinmi-intro-copy {
   width: min(1060px, 92vw);
   min-width: 0;
@@ -1588,6 +1598,8 @@ button:active,
   gap: clamp(34px, 5vw, 72px);
   align-items: center;
   color: #2f3133;
+  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+  line-height: 2;
   letter-spacing: 0;
   position: relative;
   z-index: auto;
@@ -1599,16 +1611,15 @@ button:active,
 }
 
 #intro-text .xinmi-intro-copy h2 {
-  grid-column: 2;
-  margin: 0 0 0.55em;
+  margin: 0 0 1.1em;
   color: #111;
-  font-size: clamp(1.85rem, 3.4vw, 3.45rem);
-  line-height: 1.22;
+  font-size: clamp(1.7rem, 3.2vw, 3rem);
+  line-height: 1.35;
   letter-spacing: 0;
 }
 
 #intro-text .xinmi-intro-copy p {
-  margin: 0 0 1.15em;
+  margin: 0 0 1.35em;
 }
 
 #intro-text .xinmi-intro-copy p,
@@ -1638,12 +1649,12 @@ button:active,
 
 .xinmi-speaker figcaption {
   width: fit-content;
-  max-width: min(100%, 22em);
+  max-width: min(100%, 24em);
   padding: 9px 14px;
   border: 2px solid #000;
   background: #fff;
   color: #000;
-  font-size: clamp(0.74rem, 1vw, 1rem);
+  font-size: clamp(0.82rem, 1.08vw, 1rem);
   font-weight: 900;
   line-height: 1.38;
   text-align: center;
@@ -1668,6 +1679,84 @@ button:active,
   position: relative;
   min-height: 560vh;
   background: #fff;
+}
+
+.xinmi-card-scroll.is-inline-media {
+  width: 100%;
+  min-height: 320vh;
+  overflow: visible;
+}
+
+.xinmi-card-scroll.is-inline-media .xinmi-card-sticky {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  justify-items: center;
+  width: 100%;
+  padding: 96px 6vw;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.xinmi-card-scroll.is-inline-media .xinmi-intro-copy {
+  grid-area: 1 / 1;
+  z-index: 1;
+}
+
+.xinmi-card-scroll.is-inline-media.has-active-card .xinmi-story-text {
+  filter: blur(3px);
+  opacity: 0.46;
+}
+
+.xinmi-card-scroll.is-inline-media .xinmi-story-card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 8;
+  width: min(1100px, 74vw);
+  max-height: none;
+  overflow: visible;
+  pointer-events: auto;
+  visibility: hidden;
+  transform: translate3d(-50%, calc(-50% + var(--xinmi-inline-card-y, 120vh)), 0);
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  box-shadow: 0 28px 76px rgba(38, 41, 43, 0.22);
+  padding: clamp(16px, 2vw, 26px);
+  will-change: transform;
+}
+
+.xinmi-card-scroll.is-inline-media .xinmi-progress-card {
+  width: min(1100px, 74vw);
+  margin-top: 0;
+}
+
+.xinmi-card-scroll.is-inline-media .xinmi-food-card {
+  width: min(980px, 68vw);
+  margin-top: 0;
+}
+
+.xinmi-card-scroll.is-inline-media .xinmi-story-card p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(1.02rem, 1.35vw, 1.18rem);
+  line-height: 1.9;
+}
+
+.xinmi-card-scroll.is-inline-media .xinmi-story-card small {
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.xinmi-card-scroll.is-inline-media .xinmi-month-compare figcaption,
+.xinmi-card-scroll.is-inline-media .xinmi-month-compare p {
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.xinmi-card-scroll.is-inline-media .xinmi-story-card .slider-action-hint {
+  border-color: rgba(255, 255, 255, 0.42);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
 }
 
 .xinmi-card-sticky {
@@ -1906,6 +1995,11 @@ button:active,
   background: #f4f0ea;
 }
 
+.xinmi-card-scroll.is-inline-media .xinmi-food-grid img {
+  aspect-ratio: 3 / 4.1;
+  object-fit: cover;
+}
+
 @media (max-width: 1180px) {
   #intro-text .xinmi-intro-copy {
     width: min(960px, 92vw);
@@ -1982,8 +2076,18 @@ button:active,
     min-height: 430vh;
   }
 
+  .xinmi-card-scroll.is-inline-media {
+    min-height: 360vh;
+  }
+
   .xinmi-card-sticky {
     padding: 44px 18px;
+  }
+
+  .xinmi-card-scroll.is-inline-media .xinmi-card-sticky {
+    min-height: 100vh;
+    padding: 72px 22px;
+    overflow: hidden;
   }
 
   .xinmi-story-card {
@@ -2003,6 +2107,18 @@ button:active,
     transform: translate3d(-50%, calc(-50% + var(--xinmi-card-y, 0vh)), 0) scale(var(--xinmi-card-scale, 1));
   }
 
+  .xinmi-card-scroll.is-inline-media .xinmi-story-card,
+  .xinmi-card-scroll.is-inline-media .xinmi-story-card.is-active,
+  .xinmi-card-scroll.is-inline-media .xinmi-media-panel.is-active {
+    left: 50%;
+    top: 50%;
+    width: min(88vw, 420px);
+    max-height: none;
+    padding: 18px;
+    overflow: visible;
+    transform: translate3d(-50%, calc(-50% + var(--xinmi-inline-card-y, 120vh)), 0);
+  }
+
   .xinmi-story-card p {
     font-size: 1rem;
     line-height: 1.68;
@@ -2011,6 +2127,22 @@ button:active,
   .xinmi-month-grid,
   .xinmi-food-grid {
     grid-template-columns: 1fr;
+  }
+
+  .xinmi-card-scroll.is-inline-media .xinmi-month-grid,
+  .xinmi-card-scroll.is-inline-media .xinmi-food-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .xinmi-card-scroll.is-inline-media .xinmi-story-card p {
+    font-size: clamp(0.78rem, 2.7vw, 0.95rem);
+    line-height: 1.55;
+  }
+
+  .xinmi-card-scroll.is-inline-media .xinmi-month-compare figcaption,
+  .xinmi-card-scroll.is-inline-media .xinmi-month-compare p {
+    font-size: clamp(0.62rem, 2.2vw, 0.78rem);
   }
 
   .xinmi-comparison {
@@ -2130,6 +2262,375 @@ button:active,
   right: clamp(-10px, 2vw, 36px);
   bottom: clamp(8px, 3vw, 48px);
   transform: none;
+}
+
+.social-anxiety-chart {
+  width: 100%;
+  padding: clamp(54px, 7vw, 88px) 6vw;
+  background: #fff;
+  color: #30343a;
+  box-sizing: border-box;
+}
+
+.social-anxiety-chart-inner {
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(22px, 3vw, 34px);
+}
+
+.social-anxiety-chart-header {
+  display: grid;
+  gap: 12px;
+  max-width: 840px;
+}
+
+.social-anxiety-chart-kicker,
+.social-anxiety-source {
+  margin: 0;
+  color: #6f7780;
+  font-size: 0.86rem;
+  line-height: 1.6;
+}
+
+.social-anxiety-chart-kicker {
+  font-weight: 800;
+}
+
+.social-anxiety-chart h2,
+.social-anxiety-chart h3,
+.social-anxiety-chart h4,
+.social-anxiety-chart p {
+  letter-spacing: 0;
+}
+
+.social-anxiety-chart h2 {
+  margin: 0;
+  color: #20242a;
+  font-size: clamp(1.8rem, 3.2vw, 3rem);
+  line-height: 1.28;
+}
+
+.social-anxiety-chart-header p {
+  margin: 0;
+  color: #3f454c;
+  font-size: clamp(1rem, 1.25vw, 1.12rem);
+  line-height: 1.9;
+}
+
+.social-anxiety-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid #d9dee4;
+  border-left: 1px solid #d9dee4;
+}
+
+.social-anxiety-stat-grid article {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 132px;
+  padding: clamp(18px, 2.4vw, 26px);
+  border-right: 1px solid #d9dee4;
+  border-bottom: 1px solid #d9dee4;
+  background: #fbfcfd;
+  box-sizing: border-box;
+}
+
+.social-anxiety-stat-grid b {
+  color: #456f98;
+  font-size: clamp(2rem, 3.3vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.social-anxiety-stat-grid span {
+  color: #30343a;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+.social-anxiety-panel {
+  border-top: 1px solid #cfd6de;
+  border-bottom: 1px solid #cfd6de;
+  padding: clamp(20px, 3vw, 32px) 0;
+}
+
+.social-anxiety-panel-heading {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.7fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 18px;
+}
+
+.social-anxiety-panel-heading h3 {
+  margin: 0;
+  color: #20242a;
+  font-size: clamp(1.1rem, 1.55vw, 1.35rem);
+  line-height: 1.45;
+}
+
+.social-anxiety-panel-heading p {
+  margin: 0;
+  color: #5a646e;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.social-anxiety-bars {
+  display: grid;
+  gap: 12px;
+}
+
+.social-anxiety-bars button,
+.social-anxiety-compare-row {
+  display: grid;
+  grid-template-columns: minmax(86px, 130px) minmax(0, 1fr) minmax(54px, auto);
+  gap: 14px;
+  align-items: center;
+}
+
+.social-anxiety-bars button {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.social-anxiety-bars button span,
+.social-anxiety-compare-row span {
+  color: #30343a;
+  font-size: 0.94rem;
+  line-height: 1.35;
+}
+
+.social-anxiety-bars i,
+.social-anxiety-compare-row i {
+  position: relative;
+  display: block;
+  height: 14px;
+  background: #edf1f5;
+  overflow: hidden;
+}
+
+.social-anxiety-bars i::after,
+.social-anxiety-compare-row i::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  background: #7d9fbd;
+  transition: width 0.9s ease;
+}
+
+.social-anxiety-chart.is-visible .social-anxiety-bars i::after,
+.social-anxiety-chart.is-visible .social-anxiety-compare-row i::after {
+  width: var(--bar-value);
+}
+
+.social-anxiety-bars button.is-high-use i::after,
+.social-anxiety-compare-row i::after {
+  background: #456f98;
+}
+
+.social-anxiety-compare-row.is-low-use i::after {
+  background: #9fb7ca;
+}
+
+.social-anxiety-bars b,
+.social-anxiety-compare-row b {
+  color: #20242a;
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.social-anxiety-bars button:hover span,
+.social-anxiety-bars button:focus-visible span,
+.social-anxiety-compare-list article:hover h4,
+.social-anxiety-compare-list article:focus-visible h4 {
+  color: #456f98;
+}
+
+.social-anxiety-bars button:focus-visible,
+.social-anxiety-compare-list article:focus-visible {
+  outline: 2px solid rgba(69, 111, 152, 0.42);
+  outline-offset: 4px;
+}
+
+.social-anxiety-average {
+  margin: 14px 0 0;
+  color: #6f7780;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.social-anxiety-compare-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 48px);
+}
+
+.social-anxiety-compare-list article {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  padding: 0;
+  border-top: 0;
+}
+
+.social-anxiety-compare-list header {
+  display: block;
+  text-align: center;
+}
+
+.social-anxiety-compare-list h4 {
+  margin: 0;
+  color: #20242a;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.social-anxiety-compare-chart {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(92px, 132px));
+  justify-content: center;
+  gap: clamp(12px, 1.6vw, 20px);
+}
+
+.social-anxiety-compare-list .social-anxiety-compare-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 170px auto;
+  gap: 8px;
+  justify-items: center;
+  align-items: end;
+}
+
+.social-anxiety-compare-list .social-anxiety-compare-row span {
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.social-anxiety-compare-list .social-anxiety-compare-row i {
+  width: 58px;
+  height: 170px;
+}
+
+.social-anxiety-compare-list .social-anxiety-compare-row i::after {
+  inset: auto 0 0;
+  width: 100%;
+  height: 0;
+  transition: height 0.9s ease;
+}
+
+.social-anxiety-chart.is-visible .social-anxiety-compare-list .social-anxiety-compare-row i::after {
+  width: 100%;
+  height: var(--bar-value);
+}
+
+.social-anxiety-compare-list .social-anxiety-compare-row b {
+  text-align: center;
+}
+
+.social-anxiety-delta-line {
+  position: absolute;
+  left: 50%;
+  top: 29px;
+  z-index: 2;
+  width: calc(100% - 44px);
+  height: 170px;
+  overflow: visible;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.social-anxiety-delta-line line {
+  stroke: rgba(69, 111, 152, 0.48);
+  stroke-width: 1.2;
+  vector-effect: non-scaling-stroke;
+}
+
+.social-anxiety-delta-line rect {
+  fill: rgba(255, 255, 255, 0.98);
+}
+
+.social-anxiety-delta-line text {
+  fill: #456f98;
+  font-size: 6.8px;
+  font-weight: 900;
+  text-anchor: middle;
+}
+
+.social-anxiety-explain {
+  margin: 0;
+  max-width: 880px;
+  color: #3f454c;
+  font-size: clamp(1rem, 1.2vw, 1.1rem);
+  line-height: 1.9;
+}
+
+.social-anxiety-source {
+  padding-top: 8px;
+  border-top: 1px solid #d9dee4;
+}
+
+@media (max-width: 900px) {
+  .social-anxiety-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .social-anxiety-panel-heading,
+  .social-anxiety-compare-list {
+    grid-template-columns: 1fr;
+  }
+
+  .social-anxiety-compare-list article {
+    max-width: 420px;
+  }
+}
+
+@media (max-width: 620px) {
+  .social-anxiety-chart {
+    padding: 48px 22px;
+  }
+
+  .social-anxiety-stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .social-anxiety-stat-grid article {
+    min-height: 0;
+  }
+
+  .social-anxiety-bars button {
+    grid-template-columns: 1fr minmax(48px, auto);
+    gap: 8px 12px;
+  }
+
+  .social-anxiety-bars button span {
+    grid-column: 1 / -1;
+  }
+
+  .social-anxiety-bars i {
+    min-width: 0;
+  }
+
+  .social-anxiety-compare-list .social-anxiety-compare-row i {
+    width: 48px;
+    height: 132px;
+  }
+
+  .social-anxiety-delta-line {
+    top: 29px;
+    height: 132px;
+  }
 }
 
 @media (max-width: 1080px) {
@@ -2815,15 +3316,46 @@ button:active,
 
 .yu-product-story-card {
   display: grid;
-  grid-template-columns: minmax(240px, 340px) minmax(0, 680px);
-  gap: clamp(34px, 5vw, 72px);
+  grid-template-columns: minmax(220px, 320px) minmax(0, 640px);
+  gap: clamp(30px, 4.5vw, 60px);
   align-items: center;
-  width: min(1060px, 92vw);
+  justify-content: center;
+  width: min(1000px, 92vw);
   margin: 0 auto 1.8em;
-  transform: translateX(clamp(-84px, -4vw, -36px));
+  transform: none;
+}
+
+.post-cost-copy {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+}
+
+.fitness-trend-copy {
+  width: 100%;
+}
+
+.fitness-trend-copy-inner {
+  display: grid;
+  grid-template-columns: minmax(220px, 320px) minmax(0, 640px);
+  gap: clamp(30px, 4.5vw, 60px);
+  align-items: start;
+  justify-content: center;
+  width: min(1000px, 92vw);
+  margin: 0 auto;
+}
+
+.fitness-trend-copy-inner h2,
+.fitness-trend-copy-inner p {
+  grid-column: 2;
+}
+
+.fitness-trend-copy-inner h2 {
+  margin-top: 0;
 }
 
 .yu-product-story-card > div {
+  width: 100%;
   min-width: 0;
 }
 
@@ -2833,6 +3365,7 @@ button:active,
 
 .yu-product-profile-card {
   width: min(340px, 74vw);
+  justify-self: center;
   display: grid;
   justify-items: center;
   gap: 10px;
@@ -3572,6 +4105,15 @@ button:active,
   transform: none;
 }
 
+.social-expert-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.social-expert-card::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(14, 14, 14, 0.28);
+}
+
 .social-expert-card.is-active {
   opacity: 1;
   transform: none;
@@ -3658,6 +4200,62 @@ button:active,
   background: #303234;
 }
 
+@media (max-height: 820px) and (min-width: 621px) {
+  .social-expert-sticky {
+    gap: 10px;
+    padding: 16px 0 18px;
+  }
+
+  .social-expert-heading {
+    width: min(560px, 86vw);
+    gap: 4px;
+    padding: 6px 12px;
+  }
+
+  .social-expert-heading .section-kicker {
+    font-size: clamp(1.05rem, 1.45vw, 1.35rem);
+  }
+
+  .social-expert-heading small {
+    font-size: clamp(0.88rem, 1.08vw, 1.05rem);
+  }
+
+  .social-expert-carousel {
+    padding-bottom: 10px;
+  }
+
+  .social-expert-card {
+    min-height: 0;
+    height: calc(100svh - 190px);
+    max-height: 560px;
+    gap: 12px;
+    padding: 24px 24px 30px;
+    overflow-y: auto;
+  }
+
+  .social-expert-profile {
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .social-expert-profile h3 {
+    font-size: clamp(1.8rem, 2.2vw, 2.35rem);
+  }
+
+  .social-expert-profile p {
+    font-size: clamp(0.88rem, 1.04vw, 1.02rem);
+  }
+
+  .social-expert-question {
+    font-size: clamp(0.92rem, 1.05vw, 1rem);
+  }
+
+  .social-expert-answer {
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    line-height: 1.62;
+  }
+}
+
 @media (max-width: 900px) {
   .peixuan-social-block {
     grid-template-columns: 1fr;
@@ -3710,6 +4308,16 @@ button:active,
   .yu-product-story-card {
     grid-template-columns: 1fr;
     width: min(520px, 100%);
+  }
+
+  .fitness-trend-copy-inner {
+    grid-template-columns: 1fr;
+    width: min(640px, 92vw);
+  }
+
+  .fitness-trend-copy-inner h2,
+  .fitness-trend-copy-inner p {
+    grid-column: 1;
   }
 
   .sam-photo-card {
@@ -5888,7 +6496,7 @@ body,
   position: relative;
   z-index: 4;
   padding: clamp(72px, 9vw, 124px) 0;
-  border-bottom: 1px solid rgba(47, 47, 47, 0.16);
+  border-bottom: 0;
   background: #fff;
   color: #2f2f2f;
 }
@@ -6263,8 +6871,8 @@ body,
 
 .fitness-chart-panel {
   position: relative;
-  border-top: 1px solid #e5e7eb;
-  border-bottom: 1px solid #e5e7eb;
+  border-top: 0;
+  border-bottom: 0;
   padding: clamp(18px, 2.7vw, 30px) 0 18px;
 }
 
@@ -6291,11 +6899,11 @@ body,
 }
 
 .fitness-legend-count {
-  background: #2f80ed;
+  background: #456f98;
 }
 
 .fitness-legend-sales {
-  background: #555555;
+  background: #6f7780;
 }
 
 .fitness-chart-svg {
@@ -6312,12 +6920,12 @@ body,
 }
 
 .fitness-grid-line {
-  stroke: #e5e7eb;
+  stroke: #e9edf1;
   stroke-width: 1;
 }
 
 .fitness-axis-line {
-  stroke: #cfd4dc;
+  stroke: #d9dee4;
   stroke-width: 1;
 }
 
@@ -6338,11 +6946,11 @@ body,
 }
 
 .fitness-line-count {
-  stroke: #2f80ed;
+  stroke: #456f98;
 }
 
 .fitness-line-sales {
-  stroke: #555555;
+  stroke: #6f7780;
 }
 
 .fitness-bar {
@@ -6358,21 +6966,21 @@ body,
 }
 
 .fitness-scrolly-chart.is-chart-visible .fitness-bar {
-  opacity: 0.88;
+  opacity: 0.9;
   transform: scaleY(1);
 }
 
 .fitness-bar-count {
-  fill: #2f80ed;
+  fill: #5f86aa;
 }
 
 .fitness-bar-sales {
-  fill: #555555;
+  fill: #6f7780;
 }
 
 .fitness-bar.is-active {
   opacity: 1;
-  stroke: #333333;
+  stroke: #30343a;
   stroke-width: 1;
 }
 
@@ -6380,7 +6988,7 @@ body,
 .fitness-bar:focus {
   opacity: 1;
   outline: none;
-  stroke: #333333;
+  stroke: #30343a;
   stroke-width: 1.4;
 }
 
@@ -6391,11 +6999,11 @@ body,
 }
 
 .fitness-point-count {
-  fill: #2f80ed;
+  fill: #456f98;
 }
 
 .fitness-point-sales {
-  fill: #555555;
+  fill: #6f7780;
 }
 
 .fitness-point-label {
@@ -6411,21 +7019,28 @@ body,
 }
 
 .fitness-callout line {
-  stroke: #9ca3af;
+  stroke: #aeb8c2;
   stroke-width: 1;
   vector-effect: non-scaling-stroke;
 }
 
 .fitness-callout text {
   fill: #333333;
-  font-size: 13px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 950;
 }
 
 .fitness-callout tspan {
-  fill: #777777;
-  font-size: 11px;
-  font-weight: 700;
+  fill: #333333;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.fitness-callout-bg {
+  fill: rgba(255, 255, 255, 0.96);
+  stroke: #cfd6de;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
 }
 
 .fitness-callout {
@@ -6489,9 +7104,9 @@ body,
   display: grid;
   gap: 7px;
   min-width: 0;
-  padding: clamp(18px, 3vw, 28px);
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  padding: clamp(18px, 3vw, 28px) 0;
+  border: 0;
+  border-radius: 0;
   background: #fff;
 }
 
@@ -6502,7 +7117,7 @@ body,
 }
 
 .fitness-summary-card b {
-  color: #2f80ed;
+  color: #456f98;
   font-size: clamp(3.4rem, 8vw, 4.5rem);
   line-height: 0.98;
   letter-spacing: 0;

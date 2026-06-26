@@ -2408,6 +2408,68 @@ function initXinmiIntroCards() {
   const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
   let xinmiFrame = 0;
 
+  function setComparisonReveal(comparison, value) {
+    if (!comparison) return;
+    comparison.style.setProperty('--reveal', `${value}%`);
+  }
+
+  stack.querySelectorAll('[data-xinmi-compare-range]').forEach((range) => {
+    const comparison = range.closest('[data-xinmi-comparison]');
+    setComparisonReveal(comparison, range.value);
+    range.addEventListener('input', (event) => {
+      setComparisonReveal(comparison, event.target.value);
+    });
+  });
+
+  if (stack.classList.contains('is-inline-media')) {
+    const storyText = stack.querySelector('.xinmi-story-text');
+
+    function updateInlineCards() {
+      if (!storyText) return;
+      const rect = stack.getBoundingClientRect();
+      const stackTop = rect.top + window.scrollY;
+      const scrollable = Math.max(1, stack.offsetHeight - window.innerHeight);
+      const progress = clamp((window.scrollY - stackTop) / scrollable, 0, 1);
+
+      const cardStages = [
+        { start: 0.08, end: 0.56 },
+        { start: 0.56, end: 1.04 }
+      ];
+
+      panels.forEach((panel, index) => {
+        const stage = cardStages[index] || cardStages[cardStages.length - 1];
+        const phase = clamp((progress - stage.start) / (stage.end - stage.start), 0, 1);
+        const yOffset = 122 - (phase * 252);
+        const isVisible = progress >= stage.start && progress < stage.end;
+        panel.style.setProperty('--xinmi-inline-card-y', `${yOffset}vh`);
+        panel.style.visibility = isVisible ? 'visible' : 'hidden';
+        panel.style.pointerEvents = isVisible ? 'auto' : 'none';
+        panel.style.zIndex = String(8 + index);
+      });
+
+      const textRect = storyText.getBoundingClientRect();
+      const isOverText = panels.some((panel) => {
+        if (panel.style.visibility === 'hidden') return false;
+        const panelRect = panel.getBoundingClientRect();
+        const verticalOverlap = panelRect.top < textRect.bottom && panelRect.bottom > textRect.top;
+        const horizontalOverlap = panelRect.left < textRect.right && panelRect.right > textRect.left;
+        return verticalOverlap && horizontalOverlap;
+      });
+      stack.classList.toggle('has-active-card', isOverText);
+      xinmiFrame = 0;
+    }
+
+    function requestInlineCardUpdate() {
+      if (xinmiFrame) return;
+      xinmiFrame = window.requestAnimationFrame(updateInlineCards);
+    }
+
+    window.addEventListener('scroll', requestInlineCardUpdate, { passive: true });
+    window.addEventListener('resize', requestInlineCardUpdate);
+    updateInlineCards();
+    return;
+  }
+
   function setActivePanel() {
     const rect = stack.getBoundingClientRect();
     const stackTop = rect.top + window.scrollY;
@@ -2437,19 +2499,6 @@ function initXinmiIntroCards() {
     if (xinmiFrame) return;
     xinmiFrame = window.requestAnimationFrame(setActivePanel);
   }
-
-  function setComparisonReveal(comparison, value) {
-    if (!comparison) return;
-    comparison.style.setProperty('--reveal', `${value}%`);
-  }
-
-  stack.querySelectorAll('[data-xinmi-compare-range]').forEach((range) => {
-    const comparison = range.closest('[data-xinmi-comparison]');
-    setComparisonReveal(comparison, range.value);
-    range.addEventListener('input', (event) => {
-      setComparisonReveal(comparison, event.target.value);
-    });
-  });
 
   window.addEventListener('scroll', requestActivePanelUpdate, { passive: true });
   window.addEventListener('resize', requestActivePanelUpdate);
@@ -3860,20 +3909,38 @@ function initFitnessScrollyChart() {
     });
     const textX = clamp(point.x + dx, chart.left + 82, chart.right - 86);
     const textY = clamp(point.y + dy, chart.top + 22, chart.bottom - 34);
+    const anchor = dx < 0 ? 'end' : 'start';
+    const longestLine = textLines.reduce((longest, line) => Math.max(longest, line.length), 0);
+    const boxWidth = clamp(longestLine * 12 + 24, 132, 236);
+    const boxHeight = 20 + Math.max(0, textLines.length - 1) * 16 + 18;
+    const boxX = anchor === 'end' ? textX - boxWidth + 10 : textX - 10;
+    const boxY = textY - 18;
+    const textCenterX = boxX + boxWidth / 2;
+    const textStartY = boxY + (boxHeight - ((textLines.length - 1) * 15)) / 2;
     group.appendChild(createSvgElement('line', {
       x1: point.x,
       y1: point.y,
       x2: textX,
       y2: textY + 8
     }));
+    group.appendChild(createSvgElement('rect', {
+      class: 'fitness-callout-bg',
+      x: boxX,
+      y: boxY,
+      width: boxWidth,
+      height: boxHeight,
+      rx: 6,
+      ry: 6
+    }));
     const text = createSvgElement('text', {
-      x: textX,
-      y: textY,
-      'text-anchor': dx < 0 ? 'end' : 'start'
+      x: textCenterX,
+      y: textStartY,
+      'text-anchor': 'middle',
+      'dominant-baseline': 'middle'
     });
     textLines.forEach((line, lineIndex) => {
       const tspan = createSvgElement('tspan', {
-        x: textX,
+        x: textCenterX,
         dy: lineIndex === 0 ? 0 : 15
       });
       tspan.textContent = line;
@@ -3946,6 +4013,51 @@ function initFitnessScrollyChart() {
   observer.observe(section);
 }
 
+function initSocialAnxietyChart() {
+  const section = document.querySelector('[data-social-anxiety-chart]');
+  if (!section) return;
+
+  const chartNote = section.querySelector('[data-social-chart-note]');
+  const compareNote = section.querySelector('[data-social-compare-note]');
+  const defaultChartNote = chartNote?.textContent || '';
+  const defaultCompareNote = compareNote?.textContent || '';
+
+  function bindNote(items, target, defaultText, attribute) {
+    if (!target) return;
+    items.forEach((item) => {
+      const text = item.getAttribute(attribute);
+      if (!text) return;
+      const showNote = () => {
+        target.textContent = text;
+      };
+      const resetNote = () => {
+        target.textContent = defaultText;
+      };
+      item.addEventListener('mouseenter', showNote);
+      item.addEventListener('focus', showNote);
+      item.addEventListener('click', showNote);
+      item.addEventListener('mouseleave', resetNote);
+      item.addEventListener('blur', resetNote);
+    });
+  }
+
+  bindNote(section.querySelectorAll('[data-chart-note]'), chartNote, defaultChartNote, 'data-chart-note');
+  bindNote(section.querySelectorAll('[data-compare-note]'), compareNote, defaultCompareNote, 'data-compare-note');
+
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) {
+      section.classList.add('is-visible');
+      observer.disconnect();
+    }
+  }, {
+    root: null,
+    rootMargin: '-12% 0px -12% 0px',
+    threshold: 0.2
+  });
+
+  observer.observe(section);
+}
+
 initDynamicContentTransitions();
 initBodyManagementExperienceHub();
 initBodyMangaScroll();
@@ -3964,3 +4076,5 @@ initGymScrollSequence();
 document.addEventListener('DOMContentLoaded', initGymScrollSequence);
 initFitnessScrollyChart();
 document.addEventListener('DOMContentLoaded', initFitnessScrollyChart);
+initSocialAnxietyChart();
+document.addEventListener('DOMContentLoaded', initSocialAnxietyChart);
