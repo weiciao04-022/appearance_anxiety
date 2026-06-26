@@ -270,7 +270,7 @@ const bodyFatImages = [
     bodyFatTarget: 8,
     bodyFatMin: 8,
     bodyFatMax: 8,
-    selectionNote: '你選擇的是線條較精瘦、肌肉輪廓較明顯的體態。'
+    selectionNote: '你選擇的是體脂較低、肌肉線條較明顯的體態。'
   },
   {
     id: 'female-25',
@@ -281,7 +281,7 @@ const bodyFatImages = [
     bodyFatTarget: 25,
     bodyFatMin: 25,
     bodyFatMax: 25,
-    selectionNote: '你選擇的是線條較柔和、身形曲線較明顯的體態。'
+    selectionNote: '你選擇的是曲線較柔和、整體輪廓較自然的體態。'
   },
   {
     id: 'female-15-18',
@@ -292,7 +292,7 @@ const bodyFatImages = [
     bodyFatTarget: 15,
     bodyFatMin: 15,
     bodyFatMax: 15,
-    selectionNote: '你選擇的是保有部分線條、外觀較自然均衡的體態。'
+    selectionNote: '你選擇的是身形較均衡、保有自然線條的體態。'
   },
   {
     id: 'male-under-8',
@@ -303,7 +303,7 @@ const bodyFatImages = [
     bodyFatTarget: 8,
     bodyFatMin: 8,
     bodyFatMax: 8,
-    selectionNote: '你選擇的是線條較精瘦、肌肉輪廓較明顯的體態。'
+    selectionNote: '你選擇的是肌肉量較高、身形厚實且線條較明顯的體態。'
   },
   {
     id: 'male-20',
@@ -314,7 +314,7 @@ const bodyFatImages = [
     bodyFatTarget: 20,
     bodyFatMin: 20,
     bodyFatMax: 20,
-    selectionNote: '你選擇的是線條較柔和、整體輪廓較厚實的體態。'
+    selectionNote: '你選擇的是整體輪廓較厚實、線條較柔和的體態。'
   },
   {
     id: 'male-15-18',
@@ -325,7 +325,7 @@ const bodyFatImages = [
     bodyFatTarget: 15,
     bodyFatMin: 15,
     bodyFatMax: 15,
-    selectionNote: '你選擇的是保有部分線條、外觀較自然均衡的體態。'
+    selectionNote: '你選擇的是身形較均衡、帶有自然線條的體態。'
   }
 ];
 
@@ -391,7 +391,12 @@ function writeLocalBodyChoiceStat(choice) {
 
 function calculateBodyChoiceStats(stats, selectedBodyImage) {
   const activeChoiceIds = new Set(bodyFatImages.map((image) => image.id));
-  const validStats = stats.filter((item) => activeChoiceIds.has(item.choiceId));
+  const activeGender = selectedBodyImage?.gender || IdealBodySelector.selectedGender;
+  const validStats = stats.filter((item) => {
+    if (!activeChoiceIds.has(item.choiceId)) return false;
+    const statChoice = bodyFatImages.find((image) => image.id === item.choiceId);
+    return (item.gender || statChoice?.gender) === activeGender;
+  });
 
   if (!selectedBodyImage || validStats.length === 0) {
     return {
@@ -424,7 +429,7 @@ function updateBodyChoiceResult() {
   const stats = calculateBodyChoiceStats(IdealBodySelector.voteCounts, IdealBodySelector.selectedBodyImage);
   IdealBodySelector.percentage = stats.percentage;
   const hasSharedStats = IdealBodySelector.statsSource === 'firebase';
-  const statsSourceText = hasSharedStats ? '所有使用者即時選擇' : '本機即時選擇';
+  const statsSourceText = hasSharedStats ? '同性別使用者即時選擇' : '本機同性別選擇';
 
   choiceResult.innerHTML = `
     <article class="body-choice-stat-card">
@@ -438,8 +443,8 @@ function updateBodyChoiceResult() {
       <div class="body-choice-progress" aria-label="選擇相同理想身材比例">
         <span style="width: ${stats.percentage}%"></span>
       </div>
-      <p class="body-choice-stat-count">${stats.sameChoiceCount} / ${stats.totalCount} 人選擇這張理想身材</p>
-      <p>目前共有 ${stats.totalCount} 位使用者完成選擇。其中有 ${stats.sameChoiceCount} 位使用者也點選這張理想身材，約佔所有選擇的 ${stats.percentage}%。</p>
+      <p class="body-choice-stat-count">${stats.sameChoiceCount} / ${stats.totalCount} 位同性別使用者選擇這張理想身材</p>
+      <p>目前共有 ${stats.totalCount} 位同性別使用者完成選擇。其中有 ${stats.sameChoiceCount} 位也點選這張理想身材，約佔同性別選擇的 ${stats.percentage}%。</p>
       <p>這個比例只代表目前收集到的選擇分布，不代表健康程度或最佳體態。</p>
       ${hasSharedStats ? '' : '<p class="body-choice-local-note">目前僅顯示本機即時回饋；Firebase 連線後會更新為所有使用者資料。</p>'}
     </article>
@@ -672,6 +677,12 @@ function updateBodyCheckResult() {
   `;
 }
 
+function resetBodyCheckPrompt() {
+  const result = document.getElementById('bodyCheckResult');
+  if (!result) return;
+  result.textContent = '若不清楚自己的體脂率，可略過不填。按下「計算行動」後，才會產生飲食與運動建議。';
+}
+
 function renderBodyOptions() {
   const optionGrid = document.getElementById('bodyOptionGrid');
   if (!optionGrid) return;
@@ -735,7 +746,7 @@ async function initIdealBodySelector() {
     });
     renderBodyOptions();
     updateBodyChoiceResult();
-    updateBodyCheckResult();
+    resetBodyCheckPrompt();
   }
 
   genderButtons.forEach((button) => {
@@ -754,7 +765,7 @@ async function initIdealBodySelector() {
     IdealBodySelector.selectedBodyImage = bodyFatImages.find((image) => image.id === IdealBodySelector.selectedOptionId) || null;
     renderBodyOptions();
     updateBodyChoiceResult();
-    updateBodyCheckResult();
+    resetBodyCheckPrompt();
 
     if (!IdealBodySelector.selectedBodyImage) return;
 
@@ -829,7 +840,7 @@ function initBodyCheckForm() {
     event.preventDefault();
     runBodyCheckCalculation(true);
   });
-  inputs.forEach((input) => input.addEventListener('input', updateBodyCheckResult));
+  inputs.forEach((input) => input.addEventListener('input', resetBodyCheckPrompt));
 }
 
 initBodyCheckForm();
@@ -2685,14 +2696,11 @@ function initWeightStorySection() {
       if (selectedIds.has(item.id)) {
         selectedIds.delete(item.id);
       } else {
-        if (item.category === 'base') {
-          mealItems.filter((mealItem) => mealItem.category === 'base').forEach((mealItem) => selectedIds.delete(mealItem.id));
-        }
         if (item.category === 'protein') {
           mealItems.filter((mealItem) => mealItem.category === 'protein').forEach((mealItem) => selectedIds.delete(mealItem.id));
         }
         selectedIds.add(item.id);
-        collapsedSections.add(item.category);
+        if (item.category !== 'base') collapsedSections.add(item.category);
       }
       if (!wasSelected) flyStickerToBox(button, item);
       renderMealPlanner();
@@ -2788,13 +2796,11 @@ function initSocialExpertCards() {
     if (stage.dataset.socialExpertInitialized === 'true') return;
 
     const frame = stage.closest('.social-phone-frame');
-    const container = stage.closest('.social-expert-sticky') || stage;
     const track = stage.querySelector('.social-expert-carousel');
     const panels = Array.from(stage.querySelectorAll('[data-social-expert-panel]'));
-    const prevButton = container.querySelector('[data-social-expert-prev]');
-    const nextButton = container.querySelector('[data-social-expert-next]');
+    const container = stage.closest('.social-expert-sticky') || stage;
     const progressBar = container.querySelector('[data-social-expert-progress]');
-    if (!panels.length || !prevButton || !nextButton) return;
+    if (!panels.length) return;
     const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
     function activePanelIndex() {
@@ -2811,11 +2817,6 @@ function initSocialExpertCards() {
 
     function setActivePanel(index) {
       panels.forEach((panel, panelIndex) => panel.classList.toggle('is-active', panelIndex === index));
-    }
-
-    function scrollToPanel(index) {
-      const target = panels[Math.min(Math.max(index, 0), panels.length - 1)];
-      target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
 
     function updateScrollDrivenCards() {
@@ -2843,29 +2844,6 @@ function initSocialExpertCards() {
       if (progressBar) progressBar.style.width = `${percent}%`;
     }
 
-    function scrollWindowToPanel(index) {
-      if (!frame) {
-        scrollToPanel(index);
-        return;
-      }
-      const targetIndex = clamp(index, 0, panels.length - 1);
-      const progress = panels.length > 1 ? targetIndex / (panels.length - 1) : 0;
-      const frameTop = frame.getBoundingClientRect().top + window.scrollY;
-      const scrollable = Math.max(1, frame.offsetHeight - window.innerHeight);
-      window.scrollTo({
-        top: frameTop + progress * scrollable,
-        behavior: 'smooth'
-      });
-    }
-
-    prevButton.addEventListener('click', () => {
-      scrollWindowToPanel(activePanelIndex() - 1);
-    });
-
-    nextButton.addEventListener('click', () => {
-      scrollWindowToPanel(activePanelIndex() + 1);
-    });
-
     stage.addEventListener('scroll', updateScrollDrivenCards, { passive: true });
     window.addEventListener('scroll', updateScrollDrivenCards, { passive: true });
     window.addEventListener('resize', updateScrollDrivenCards);
@@ -2887,8 +2865,8 @@ const bodyCostItems = [
     id: 'personalTrainer',
     name: '私人健身教練課',
     icon: 'clipboard-check',
-    monthlyCost: 14400,
-    calculation: '以每堂 NT$1,800、一週 2 堂、每月 8 堂估算',
+    monthlyCost: 12000,
+    calculation: '以每堂 NT$1,500、一週 2 堂、每月 8 堂估算',
     description: '若以規律訓練頻率計算，教練課通常會成為體態管理中最高的固定支出之一。'
   },
   {
@@ -3279,6 +3257,695 @@ function initGymScrollSequence() {
   });
 }
 
+function initFitnessScrollyChartScrollDrivenOld() {
+  const section = document.querySelector('[data-fitness-scrolly-chart]');
+  if (!section || section.dataset.fitnessInitialized === 'true') return;
+  section.dataset.fitnessInitialized = 'true';
+
+  const svg = section.querySelector('[data-fitness-svg]');
+  const gridLayer = section.querySelector('[data-fitness-grid]');
+  const axisLayer = section.querySelector('[data-fitness-axis]');
+  const countLine = section.querySelector('[data-fitness-count-line]');
+  const salesLine = section.querySelector('[data-fitness-sales-line]');
+  const pointsLayer = section.querySelector('[data-fitness-points]');
+  const labelsLayer = section.querySelector('[data-fitness-labels]');
+  const summary = section.querySelector('[data-fitness-summary]');
+  const steps = Array.from(section.querySelectorAll('[data-fitness-step]'));
+  if (!svg || !gridLayer || !axisLayer || !countLine || !salesLine || !pointsLayer || !labelsLayer || !summary || !steps.length) return;
+
+  const ns = 'http://www.w3.org/2000/svg';
+  const chart = {
+    left: 74,
+    right: 646,
+    top: 52,
+    bottom: 344,
+    countMin: 0,
+    countMax: 1150,
+    salesMin: 0,
+    salesMax: 200,
+    firstYear: 2015,
+    lastYear: 2025
+  };
+  const stepYears = [2015, 2019, 2020, 2021, 2024, 2025];
+  const averageGrowth = {
+    count: '+17.1%',
+    sales: '+15.4%'
+  };
+  const data = [
+    { year: 2015, count: 225, sales: 51.6 },
+    { year: 2016, count: 299, sales: 62.2, countGrowth: '+32.9%', salesGrowth: '+20.5%' },
+    { year: 2017, count: 369, sales: 78.7, countGrowth: '+23.4%', salesGrowth: '+26.5%' },
+    { year: 2018, count: 482, sales: 100.8, countGrowth: '+30.6%', salesGrowth: '+28.1%' },
+    { year: 2019, count: 620, sales: 129.7, countGrowth: '+28.6%', salesGrowth: '+28.7%' },
+    { year: 2020, count: 728, sales: 152.1, countGrowth: '+17.4%', salesGrowth: '+17.3%' },
+    { year: 2021, count: 817, sales: 123.6, countGrowth: '+12.2%', salesGrowth: '-18.7%' },
+    { year: 2022, count: 894, sales: 153.4, countGrowth: '+9.4%', salesGrowth: '+24.1%' },
+    { year: 2023, count: 985, sales: 170.9, countGrowth: '+10.2%', salesGrowth: '+11.4%' },
+    { year: 2024, count: 1062, sales: 186.6, countGrowth: '+7.8%', salesGrowth: '+9.2%' },
+    { year: 2025, count: 1095, sales: null, countGrowth: '+3.1%' }
+  ];
+
+  const dataByYear = new Map(data.map((item) => [item.year, item]));
+  let activeStep = -1;
+  let ticking = false;
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function xForYear(year) {
+    const progress = (year - chart.firstYear) / (chart.lastYear - chart.firstYear);
+    return chart.left + progress * (chart.right - chart.left);
+  }
+
+  function yForCount(value) {
+    const progress = (value - chart.countMin) / (chart.countMax - chart.countMin);
+    return chart.bottom - progress * (chart.bottom - chart.top);
+  }
+
+  function yForSales(value) {
+    const progress = (value - chart.salesMin) / (chart.salesMax - chart.salesMin);
+    return chart.bottom - progress * (chart.bottom - chart.top);
+  }
+
+  function createSvgElement(tag, attributes = {}) {
+    const element = document.createElementNS(ns, tag);
+    Object.entries(attributes).forEach(([key, value]) => {
+      element.setAttribute(key, String(value));
+    });
+    return element;
+  }
+
+  function pointPath(points) {
+    if (!points.length) return '';
+    return points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(' ');
+  }
+
+  function drawStaticScaffold() {
+    const gridStops = [0, 0.25, 0.5, 0.75, 1];
+    gridStops.forEach((stop) => {
+      const y = chart.bottom - stop * (chart.bottom - chart.top);
+      gridLayer.appendChild(createSvgElement('line', {
+        class: 'fitness-grid-line',
+        x1: chart.left,
+        x2: chart.right,
+        y1: y,
+        y2: y
+      }));
+    });
+
+    axisLayer.appendChild(createSvgElement('line', {
+      class: 'fitness-axis-line',
+      x1: chart.left,
+      x2: chart.right,
+      y1: chart.bottom,
+      y2: chart.bottom
+    }));
+
+    [2015, 2017, 2019, 2021, 2023, 2025].forEach((year) => {
+      const text = createSvgElement('text', {
+        class: 'fitness-axis-label',
+        x: xForYear(year),
+        y: chart.bottom + 30,
+        'text-anchor': 'middle'
+      });
+      text.textContent = year;
+      axisLayer.appendChild(text);
+    });
+
+    [
+      { text: '家數', x: chart.left, y: 22, anchor: 'start' },
+      { text: '銷售額（億元）', x: chart.right, y: 22, anchor: 'end' }
+    ].forEach((item) => {
+      const text = createSvgElement('text', {
+        class: 'fitness-axis-title',
+        x: item.x,
+        y: item.y,
+        'text-anchor': item.anchor
+      });
+      text.textContent = item.text;
+      axisLayer.appendChild(text);
+    });
+
+    [
+      { value: 0, y: yForCount(0), x: chart.left - 12, anchor: 'end' },
+      { value: 550, y: yForCount(550), x: chart.left - 12, anchor: 'end' },
+      { value: 1100, y: yForCount(1100), x: chart.left - 12, anchor: 'end' },
+      { value: 0, y: yForSales(0), x: chart.right + 12, anchor: 'start' },
+      { value: 100, y: yForSales(100), x: chart.right + 12, anchor: 'start' },
+      { value: 200, y: yForSales(200), x: chart.right + 12, anchor: 'start' }
+    ].forEach((item) => {
+      const text = createSvgElement('text', {
+        class: 'fitness-axis-label',
+        x: item.x,
+        y: item.y + 4,
+        'text-anchor': item.anchor
+      });
+      text.textContent = item.value;
+      axisLayer.appendChild(text);
+    });
+  }
+
+  function visiblePoints(activeYear, key, yScale) {
+    return data
+      .filter((item) => item.year <= activeYear && item[key] !== null && item[key] !== undefined)
+      .map((item) => ({
+        item,
+        x: xForYear(item.year),
+        y: yScale(item[key])
+      }));
+  }
+
+  function visibleItems(activeYear) {
+    return data.filter((item) => item.year <= activeYear);
+  }
+
+  function addBar(item, type, activeYear) {
+    const isCount = type === 'count';
+    const value = item[type];
+    if (value === null || value === undefined) return null;
+    const yearSpacing = (chart.right - chart.left) / (chart.lastYear - chart.firstYear);
+    const barWidth = Math.min(20, yearSpacing * 0.32);
+    const gap = 3;
+    const xCenter = xForYear(item.year);
+    const x = isCount ? xCenter - barWidth - gap : xCenter + gap;
+    const y = isCount ? yForCount(value) : yForSales(value);
+    const height = chart.bottom - y;
+    const bar = createSvgElement('rect', {
+      class: `fitness-bar fitness-bar-${type}${item.year === activeYear ? ' is-active' : ''}`,
+      x,
+      y,
+      width: barWidth,
+      height: Math.max(1, height),
+      rx: 3,
+      ry: 3
+    });
+    pointsLayer.appendChild(bar);
+    return {
+      item,
+      type,
+      x: x + barWidth / 2,
+      y,
+      width: barWidth,
+      value
+    };
+  }
+
+  function addPoint(point, type) {
+    pointsLayer.appendChild(createSvgElement('circle', {
+      class: `fitness-point fitness-point-${type}`,
+      cx: point.x,
+      cy: point.y,
+      r: point.item.year === stepYears[activeStep] ? 6 : 4
+    }));
+  }
+
+  function addActiveLabel(point, lines, anchor = 'middle', dy = -18) {
+    const text = createSvgElement('text', {
+      class: 'fitness-point-label',
+      x: point.x,
+      y: point.y + dy,
+      'text-anchor': anchor
+    });
+    lines.forEach((line, index) => {
+      const tspan = createSvgElement('tspan', {
+        x: point.x,
+        dy: index === 0 ? 0 : 15
+      });
+      tspan.textContent = line;
+      text.appendChild(tspan);
+    });
+    labelsLayer.appendChild(text);
+  }
+
+  function addCallout(point, textLines, dx, dy) {
+    const group = createSvgElement('g', { class: 'fitness-callout' });
+    const textX = clamp(point.x + dx, chart.left + 82, chart.right - 86);
+    const textY = clamp(point.y + dy, chart.top + 22, chart.bottom - 34);
+    group.appendChild(createSvgElement('line', {
+      x1: point.x,
+      y1: point.y,
+      x2: textX,
+      y2: textY + 8
+    }));
+    const text = createSvgElement('text', {
+      x: textX,
+      y: textY,
+      'text-anchor': dx < 0 ? 'end' : 'start'
+    });
+    textLines.forEach((line, index) => {
+      const tspan = createSvgElement('tspan', {
+        x: textX,
+        dy: index === 0 ? 0 : 15
+      });
+      tspan.textContent = line;
+      text.appendChild(tspan);
+    });
+    group.appendChild(text);
+    labelsLayer.appendChild(group);
+  }
+
+  function addGrowthArrow(point) {
+    const group = createSvgElement('g', { class: 'fitness-growth-arrow' });
+    const arrowX = clamp(point.x + 36, chart.left + 32, chart.right - 58);
+    const arrowY = clamp(point.y - 42, chart.top + 26, chart.bottom - 96);
+    const arrow = createSvgElement('text', {
+      x: arrowX,
+      y: arrowY,
+      'text-anchor': 'middle'
+    });
+    arrow.textContent = '↑';
+    group.appendChild(arrow);
+
+    const caption = createSvgElement('text', {
+      class: 'fitness-growth-arrow-caption',
+      x: arrowX,
+      y: arrowY + 20,
+      'text-anchor': 'middle'
+    });
+    ['平均年增率', `家數 ${averageGrowth.count}`, `銷售額 ${averageGrowth.sales}`].forEach((line, index) => {
+      const tspan = createSvgElement('tspan', {
+        x: arrowX,
+        dy: index === 0 ? 0 : 15
+      });
+      tspan.textContent = line;
+      caption.appendChild(tspan);
+    });
+    group.appendChild(caption);
+    labelsLayer.appendChild(group);
+  }
+
+  function formatGrowth(value) {
+    return value ? `年增率 ${value}` : '基期';
+  }
+
+  function renderSummary(year) {
+    const item = dataByYear.get(year);
+    if (!item) return;
+    const salesValue = item.sales === null ? '尚無資料' : `${item.sales.toFixed(1)} 億元`;
+    const salesGrowth = item.salesGrowth ? `年增率 ${item.salesGrowth}` : (item.sales === null ? '2025 未列入銷售額統計' : '基期');
+    const note = year === 2021
+      ? '<p class="fitness-summary-note">疫情衝擊，銷售額年減 18.7%</p>'
+      : year === 2025
+        ? `<p class="fitness-summary-note">家數仍增，但年增率降至 3.1%。2015 至 2025 年家數平均年增率約 ${averageGrowth.count}；2015 至 2024 年銷售額平均年增率約 ${averageGrowth.sales}。</p>`
+        : '';
+    summary.innerHTML = `
+      <p class="fitness-summary-year">${year} 年</p>
+      <div class="fitness-summary-grid">
+        <div class="fitness-summary-card">
+          <span>健身中心家數</span>
+          <b>${item.count.toLocaleString('zh-TW')} 家</b>
+          <em>${formatGrowth(item.countGrowth)}</em>
+        </div>
+        <div class="fitness-summary-card">
+          <span>銷售額</span>
+          <b>${salesValue}</b>
+          <em>${salesGrowth}</em>
+        </div>
+      </div>
+      ${note}
+    `;
+  }
+
+  function renderChart(stepIndex) {
+    activeStep = clamp(stepIndex, 0, stepYears.length - 1);
+    const activeYear = stepYears[activeStep];
+    const items = visibleItems(activeYear);
+    countLine.setAttribute('d', '');
+    salesLine.setAttribute('d', '');
+    pointsLayer.replaceChildren();
+    labelsLayer.replaceChildren();
+
+    const countBars = items.map((item) => addBar(item, 'count', activeYear)).filter(Boolean);
+    const salesBars = items.map((item) => addBar(item, 'sales', activeYear)).filter(Boolean);
+
+    const activeItem = dataByYear.get(activeYear);
+    const activeCountBar = countBars.find((bar) => bar.item.year === activeYear);
+    const activeSalesBar = salesBars.find((bar) => bar.item.year === activeYear);
+    if (activeItem && activeCountBar) {
+      addActiveLabel(activeCountBar, [
+        `${activeItem.count.toLocaleString('zh-TW')} 家`,
+        formatGrowth(activeItem.countGrowth)
+      ], activeYear >= 2024 ? 'end' : 'middle', activeYear >= 2024 ? -22 : -18);
+    }
+    if (activeItem && activeSalesBar) {
+      addActiveLabel(activeSalesBar, [
+        `${activeItem.sales.toFixed(1)} 億元`,
+        formatGrowth(activeItem.salesGrowth)
+      ], activeYear >= 2024 ? 'end' : 'middle', 30);
+    }
+
+    if (activeYear >= 2021) {
+      const impactBar = salesBars.find((bar) => bar.item.year === 2021);
+      if (impactBar) addCallout(impactBar, ['疫情衝擊', '銷售額年減 18.7%'], 74, 48);
+    }
+
+    if (activeYear >= 2025) {
+      const slowBar = countBars.find((bar) => bar.item.year === 2025);
+      if (slowBar) {
+        addCallout(slowBar, ['家數仍增', '年增率降至 3.1%'], -82, -44);
+        addGrowthArrow(slowBar);
+      }
+    }
+
+    steps.forEach((step, index) => {
+      step.classList.toggle('is-active', index === activeStep);
+    });
+    renderSummary(activeYear);
+  }
+
+  function closestStepIndex() {
+    const viewportCenter = window.innerHeight * 0.52;
+    return steps.reduce((closest, step, index) => {
+      const rect = step.getBoundingClientRect();
+      const center = rect.top + rect.height / 2;
+      const distance = Math.abs(center - viewportCenter);
+      return distance < closest.distance ? { index, distance } : closest;
+    }, { index: 0, distance: Infinity }).index;
+  }
+
+  function requestStepUpdate() {
+    if (ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(() => {
+      ticking = false;
+      const nextStep = closestStepIndex();
+      if (nextStep !== activeStep) renderChart(nextStep);
+    });
+  }
+
+  drawStaticScaffold();
+  renderChart(0);
+
+  const observer = new IntersectionObserver((entries) => {
+    const visibleEntry = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (!visibleEntry) return;
+    const stepIndex = Number(visibleEntry.target.dataset.fitnessStep);
+    if (Number.isFinite(stepIndex) && stepIndex !== activeStep) renderChart(stepIndex);
+  }, {
+    root: null,
+    rootMargin: '-42% 0px -42% 0px',
+    threshold: [0, 0.2, 0.5, 0.8, 1]
+  });
+
+  steps.forEach((step) => observer.observe(step));
+  window.addEventListener('scroll', requestStepUpdate, { passive: true });
+  window.addEventListener('resize', requestStepUpdate);
+}
+
+function initFitnessScrollyChart() {
+  const section = document.querySelector('[data-fitness-scrolly-chart]');
+  if (!section || section.dataset.fitnessInitialized === 'true') return;
+  section.dataset.fitnessInitialized = 'true';
+
+  const gridLayer = section.querySelector('[data-fitness-grid]');
+  const axisLayer = section.querySelector('[data-fitness-axis]');
+  const countLine = section.querySelector('[data-fitness-count-line]');
+  const salesLine = section.querySelector('[data-fitness-sales-line]');
+  const pointsLayer = section.querySelector('[data-fitness-points]');
+  const labelsLayer = section.querySelector('[data-fitness-labels]');
+  const summary = section.querySelector('[data-fitness-summary]');
+  const tooltip = section.querySelector('[data-fitness-tooltip]');
+  const chartPanel = section.querySelector('.fitness-chart-panel');
+  if (!gridLayer || !axisLayer || !countLine || !salesLine || !pointsLayer || !labelsLayer || !summary || !tooltip || !chartPanel) return;
+
+  const ns = 'http://www.w3.org/2000/svg';
+  const chart = {
+    left: 74,
+    right: 646,
+    top: 52,
+    bottom: 344,
+    countMin: 0,
+    countMax: 1150,
+    salesMin: 0,
+    salesMax: 200,
+    firstYear: 2015,
+    lastYear: 2025
+  };
+  const averageGrowth = {
+    count: '+17.1%',
+    sales: '+15.4%'
+  };
+  const data = [
+    { year: 2015, count: 225, sales: 51.6 },
+    { year: 2016, count: 299, sales: 62.2 },
+    { year: 2017, count: 369, sales: 78.7 },
+    { year: 2018, count: 482, sales: 100.8 },
+    { year: 2019, count: 620, sales: 129.7 },
+    { year: 2020, count: 728, sales: 152.1 },
+    { year: 2021, count: 817, sales: 123.6 },
+    { year: 2022, count: 894, sales: 153.4 },
+    { year: 2023, count: 985, sales: 170.9 },
+    { year: 2024, count: 1062, sales: 186.6 },
+    { year: 2025, count: 1095, sales: null }
+  ];
+
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
+  function xForYear(year) {
+    const progress = (year - chart.firstYear) / (chart.lastYear - chart.firstYear);
+    return chart.left + progress * (chart.right - chart.left);
+  }
+
+  function yForCount(value) {
+    const progress = (value - chart.countMin) / (chart.countMax - chart.countMin);
+    return chart.bottom - progress * (chart.bottom - chart.top);
+  }
+
+  function yForSales(value) {
+    const progress = (value - chart.salesMin) / (chart.salesMax - chart.salesMin);
+    return chart.bottom - progress * (chart.bottom - chart.top);
+  }
+
+  function createSvgElement(tag, attributes = {}) {
+    const element = document.createElementNS(ns, tag);
+    Object.entries(attributes).forEach(([key, value]) => {
+      element.setAttribute(key, String(value));
+    });
+    return element;
+  }
+
+  function drawStaticScaffold() {
+    const gridStops = [0, 0.25, 0.5, 0.75, 1];
+    gridStops.forEach((stop) => {
+      const y = chart.bottom - stop * (chart.bottom - chart.top);
+      gridLayer.appendChild(createSvgElement('line', {
+        class: 'fitness-grid-line',
+        x1: chart.left,
+        x2: chart.right,
+        y1: y,
+        y2: y
+      }));
+    });
+
+    axisLayer.appendChild(createSvgElement('line', {
+      class: 'fitness-axis-line',
+      x1: chart.left,
+      x2: chart.right,
+      y1: chart.bottom,
+      y2: chart.bottom
+    }));
+
+    [2015, 2017, 2019, 2021, 2023, 2025].forEach((year) => {
+      const text = createSvgElement('text', {
+        class: 'fitness-axis-label',
+        x: xForYear(year),
+        y: chart.bottom + 30,
+        'text-anchor': 'middle'
+      });
+      text.textContent = year;
+      axisLayer.appendChild(text);
+    });
+
+    [
+      { text: '家數', x: chart.left, y: 22, anchor: 'start' },
+      { text: '銷售額（億元）', x: chart.right, y: 22, anchor: 'end' }
+    ].forEach((item) => {
+      const text = createSvgElement('text', {
+        class: 'fitness-axis-title',
+        x: item.x,
+        y: item.y,
+        'text-anchor': item.anchor
+      });
+      text.textContent = item.text;
+      axisLayer.appendChild(text);
+    });
+
+    [
+      { value: 0, y: yForCount(0), x: chart.left - 12, anchor: 'end' },
+      { value: 550, y: yForCount(550), x: chart.left - 12, anchor: 'end' },
+      { value: 1100, y: yForCount(1100), x: chart.left - 12, anchor: 'end' },
+      { value: 0, y: yForSales(0), x: chart.right + 12, anchor: 'start' },
+      { value: 100, y: yForSales(100), x: chart.right + 12, anchor: 'start' },
+      { value: 200, y: yForSales(200), x: chart.right + 12, anchor: 'start' }
+    ].forEach((item) => {
+      const text = createSvgElement('text', {
+        class: 'fitness-axis-label',
+        x: item.x,
+        y: item.y + 4,
+        'text-anchor': item.anchor
+      });
+      text.textContent = item.value;
+      axisLayer.appendChild(text);
+    });
+  }
+
+  function showTooltip(bar) {
+    tooltip.textContent = bar.dataset.tooltip || '';
+    moveTooltip(bar);
+    tooltip.classList.add('is-visible');
+  }
+
+  function moveTooltip(bar) {
+    const panelRect = chartPanel.getBoundingClientRect();
+    const rect = bar.getBoundingClientRect();
+    tooltip.style.left = `${rect.left + rect.width / 2 - panelRect.left}px`;
+    tooltip.style.top = `${rect.top - panelRect.top}px`;
+  }
+
+  function hideTooltip() {
+    tooltip.classList.remove('is-visible');
+  }
+
+  function addBar(item, type, index) {
+    const isCount = type === 'count';
+    const value = item[type];
+    if (value === null || value === undefined) return null;
+    const yearSpacing = (chart.right - chart.left) / (chart.lastYear - chart.firstYear);
+    const barWidth = Math.min(20, yearSpacing * 0.32);
+    const gap = 3;
+    const xCenter = xForYear(item.year);
+    const x = isCount ? xCenter - barWidth - gap : xCenter + gap;
+    const y = isCount ? yForCount(value) : yForSales(value);
+    const bar = createSvgElement('rect', {
+      class: `fitness-bar fitness-bar-${type}`,
+      x,
+      y,
+      width: barWidth,
+      height: Math.max(1, chart.bottom - y),
+      rx: 3,
+      ry: 3,
+      tabindex: 0,
+      role: 'img',
+      'aria-label': `${item.year} 年${isCount ? `健身中心家數 ${item.count.toLocaleString('zh-TW')} 家` : `銷售額 ${item.sales.toFixed(1)} 億元`}`,
+      'data-tooltip': `${item.year} 年｜${isCount ? `家數 ${item.count.toLocaleString('zh-TW')} 家` : `銷售額 ${item.sales.toFixed(1)} 億元`}`,
+      style: `--bar-delay: ${index * 90 + (isCount ? 0 : 35)}ms`
+    });
+    pointsLayer.appendChild(bar);
+    bar.addEventListener('pointerenter', () => showTooltip(bar));
+    bar.addEventListener('pointermove', () => moveTooltip(bar));
+    bar.addEventListener('pointerleave', hideTooltip);
+    bar.addEventListener('mouseenter', () => showTooltip(bar));
+    bar.addEventListener('mousemove', () => moveTooltip(bar));
+    bar.addEventListener('mouseleave', hideTooltip);
+    bar.addEventListener('focus', () => showTooltip(bar));
+    bar.addEventListener('blur', hideTooltip);
+    return {
+      item,
+      type,
+      x: x + barWidth / 2,
+      y,
+      value
+    };
+  }
+
+  function addCallout(point, textLines, dx, dy, delay = 1500) {
+    const group = createSvgElement('g', {
+      class: 'fitness-callout',
+      style: `--annotation-delay: ${delay}ms`
+    });
+    const textX = clamp(point.x + dx, chart.left + 82, chart.right - 86);
+    const textY = clamp(point.y + dy, chart.top + 22, chart.bottom - 34);
+    group.appendChild(createSvgElement('line', {
+      x1: point.x,
+      y1: point.y,
+      x2: textX,
+      y2: textY + 8
+    }));
+    const text = createSvgElement('text', {
+      x: textX,
+      y: textY,
+      'text-anchor': dx < 0 ? 'end' : 'start'
+    });
+    textLines.forEach((line, lineIndex) => {
+      const tspan = createSvgElement('tspan', {
+        x: textX,
+        dy: lineIndex === 0 ? 0 : 15
+      });
+      tspan.textContent = line;
+      text.appendChild(tspan);
+    });
+    group.appendChild(text);
+    labelsLayer.appendChild(group);
+  }
+
+  function renderSummary() {
+    summary.innerHTML = `
+      <div class="fitness-average-summary">
+        <p class="fitness-summary-year">平均年增率</p>
+        <div class="fitness-summary-grid">
+          <div class="fitness-summary-card">
+            <b>${averageGrowth.count}</b>
+            <span>家數平均年增率</span>
+            <em>2015 至 2025 年</em>
+          </div>
+          <div class="fitness-summary-card">
+            <b>${averageGrowth.sales}</b>
+            <span>銷售額平均年增率</span>
+            <em>2015 至 2024 年</em>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderChart() {
+    countLine.setAttribute('d', '');
+    salesLine.setAttribute('d', '');
+    pointsLayer.replaceChildren();
+    labelsLayer.replaceChildren();
+
+    const countBars = data.map((item, index) => addBar(item, 'count', index)).filter(Boolean);
+    const salesBars = data.map((item, index) => addBar(item, 'sales', index)).filter(Boolean);
+    const impactBar = salesBars.find((bar) => bar.item.year === 2021);
+    const slowBar = countBars.find((bar) => bar.item.year === 2025);
+
+    if (impactBar) addCallout(impactBar, ['2021 疫情衝擊', '銷售額年減 18.7%'], 74, 48, 1500);
+    if (slowBar) {
+      addCallout(slowBar, ['2025 家數仍增', '增速放緩至 3.1%'], -82, -44, 1700);
+    }
+    renderSummary();
+  }
+
+  function startChartAnimation() {
+    if (section.classList.contains('is-chart-visible')) return;
+    section.classList.add('is-chart-visible');
+    window.setTimeout(() => {
+      section.classList.add('is-chart-complete');
+    }, 2200);
+  }
+
+  drawStaticScaffold();
+  renderChart();
+
+  const observer = new IntersectionObserver((entries) => {
+    if (entries.some((entry) => entry.isIntersecting)) {
+      startChartAnimation();
+      observer.disconnect();
+    }
+  }, {
+    root: null,
+    rootMargin: '-18% 0px -18% 0px',
+    threshold: 0.25
+  });
+
+  observer.observe(section);
+}
+
 initDynamicContentTransitions();
 initBodyManagementExperienceHub();
 initBodyMangaScroll();
@@ -3295,3 +3962,5 @@ window.addEventListener('load', initSocialExpertCards);
 initBodyCostCalculator();
 initGymScrollSequence();
 document.addEventListener('DOMContentLoaded', initGymScrollSequence);
+initFitnessScrollyChart();
+document.addEventListener('DOMContentLoaded', initFitnessScrollyChart);
