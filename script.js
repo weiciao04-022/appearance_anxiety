@@ -254,6 +254,39 @@ function initScrollVideoIntro() {
 
 initScrollVideoIntro();
 
+function initXinmiMeasureIntro() {
+  const section = document.querySelector('[data-xinmi-measure-intro]');
+  const quote = section?.querySelector('[data-xinmi-measure-quote]');
+  if (!section || !quote) return;
+
+  let frameRequested = false;
+
+  function updateMeasureIntro() {
+    frameRequested = false;
+    const rect = section.getBoundingClientRect();
+    const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+    const quoteY = 75 - progress * 150;
+    const fadeIn = Math.min(1, progress / 0.08);
+    const fadeOut = Math.min(1, (1 - progress) / 0.08);
+
+    quote.style.setProperty('--quote-y', `${quoteY}vh`);
+    quote.style.setProperty('--quote-opacity', String(Math.min(fadeIn, fadeOut)));
+  }
+
+  function requestMeasureIntroUpdate() {
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateMeasureIntro);
+  }
+
+  updateMeasureIntro();
+  window.addEventListener('scroll', requestMeasureIntroUpdate, { passive: true });
+  window.addEventListener('resize', requestMeasureIntroUpdate);
+}
+
+initXinmiMeasureIntro();
+
 const bodyImageBasePath = './pic/B/';
 
 function createBodyImagePath(fileName) {
@@ -2421,6 +2454,8 @@ function initXinmiIntroCards() {
     });
   });
 
+  if (stack.classList.contains('is-static-media')) return;
+
   if (stack.classList.contains('is-inline-media')) {
     const storyText = stack.querySelector('.xinmi-story-text');
 
@@ -4058,6 +4093,129 @@ function initSocialAnxietyChart() {
   observer.observe(section);
 }
 
+function initFitnessStoryCarousel() {
+  const root = document.querySelector('[data-fitness-story-carousel]');
+  if (!root || root.dataset.carouselReady === 'true') return;
+
+  const slides = [...root.querySelectorAll('[data-fitness-story-slide]')];
+  const dots = [...root.querySelectorAll('[data-fitness-story-dot]')];
+  if (slides.length < 2) return;
+
+  root.dataset.carouselReady = 'true';
+  let activeIndex = 0;
+  let timer = 0;
+
+  function showSlide(index) {
+    activeIndex = (index + slides.length) % slides.length;
+    slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === activeIndex));
+    dots.forEach((dot, dotIndex) => dot.classList.toggle('is-active', dotIndex === activeIndex));
+  }
+
+  function restartTimer() {
+    window.clearInterval(timer);
+    timer = window.setInterval(() => showSlide(activeIndex + 1), 4200);
+  }
+
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      showSlide(index);
+      restartTimer();
+    });
+  });
+
+  showSlide(0);
+  restartTimer();
+}
+
+function initSamPhotoStory() {
+  const story = document.querySelector('[data-sam-photo-story]');
+  const profile = story?.querySelector('.sam-profile-card');
+  if (!story || !profile || story.dataset.photoStoryReady === 'true') return;
+
+  story.dataset.photoStoryReady = 'true';
+  let frameRequested = false;
+
+  function updateSamPhoto() {
+    frameRequested = false;
+    const rect = story.getBoundingClientRect();
+    const travel = Math.max(1, rect.height * 0.62);
+    const sectionProgress = Math.min(1, Math.max(0, (window.innerHeight * 0.5 - rect.top) / travel));
+    const revealProgress = Math.min(1, Math.max(0, (sectionProgress - 0.42) / 0.24));
+    profile.style.setProperty('--sam-photo-reveal', `${(1 - revealProgress) * 100}%`);
+  }
+
+  function requestSamPhotoUpdate() {
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateSamPhoto);
+  }
+
+  updateSamPhoto();
+  window.addEventListener('scroll', requestSamPhotoUpdate, { passive: true });
+  window.addEventListener('resize', requestSamPhotoUpdate);
+}
+
+function initHsuStageIntro() {
+  const section = document.querySelector('[data-hsu-stage-intro]');
+  const quote = section?.querySelector('[data-hsu-stage-quote]');
+  if (!section || !quote || section.dataset.stageReady === 'true') return;
+
+  section.dataset.stageReady = 'true';
+  let frameRequested = false;
+
+  function updateHsuStage() {
+    frameRequested = false;
+    const rect = section.getBoundingClientRect();
+    const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+    const quoteY = 85 - progress * 180;
+    const fadeIn = Math.min(1, progress / 0.08);
+    const fadeOut = Math.min(1, (1 - progress) / 0.08);
+
+    quote.style.setProperty('--hsu-quote-y', `${quoteY}vh`);
+    quote.style.setProperty('--hsu-quote-opacity', String(Math.min(fadeIn, fadeOut)));
+  }
+
+  function requestHsuStageUpdate() {
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateHsuStage);
+  }
+
+  updateHsuStage();
+  window.addEventListener('scroll', requestHsuStageUpdate, { passive: true });
+  window.addEventListener('resize', requestHsuStageUpdate);
+}
+
+function initHaochengScaleIntro() {
+  const section = document.querySelector('[data-haocheng-scale-intro]');
+  const quote = section?.querySelector('[data-haocheng-scale-quote]');
+  if (!section || !quote || section.dataset.scaleReady === 'true') return;
+
+  section.dataset.scaleReady = 'true';
+  let frameRequested = false;
+
+  function updateScaleIntro() {
+    frameRequested = false;
+    const rect = section.getBoundingClientRect();
+    const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+    const quoteY = 38 - progress * 76;
+
+    quote.style.setProperty('--haocheng-quote-y', `${quoteY}vh`);
+  }
+
+  function requestScaleUpdate() {
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateScaleIntro);
+  }
+
+  updateScaleIntro();
+  window.addEventListener('scroll', requestScaleUpdate, { passive: true });
+  window.addEventListener('resize', requestScaleUpdate);
+}
+
 initDynamicContentTransitions();
 initBodyManagementExperienceHub();
 initBodyMangaScroll();
@@ -4078,3 +4236,11 @@ initFitnessScrollyChart();
 document.addEventListener('DOMContentLoaded', initFitnessScrollyChart);
 initSocialAnxietyChart();
 document.addEventListener('DOMContentLoaded', initSocialAnxietyChart);
+initFitnessStoryCarousel();
+document.addEventListener('DOMContentLoaded', initFitnessStoryCarousel);
+initSamPhotoStory();
+document.addEventListener('DOMContentLoaded', initSamPhotoStory);
+initHsuStageIntro();
+document.addEventListener('DOMContentLoaded', initHsuStageIntro);
+initHaochengScaleIntro();
+document.addEventListener('DOMContentLoaded', initHaochengScaleIntro);
