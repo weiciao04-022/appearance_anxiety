@@ -1638,6 +1638,40 @@ button:active,
   }
 }
 
+.site-credits {
+  position: relative;
+  padding: 48px clamp(28px, 7vw, 120px) 52px;
+  color: #f5f5f5;
+  text-align: left;
+  border-top: 4px solid #d92720;
+  background: linear-gradient(135deg, #252627 0%, #1c1d1e 100%);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.06);
+}
+
+.site-credits p {
+  margin: 0;
+}
+
+.site-credits-brand {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.site-credits-team {
+  margin-top: 16px !important;
+  color: #d7d7d7;
+  line-height: 1.8;
+  letter-spacing: 0.04em;
+}
+
+.site-credits-team span {
+  display: block;
+  margin-bottom: 2px;
+  color: #fff;
+  font-weight: 700;
+}
+
 #intro-text {
   min-height: auto;
   flex-direction: column;
