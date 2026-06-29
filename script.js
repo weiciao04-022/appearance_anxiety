@@ -31,11 +31,81 @@ function preloadImage(src) {
   });
 }
 
+function preloadVideoMetadata(src) {
+  return new Promise((resolve) => {
+    const video = document.createElement('video');
+    const done = () => {
+      video.removeAttribute('src');
+      video.load();
+      resolve();
+    };
+    const timer = window.setTimeout(done, 12000);
+    const finish = () => {
+      window.clearTimeout(timer);
+      done();
+    };
+    video.preload = 'metadata';
+    video.muted = true;
+    video.playsInline = true;
+    video.addEventListener('loadedmetadata', finish, { once: true });
+    video.addEventListener('canplay', finish, { once: true });
+    video.addEventListener('error', finish, { once: true });
+    video.src = src;
+    video.load();
+  });
+}
+
+function normalizeAssetUrl(src) {
+  if (!src || src.startsWith('data:') || src.startsWith('blob:')) return '';
+  try {
+    return new URL(src, window.location.href).href;
+  } catch {
+    return src;
+  }
+}
+
 function pageImageAssets() {
   const imageSources = Array.from(document.querySelectorAll('img'))
     .map((image) => image.currentSrc || image.getAttribute('src'))
     .filter(Boolean);
-  return [...siteAssetManifest, ...imageSources];
+  return [...siteAssetManifest, ...imageSources, ...stylesheetImageAssets()];
+}
+
+function pageVideoAssets() {
+  const videoSources = Array.from(document.querySelectorAll('video source, video'))
+    .map((node) => node.getAttribute('src') || node.currentSrc)
+    .filter(Boolean);
+  const scriptedVideoSources = [
+    './video/body-feed/weightloss.m4v',
+    './video/body-feed/butttraining.m4v',
+    './video/body-feed/healthyfood.m4v',
+    './video/body-feed/chesttraining.m4v',
+    './video/body-feed/moremusle.m4v'
+  ];
+  return [...videoSources, ...scriptedVideoSources];
+}
+
+function stylesheetImageAssets() {
+  const urls = [];
+  const collectUrls = (rules) => {
+    Array.from(rules || []).forEach((rule) => {
+      if (rule.cssRules) collectUrls(rule.cssRules);
+      const text = rule.cssText || '';
+      const matches = text.matchAll(/url\((['"]?)(.*?)\1\)/g);
+      for (const match of matches) {
+        const asset = match[2];
+        if (asset && !asset.startsWith('data:')) urls.push(asset);
+      }
+    });
+  };
+  Array.from(document.styleSheets).forEach((sheet) => {
+    try {
+      collectUrls(sheet.cssRules);
+    } catch {
+      // Cross-origin stylesheets cannot always be inspected; DOM assets are still tracked.
+    }
+  });
+  return urls;
 }
 
 async function sequenceImageAssets() {
@@ -73,8 +143,13 @@ async function initSitePreloader() {
     return;
   }
 
-  const imageAssets = [...new Set([...pageImageAssets(), ...await sequenceImageAssets()])];
-  const totalAssets = Math.max(1, imageAssets.length);
+  const imageAssets = [...new Set([...pageImageAssets(), ...await sequenceImageAssets()].map(normalizeAssetUrl).filter(Boolean))];
+  const videoAssets = [...new Set(pageVideoAssets().map(normalizeAssetUrl).filter(Boolean))];
+  const preloadTasks = [
+    ...imageAssets.map((src) => preloadImage(src)),
+    ...videoAssets.map((src) => preloadVideoMetadata(src))
+  ];
+  const totalAssets = Math.max(1, preloadTasks.length);
   const startedAt = performance.now();
   let completed = 0;
   const updateProgress = () => {
@@ -90,10 +165,10 @@ async function initSitePreloader() {
     window.setTimeout(() => preloader.remove(), 500);
   };
 
+  updateProgress();
+
   const preloadTask = Promise.all(
-    [
-      ...imageAssets.map((src) => preloadImage(src))
-    ].map((task) =>
+    preloadTasks.map((task) =>
       task.finally(() => {
         completed += 1;
         updateProgress();
