@@ -12,22 +12,24 @@
   <meta name="twitter:title" content="當美被社群媒體形塑｜Z世代的體態焦慮與自我追尋" />
   <meta name="twitter:description" content="當美被社群媒體形塑：Z世代的體態焦慮與自我追尋。" />
   <link rel="preload" as="image" href="./pic/opening-comic/1.jpg" />
-  <link rel="stylesheet" href="style.css?v=20260629-12" />
+  <link rel="preload" as="image" href="./pic/cover-logo.png" />
+  <link rel="stylesheet" href="style.css?v=20260629-13" />
   <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script>
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     var shouldRestoreMainScroll = new URLSearchParams(window.location.search).get('restoreScroll') === '1';
-    window.addEventListener('load', function () {
-      var allowedHashTargets = [
-        'comic-opening',
-        'xinmi-measure-intro',
-        'intro-text',
-        'ideal-body-check',
-        'after-body-text',
-        'gym-scroll-sequence',
-        'body-cost-calculator'
-      ];
+    var allowedHashTargets = [
+      'comic-opening',
+      'xinmi-measure-intro',
+      'intro-text',
+      'ideal-body-check',
+      'after-body-text',
+      'gym-scroll-sequence',
+      'body-cost-calculator'
+    ];
+
+    function resolveAllowedHashTarget() {
       if (window.location.hash) {
         var target = null;
         try {
@@ -36,15 +38,52 @@
           target = null;
         }
         if (target && allowedHashTargets.indexOf(target.id) !== -1) {
-          window.requestAnimationFrame(function () {
-            target.scrollIntoView({ block: 'start' });
-          });
-          return;
+          return target;
         }
         history.replaceState(null, '', window.location.pathname + window.location.search);
       }
+      return null;
+    }
+
+    function forceScrollToTop(attemptsLeft) {
       if (shouldRestoreMainScroll) return;
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.dispatchEvent(new Event('scroll'));
+
+      if (attemptsLeft <= 0) return;
+      window.setTimeout(function () {
+        var currentScroll = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        if (currentScroll > 2) forceScrollToTop(attemptsLeft - 1);
+      }, 120);
+    }
+
+    function normalizeOpeningView() {
+      var hashTarget = resolveAllowedHashTarget();
+      if (hashTarget) {
+        window.requestAnimationFrame(function () {
+          hashTarget.scrollIntoView({ block: 'start' });
+        });
+        return;
+      }
+
+      forceScrollToTop(5);
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      if (!shouldRestoreMainScroll) forceScrollToTop(2);
+    }, { once: true });
+
+    window.addEventListener('load', function () {
+      normalizeOpeningView();
+    });
+
+    window.addEventListener('pageshow', function () {
+      normalizeOpeningView();
+      window.setTimeout(function () {
+        forceScrollToTop(4);
+      }, 180);
     });
   </script>
   <script>
@@ -82,14 +121,8 @@
     <div class="opening-comic-sticky">
       <div class="opening-comic-hero" aria-label="專題開場">
         <img src="./pic/opening-comic/1.jpg" alt="" aria-hidden="true" />
-        <div class="opening-hero-copy">
-          <h1 class="opening-hero-title">
-            <span class="opening-hero-line">當美被</span>
-            <span class="opening-hero-line">
-              <span class="algorithm-word">演算法<span class="algorithm-pixels" data-algorithm-pixels aria-hidden="true"></span></span><span>定義</span>
-            </span>
-          </h1>
-          <p class="opening-hero-subtitle">社群媒體如何影響 Z 世代的<br />體態焦慮與身體認同</p>
+        <div class="opening-hero-copy opening-hero-copy--logo">
+          <img class="opening-cover-logo" src="./pic/cover-logo.png" alt="當美被演算法定義：社群媒體如何影響 Z 世代的體態焦慮與身體認同" />
           <span class="scroll-cue" aria-label="向下滑動"></span>
         </div>
       </div>
@@ -4109,6 +4142,6 @@
     </div>
   </nav>
 
-  <script src="script.js?v=20260629-10"></script>
+  <script src="script.js?v=20260629-13"></script>
 </body>
 </html>

@@ -12,6 +12,107 @@ const PRELOADER_MIN_DISPLAY_MS = 350;
 const PRELOADER_SOFT_TIMEOUT_MS = 4500;
 const PRELOADER_HARD_TIMEOUT_MS = 7000;
 const IMAGE_READY_TIMEOUT_MS = 2500;
+const isLocalFileProtocol = window.location.protocol === 'file:';
+
+function resolveBrowserStorage(kind) {
+  try {
+    return window[kind] || null;
+  } catch {
+    return null;
+  }
+}
+
+function createSafeStorage(kind) {
+  return {
+    getItem(key) {
+      try {
+        return resolveBrowserStorage(kind)?.getItem(key) ?? null;
+      } catch {
+        return null;
+      }
+    },
+    setItem(key, value) {
+      try {
+        resolveBrowserStorage(kind)?.setItem(key, value);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+  };
+}
+
+function readStoredJson(storage, key, fallback = null) {
+  try {
+    const raw = storage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+const safeSessionStorage = createSafeStorage('sessionStorage');
+const safeLocalStorage = createSafeStorage('localStorage');
+
+function ensureOpeningCoverLogoStyles() {
+  if (document.getElementById('opening-cover-logo-inline-style')) return;
+  const style = document.createElement('style');
+  style.id = 'opening-cover-logo-inline-style';
+  style.textContent = `
+    .opening-hero-copy--logo {
+      top: 50% !important;
+      left: 50% !important;
+      width: min(1080px, 86vw) !important;
+      max-width: 1080px !important;
+      transform: translate(-50%, -50%) !important;
+      display: grid !important;
+      justify-items: center !important;
+      text-align: center !important;
+      gap: 28px !important;
+    }
+    .opening-hero-copy--logo::before {
+      top: -12% !important;
+      right: -8% !important;
+      bottom: -14% !important;
+      left: -8% !important;
+      border-radius: 56px !important;
+      background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.72) 42%, rgba(255, 255, 255, 0) 82%) !important;
+    }
+    .opening-cover-logo {
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+    }
+    @media (max-width: 960px) {
+      .opening-hero-copy--logo {
+        width: min(92vw, 680px) !important;
+        gap: 24px !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function initOpeningCoverLogo() {
+  const heroCopy = document.querySelector('.opening-comic-hero .opening-hero-copy');
+  if (!heroCopy) return;
+
+  ensureOpeningCoverLogoStyles();
+  heroCopy.classList.add('opening-hero-copy--logo');
+  heroCopy.querySelector('.opening-hero-title')?.remove();
+  heroCopy.querySelector('.opening-hero-subtitle')?.remove();
+
+  let logo = heroCopy.querySelector('.opening-cover-logo');
+  if (!logo) {
+    logo = document.createElement('img');
+    logo.className = 'opening-cover-logo';
+    logo.src = './pic/cover-logo.png';
+    logo.alt = '當美被演算法定義：社群媒體如何影響 Z 世代的體態焦慮與身體認同';
+    const cue = heroCopy.querySelector('.scroll-cue');
+    heroCopy.insertBefore(logo, cue || null);
+  }
+}
 
 function refreshLucideIcons() {
   if (window.lucide?.createIcons) {
@@ -25,6 +126,7 @@ function refreshLucideIcons() {
 }
 
 window.addEventListener('load', refreshLucideIcons);
+initOpeningCoverLogo();
 
 function waitForPromise(promise, timeoutMs) {
   return new Promise((resolve) => {
@@ -261,7 +363,7 @@ function initMainPageScrollRestore() {
   if (isMainPage) {
     const params = new URLSearchParams(window.location.search);
     const shouldRestore = params.get('restoreScroll') === '1';
-    const savedScroll = Number(sessionStorage.getItem(scrollKey));
+    const savedScroll = Number(safeSessionStorage.getItem(scrollKey));
     let restorationPending = shouldRestore && Number.isFinite(savedScroll);
 
     function restoreMainScroll() {
@@ -272,7 +374,7 @@ function initMainPageScrollRestore() {
           window.setTimeout(() => {
             window.scrollTo({ top: savedScroll, behavior: 'auto' });
             restorationPending = false;
-            sessionStorage.setItem(scrollKey, String(Math.round(savedScroll)));
+            safeSessionStorage.setItem(scrollKey, String(Math.round(savedScroll)));
           }, 250);
         });
       });
@@ -291,7 +393,7 @@ function initMainPageScrollRestore() {
 
     const saveMainScroll = () => {
       if (restorationPending) return;
-      sessionStorage.setItem(scrollKey, String(Math.round(window.scrollY || document.documentElement.scrollTop || 0)));
+      safeSessionStorage.setItem(scrollKey, String(Math.round(window.scrollY || document.documentElement.scrollTop || 0)));
     };
     if (!restorationPending) saveMainScroll();
     window.addEventListener('scroll', saveMainScroll, { passive: true });
@@ -300,7 +402,7 @@ function initMainPageScrollRestore() {
 
   document.querySelectorAll('a[href^="pages/case"], a[href$="full-article.html"]').forEach((link) => {
     link.addEventListener('click', () => {
-      sessionStorage.setItem(scrollKey, String(Math.round(window.scrollY || document.documentElement.scrollTop || 0)));
+      safeSessionStorage.setItem(scrollKey, String(Math.round(window.scrollY || document.documentElement.scrollTop || 0)));
     });
   });
 }
@@ -344,9 +446,6 @@ function initScrollVideoIntro() {
   const progressBar = intro.querySelector('[data-comic-progress]');
   const panels = [...intro.querySelectorAll('[data-comic-panel]')];
   const panelStops = panels.map((_, index) => index / panels.length).concat(1.01);
-  const heroExitSpan = 0.06;
-  const panelRevealStart = 0.04;
-  const panelRevealSpan = 0.94;
   let activePanelIndex = -1;
   let introFrameRequested = false;
 
@@ -355,15 +454,17 @@ function initScrollVideoIntro() {
     const rect = intro.getBoundingClientRect();
     const scrollable = Math.max(1, intro.offsetHeight - window.innerHeight);
     const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
-    const titleExitProgress = Math.min(1, progress / heroExitSpan);
-    const panelProgress = Math.min(1, Math.max(0, (progress - panelRevealStart) / panelRevealSpan));
-    const panelPercent = Math.round(panelProgress * 100);
+    const percent = Math.round(progress * 100);
+    const titleExitProgress = Math.min(1, progress / 0.1);
+    // Begin the first comic before the title has fully left. The previous
+    // 0.18 start left a long all-white gap between the hero and the comic.
+    const panelProgress = Math.min(1, Math.max(0, (progress - 0.08) / 0.92));
     const activeIndex = Math.min(
       panels.length - 1,
       Math.max(0, panelStops.findIndex((stop, index) => panelProgress >= stop && panelProgress < panelStops[index + 1]))
     );
 
-    intro.style.setProperty('--comic-progress', `${panelPercent}%`);
+    intro.style.setProperty('--comic-progress', `${percent}%`);
     if (hero) {
       hero.style.opacity = String(1 - titleExitProgress);
       hero.style.filter = `blur(${titleExitProgress * 18}px)`;
@@ -371,10 +472,10 @@ function initScrollVideoIntro() {
       hero.style.pointerEvents = titleExitProgress > 0.95 ? 'none' : '';
     }
     if (stage) {
-      stage.style.opacity = String(Math.min(1, panelProgress * 10));
-      stage.style.transform = `translateY(${Math.max(0, 20 - panelProgress * 20)}px)`;
+      stage.style.opacity = String(Math.min(1, panelProgress * 25));
+      stage.style.transform = `translateY(${Math.max(0, 28 - panelProgress * 28)}px)`;
     }
-    if (progressBar) progressBar.style.width = `${panelPercent}%`;
+    if (progressBar) progressBar.style.width = `${percent}%`;
     if (activeIndex !== activePanelIndex) {
       activePanelIndex = activeIndex;
       panels.forEach((panel, index) => panel.classList.toggle('is-active', index === activeIndex));
@@ -525,20 +626,16 @@ const bodyChoiceStorageKeys = {
 };
 
 function getBodyChoiceClientId() {
-  let clientId = localStorage.getItem(bodyChoiceStorageKeys.clientId);
+  let clientId = safeLocalStorage.getItem(bodyChoiceStorageKeys.clientId);
   if (!clientId) {
     clientId = `body-choice-${Date.now()}-${Math.random().toString(36).slice(2)}`;
-    localStorage.setItem(bodyChoiceStorageKeys.clientId, clientId);
+    safeLocalStorage.setItem(bodyChoiceStorageKeys.clientId, clientId);
   }
   return clientId;
 }
 
 function readLocalBodyChoiceStats() {
-  try {
-    return JSON.parse(localStorage.getItem(bodyChoiceStorageKeys.fallbackStats)) || [];
-  } catch {
-    return [];
-  }
+  return readStoredJson(safeLocalStorage, bodyChoiceStorageKeys.fallbackStats, []) || [];
 }
 
 function writeLocalBodyChoiceStat(choice) {
@@ -555,10 +652,10 @@ function writeLocalBodyChoiceStat(choice) {
   };
 
   stats.push(record);
-  localStorage.setItem(bodyChoiceStorageKeys.fallbackStats, JSON.stringify(stats));
-  localStorage.setItem(bodyChoiceStorageKeys.hasSubmitted, 'true');
-  localStorage.setItem(bodyChoiceStorageKeys.submittedChoiceId, choice.id);
-  localStorage.setItem(bodyChoiceStorageKeys.submittedAt, String(record.updatedAt));
+  safeLocalStorage.setItem(bodyChoiceStorageKeys.fallbackStats, JSON.stringify(stats));
+  safeLocalStorage.setItem(bodyChoiceStorageKeys.hasSubmitted, 'true');
+  safeLocalStorage.setItem(bodyChoiceStorageKeys.submittedChoiceId, choice.id);
+  safeLocalStorage.setItem(bodyChoiceStorageKeys.submittedAt, String(record.updatedAt));
   return stats;
 }
 
@@ -818,7 +915,7 @@ function updateBodyCheckResult() {
     waterTarget: plan.waterTarget,
     bodyActionPlan: plan
   };
-  localStorage.setItem('bodyHealthProfile', JSON.stringify(savedProfile));
+  safeLocalStorage.setItem('bodyHealthProfile', JSON.stringify(savedProfile));
 
   const rangeMessage = hasBodyFat
     ? (plan.withinRange
@@ -1556,11 +1653,7 @@ class BodyManagementExperienceHub {
   }
 
   mealProfile() {
-    try {
-      return JSON.parse(localStorage.getItem('bodyHealthProfile')) || null;
-    } catch {
-      return null;
-    }
+    return readStoredJson(safeLocalStorage, 'bodyHealthProfile', null);
   }
 
   mealItems() {
@@ -2778,12 +2871,7 @@ function initWeightStorySection() {
   };
 
   function savedMealTargets() {
-    let profile = null;
-    try {
-      profile = JSON.parse(localStorage.getItem('bodyHealthProfile'));
-    } catch {
-      profile = null;
-    }
+    const profile = readStoredJson(safeLocalStorage, 'bodyHealthProfile', null);
 
     if (!profile || !Number(profile.weight)) {
       return {
@@ -3457,20 +3545,28 @@ function initGymScrollSequence() {
       });
   }
 
-  fetch(manifestPath)
-    .then((response) => {
-      if (!response.ok) throw new Error(`Unable to load sequence manifest: ${response.status}`);
-      return response.json();
-    })
-    .then((manifest) => {
-      return loadSequence(buildSequence(manifest));
-    })
-    .catch((error) => {
-      console.warn(error);
-      loadSequence(fallbackGymSequence()).catch((fallbackError) => {
-        console.warn(fallbackError);
-      });
+  const loadFallbackSequence = () => {
+    loadSequence(fallbackGymSequence()).catch((fallbackError) => {
+      console.warn(fallbackError);
     });
+  };
+
+  if (isLocalFileProtocol) {
+    loadFallbackSequence();
+  } else {
+    fetch(manifestPath)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Unable to load sequence manifest: ${response.status}`);
+        return response.json();
+      })
+      .then((manifest) => {
+        return loadSequence(buildSequence(manifest));
+      })
+      .catch((error) => {
+        console.warn(error);
+        loadFallbackSequence();
+      });
+  }
 
   window.addEventListener('scroll', requestDraw, { passive: true });
   window.addEventListener('resize', () => {
