@@ -8,6 +8,11 @@ const siteAssetManifest = [
   './pic/opening-comic/7.jpg'
 ];
 
+const PRELOADER_MIN_DISPLAY_MS = 350;
+const PRELOADER_SOFT_TIMEOUT_MS = 4500;
+const PRELOADER_HARD_TIMEOUT_MS = 7000;
+const IMAGE_READY_TIMEOUT_MS = 2500;
+
 function refreshLucideIcons() {
   if (window.lucide?.createIcons) {
     window.lucide.createIcons({
@@ -21,90 +26,74 @@ function refreshLucideIcons() {
 
 window.addEventListener('load', refreshLucideIcons);
 
-function preloadImage(src) {
+function waitForPromise(promise, timeoutMs) {
+  return new Promise((resolve) => {
+    let settled = false;
+    const done = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      resolve();
+    };
+    const timer = window.setTimeout(done, timeoutMs);
+    Promise.resolve(promise).then(done, done);
+  });
+}
+
+function decodeImageSafely(image, timeoutMs = 1200) {
+  if (!image?.decode) return Promise.resolve();
+  return waitForPromise(image.decode().catch(() => {}), timeoutMs);
+}
+
+function preloadImage(src, timeoutMs = IMAGE_READY_TIMEOUT_MS) {
   return new Promise((resolve) => {
     const image = new Image();
     let settled = false;
     const done = () => {
       if (settled) return;
       settled = true;
-      resolve();
-    };
-    image.onload = async () => {
-      try {
-        await image.decode();
-      } catch {
-        // A completed image can still be displayed when decode() is unavailable.
-      }
-      done();
-    };
-    image.onerror = resolve;
-    image.decoding = 'sync';
-    image.src = src;
-    if (image.complete && image.naturalWidth > 0) image.onload();
-  });
-}
-
-function ensureDomImageReady(image) {
-  if (image.complete && image.naturalWidth > 0) {
-    return image.decode().catch(() => {});
-  }
-
-  return new Promise((resolve) => {
-    let settled = false;
-    const originalSource = image.currentSrc || image.getAttribute('src');
-    const done = async () => {
-      if (settled) return;
-      settled = true;
       window.clearTimeout(timer);
-      image.removeEventListener('load', done);
-      image.removeEventListener('error', done);
-      if (image.naturalWidth > 0) {
-        try {
-          await image.decode();
-        } catch {
-          // The decoded pixels are already available on browsers without decode().
-        }
-      }
       resolve();
     };
-    const timer = window.setTimeout(done, 12000);
-    image.addEventListener('load', done, { once: true });
-    image.addEventListener('error', done, { once: true });
-
-    // A large parallel preload can make Safari cancel an off-screen request.
-    // Retrying the real DOM node here ensures it owns a displayable resource.
-    if (originalSource) {
-      image.removeAttribute('src');
-      image.src = originalSource;
+    const handleLoad = () => {
+      decodeImageSafely(image).finally(done);
+    };
+    const timer = window.setTimeout(done, timeoutMs);
+    image.onload = handleLoad;
+    image.onerror = done;
+    image.decoding = 'async';
+    image.src = src;
+    if (image.complete) {
+      if (image.naturalWidth > 0) {
+        handleLoad();
+      } else {
+        done();
+      }
     }
   });
 }
 
-function preloadVideoForDisplay(video) {
+function ensureDomImageReady(image, timeoutMs = IMAGE_READY_TIMEOUT_MS) {
+  if (image.complete) {
+    return image.naturalWidth > 0 ? decodeImageSafely(image) : Promise.resolve();
+  }
+
   return new Promise((resolve) => {
     let settled = false;
     const done = () => {
       if (settled) return;
       settled = true;
       window.clearTimeout(timer);
-      video.removeEventListener('loadeddata', done);
-      video.removeEventListener('canplay', done);
-      video.removeEventListener('error', done);
+      image.removeEventListener('load', handleLoad);
+      image.removeEventListener('error', done);
       resolve();
     };
-    const timer = window.setTimeout(done, 12000);
-    video.preload = 'auto';
-    video.muted = true;
-    video.playsInline = true;
-    video.addEventListener('loadeddata', done, { once: true });
-    video.addEventListener('canplay', done, { once: true });
-    video.addEventListener('error', done, { once: true });
-    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-      done();
-      return;
-    }
-    video.load();
+    const handleLoad = () => {
+      decodeImageSafely(image).finally(done);
+    };
+    const timer = window.setTimeout(done, timeoutMs);
+    image.addEventListener('load', handleLoad, { once: true });
+    image.addEventListener('error', done, { once: true });
   });
 }
 
@@ -117,66 +106,16 @@ function normalizeAssetUrl(src) {
   }
 }
 
-function pageImageAssets() {
-  const imageSources = Array.from(document.querySelectorAll('img'))
+function criticalImageAssets() {
+  const openingImages = Array.from(document.querySelectorAll('#comic-opening img'))
     .map((image) => image.currentSrc || image.getAttribute('src'))
     .filter(Boolean);
-  return [...siteAssetManifest, ...imageSources, ...stylesheetImageAssets()];
-}
 
-function pageVideoElements() {
-  return Array.from(document.querySelectorAll('video')).filter((video) =>
-    video.currentSrc || video.getAttribute('src') || video.querySelector('source[src]')
-  );
-}
-
-function stylesheetImageAssets() {
-  const urls = [];
-  const collectUrls = (rules) => {
-    Array.from(rules || []).forEach((rule) => {
-      if (rule.cssRules) collectUrls(rule.cssRules);
-      const text = rule.cssText || '';
-      const matches = text.matchAll(/url\((['"]?)(.*?)\1\)/g);
-      for (const match of matches) {
-        const asset = match[2];
-        if (asset && !asset.startsWith('data:')) urls.push(asset);
-      }
-    });
-  };
-  Array.from(document.styleSheets).forEach((sheet) => {
-    try {
-      collectUrls(sheet.cssRules);
-    } catch {
-      // Cross-origin stylesheets cannot always be inspected; DOM assets are still tracked.
-    }
-  });
-  return urls;
-}
-
-async function sequenceImageAssets() {
-  const sequenceSections = Array.from(document.querySelectorAll('[data-sequence-manifest]'));
-  const sequenceSources = [];
-  await Promise.all(sequenceSections.map(async (section) => {
-    try {
-      const response = await fetch(section.dataset.sequenceManifest);
-      if (!response.ok) return;
-      const manifest = await response.json();
-      if (Array.isArray(manifest.sequence)) {
-        sequenceSources.push(...manifest.sequence);
-        return;
-      }
-
-      const basePath = manifest.basePath || '';
-      const order = Array.isArray(manifest.order) ? manifest.order : [];
-      order.forEach((folder) => {
-        const files = manifest.folders?.[folder] || [];
-        files.forEach((file) => sequenceSources.push(`${basePath}/${folder}/${file}`));
-      });
-    } catch {
-      // Missing optional manifest assets should not permanently block the story.
-    }
-  }));
-  return sequenceSources;
+  return [
+    ...siteAssetManifest,
+    './pic/opening-comic/ending-hard.png',
+    ...openingImages
+  ];
 }
 
 async function initSitePreloader() {
@@ -193,36 +132,45 @@ async function initSitePreloader() {
   }
   await new Promise((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
 
-  const pageImages = Array.from(document.querySelectorAll('img'));
-  pageImages.forEach((image) => {
+  const criticalImages = Array.from(document.querySelectorAll('#comic-opening img'));
+  criticalImages.forEach((image) => {
     image.loading = 'eager';
-    image.decoding = 'sync';
+    image.decoding = 'async';
+    image.fetchPriority = 'high';
   });
 
-  const imageAssets = [...new Set([...pageImageAssets(), ...await sequenceImageAssets()].map(normalizeAssetUrl).filter(Boolean))];
-  const videoElements = pageVideoElements();
-  const preloadTasks = [
-    ...imageAssets.map((src) => preloadImage(src)),
-    ...videoElements.map((video) => preloadVideoForDisplay(video))
-  ];
-  const totalAssets = Math.max(1, preloadTasks.length);
+  const imageAssets = [...new Set(criticalImageAssets().map(normalizeAssetUrl).filter(Boolean))];
+  const preloadTasks = imageAssets.map((src) => preloadImage(src));
+  const totalAssets = preloadTasks.length;
   const startedAt = performance.now();
+  let finished = false;
   let completed = 0;
   const updateProgress = () => {
-    const percentage = Math.round((completed / totalAssets) * 100);
+    const percentage = totalAssets ? Math.round((completed / totalAssets) * 100) : 100;
     if (progressBar) progressBar.style.width = `${percentage}%`;
     if (status) status.textContent = `載入素材 ${percentage}%`;
   };
   const finishPreloader = () => {
+    if (finished) return;
+    finished = true;
+    window.clearTimeout(hardTimeout);
+    if (typeof window.__preloaderFailSafe === 'number') {
+      window.clearTimeout(window.__preloaderFailSafe);
+    }
     if (progressBar) progressBar.style.width = '100%';
     if (status) status.textContent = '準備完成';
     window.requestAnimationFrame(() => {
+      if (typeof window.__releaseSitePreloader === 'function') {
+        window.__releaseSitePreloader();
+        return;
+      }
       document.documentElement.classList.remove('is-preloading');
       preloader.classList.add('is-complete');
       window.dispatchEvent(new Event('resize'));
       window.setTimeout(() => preloader.remove(), 500);
     });
   };
+  const hardTimeout = window.setTimeout(finishPreloader, PRELOADER_HARD_TIMEOUT_MS);
 
   updateProgress();
 
@@ -235,14 +183,19 @@ async function initSitePreloader() {
     )
   );
   try {
-    await preloadTask;
-    await (document.fonts?.ready || Promise.resolve());
-    await Promise.all(pageImages.map(ensureDomImageReady));
+    await waitForPromise(
+      Promise.all([
+        preloadTask,
+        waitForPromise(document.fonts?.ready || Promise.resolve(), 1500),
+        Promise.all(criticalImages.map((image) => ensureDomImageReady(image)))
+      ]),
+      PRELOADER_SOFT_TIMEOUT_MS
+    );
   } catch {
     // The article should stay readable even if one optional asset reports late.
   }
 
-  const minimumDisplayTime = Math.max(0, 350 - (performance.now() - startedAt));
+  const minimumDisplayTime = Math.max(0, PRELOADER_MIN_DISPLAY_MS - (performance.now() - startedAt));
   await new Promise((resolve) => window.setTimeout(resolve, minimumDisplayTime));
   finishPreloader();
 }
@@ -391,6 +344,9 @@ function initScrollVideoIntro() {
   const progressBar = intro.querySelector('[data-comic-progress]');
   const panels = [...intro.querySelectorAll('[data-comic-panel]')];
   const panelStops = panels.map((_, index) => index / panels.length).concat(1.01);
+  const heroExitSpan = 0.05;
+  const panelRevealStart = 0.015;
+  const panelRevealSpan = 0.4;
   let activePanelIndex = -1;
   let introFrameRequested = false;
 
@@ -400,10 +356,8 @@ function initScrollVideoIntro() {
     const scrollable = Math.max(1, intro.offsetHeight - window.innerHeight);
     const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
     const percent = Math.round(progress * 100);
-    const titleExitProgress = Math.min(1, progress / 0.1);
-    // Begin the first comic before the title has fully left. The previous
-    // 0.18 start left a long all-white gap between the hero and the comic.
-    const panelProgress = Math.min(1, Math.max(0, (progress - 0.08) / 0.92));
+    const titleExitProgress = Math.min(1, progress / heroExitSpan);
+    const panelProgress = Math.min(1, Math.max(0, (progress - panelRevealStart) / panelRevealSpan));
     const activeIndex = Math.min(
       panels.length - 1,
       Math.max(0, panelStops.findIndex((stop, index) => panelProgress >= stop && panelProgress < panelStops[index + 1]))
@@ -417,8 +371,8 @@ function initScrollVideoIntro() {
       hero.style.pointerEvents = titleExitProgress > 0.95 ? 'none' : '';
     }
     if (stage) {
-      stage.style.opacity = String(Math.min(1, panelProgress * 25));
-      stage.style.transform = `translateY(${Math.max(0, 28 - panelProgress * 28)}px)`;
+      stage.style.opacity = String(Math.min(1, panelProgress * 8));
+      stage.style.transform = `translateY(${Math.max(0, 20 - panelProgress * 20)}px)`;
     }
     if (progressBar) progressBar.style.width = `${percent}%`;
     if (activeIndex !== activePanelIndex) {

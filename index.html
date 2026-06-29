@@ -47,6 +47,19 @@
       window.scrollTo(0, 0);
     });
   </script>
+  <script>
+    window.__releaseSitePreloader = function () {
+      document.documentElement.classList.remove('is-preloading');
+      var preloader = document.querySelector('[data-site-preloader]');
+      if (!preloader) return;
+      preloader.classList.add('is-complete');
+      window.dispatchEvent(new Event('resize'));
+      window.setTimeout(function () {
+        if (preloader.isConnected) preloader.remove();
+      }, 500);
+    };
+    window.__preloaderFailSafe = window.setTimeout(window.__releaseSitePreloader, 7000);
+  </script>
 </head>
 <body>
   <div class="reading-progress" aria-hidden="true">
@@ -4096,6 +4109,6 @@
     </div>
   </nav>
 
-  <script src="script.js?v=20260629-7"></script>
+  <script src="script.js?v=20260629-9"></script>
 </body>
 </html>
