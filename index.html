@@ -17,6 +17,7 @@
   <script src="./vendor/html2canvas.min.js?v=1.4.1" defer></script>
   <script>
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    var shouldRestoreMainScroll = new URLSearchParams(window.location.search).get('restoreScroll') === '1';
     window.addEventListener('load', function () {
       var allowedHashTargets = [
         'comic-opening',
@@ -42,6 +43,7 @@
         }
         history.replaceState(null, '', window.location.pathname + window.location.search);
       }
+      if (shouldRestoreMainScroll) return;
       window.scrollTo(0, 0);
     });
   </script>
@@ -64,8 +66,14 @@
     <div class="opening-comic-sticky">
       <div class="opening-comic-hero" aria-label="專題開場">
         <img src="./pic/opening-comic/1.jpg" alt="" aria-hidden="true" />
-        <div>
-          <h1>當美被社群媒體形塑<br />Z世代的體態焦慮與自我追尋</h1>
+        <div class="opening-hero-copy">
+          <h1 class="opening-hero-title">
+            <span class="opening-hero-line">當美被</span>
+            <span class="opening-hero-line">
+              <span class="algorithm-word">演算法<span class="algorithm-pixels" data-algorithm-pixels aria-hidden="true"></span></span><span>定義</span>
+            </span>
+          </h1>
+          <p class="opening-hero-subtitle">社群媒體如何影響 Z 世代的<br />體態焦慮與身體認同</p>
           <span class="scroll-cue" aria-label="向下滑動"></span>
         </div>
       </div>
@@ -4024,49 +4032,49 @@
         </label>
         <div class="case-hashtag-row" aria-label="案例 hashtag">
           <button type="button" data-case-tag="">全部</button>
-          <button type="button" data-case-tag="節食停滯">#節食停滯</button>
-          <button type="button" data-case-tag="復胖壓力">#復胖壓力</button>
+          <button type="button" data-case-tag="飲食控制">#飲食控制</button>
+          <button type="button" data-case-tag="增肌訓練">#增肌訓練</button>
           <button type="button" data-case-tag="社群比較">#社群比較</button>
-          <button type="button" data-case-tag="健身房">#健身房</button>
-          <button type="button" data-case-tag="健康餐">#健康餐</button>
-          <button type="button" data-case-tag="瘦瘦針">#瘦瘦針</button>
+          <button type="button" data-case-tag="健康因素">#健康因素</button>
+          <button type="button" data-case-tag="體態審美">#體態審美</button>
+          <button type="button" data-case-tag="競技壓力">#競技壓力</button>
         </div>
         <div class="case-video-grid" data-case-video-grid>
-          <a class="case-video-card" href="pages/case1.html" data-case-card data-tags="吳佩璇 佩璇 阿寶 國貿 重訓 飲食控制 復胖壓力 蛋白質 坐著肚子 焦慮" data-search="吳佩璇 佩璇 阿寶 國貿 重訓 飲食控制 復胖壓力 蛋白質 坐著肚子 焦慮">
+          <a class="case-video-card" href="pages/case1.html" data-case-card data-tags="飲食控制 增肌訓練 社群比較 體態審美" data-search="吳佩璇 佩璇 阿寶 國貿 反覆減重 復胖壓力 168間歇性斷食 飲食控制 增肌訓練 重訓 有氧 外食 蛋白質 社群比較 理想體態 坐著肚子 體態審美">
             <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case1.mov" type="video/quicktime" /></video>
             <span>看看吳佩璇的故事</span>
-            <small>#重訓飲控 #復胖壓力</small>
+            <small>#反覆減重 #飲食重訓</small>
           </a>
-          <a class="case-video-card" href="pages/case2.html" data-case-card data-tags="張皓承 皓承 傳院 術後減重 椎間盤 飲食控制 一天兩餐 節食停滯 睡眠呼吸中止 健康問題" data-search="張皓承 皓承 傳院 術後減重 椎間盤 飲食控制 一天兩餐 節食停滯 睡眠呼吸中止 健康問題">
+          <a class="case-video-card" href="pages/case2.html" data-case-card data-tags="飲食控制 社群比較 健康因素" data-search="張皓承 皓承 傳院 健康減重 術後減重 椎間盤突出 飲食控制 一天兩餐 健康餐盒 瓶頸期 體重停滯 睡眠問題 社群比較 減重廣告 健康因素">
             <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case2.mp4" type="video/mp4" /></video>
             <span>看看張皓承的故事</span>
-            <small>#一天兩餐 #節食停滯</small>
+            <small>#健康減重 #瓶頸期</small>
           </a>
-          <a class="case-video-card" href="pages/case3.html" data-case-card data-tags="Sam 增肌 過瘦 社群比較 穿搭 單薄 健身 乳清 蛋白質 男性肌肉" data-search="Sam 增肌 過瘦 社群比較 穿搭 單薄 健身 乳清 蛋白質 男性肌肉">
+          <a class="case-video-card" href="pages/case3.html" data-case-card data-tags="增肌訓練 社群比較 體態審美" data-search="Sam 過瘦 增肌訓練 社群比較 體態審美 穿搭 單薄 健身 乳清 蛋白質 男性肌肉 抖音 小紅書">
             <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case3.mov" type="video/quicktime" /></video>
             <span>看看Sam的故事</span>
-            <small>#社群比較 #增肌焦慮</small>
+            <small>#過瘦增肌 #男性審美</small>
           </a>
-          <a class="case-video-card" href="pages/case4.html" data-case-card data-tags="恐龍 退役籃球 運動傷害 健身房 高蛋白 肌酸 魚油 穿搭 持續壓力 健康生活" data-search="恐龍 退役籃球 運動傷害 健身房 高蛋白 肌酸 魚油 穿搭 持續壓力 健康生活">
+          <a class="case-video-card" href="pages/case4.html" data-case-card data-tags="飲食控制 增肌訓練 社群比較 健康因素 體態審美" data-search="恐龍 退役籃球 運動表現 傷害預防 增肌訓練 飲食控制 社群比較 健康因素 體態審美 高蛋白 肌酸 魚油 穿搭 睡眠 健康生活">
             <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case4.mov" type="video/quicktime" /></video>
             <span>看看恐龍的故事</span>
-            <small>#健身房 #運動傷害</small>
+            <small>#運動表現 #傷害預防</small>
           </a>
-          <a class="case-video-card" href="pages/case5.html" data-case-card data-tags="鍾心咪 心咪 廣告系 健康餐 增肌減脂 外食選擇 營養焦慮 益生菌 生病 浮腫" data-search="鍾心咪 心咪 廣告系 健康餐 增肌減脂 外食選擇 營養焦慮 益生菌 生病 浮腫">
+          <a class="case-video-card" href="pages/case5.html" data-case-card data-tags="飲食控制 增肌訓練 社群比較 健康因素 體態審美" data-search="鍾心咪 心咪 廣告系 增肌減脂 飲食控制 增肌訓練 社群比較 健康因素 體態審美 健康預警 頻繁生病 浮腫 腿部線條 K-pop 益生菌 自煮">
             <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case5.mov" type="video/quicktime" /></video>
             <span>看看鍾心咪的故事</span>
-            <small>#健康餐 #外食選擇</small>
+            <small>#增肌減脂 #健康預警</small>
           </a>
-          <a class="case-video-card" href="pages/case6.html" data-case-card data-tags="徐同學 健美 自律 比賽 重訓 賽前飲食 醫療風險 瘦瘦針 快速見效 競技壓力" data-search="徐同學 健美 自律 比賽 重訓 賽前飲食 醫療風險 瘦瘦針 快速見效 競技壓力">
+          <a class="case-video-card" href="pages/case6.html" data-case-card data-tags="飲食控制 增肌訓練 社群比較 體態審美 競技壓力" data-search="徐同學 健美 自律 健美備賽 增肌訓練 重訓 飲食控制 賽前飲食 營養計算 社群比較 體態審美 同齡選手 競技壓力 自我要求">
             <video autoplay muted loop playsinline preload="metadata"><source src="./video/cases/case6.mov" type="video/quicktime" /></video>
             <span>看看徐同學的故事</span>
-            <small>#自律健美 #競技壓力</small>
+            <small>#健美備賽 #競技壓力</small>
           </a>
         </div>
       </div>
     </div>
   </nav>
 
-  <script src="script.js?v=20260627-16"></script>
+  <script src="script.js?v=20260629-1"></script>
 </body>
 </html>

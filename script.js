@@ -172,19 +172,40 @@ function initMainPageScrollRestore() {
 
   if (isMainPage) {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('restoreScroll') === '1') {
-      const savedScroll = Number(sessionStorage.getItem(scrollKey));
-      if (Number.isFinite(savedScroll)) {
-        window.requestAnimationFrame(() => window.scrollTo({ top: savedScroll, behavior: 'auto' }));
-      }
+    const shouldRestore = params.get('restoreScroll') === '1';
+    const savedScroll = Number(sessionStorage.getItem(scrollKey));
+    let restorationPending = shouldRestore && Number.isFinite(savedScroll);
+
+    function restoreMainScroll() {
+      if (!restorationPending) return;
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          window.scrollTo({ top: savedScroll, behavior: 'auto' });
+          window.setTimeout(() => {
+            window.scrollTo({ top: savedScroll, behavior: 'auto' });
+            restorationPending = false;
+            sessionStorage.setItem(scrollKey, String(Math.round(savedScroll)));
+          }, 250);
+        });
+      });
+    }
+
+    if (shouldRestore) {
       params.delete('restoreScroll');
       const nextQuery = params.toString();
       const nextUrl = `${window.location.pathname}${nextQuery ? `?${nextQuery}` : ''}${window.location.hash}`;
       window.history.replaceState(null, '', nextUrl);
+
+      if (document.readyState === 'complete') restoreMainScroll();
+      else window.addEventListener('load', restoreMainScroll, { once: true });
+      window.addEventListener('pageshow', restoreMainScroll, { once: true });
     }
 
-    const saveMainScroll = () => sessionStorage.setItem(scrollKey, String(Math.round(window.scrollY || document.documentElement.scrollTop || 0)));
-    saveMainScroll();
+    const saveMainScroll = () => {
+      if (restorationPending) return;
+      sessionStorage.setItem(scrollKey, String(Math.round(window.scrollY || document.documentElement.scrollTop || 0)));
+    };
+    if (!restorationPending) saveMainScroll();
     window.addEventListener('scroll', saveMainScroll, { passive: true });
     window.addEventListener('beforeunload', saveMainScroll);
   }
@@ -197,6 +218,34 @@ function initMainPageScrollRestore() {
 }
 
 initMainPageScrollRestore();
+
+function initAlgorithmPixels() {
+  const layer = document.querySelector('[data-algorithm-pixels]');
+  if (!layer || layer.dataset.ready === 'true') return;
+
+  const colors = ['#9f7c7f', '#b99a9d', '#d8c8c9', '#000000'];
+  const fragment = document.createDocumentFragment();
+
+  for (let index = 0; index < 24; index += 1) {
+    const pixel = document.createElement('i');
+    const seed = (index * 37 + 11) % 101;
+    pixel.className = 'algorithm-pixel';
+    pixel.style.setProperty('--pixel-x', `${(index * 29) % 100}%`);
+    pixel.style.setProperty('--pixel-y', `${8 + ((index * 47) % 84)}%`);
+    pixel.style.setProperty('--pixel-size', `${3 + (seed % 4)}px`);
+    pixel.style.setProperty('--pixel-color', colors[index % colors.length]);
+    pixel.style.setProperty('--pixel-opacity', `${0.08 + (seed % 15) / 100}`);
+    pixel.style.setProperty('--pixel-duration', `${6 + (seed % 40) / 10}s`);
+    pixel.style.setProperty('--pixel-delay', `${-((seed % 50) / 10)}s`);
+    pixel.style.setProperty('--pixel-travel', `${12 + (seed % 28)}px`);
+    fragment.appendChild(pixel);
+  }
+
+  layer.appendChild(fragment);
+  layer.dataset.ready = 'true';
+}
+
+initAlgorithmPixels();
 
 function initScrollVideoIntro() {
   const intro = document.querySelector('[data-comic-intro]');
