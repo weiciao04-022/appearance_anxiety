@@ -24,33 +24,86 @@ window.addEventListener('load', refreshLucideIcons);
 function preloadImage(src) {
   return new Promise((resolve) => {
     const image = new Image();
-    image.onload = resolve;
+    let settled = false;
+    const done = () => {
+      if (settled) return;
+      settled = true;
+      resolve();
+    };
+    image.onload = async () => {
+      try {
+        await image.decode();
+      } catch {
+        // A completed image can still be displayed when decode() is unavailable.
+      }
+      done();
+    };
     image.onerror = resolve;
+    image.decoding = 'sync';
     image.src = src;
-    if (image.complete) resolve();
+    if (image.complete && image.naturalWidth > 0) image.onload();
   });
 }
 
-function preloadVideoMetadata(src) {
+function ensureDomImageReady(image) {
+  if (image.complete && image.naturalWidth > 0) {
+    return image.decode().catch(() => {});
+  }
+
   return new Promise((resolve) => {
-    const video = document.createElement('video');
-    const done = () => {
-      video.removeAttribute('src');
-      video.load();
+    let settled = false;
+    const originalSource = image.currentSrc || image.getAttribute('src');
+    const done = async () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timer);
+      image.removeEventListener('load', done);
+      image.removeEventListener('error', done);
+      if (image.naturalWidth > 0) {
+        try {
+          await image.decode();
+        } catch {
+          // The decoded pixels are already available on browsers without decode().
+        }
+      }
       resolve();
     };
     const timer = window.setTimeout(done, 12000);
-    const finish = () => {
+    image.addEventListener('load', done, { once: true });
+    image.addEventListener('error', done, { once: true });
+
+    // A large parallel preload can make Safari cancel an off-screen request.
+    // Retrying the real DOM node here ensures it owns a displayable resource.
+    if (originalSource) {
+      image.removeAttribute('src');
+      image.src = originalSource;
+    }
+  });
+}
+
+function preloadVideoForDisplay(video) {
+  return new Promise((resolve) => {
+    let settled = false;
+    const done = () => {
+      if (settled) return;
+      settled = true;
       window.clearTimeout(timer);
-      done();
+      video.removeEventListener('loadeddata', done);
+      video.removeEventListener('canplay', done);
+      video.removeEventListener('error', done);
+      resolve();
     };
-    video.preload = 'metadata';
+    const timer = window.setTimeout(done, 12000);
+    video.preload = 'auto';
     video.muted = true;
     video.playsInline = true;
-    video.addEventListener('loadedmetadata', finish, { once: true });
-    video.addEventListener('canplay', finish, { once: true });
-    video.addEventListener('error', finish, { once: true });
-    video.src = src;
+    video.addEventListener('loadeddata', done, { once: true });
+    video.addEventListener('canplay', done, { once: true });
+    video.addEventListener('error', done, { once: true });
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      done();
+      return;
+    }
     video.load();
   });
 }
@@ -71,18 +124,10 @@ function pageImageAssets() {
   return [...siteAssetManifest, ...imageSources, ...stylesheetImageAssets()];
 }
 
-function pageVideoAssets() {
-  const videoSources = Array.from(document.querySelectorAll('video source, video'))
-    .map((node) => node.getAttribute('src') || node.currentSrc)
-    .filter(Boolean);
-  const scriptedVideoSources = [
-    './video/body-feed/weightloss.m4v',
-    './video/body-feed/butttraining.m4v',
-    './video/body-feed/healthyfood.m4v',
-    './video/body-feed/chesttraining.m4v',
-    './video/body-feed/moremusle.m4v'
-  ];
-  return [...videoSources, ...scriptedVideoSources];
+function pageVideoElements() {
+  return Array.from(document.querySelectorAll('video')).filter((video) =>
+    video.currentSrc || video.getAttribute('src') || video.querySelector('source[src]')
+  );
 }
 
 function stylesheetImageAssets() {
@@ -143,11 +188,22 @@ async function initSitePreloader() {
     return;
   }
 
+  if (document.readyState === 'loading') {
+    await new Promise((resolve) => document.addEventListener('DOMContentLoaded', resolve, { once: true }));
+  }
+  await new Promise((resolve) => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
+
+  const pageImages = Array.from(document.querySelectorAll('img'));
+  pageImages.forEach((image) => {
+    image.loading = 'eager';
+    image.decoding = 'sync';
+  });
+
   const imageAssets = [...new Set([...pageImageAssets(), ...await sequenceImageAssets()].map(normalizeAssetUrl).filter(Boolean))];
-  const videoAssets = [...new Set(pageVideoAssets().map(normalizeAssetUrl).filter(Boolean))];
+  const videoElements = pageVideoElements();
   const preloadTasks = [
     ...imageAssets.map((src) => preloadImage(src)),
-    ...videoAssets.map((src) => preloadVideoMetadata(src))
+    ...videoElements.map((video) => preloadVideoForDisplay(video))
   ];
   const totalAssets = Math.max(1, preloadTasks.length);
   const startedAt = performance.now();
@@ -160,9 +216,12 @@ async function initSitePreloader() {
   const finishPreloader = () => {
     if (progressBar) progressBar.style.width = '100%';
     if (status) status.textContent = '準備完成';
-    document.documentElement.classList.remove('is-preloading');
-    preloader.classList.add('is-complete');
-    window.setTimeout(() => preloader.remove(), 500);
+    window.requestAnimationFrame(() => {
+      document.documentElement.classList.remove('is-preloading');
+      preloader.classList.add('is-complete');
+      window.dispatchEvent(new Event('resize'));
+      window.setTimeout(() => preloader.remove(), 500);
+    });
   };
 
   updateProgress();
@@ -178,6 +237,7 @@ async function initSitePreloader() {
   try {
     await preloadTask;
     await (document.fonts?.ready || Promise.resolve());
+    await Promise.all(pageImages.map(ensureDomImageReady));
   } catch {
     // The article should stay readable even if one optional asset reports late.
   }
@@ -340,8 +400,10 @@ function initScrollVideoIntro() {
     const scrollable = Math.max(1, intro.offsetHeight - window.innerHeight);
     const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
     const percent = Math.round(progress * 100);
-    const titleExitProgress = Math.min(1, progress / 0.12);
-    const panelProgress = Math.min(1, Math.max(0, (progress - 0.18) / 0.82));
+    const titleExitProgress = Math.min(1, progress / 0.1);
+    // Begin the first comic before the title has fully left. The previous
+    // 0.18 start left a long all-white gap between the hero and the comic.
+    const panelProgress = Math.min(1, Math.max(0, (progress - 0.08) / 0.92));
     const activeIndex = Math.min(
       panels.length - 1,
       Math.max(0, panelStops.findIndex((stop, index) => panelProgress >= stop && panelProgress < panelStops[index + 1]))
@@ -355,7 +417,7 @@ function initScrollVideoIntro() {
       hero.style.pointerEvents = titleExitProgress > 0.95 ? 'none' : '';
     }
     if (stage) {
-      stage.style.opacity = String(Math.min(1, panelProgress * 10));
+      stage.style.opacity = String(Math.min(1, panelProgress * 25));
       stage.style.transform = `translateY(${Math.max(0, 28 - panelProgress * 28)}px)`;
     }
     if (progressBar) progressBar.style.width = `${percent}%`;
