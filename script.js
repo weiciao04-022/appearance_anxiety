@@ -344,9 +344,9 @@ function initScrollVideoIntro() {
   const progressBar = intro.querySelector('[data-comic-progress]');
   const panels = [...intro.querySelectorAll('[data-comic-panel]')];
   const panelStops = panels.map((_, index) => index / panels.length).concat(1.01);
-  const heroExitSpan = 0.05;
-  const panelRevealStart = 0.015;
-  const panelRevealSpan = 0.4;
+  const heroExitSpan = 0.06;
+  const panelRevealStart = 0.04;
+  const panelRevealSpan = 0.94;
   let activePanelIndex = -1;
   let introFrameRequested = false;
 
@@ -355,15 +355,15 @@ function initScrollVideoIntro() {
     const rect = intro.getBoundingClientRect();
     const scrollable = Math.max(1, intro.offsetHeight - window.innerHeight);
     const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
-    const percent = Math.round(progress * 100);
     const titleExitProgress = Math.min(1, progress / heroExitSpan);
     const panelProgress = Math.min(1, Math.max(0, (progress - panelRevealStart) / panelRevealSpan));
+    const panelPercent = Math.round(panelProgress * 100);
     const activeIndex = Math.min(
       panels.length - 1,
       Math.max(0, panelStops.findIndex((stop, index) => panelProgress >= stop && panelProgress < panelStops[index + 1]))
     );
 
-    intro.style.setProperty('--comic-progress', `${percent}%`);
+    intro.style.setProperty('--comic-progress', `${panelPercent}%`);
     if (hero) {
       hero.style.opacity = String(1 - titleExitProgress);
       hero.style.filter = `blur(${titleExitProgress * 18}px)`;
@@ -371,10 +371,10 @@ function initScrollVideoIntro() {
       hero.style.pointerEvents = titleExitProgress > 0.95 ? 'none' : '';
     }
     if (stage) {
-      stage.style.opacity = String(Math.min(1, panelProgress * 8));
+      stage.style.opacity = String(Math.min(1, panelProgress * 10));
       stage.style.transform = `translateY(${Math.max(0, 20 - panelProgress * 20)}px)`;
     }
-    if (progressBar) progressBar.style.width = `${percent}%`;
+    if (progressBar) progressBar.style.width = `${panelPercent}%`;
     if (activeIndex !== activePanelIndex) {
       activePanelIndex = activeIndex;
       panels.forEach((panel, index) => panel.classList.toggle('is-active', index === activeIndex));
