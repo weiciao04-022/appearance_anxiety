@@ -3,7 +3,6 @@ body {
   background: #fff;
   color: #000;
   font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", sans-serif;
-  overflow-x: hidden;
 }
 
 html.is-preloading {
@@ -302,13 +301,11 @@ button:active,
   position: absolute;
   inset: 0;
   z-index: -1;
-  background:
-    radial-gradient(circle at 38% 42%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.24) 34%, rgba(255, 255, 255, 0.12) 62%),
-    rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.22);
   backdrop-filter: blur(8px);
 }
 
-.opening-comic-hero img {
+.opening-comic-hero > img {
   position: absolute;
   inset: 0;
   z-index: -2;
@@ -349,49 +346,28 @@ button:active,
   margin: 0;
 }
 
-.opening-hero-copy::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: -9%;
-  right: -16%;
-  bottom: -13%;
-  left: -8%;
-  border-radius: 999px 46% 52% 44%;
-  background:
-    radial-gradient(ellipse at 42% 44%, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.5) 46%, rgba(255, 255, 255, 0) 72%);
-  filter: blur(16px);
-  opacity: 0.9;
-  pointer-events: none;
-}
-
 .opening-hero-copy--logo {
   top: 50%;
   left: 50%;
-  width: min(1080px, 86vw);
-  max-width: 1080px;
-  transform: translate(-50%, -50%);
+  width: min(92vw, 980px);
+  max-width: none;
   display: grid;
   justify-items: center;
-  text-align: center;
-  gap: 28px;
-}
-
-.opening-hero-copy--logo::before {
-  top: -12%;
-  right: -8%;
-  bottom: -14%;
-  left: -8%;
-  border-radius: 56px;
-  background:
-    radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.72) 42%, rgba(255, 255, 255, 0) 82%);
+  gap: 26px;
+  transform: translate(-50%, -50%);
 }
 
 .opening-cover-logo {
+  position: relative;
+  inset: auto;
+  z-index: 1;
   display: block;
-  width: 100%;
-  max-width: 100%;
+  width: min(100%, 920px);
   height: auto;
+  object-fit: contain;
+  transform: none;
+  opacity: 1;
+  filter: drop-shadow(0 18px 42px rgba(255, 255, 255, 0.28));
 }
 
 .opening-hero-title {
@@ -400,12 +376,9 @@ button:active,
   color: #000;
   font-family: "Noto Serif TC", "Source Han Serif TC", "Songti TC", serif;
   max-width: 760px;
-  font-weight: 800;
-  line-height: 0.92;
-  letter-spacing: -0.065em;
-  text-shadow:
-    0 2px 0 rgba(255, 255, 255, 0.82),
-    0 12px 30px rgba(0, 0, 0, 0.18);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
 }
 
 .opening-hero-line {
@@ -416,13 +389,13 @@ button:active,
 
 .opening-hero-line:first-child {
   color: #050505;
-  font-size: clamp(84px, 8.9vw, 148px);
+  font-size: clamp(72px, 8vw, 128px);
 }
 
 .opening-hero-line:nth-child(2) {
-  margin-top: 42px;
+  margin-top: 34px;
   color: #050505;
-  font-size: clamp(90px, 9.5vw, 158px);
+  font-size: clamp(76px, 8.5vw, 136px);
 }
 
 .algorithm-word {
@@ -430,7 +403,7 @@ button:active,
   z-index: 1;
   display: inline-block;
   isolation: isolate;
-  color: #8f676b;
+  color: #9b777a;
 }
 
 .algorithm-pixels {
@@ -454,18 +427,16 @@ button:active,
 }
 
 .opening-hero-subtitle {
-  max-width: 620px;
-  margin: 56px 0 0 22px;
-  color: #050505;
+  max-width: 520px;
+  margin: 48px 0 0;
+  color: #111;
   font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif;
-  font-size: clamp(23px, 1.9vw, 32px);
-  font-weight: 650;
-  line-height: 1.65;
-  letter-spacing: 0.015em;
-  opacity: 0.92;
-  text-shadow:
-    0 2px 0 rgba(255, 255, 255, 0.9),
-    0 8px 22px rgba(255, 255, 255, 0.78);
+  font-size: clamp(18px, 1.45vw, 24px);
+  font-weight: 500;
+  line-height: 1.8;
+  letter-spacing: 0.03em;
+  opacity: 0.82;
+  text-shadow: 0 1px 12px rgba(255, 255, 255, 0.95);
 }
 
 @keyframes algorithmFloat {
@@ -1787,9 +1758,9 @@ button:active,
   bottom: auto;
   width: min(760px, calc(100vw - 56px));
   margin: 0;
-  padding: 0.75em 0.95em;
+  padding: 0;
   color: #fff;
-  background: rgba(10, 12, 14, 0.62);
+  background: transparent;
   font-size: clamp(1.45rem, 2.5vw, 2.35rem);
   font-weight: 400;
   line-height: 1.55;
@@ -2538,99 +2509,6 @@ button:active,
 
 .weight-story-copy p {
   margin: 0 0 1.35em;
-}
-
-.full-bleed-quote-photo {
-  position: relative;
-  width: 100vw;
-  height: 230svh;
-  margin: clamp(48px, 7vw, 92px) calc(50% - 50vw) clamp(64px, 8vw, 112px);
-  background: #111;
-  background-image: url("./public/pic/social-anxiety/instagram-weight-story.jpg");
-  background-size: cover;
-  background-position: center;
-  color: #fff;
-  opacity: 1 !important;
-  transform: none !important;
-}
-
-.full-bleed-quote-photo.is-injection-shortcut {
-  background-image: url("./public/pic/social-anxiety/injection-shortcut.jpg");
-}
-
-.full-bleed-quote-sticky {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  height: 100vh;
-  height: 100svh;
-  overflow: hidden;
-  background: #111;
-}
-
-.full-bleed-quote-sticky::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.04) 38%, rgba(0, 0, 0, 0.24)),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.2));
-}
-
-.full-bleed-quote-photo img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center center;
-}
-
-.full-bleed-quote-photo blockquote {
-  position: absolute;
-  top: 50%;
-  right: clamp(28px, 5vw, 86px);
-  bottom: auto;
-  left: auto;
-  z-index: 2;
-  width: min(680px, calc(100vw - 56px));
-  max-height: none;
-  margin: 0;
-  padding: 0.82em 1.05em;
-  box-sizing: border-box;
-  color: rgba(255, 255, 255, 0.92);
-  background: rgba(10, 12, 14, 0.62);
-  border-left: 0;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  writing-mode: horizontal-tb;
-  text-orientation: mixed;
-  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", sans-serif;
-  font-size: clamp(1.02rem, 1.35vw, 1.3rem);
-  font-weight: 500;
-  line-height: 1.95;
-  letter-spacing: 0.02em;
-  transform: translate3d(0, calc(-50% + var(--full-quote-y, 0vh)), 0);
-  opacity: var(--full-quote-opacity, 1);
-  will-change: transform, opacity;
-}
-
-.full-bleed-quote-photo.is-injection-shortcut img {
-  object-position: center center;
-}
-
-.full-bleed-quote-photo.is-injection-shortcut blockquote {
-  right: clamp(28px, 5vw, 86px);
-  left: auto;
-  width: min(640px, calc(100vw - 56px));
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .full-bleed-quote-photo blockquote {
-    transform: translate3d(0, -50%, 0);
-    opacity: 1;
-  }
 }
 
 .yu-xinmi-story-copy {
@@ -3792,6 +3670,73 @@ button:active,
   margin: 0 auto;
   padding: clamp(64px, 8vw, 104px) 0;
   box-sizing: border-box;
+}
+
+.full-bleed-quote-photo {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  height: 230svh;
+  margin: 44px 0 58px -50vw;
+  background: #060505;
+}
+
+.full-bleed-quote-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: #060505;
+}
+
+.full-bleed-quote-sticky::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.54)),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.06));
+  pointer-events: none;
+}
+
+.full-bleed-quote-sticky > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.full-bleed-quote-photo blockquote {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: clamp(28px, 7vw, 120px);
+  width: min(560px, calc(100vw - 72px));
+  margin: 0;
+  padding: 0.9em 1.05em;
+  color: #fff;
+  background: rgba(8, 6, 6, 0.48);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 28px 60px rgba(0, 0, 0, 0.28);
+  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
+  font-weight: 500;
+  line-height: 2;
+  letter-spacing: 0;
+  transform: translate3d(0, calc(-50% + var(--full-quote-y, 85vh)), 0);
+  opacity: var(--full-quote-opacity, 0);
+  will-change: transform, opacity;
+}
+
+.full-bleed-quote-photo--social .full-bleed-quote-sticky > img {
+  object-position: 50% center;
+}
+
+.full-bleed-quote-photo--shortcut .full-bleed-quote-sticky > img {
+  object-position: 46% center;
 }
 
 .hsu-stage-intro {
@@ -5096,46 +5041,6 @@ button:active,
 }
 
 @media (max-width: 620px) {
-  .full-bleed-quote-photo {
-    height: 210svh;
-    margin-top: 44px;
-    margin-bottom: 58px;
-  }
-
-  .full-bleed-quote-sticky::after {
-    background:
-      linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.58)),
-      linear-gradient(90deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.02));
-  }
-
-  .full-bleed-quote-photo img {
-    object-position: 56% center;
-  }
-
-  .full-bleed-quote-photo blockquote {
-    top: 50%;
-    right: 7vw;
-    bottom: auto;
-    left: 7vw;
-    width: auto;
-    max-height: none;
-    padding: 18px 20px;
-    writing-mode: horizontal-tb;
-    font-size: 1rem;
-    line-height: 1.8;
-    letter-spacing: 0.03em;
-    transform: translate3d(0, calc(-50% + var(--full-quote-y, 0vh)), 0);
-  }
-
-  .full-bleed-quote-photo.is-injection-shortcut img {
-    object-position: 47% center;
-  }
-
-  .full-bleed-quote-photo.is-injection-shortcut blockquote {
-    right: 7vw;
-    left: 7vw;
-  }
-
   .hsu-stage-intro {
     height: 225svh;
   }
@@ -6368,31 +6273,32 @@ button:active,
     top: 50%;
     left: 50%;
     width: min(92vw, 680px);
-    transform: translate(-50%, -50%);
     gap: 24px;
+    transform: translate(-50%, -50%);
+  }
+
+  .opening-cover-logo {
+    width: min(92vw, 680px);
   }
 
   .opening-hero-title {
-    line-height: 0.93;
-    letter-spacing: -0.055em;
+    line-height: 0.95;
   }
 
   .opening-hero-line:first-child {
-    font-size: clamp(54px, 16vw, 78px);
+    font-size: clamp(48px, 15vw, 72px);
   }
 
   .opening-hero-line:nth-child(2) {
-    margin-top: 30px;
-    font-size: clamp(56px, 16.2vw, 82px);
+    margin-top: 26px;
+    font-size: clamp(50px, 15vw, 76px);
   }
 
   .opening-hero-subtitle {
-    max-width: min(92%, 360px);
-    margin-top: 38px;
-    margin-left: 8px;
-    font-size: clamp(18px, 5.2vw, 22px);
-    line-height: 1.7;
-    letter-spacing: 0.015em;
+    max-width: 90%;
+    margin-top: 32px;
+    font-size: 16px;
+    letter-spacing: 0.03em;
   }
 
   .algorithm-pixels {
@@ -6436,6 +6342,39 @@ button:active,
     height: 100%;
     border: 0;
     justify-self: center;
+  }
+
+  .full-bleed-quote-photo {
+    height: 210svh;
+    margin-top: 44px;
+    margin-bottom: 58px;
+  }
+
+  .full-bleed-quote-sticky::after {
+    background:
+      linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.58)),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.02));
+  }
+
+  .full-bleed-quote-photo blockquote {
+    top: 50%;
+    right: 7vw;
+    left: 7vw;
+    width: auto;
+    max-height: none;
+    padding: 18px 20px;
+    font-size: 1rem;
+    line-height: 1.8;
+    letter-spacing: 0.03em;
+    transform: translate3d(0, calc(-50% + var(--full-quote-y, 0vh)), 0);
+  }
+
+  .full-bleed-quote-photo--social .full-bleed-quote-sticky > img {
+    object-position: 58% center;
+  }
+
+  .full-bleed-quote-photo--shortcut .full-bleed-quote-sticky > img {
+    object-position: 43% center;
   }
 
   .body-check-form {

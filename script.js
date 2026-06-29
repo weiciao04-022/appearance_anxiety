@@ -54,66 +54,6 @@ function readStoredJson(storage, key, fallback = null) {
 const safeSessionStorage = createSafeStorage('sessionStorage');
 const safeLocalStorage = createSafeStorage('localStorage');
 
-function ensureOpeningCoverLogoStyles() {
-  if (document.getElementById('opening-cover-logo-inline-style')) return;
-  const style = document.createElement('style');
-  style.id = 'opening-cover-logo-inline-style';
-  style.textContent = `
-    .opening-hero-copy--logo {
-      top: 50% !important;
-      left: 50% !important;
-      width: min(1080px, 86vw) !important;
-      max-width: 1080px !important;
-      transform: translate(-50%, -50%) !important;
-      display: grid !important;
-      justify-items: center !important;
-      text-align: center !important;
-      gap: 28px !important;
-    }
-    .opening-hero-copy--logo::before {
-      top: -12% !important;
-      right: -8% !important;
-      bottom: -14% !important;
-      left: -8% !important;
-      border-radius: 56px !important;
-      background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.72) 42%, rgba(255, 255, 255, 0) 82%) !important;
-    }
-    .opening-cover-logo {
-      display: block !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      height: auto !important;
-    }
-    @media (max-width: 960px) {
-      .opening-hero-copy--logo {
-        width: min(92vw, 680px) !important;
-        gap: 24px !important;
-      }
-    }
-  `;
-  document.head.appendChild(style);
-}
-
-function initOpeningCoverLogo() {
-  const heroCopy = document.querySelector('.opening-comic-hero .opening-hero-copy');
-  if (!heroCopy) return;
-
-  ensureOpeningCoverLogoStyles();
-  heroCopy.classList.add('opening-hero-copy--logo');
-  heroCopy.querySelector('.opening-hero-title')?.remove();
-  heroCopy.querySelector('.opening-hero-subtitle')?.remove();
-
-  let logo = heroCopy.querySelector('.opening-cover-logo');
-  if (!logo) {
-    logo = document.createElement('img');
-    logo.className = 'opening-cover-logo';
-    logo.src = './pic/cover-logo.png';
-    logo.alt = '當美被演算法定義：社群媒體如何影響 Z 世代的體態焦慮與身體認同';
-    const cue = heroCopy.querySelector('.scroll-cue');
-    heroCopy.insertBefore(logo, cue || null);
-  }
-}
-
 function refreshLucideIcons() {
   if (window.lucide?.createIcons) {
     window.lucide.createIcons({
@@ -126,7 +66,6 @@ function refreshLucideIcons() {
 }
 
 window.addEventListener('load', refreshLucideIcons);
-initOpeningCoverLogo();
 
 function waitForPromise(promise, timeoutMs) {
   return new Promise((resolve) => {
