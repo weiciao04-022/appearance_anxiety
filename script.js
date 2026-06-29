@@ -4236,6 +4236,51 @@ function initHsuStageIntro() {
   window.addEventListener('resize', requestHsuStageUpdate);
 }
 
+function initFullBleedQuotePhotos() {
+  const sections = Array.from(document.querySelectorAll('[data-full-bleed-quote-photo]'));
+  if (!sections.length) return;
+
+  const targets = sections
+    .filter((section) => section.dataset.fullQuoteReady !== 'true')
+    .map((section) => {
+      section.dataset.fullQuoteReady = 'true';
+      return {
+        section,
+        quote: section.querySelector('[data-full-bleed-quote-card]')
+      };
+    })
+    .filter((target) => target.quote);
+
+  if (!targets.length) return;
+
+  let frameRequested = false;
+
+  function updateFullBleedQuotes() {
+    frameRequested = false;
+    targets.forEach(({ section, quote }) => {
+      const rect = section.getBoundingClientRect();
+      const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
+      const progress = Math.min(1, Math.max(0, -rect.top / scrollable));
+      const quoteY = 85 - progress * 180;
+      const fadeIn = Math.min(1, progress / 0.08);
+      const fadeOut = Math.min(1, (1 - progress) / 0.08);
+
+      quote.style.setProperty('--full-quote-y', `${quoteY}vh`);
+      quote.style.setProperty('--full-quote-opacity', String(Math.min(fadeIn, fadeOut)));
+    });
+  }
+
+  function requestFullBleedQuoteUpdate() {
+    if (frameRequested) return;
+    frameRequested = true;
+    window.requestAnimationFrame(updateFullBleedQuotes);
+  }
+
+  updateFullBleedQuotes();
+  window.addEventListener('scroll', requestFullBleedQuoteUpdate, { passive: true });
+  window.addEventListener('resize', requestFullBleedQuoteUpdate);
+}
+
 function initHaochengScaleIntro() {
   const section = document.querySelector('[data-haocheng-scale-intro]');
   const quote = section?.querySelector('[data-haocheng-scale-quote]');
@@ -4291,5 +4336,7 @@ initSamPhotoStory();
 document.addEventListener('DOMContentLoaded', initSamPhotoStory);
 initHsuStageIntro();
 document.addEventListener('DOMContentLoaded', initHsuStageIntro);
+initFullBleedQuotePhotos();
+document.addEventListener('DOMContentLoaded', initFullBleedQuotePhotos);
 initHaochengScaleIntro();
 document.addEventListener('DOMContentLoaded', initHaochengScaleIntro);
